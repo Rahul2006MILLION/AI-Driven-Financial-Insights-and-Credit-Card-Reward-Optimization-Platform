@@ -17,7 +17,7 @@ class ExtractedRuleDraft(BaseModel):
 class ExtractedBenefitDraft(BaseModel):
     benefit_type: str
     title: str
-    description: str
+    description: Optional[str] = ""
     annual_value_estimate: Decimal = Decimal("0.0")
 
 class ExtractedDataResponse(BaseModel):

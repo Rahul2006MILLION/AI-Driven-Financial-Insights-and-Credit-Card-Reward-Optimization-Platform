@@ -178,3 +178,112 @@ class TestRewardOptimizationEngine:
         # In alternatives: both earn ₹40, but Free Card has ₹0 fee so it must rank above Premium Card (₹5000 fee)
         assert res.alternatives[0].card_name == "Free Card"
         assert res.alternatives[1].card_name == "Premium Card"
+
+    def test_minimum_spend_not_met(self):
+        """Transaction below minimum spend requirement yields ₹0."""
+        card = create_mock_card(
+            card_id="c_min",
+            card_name="Travel Card",
+            rules=[{
+                "category_id": "travel",
+                "reward_rate_percentage": "10.0",
+                "min_transaction_amount": "1000.00"
+            }]
+        )
+        res = RewardOptimizationEngine.evaluate_card_for_transaction(
+            card=card,
+            amount=Decimal("500.00"),
+            category_id="travel"
+        )
+        assert res.expected_reward_monetary == Decimal("0.00")
+        assert res.effective_rate_percentage == Decimal("0.00")
+        assert "Minimum spend of ₹1000.00 not met" in res.exclusion_reason
+
+    def test_inactive_card_is_excluded(self):
+        """Inactive cards are marked excluded with 0 expected reward."""
+        card = create_mock_card(
+            card_id="c_inactive",
+            card_name="Disabled Card",
+            rules=[{"category_id": "all", "reward_rate_percentage": "5.0"}],
+            is_active=False
+        )
+        res = RewardOptimizationEngine.evaluate_card_for_transaction(
+            card=card,
+            amount=Decimal("1000.00"),
+            category_id="shopping"
+        )
+        assert res.is_excluded is True
+        assert res.expected_reward_monetary == Decimal("0.00")
+        assert "inactive" in res.exclusion_reason.lower()
+
+    def test_points_reward_type_with_fractional_point_value(self):
+        """Reward points floor fractional points and multiply by point_monetary_value."""
+        card = create_mock_card(
+            card_id="c_points",
+            card_name="Miles Card",
+            rules=[{
+                "category_id": "travel",
+                "reward_type": "REWARD_POINTS",
+                "reward_rate_percentage": "3.33",
+                "point_monetary_value": "0.25"
+            }]
+        )
+        # ₹1000 * 3.33% = 33.3 points -> floored to 33 points
+        # 33 points * ₹0.25 = ₹8.25
+        res = RewardOptimizationEngine.evaluate_card_for_transaction(
+            card=card,
+            amount=Decimal("1000.00"),
+            category_id="travel"
+        )
+        assert res.expected_reward_monetary == Decimal("8.25")
+        assert res.effective_rate_percentage == Decimal("0.83")
+
+    def test_zero_amount_handling(self):
+        """Zero amount returns ₹0 without division by zero errors."""
+        card = create_mock_card(
+            card_id="c_zero",
+            card_name="Standard Card",
+            rules=[{"category_id": "all", "reward_rate_percentage": "2.0"}]
+        )
+        res = RewardOptimizationEngine.evaluate_card_for_transaction(
+            card=card,
+            amount=Decimal("0.00"),
+            category_id="shopping"
+        )
+        assert res.expected_reward_monetary == Decimal("0.00")
+        assert res.effective_rate_percentage == Decimal("0.00")
+
+    def test_exhausted_monthly_cap(self):
+        """If user has already consumed the monthly cap, reward is ₹0."""
+        card = create_mock_card(
+            card_id="c_capped",
+            card_name="Cap Card",
+            rules=[{
+                "category_id": "grocery",
+                "reward_rate_percentage": "5.0",
+                "monthly_cap_amount": "500.00"
+            }]
+        )
+        res = RewardOptimizationEngine.evaluate_card_for_transaction(
+            card=card,
+            amount=Decimal("1000.00"),
+            category_id="grocery",
+            current_month_spent_rewards=Decimal("500.00")
+        )
+        assert res.expected_reward_monetary == Decimal("0.00")
+
+    def test_missing_card_rules_fallback(self):
+        """Card with empty rules list defaults conservatively to 1% base reward."""
+        card = create_mock_card(
+            card_id="c_empty",
+            card_name="Blank Card",
+            rules=[]
+        )
+        res = RewardOptimizationEngine.evaluate_card_for_transaction(
+            card=card,
+            amount=Decimal("2000.00"),
+            category_id="shopping"
+        )
+        assert res.expected_reward_monetary == Decimal("20.00")
+        assert res.effective_rate_percentage == Decimal("1.00")
+

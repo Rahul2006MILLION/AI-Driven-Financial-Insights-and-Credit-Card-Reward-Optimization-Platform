@@ -265,7 +265,10 @@ class RewardOptimizationEngine:
             final_monetary = capped_monetary
 
         final_monetary = final_monetary.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        effective_rate = ((final_monetary / amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        if amount > Decimal("0.00"):
+            effective_rate = ((final_monetary / amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        else:
+            effective_rate = Decimal("0.00")
 
         return CardRecommendation(
             card_id=card.id,

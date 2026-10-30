@@ -90,8 +90,8 @@ async def upload_document(
             extracted_bank_name=parsed.get("bank_name"),
             extracted_network=parsed.get("network", "VISA"),
             extracted_annual_fee=parsed.get("annual_fee", Decimal("0.00")),
-            extracted_rules_json=json.dumps(parsed.get("rules", [])),
-            extracted_benefits_json=json.dumps(parsed.get("benefits", [])),
+            extracted_rules_json=json.dumps(parsed.get("rules", []), default=str),
+            extracted_benefits_json=json.dumps(parsed.get("benefits", []), default=str),
             confidence_score=parsed.get("confidence_score", Decimal("0.85")),
             is_verified=False
         )
