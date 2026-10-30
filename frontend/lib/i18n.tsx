@@ -10,6 +10,7 @@ export interface Translations {
   nav: {
     dashboard: string;
     cards: string;
+    offers: string;
     addCard: string;
     compare: string;
     optimizer: string;
@@ -23,6 +24,20 @@ export interface Translations {
     logout: string;
     login: string;
     register: string;
+  };
+  offers: {
+    title: string;
+    subtitle: string;
+    myCardsOnly: string;
+    allOffers: string;
+    expiringSoon: string;
+    copyCode: string;
+    codeCopied: string;
+    minSpend: string;
+    validTill: string;
+    applicableOn: string;
+    verified: string;
+    sample: string;
   };
   dashboard: {
     title: string;
@@ -120,6 +135,7 @@ export const translations: Record<Language, Translations> = {
     nav: {
       dashboard: "Dashboard",
       cards: "My Credit Cards",
+      offers: "Offers & Deals",
       addCard: "Add Credit Card",
       compare: "Card Comparison",
       optimizer: "Reward Optimization",
@@ -133,6 +149,20 @@ export const translations: Record<Language, Translations> = {
       logout: "Sign Out",
       login: "Sign In",
       register: "Create Account",
+    },
+    offers: {
+      title: "Credit Card Offers & Deals",
+      subtitle: "Discover instant discounts and promotional deals matching your cards.",
+      myCardsOnly: "My Cards Only",
+      allOffers: "All Offers",
+      expiringSoon: "Expiring Soon",
+      copyCode: "Copy Code",
+      codeCopied: "Copied!",
+      minSpend: "Min. spend",
+      validTill: "Valid till",
+      applicableOn: "Applicable on",
+      verified: "VERIFIED",
+      sample: "SAMPLE",
     },
     dashboard: {
       title: "Financial Intelligence Overview",
@@ -233,6 +263,7 @@ export const translations: Record<Language, Translations> = {
     nav: {
       dashboard: "डैशबोर्ड",
       cards: "मेरे क्रेडिट कार्ड्स",
+      offers: "ऑफ़र्स और छूट",
       addCard: "नया कार्ड जोड़ें",
       compare: "कार्ड तुलना",
       optimizer: "रिवॉर्ड ऑप्टिमाइज़र",
@@ -246,6 +277,20 @@ export const translations: Record<Language, Translations> = {
       logout: "साइन आउट",
       login: "लॉगिन करें",
       register: "खाता बनाएं",
+    },
+    offers: {
+      title: "क्रेडिट कार्ड ऑफ़र्स और डील्स",
+      subtitle: "अपने पंजीकृत कार्ड्स पर उपलब्ध तत्काल छूट और ऑफ़र्स खोजें।",
+      myCardsOnly: "केवल मेरे कार्ड्स",
+      allOffers: "सभी ऑफ़र्स",
+      expiringSoon: "जल्द समाप्त होने वाले",
+      copyCode: "कोड कॉपी करें",
+      codeCopied: "कॉपी हो गया!",
+      minSpend: "न्यूनतम खर्च",
+      validTill: "वैधता तिथि",
+      applicableOn: "लागू कार्ड्स",
+      verified: "सत्यापित",
+      sample: "सैंपल",
     },
     dashboard: {
       title: "वित्तीय बुद्धिमत्ता सारांश",
@@ -346,6 +391,7 @@ export const translations: Record<Language, Translations> = {
     nav: {
       dashboard: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
       cards: "ನನ್ನ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು",
+      offers: "ಆಫರ್‌ಗಳು ಮತ್ತು ಕೊಡುಗೆಗಳು",
       addCard: "ಹೊಸ ಕಾರ್ಡ್ ಸೇರಿಸಿ",
       compare: "ಕಾರ್ಡ್ ಹೋಲಿಕೆ",
       optimizer: "ರಿವಾರ್ಡ್ ಆಪ್ಟಿಮೈಜರ್",
@@ -359,6 +405,20 @@ export const translations: Record<Language, Translations> = {
       logout: "ಸೈನ್ ಔಟ್",
       login: "ಲಾಗಿನ್",
       register: "ಖಾತೆ ತೆರೆಯಿರಿ",
+    },
+    offers: {
+      title: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಆಫರ್‌ಗಳು ಮತ್ತು ಡೀಲ್‌ಗಳು",
+      subtitle: "ನಿಮ್ಮ ಕಾರ್ಡ್‌ಗಳಿಗೆ ಲಭ್ಯವಿರುವ ರಿಯಾಯಿತಿ ಮತ್ತು ಕೊಡುಗೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.",
+      myCardsOnly: "ನನ್ನ ಕಾರ್ಡ್‌ಗಳು ಮಾತ್ರ",
+      allOffers: "ಎಲ್ಲಾ ಆಫರ್‌ಗಳು",
+      expiringSoon: "ಶೀಘ್ರದಲ್ಲೇ ಮುಕ್ತಾಯ",
+      copyCode: "ಕೋಡ್ ನಕಲಿಸಿ",
+      codeCopied: "ನಕಲಿಸಲಾಗಿದೆ!",
+      minSpend: "ಕನಿಷ್ಠ ವೆಚ್ಚ",
+      validTill: "ಮಾನ್ಯತೆ",
+      applicableOn: "ಅನ್ವಯವಾಗುವ ಕಾರ್ಡ್",
+      verified: "ದೃಢೀಕರಿಸಲಾಗಿದೆ",
+      sample: "ಮಾದರಿ",
     },
     dashboard: {
       title: "ಆರ್ಥಿಕ ಮಾಹಿತಿ ಅವಲೋಕನ",

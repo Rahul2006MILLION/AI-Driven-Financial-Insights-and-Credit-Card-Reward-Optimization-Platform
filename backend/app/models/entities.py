@@ -40,10 +40,15 @@ class CreditCard(Base):
     bank_name: Mapped[str] = mapped_column(String(128), nullable=False)
     network: Mapped[str] = mapped_column(String(32), default="VISA", nullable=False)  # VISA, MASTERCARD, AMEX, RUPAY, DINERS
     card_type: Mapped[str] = mapped_column(String(32), default="CREDIT", nullable=False)
+    card_variant: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)  # e.g. Metal, Signature, Platinum, Select
     last_four_digits: Mapped[Optional[str]] = mapped_column(String(4), nullable=True)
+    joining_fee: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
     annual_fee: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
     renewal_waiver_spend: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 2), nullable=True)
+    fee_waiver_condition_details: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    renewal_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     billing_cycle_day: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    terms_source_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -78,13 +83,51 @@ class CardBenefit(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
     card_id: Mapped[str] = mapped_column(String(36), ForeignKey("credit_cards.id", ondelete="CASCADE"), nullable=False, index=True)
-    benefit_type: Mapped[str] = mapped_column(String(64), nullable=False)  # LOUNGE_ACCESS, GOLF, INSURANCE, MILESTONE, CONCIERGE
+    benefit_type: Mapped[str] = mapped_column(String(64), nullable=False)  # PERMANENT, PROMOTIONAL, MERCHANT_SPECIFIC, NETWORK_SPECIFIC, LOUNGE_ACCESS, INSURANCE, GOLF, MILESTONE
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
+    applicable_category: Mapped[str] = mapped_column(String(64), default="all", nullable=False)  # shopping_online, shopping_offline, dining, food_delivery, travel, flights, hotels, fuel, entertainment, grocery, utility, international, all
+    reward_percentage_or_points: Mapped[Optional[Decimal]] = mapped_column(Numeric(6, 2), nullable=True)
+    reward_basis: Mapped[str] = mapped_column(String(32), default="COMPLIMENTARY", nullable=False)  # PERCENTAGE, FIXED_POINTS_PER_100, CASHBACK_FIXED, COMPLIMENTARY
+    max_reward: Mapped[Optional[Decimal]] = mapped_column(Numeric(10, 2), nullable=True)
+    min_transaction_amount: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
+    cap_amount: Mapped[Optional[Decimal]] = mapped_column(Numeric(10, 2), nullable=True)
+    cap_period: Mapped[str] = mapped_column(String(32), default="NONE", nullable=False)  # MONTHLY, ANNUAL, PER_TRANSACTION, NONE
+    eligibility_restrictions: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    valid_from: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    valid_to: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    terms_and_conditions: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    source_reference: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    last_verified_date: Mapped[Optional[datetime]] = mapped_column(DateTime, default=datetime.utcnow, nullable=True)
     annual_value_estimate: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     card: Mapped["CreditCard"] = relationship("CreditCard", back_populates="benefits")
+
+class CardOffer(Base):
+    __tablename__ = "card_offers"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    merchant_name: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    offer_title: Mapped[str] = mapped_column(String(255), nullable=False)
+    category_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)  # food_delivery, dining, shopping, travel, entertainment, grocery, utility
+    discount_type: Mapped[str] = mapped_column(String(32), default="PERCENTAGE", nullable=False)  # PERCENTAGE, FLAT_AMOUNT
+    discount_value: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)  # e.g. 15.00 for 15% or 150.00 for ₹150
+    min_transaction_value: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
+    max_discount_amount: Mapped[Optional[Decimal]] = mapped_column(Numeric(10, 2), nullable=True)  # e.g. 200.00
+    eligible_bank: Mapped[Optional[str]] = mapped_column(String(128), nullable=True, index=True)  # e.g. "HDFC Bank", "ICICI Bank" or None for all
+    eligible_network: Mapped[Optional[str]] = mapped_column(String(32), nullable=True, index=True)  # VISA, MASTERCARD, RUPAY, AMEX or None
+    eligible_card_names_json: Mapped[str] = mapped_column(Text, default="[]", nullable=False)  # JSON array of specific card names e.g. ["Millennia", "Regalia"] or [] for all bank cards
+    valid_from: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    valid_to: Mapped[datetime] = mapped_column(DateTime, nullable=False, index=True)
+    payment_channel: Mapped[str] = mapped_column(String(32), default="ONLINE", nullable=False)  # ONLINE, OFFLINE, BOTH
+    promo_code: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    activation_requirement: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)  # e.g. "Apply coupon code at checkout"
+    terms_and_conditions: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    source_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    verification_status: Mapped[str] = mapped_column(String(32), default="VERIFIED", nullable=False)  # VERIFIED, SAMPLE, MANUALLY_ENTERED, EXPIRED
+    last_verified_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
 class SpendingCategory(Base):
     __tablename__ = "spending_categories"

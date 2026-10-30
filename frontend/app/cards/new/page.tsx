@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import {
   CreditCard,
   PlusCircle,
@@ -12,6 +12,8 @@ import {
   ArrowLeft,
   Loader2,
   Sparkles,
+  Shield,
+  Zap,
 } from "lucide-react";
 
 export default function AddCardPage() {
@@ -21,10 +23,14 @@ export default function AddCardPage() {
   const [cardName, setCardName] = useState("");
   const [bankName, setBankName] = useState("HDFC Bank");
   const [network, setNetwork] = useState("VISA");
+  const [cardVariant, setCardVariant] = useState("Metal");
   const [lastFour, setLastFour] = useState("");
-  const [annualFee, setAnnualFee] = useState<number>(0);
+  const [joiningFee, setJoiningFee] = useState<number>(0);
+  const [annualFee, setAnnualFee] = useState<number>(1000);
   const [waiverSpend, setWaiverSpend] = useState<number>(100000);
+  const [waiverDetails, setWaiverDetails] = useState("");
   const [cycleDay, setCycleDay] = useState<number>(15);
+  const [termsUrl, setTermsUrl] = useState("");
 
   // Dynamic Rules
   const [rules, setRules] = useState<any[]>([
@@ -37,12 +43,32 @@ export default function AddCardPage() {
       is_excluded: false,
     },
     {
+      category_id: "dining",
+      merchant_pattern: "Swiggy, Zomato",
+      reward_type: "CASHBACK",
+      reward_rate_percentage: 5.0,
+      monthly_cap_amount: 1000.0,
+      is_excluded: false,
+    },
+    {
       category_id: "all",
       merchant_pattern: "",
       reward_type: "CASHBACK",
-      reward_rate_percentage: 1.5,
+      reward_rate_percentage: 1.0,
       monthly_cap_amount: null,
       is_excluded: false,
+    },
+  ]);
+
+  // Dynamic Benefits
+  const [benefits, setBenefits] = useState<any[]>([
+    {
+      benefit_type: "LOUNGE_ACCESS",
+      title: "Airport Lounge Access",
+      description: "Complimentary domestic lounge visits per calendar quarter.",
+      applicable_category: "travel",
+      reward_basis: "COMPLIMENTARY",
+      annual_value_estimate: 4000.0,
     },
   ]);
 
@@ -53,7 +79,7 @@ export default function AddCardPage() {
     setRules([
       ...rules,
       {
-        category_id: "dining",
+        category_id: "grocery",
         merchant_pattern: "",
         reward_type: "CASHBACK",
         reward_rate_percentage: 2.0,
@@ -73,25 +99,50 @@ export default function AddCardPage() {
     setRules(updated);
   };
 
+  const addBenefit = () => {
+    setBenefits([
+      ...benefits,
+      {
+        benefit_type: "PERMANENT",
+        title: "Dining Privileges",
+        description: "Up to 20% off at partner restaurants.",
+        applicable_category: "dining",
+        reward_basis: "COMPLIMENTARY",
+        annual_value_estimate: 2000.0,
+      },
+    ]);
+  };
+
+  const removeBenefit = (idx: number) => {
+    setBenefits(benefits.filter((_, i) => i !== idx));
+  };
+
+  const updateBenefit = (idx: number, field: string, val: any) => {
+    const updated = [...benefits];
+    updated[idx][field] = val;
+    setBenefits(updated);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      await apiFetch("/cards", {
-        method: "POST",
-        body: JSON.stringify({
-          card_name: cardName,
-          bank_name: bankName,
-          network,
-          last_four_digits: lastFour || null,
-          annual_fee: annualFee,
-          renewal_waiver_spend: waiverSpend || null,
-          billing_cycle_day: cycleDay,
-          rules,
-          benefits: [],
-        }),
+      await api.createCard({
+        card_name: cardName,
+        bank_name: bankName,
+        network: network as any,
+        card_variant: cardVariant || undefined,
+        last_four_digits: lastFour || undefined,
+        joining_fee: joiningFee,
+        annual_fee: annualFee,
+        renewal_waiver_spend: waiverSpend || undefined,
+        fee_waiver_condition_details: waiverDetails || undefined,
+        billing_cycle_day: cycleDay,
+        terms_source_url: termsUrl || undefined,
+        rules,
+        benefits,
       });
 
       router.push("/cards");
@@ -117,7 +168,7 @@ export default function AddCardPage() {
           <div>
             <h1 className="text-2xl font-extrabold text-white">{t.cards.addNew}</h1>
             <p className="text-xs text-cliq-textSecondary">
-              Register a card with customized category cashback rules and monthly caps.
+              Register a card with customized category rules, lounge perks, waiver targets, and official terms.
             </p>
           </div>
         </div>
@@ -131,8 +182,9 @@ export default function AddCardPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Card Basic Details */}
           <div className="glass-panel p-6 rounded-2xl border-cliq-border space-y-4">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-              Card Specifications
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-cliq-cyan" />
+              <span>Card Identity & Specifications</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -189,6 +241,19 @@ export default function AddCardPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
+                  Card Variant / Edition
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Signature, Metal, Platinum, Select"
+                  value={cardVariant}
+                  onChange={(e) => setCardVariant(e.target.value)}
+                  className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
                   Last 4 Digits (Optional)
                 </label>
                 <input
@@ -216,13 +281,39 @@ export default function AddCardPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
-                  Annual Fee Waiver Spend (₹)
+                  Annual Fee Waiver Spend Target (₹)
                 </label>
                 <input
                   type="number"
                   min={0}
                   value={waiverSpend}
                   onChange={(e) => setWaiverSpend(Number(e.target.value))}
+                  className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
+                  Fee Waiver Condition Details
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Spend ₹1 Lakh in calendar year to waive annual fee"
+                  value={waiverDetails}
+                  onChange={(e) => setWaiverDetails(e.target.value)}
+                  className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
+                  Official Terms & Schedule URL (Optional)
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://www.bank.com/credit-cards/terms-and-conditions"
+                  value={termsUrl}
+                  onChange={(e) => setTermsUrl(e.target.value)}
                   className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-cliq-cyan"
                 />
               </div>
@@ -233,17 +324,19 @@ export default function AddCardPage() {
           <div className="glass-panel p-6 rounded-2xl border-cliq-border space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Deterministic Multipliers & Rules
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-cliq-cyan" />
+                  <span>Category Multipliers & Reward Rules</span>
                 </h3>
-                <p className="text-[11px] text-cliq-textSecondary">
-                  Define category multipliers, accelerated merchants, caps, and exclusions.
+                <p className="text-xs text-cliq-textSecondary mt-0.5">
+                  Specify exact cashback % or reward point multipliers for specific merchants or categories.
                 </p>
               </div>
+
               <button
                 type="button"
                 onClick={addRule}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cliq-surface hover:bg-cliq-surfaceHover text-cliq-cyan text-xs font-semibold border border-cliq-cyan/40"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-cliq-cyan text-xs font-bold transition-colors"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
                 <span>Add Rule</span>
@@ -254,124 +347,181 @@ export default function AddCardPage() {
               {rules.map((rule, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-xl bg-cliq-bgSecondary/80 border border-cliq-border space-y-3"
+                  className="p-4 rounded-xl bg-cliq-surface/90 border border-cliq-border space-y-3"
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Rule #{idx + 1}</span>
+                    {rules.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeRule(idx)}
+                        className="text-cliq-textMuted hover:text-cliq-danger p-1"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
                     <div>
-                      <label className="block text-[10px] text-cliq-textMuted uppercase mb-1">
-                        Category
-                      </label>
+                      <label className="block text-cliq-textMuted mb-1">Category</label>
                       <select
                         value={rule.category_id}
                         onChange={(e) => updateRule(idx, "category_id", e.target.value)}
-                        className="w-full bg-cliq-surface border border-cliq-border rounded-lg px-2.5 py-1.5 text-white text-xs"
+                        className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-lg p-2 text-white"
                       >
+                        <option value="all">All / Standard Base</option>
+                        <option value="dining">Dining & Restaurants</option>
+                        <option value="food_delivery">Food Delivery</option>
                         <option value="shopping">Online Shopping</option>
-                        <option value="dining">Dining & Delivery</option>
-                        <option value="grocery">Groceries</option>
+                        <option value="grocery">Grocery & Supermarket</option>
+                        <option value="travel">Travel, Flights & Hotels</option>
                         <option value="utility">Utility & Bills</option>
-                        <option value="travel">Travel & Flights</option>
-                        <option value="fuel">Fuel (Petrol Pumps)</option>
-                        <option value="all">General (All Spends)</option>
+                        <option value="fuel">Fuel & Petrol</option>
+                        <option value="entertainment">Entertainment</option>
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] text-cliq-textMuted uppercase mb-1">
-                        Merchant (Optional)
-                      </label>
+                      <label className="block text-cliq-textMuted mb-1">Merchant Keyword</label>
                       <input
                         type="text"
                         placeholder="e.g. Swiggy, Amazon"
                         value={rule.merchant_pattern || ""}
                         onChange={(e) => updateRule(idx, "merchant_pattern", e.target.value)}
-                        className="w-full bg-cliq-surface border border-cliq-border rounded-lg px-2.5 py-1.5 text-white text-xs"
+                        className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-lg p-2 text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] text-cliq-textMuted uppercase mb-1">
-                        Reward Rate (%)
-                      </label>
+                      <label className="block text-cliq-textMuted mb-1">Reward Rate (%)</label>
                       <input
                         type="number"
                         step="0.1"
                         min="0"
-                        max="100"
                         value={rule.reward_rate_percentage}
-                        onChange={(e) =>
-                          updateRule(idx, "reward_rate_percentage", Number(e.target.value))
-                        }
-                        className="w-full bg-cliq-surface border border-cliq-border rounded-lg px-2.5 py-1.5 text-white text-xs font-bold"
+                        onChange={(e) => updateRule(idx, "reward_rate_percentage", Number(e.target.value))}
+                        className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-lg p-2 text-white"
                       />
                     </div>
 
-                    <div className="flex items-end justify-between gap-2">
-                      <div className="flex-1">
-                        <label className="block text-[10px] text-cliq-textMuted uppercase mb-1">
-                          Monthly Cap (₹)
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="No cap"
-                          value={rule.monthly_cap_amount || ""}
-                          onChange={(e) =>
-                            updateRule(
-                              idx,
-                              "monthly_cap_amount",
-                              e.target.value ? Number(e.target.value) : null
-                            )
-                          }
-                          className="w-full bg-cliq-surface border border-cliq-border rounded-lg px-2.5 py-1.5 text-white text-xs"
-                        />
-                      </div>
-
-                      {rules.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeRule(idx)}
-                          className="p-2 rounded-lg text-cliq-textMuted hover:text-cliq-danger hover:bg-cliq-surface"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
+                    <div>
+                      <label className="block text-cliq-textMuted mb-1">Monthly Cap (₹)</label>
+                      <input
+                        type="number"
+                        placeholder="No cap"
+                        value={rule.monthly_cap_amount || ""}
+                        onChange={(e) =>
+                          updateRule(
+                            idx,
+                            "monthly_cap_amount",
+                            e.target.value ? Number(e.target.value) : null
+                          )
+                        }
+                        className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-lg p-2 text-white"
+                      />
                     </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-1">
-                    <input
-                      type="checkbox"
-                      id={`exclude_${idx}`}
-                      checked={rule.is_excluded}
-                      onChange={(e) => updateRule(idx, "is_excluded", e.target.checked)}
-                      className="rounded bg-cliq-surface border-cliq-border text-cliq-cyan"
-                    />
-                    <label
-                      htmlFor={`exclude_${idx}`}
-                      className="text-xs text-cliq-textSecondary cursor-pointer"
-                    >
-                      Mark this category as an exclusion (0% rewards, e.g. Fuel, Wallet top-up)
-                    </label>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="px-5 py-2.5 rounded-xl bg-cliq-surface border border-cliq-border text-white text-xs font-semibold"
-            >
-              Cancel
-            </button>
+          {/* Perks & Privileges */}
+          <div className="glass-panel p-6 rounded-2xl border-cliq-border space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-cliq-emerald" />
+                  <span>Card Perks & Privileges</span>
+                </h3>
+                <p className="text-xs text-cliq-textSecondary mt-0.5">
+                  Track lounge access, travel protection, and concierge privileges.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={addBenefit}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-cliq-emerald text-xs font-bold transition-colors"
+              >
+                <PlusCircle className="w-3.5 h-3.5" />
+                <span>Add Perk</span>
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {benefits.map((ben, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-xl bg-cliq-surface/90 border border-cliq-border space-y-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Benefit #{idx + 1}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeBenefit(idx)}
+                      className="text-cliq-textMuted hover:text-cliq-danger p-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div>
+                      <label className="block text-cliq-textMuted mb-1">Benefit Type</label>
+                      <select
+                        value={ben.benefit_type}
+                        onChange={(e) => updateBenefit(idx, "benefit_type", e.target.value)}
+                        className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-lg p-2 text-white"
+                      >
+                        <option value="LOUNGE_ACCESS">Airport Lounge Access</option>
+                        <option value="PERMANENT">Permanent Feature / Milestone</option>
+                        <option value="INSURANCE">Insurance & Protection</option>
+                        <option value="GOLF">Golf Privileges</option>
+                        <option value="CONCIERGE">Concierge Service</option>
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="block text-cliq-textMuted mb-1">Title</label>
+                      <input
+                        type="text"
+                        value={ben.title}
+                        onChange={(e) => updateBenefit(idx, "title", e.target.value)}
+                        className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-lg p-2 text-white"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-3">
+                      <label className="block text-cliq-textMuted mb-1">Description</label>
+                      <input
+                        type="text"
+                        value={ben.description}
+                        onChange={(e) => updateBenefit(idx, "description", e.target.value)}
+                        className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-lg p-2 text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95 flex items-center gap-2"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cliq-cyan via-cliq-turquoise to-cliq-emerald text-cliq-bg font-extrabold text-sm shadow-neonCyan hover:opacity-95 transition-all flex items-center justify-center gap-2"
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Save Card to Portfolio</span>}
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <PlusCircle className="w-4 h-4" />
+                  <span>Save Card to Portfolio</span>
+                </>
+              )}
             </button>
           </div>
         </form>

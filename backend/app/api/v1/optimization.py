@@ -15,6 +15,7 @@ from app.schemas.optimization import (
 )
 from app.security.dependencies import get_current_user
 from app.services.reward_optimization.engine import RewardOptimizationEngine
+from app.services.offers.offer_service import OfferService
 
 router = APIRouter(prefix="/optimization", tags=["Reward Optimization"])
 
@@ -34,11 +35,25 @@ async def recommend_card(
     )
     user_cards = (await db.execute(stmt)).scalars().all()
 
+    # Pre-fetch applicable promotional offers for each card
+    matched_card_offers_map = {}
+    for card in user_cards:
+        matched_card_offers_map[card.id] = await OfferService.get_applicable_offers_for_card(
+            db=db,
+            card=card,
+            amount=req.amount,
+            category_id=req.category_id,
+            merchant_name=req.merchant_name,
+            payment_channel=req.payment_channel
+        )
+
     result = RewardOptimizationEngine.optimize_transaction(
         cards=user_cards,
         amount=req.amount,
         category_id=req.category_id,
         merchant_name=req.merchant_name,
+        payment_channel=req.payment_channel,
+        matched_card_offers_map=matched_card_offers_map,
         language=current_user.preferred_language or "en"
     )
 

@@ -1,11 +1,13 @@
 from typing import List, Optional, Any, Dict
 from decimal import Decimal
 from pydantic import BaseModel, Field
+from app.schemas.offer import ApplicableOfferSummary
 
 class RecommendRequest(BaseModel):
     amount: Decimal = Field(..., gt=Decimal("0.0"))
     category_id: str = Field(..., max_length=64)
     merchant_name: Optional[str] = Field(None, max_length=255)
+    payment_channel: str = Field("ONLINE", pattern="^(ONLINE|OFFLINE|BOTH)$")
     include_annual_fee_net: bool = False
 
 class CalculationStep(BaseModel):
@@ -22,19 +24,27 @@ class CardRecommendation(BaseModel):
     card_name: str
     bank_name: str
     network: str
+    card_variant: Optional[str] = None
     reward_type: str
     reward_rate_percentage: Decimal
     point_monetary_value: Decimal
-    expected_reward_monetary: Decimal
+    instant_discount_monetary: Decimal = Decimal("0.00")
+    post_reward_monetary: Decimal = Decimal("0.00")
+    expected_reward_monetary: Decimal = Decimal("0.00")
+    net_financial_benefit: Decimal = Decimal("0.00")
     effective_rate_percentage: Decimal
     is_excluded: bool = False
     exclusion_reason: Optional[str] = None
+    applicable_offers: List[ApplicableOfferSummary] = []
+    missing_information_notes: List[str] = []
+    source_references: List[str] = []
     breakdown_steps: List[CalculationStep] = []
 
 class RecommendResponse(BaseModel):
     transaction_amount: Decimal
     category_id: str
     merchant_name: Optional[str] = None
+    payment_channel: str = "ONLINE"
     recommended_card: Optional[CardRecommendation] = None
     alternatives: List[CardRecommendation] = []
     explanation: str

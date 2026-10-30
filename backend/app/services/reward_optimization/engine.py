@@ -1,5 +1,5 @@
 from decimal import Decimal, ROUND_HALF_UP, ROUND_FLOOR
-from typing import List, Optional, Tuple, Dict
+from typing import List, Optional, Tuple, Dict, Any
 from datetime import datetime
 import re
 
@@ -12,6 +12,7 @@ from app.schemas.optimization import (
     CompareResponse,
     CompareCategoryYield
 )
+from app.schemas.offer import ApplicableOfferSummary
 from app.models.entities import CreditCard, CardRewardRule
 
 def to_decimal(val) -> Decimal:
@@ -23,8 +24,9 @@ def to_decimal(val) -> Decimal:
 
 class RewardOptimizationEngine:
     """
-    Deterministic Reward Optimization Engine.
+    Deterministic Reward Optimization & Smart Card Utilization Engine.
     All calculations use pure Python arbitrary-precision Decimal arithmetic.
+    Evaluates both upfront promotional instant discounts and post-transaction rewards.
     NEVER relies on probabilistic LLMs for numerical or ranking decisions.
     """
 
@@ -35,36 +37,86 @@ class RewardOptimizationEngine:
         amount: Decimal,
         category_id: str,
         merchant_name: Optional[str] = None,
-        current_month_spent_rewards: Decimal = Decimal("0.00")
+        payment_channel: str = "ONLINE",
+        current_month_spent_rewards: Decimal = Decimal("0.00"),
+        matched_offers: Optional[List[Tuple[Any, Decimal]]] = None
     ) -> CardRecommendation:
         amount = to_decimal(amount)
         current_month_spent_rewards = to_decimal(current_month_spent_rewards)
         steps: List[CalculationStep] = []
         step_idx = 1
+        missing_notes: List[str] = []
+        source_refs: List[str] = []
 
-        # Check if card is active
+        if card.terms_source_url:
+            source_refs.append(card.terms_source_url)
+
+        # 0. Check if card is active
         if not card.is_active:
             return CardRecommendation(
                 card_id=card.id,
                 card_name=card.card_name,
                 bank_name=card.bank_name,
                 network=card.network,
+                card_variant=card.card_variant,
                 reward_type="NONE",
                 reward_rate_percentage=Decimal("0.00"),
                 point_monetary_value=Decimal("1.00"),
+                instant_discount_monetary=Decimal("0.00"),
+                post_reward_monetary=Decimal("0.00"),
                 expected_reward_monetary=Decimal("0.00"),
+                net_financial_benefit=Decimal("0.00"),
                 effective_rate_percentage=Decimal("0.00"),
                 is_excluded=True,
                 exclusion_reason="Card is marked inactive",
+                applicable_offers=[],
+                missing_information_notes=["Card is deactivated."],
+                source_references=source_refs,
                 breakdown_steps=[]
             )
 
-        # 1. Minimum transaction spend check across rules or card default
-        # Scan rules for matching rule
+        # 1. Evaluate Upfront Promotional Offers (Instant Discounts)
+        applicable_offer_summaries: List[ApplicableOfferSummary] = []
+        instant_discount = Decimal("0.00")
+
+        if matched_offers:
+            # First offer is highest discount value
+            best_offer, discount_amount = matched_offers[0]
+            instant_discount = to_decimal(discount_amount)
+            applicable_offer_summaries.append(ApplicableOfferSummary(
+                offer_id=best_offer.id,
+                merchant_name=best_offer.merchant_name,
+                offer_title=best_offer.offer_title,
+                promo_code=best_offer.promo_code,
+                discount_type=best_offer.discount_type,
+                discount_amount=instant_discount,
+                terms_and_conditions=best_offer.terms_and_conditions,
+                source_url=best_offer.source_url,
+                verification_status=best_offer.verification_status
+            ))
+            if best_offer.source_url:
+                source_refs.append(best_offer.source_url)
+
+            code_text = f" (Promo Code: {best_offer.promo_code})" if best_offer.promo_code else " (Auto-applied)"
+            steps.append(CalculationStep(
+                step_number=step_idx,
+                rule_name=f"Instant Promotional Discount ({best_offer.merchant_name})",
+                rate_percentage=to_decimal(best_offer.discount_value) if best_offer.discount_type == "PERCENTAGE" else Decimal("0.00"),
+                raw_reward=instant_discount,
+                cap_applied=best_offer.max_discount_amount,
+                final_monetary_value=instant_discount,
+                reason=f"Applied upfront offer '{best_offer.offer_title}'{code_text}. Discount: ₹{instant_discount}."
+            ))
+            step_idx += 1
+
+        # The net charged amount on the credit card after instant discount
+        charged_amount = max(Decimal("0.00"), amount - instant_discount)
+
+        # 2. Match Permanent Reward Rules on the Card
         rules: List[CardRewardRule] = list(card.reward_rules) if card.reward_rules else []
         matched_rule: Optional[CardRewardRule] = None
 
-        # Step A: Merchant-specific match
+        # Step A: Merchant-specific rule match
         if merchant_name:
             merchant_clean = merchant_name.strip().lower()
             for r in rules:
@@ -78,17 +130,16 @@ class RewardOptimizationEngine:
                             rate_percentage=to_decimal(r.reward_rate_percentage),
                             raw_reward=Decimal("0.00"),
                             final_monetary_value=Decimal("0.00"),
-                            reason=f"Matched merchant '{merchant_name}' against rule pattern '{r.merchant_pattern}'."
+                            reason=f"Matched merchant '{merchant_name}' against card rule pattern '{r.merchant_pattern}'."
                         ))
                         step_idx += 1
                         break
 
-        # Step B: Category match (only for rules without a specific merchant constraint, or matching merchant)
+        # Step B: Category match
         if not matched_rule:
             target_cat = category_id.strip().lower()
             for r in rules:
                 if r.category_id and r.category_id.strip().lower() == target_cat:
-                    # If this rule has a merchant pattern, it should only match if merchant matches
                     if r.merchant_pattern:
                         if merchant_name and (r.merchant_pattern.strip().lower() in merchant_name.strip().lower() or merchant_name.strip().lower() in r.merchant_pattern.strip().lower()):
                             matched_rule = r
@@ -115,7 +166,7 @@ class RewardOptimizationEngine:
                         step_idx += 1
                         break
 
-        # Step C: Fallback to general 'all' or default rule
+        # Step C: Fallback to standard base rule
         if not matched_rule:
             for r in rules:
                 if r.category_id in ("all", "default", "*", None):
@@ -126,12 +177,12 @@ class RewardOptimizationEngine:
                         rate_percentage=to_decimal(r.reward_rate_percentage),
                         raw_reward=Decimal("0.00"),
                         final_monetary_value=Decimal("0.00"),
-                        reason="No specific merchant or category rule found; using standard base reward rate."
+                        reason="No category accelerator rule; evaluated against card base reward rate."
                     ))
                     step_idx += 1
                     break
 
-        # If still no rule, assign a conservative 1.0% default base
+        # Step D: Conservative default if no rules configured
         if not matched_rule:
             reward_type = "CASHBACK"
             rate_percentage = Decimal("1.00")
@@ -141,6 +192,7 @@ class RewardOptimizationEngine:
             monthly_cap = None
             is_excluded = False
             exclusion_reason = None
+            missing_notes.append("No specific reward rules registered; applied conservative 1.0% base rate.")
         else:
             reward_type = matched_rule.reward_type or "CASHBACK"
             rate_percentage = to_decimal(matched_rule.reward_rate_percentage)
@@ -151,7 +203,7 @@ class RewardOptimizationEngine:
             is_excluded = matched_rule.is_excluded
             exclusion_reason = matched_rule.exclusion_reason
 
-        # Check exclusion flag
+        # 3. Check Exclusion
         if is_excluded:
             steps.append(CalculationStep(
                 step_number=step_idx,
@@ -161,62 +213,83 @@ class RewardOptimizationEngine:
                 final_monetary_value=Decimal("0.00"),
                 reason=exclusion_reason or "Category or merchant is explicitly excluded from earning rewards."
             ))
+            net_benefit = instant_discount
+            effective_rate = ((net_benefit / amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) if amount > Decimal("0.00") else Decimal("0.00")
+
             return CardRecommendation(
                 card_id=card.id,
                 card_name=card.card_name,
                 bank_name=card.bank_name,
                 network=card.network,
+                card_variant=card.card_variant,
                 reward_type=reward_type,
                 reward_rate_percentage=Decimal("0.00"),
                 point_monetary_value=point_value,
-                expected_reward_monetary=Decimal("0.00"),
-                effective_rate_percentage=Decimal("0.00"),
+                instant_discount_monetary=instant_discount,
+                post_reward_monetary=Decimal("0.00"),
+                expected_reward_monetary=net_benefit,
+                net_financial_benefit=net_benefit,
+                effective_rate_percentage=effective_rate,
                 is_excluded=True,
                 exclusion_reason=exclusion_reason or "Exclusion applied",
+                applicable_offers=applicable_offer_summaries,
+                missing_information_notes=missing_notes,
+                source_references=source_refs,
                 breakdown_steps=steps
             )
 
-        # Check minimum spend requirement
-        if amount < min_spend:
+        # 4. Check Minimum Spend Requirement on Card Rule
+        calc_spend_basis = charged_amount if charged_amount > Decimal("0.00") else amount
+        if calc_spend_basis < min_spend:
             steps.append(CalculationStep(
                 step_number=step_idx,
                 rule_name="Minimum Spend Not Met",
                 rate_percentage=Decimal("0.00"),
                 raw_reward=Decimal("0.00"),
                 final_monetary_value=Decimal("0.00"),
-                reason=f"Transaction amount ₹{amount} is less than required minimum ₹{min_spend}."
+                reason=f"Eligible spend ₹{calc_spend_basis} is less than required minimum ₹{min_spend} for rewards."
             ))
+            net_benefit = instant_discount
+            effective_rate = ((net_benefit / amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) if amount > Decimal("0.00") else Decimal("0.00")
+
             return CardRecommendation(
                 card_id=card.id,
                 card_name=card.card_name,
                 bank_name=card.bank_name,
                 network=card.network,
+                card_variant=card.card_variant,
                 reward_type=reward_type,
                 reward_rate_percentage=rate_percentage,
                 point_monetary_value=point_value,
-                expected_reward_monetary=Decimal("0.00"),
-                effective_rate_percentage=Decimal("0.00"),
+                instant_discount_monetary=instant_discount,
+                post_reward_monetary=Decimal("0.00"),
+                expected_reward_monetary=net_benefit,
+                net_financial_benefit=net_benefit,
+                effective_rate_percentage=effective_rate,
                 is_excluded=False,
-                exclusion_reason=f"Minimum spend of ₹{min_spend} not met",
+                exclusion_reason=f"Minimum spend of ₹{min_spend} not met for rewards",
+                applicable_offers=applicable_offer_summaries,
+                missing_information_notes=missing_notes,
+                source_references=source_refs,
                 breakdown_steps=steps
             )
 
-        # Calculate raw reward
+        # 5. Calculate Raw Post-Transaction Rewards
         rate_multiplier = (rate_percentage / Decimal("100.00"))
         if reward_type == "CASHBACK":
-            raw_monetary = (amount * rate_multiplier).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            raw_monetary = (calc_spend_basis * rate_multiplier).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
             steps.append(CalculationStep(
                 step_number=step_idx,
                 rule_name="Cashback Calculation",
                 rate_percentage=rate_percentage,
                 raw_reward=raw_monetary,
                 final_monetary_value=raw_monetary,
-                reason=f"₹{amount} × {rate_percentage}% = ₹{raw_monetary}"
+                reason=f"₹{calc_spend_basis} × {rate_percentage}% = ₹{raw_monetary}"
             ))
             step_idx += 1
         else:
-            # Points or Miles: integer point accumulation floored
-            points = (amount * rate_multiplier).quantize(Decimal("1"), rounding=ROUND_FLOOR)
+            # Reward Points or Miles: integer point accumulation floored
+            points = (calc_spend_basis * rate_multiplier).quantize(Decimal("1"), rounding=ROUND_FLOOR)
             raw_monetary = (points * point_value).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
             steps.append(CalculationStep(
                 step_number=step_idx,
@@ -264,9 +337,11 @@ class RewardOptimizationEngine:
         else:
             final_monetary = capped_monetary
 
-        final_monetary = final_monetary.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        post_reward_monetary = final_monetary.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        net_benefit = (instant_discount + post_reward_monetary).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
         if amount > Decimal("0.00"):
-            effective_rate = ((final_monetary / amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            effective_rate = ((net_benefit / amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
         else:
             effective_rate = Decimal("0.00")
 
@@ -275,13 +350,20 @@ class RewardOptimizationEngine:
             card_name=card.card_name,
             bank_name=card.bank_name,
             network=card.network,
+            card_variant=card.card_variant,
             reward_type=reward_type,
             reward_rate_percentage=rate_percentage,
             point_monetary_value=point_value,
-            expected_reward_monetary=final_monetary,
+            instant_discount_monetary=instant_discount,
+            post_reward_monetary=post_reward_monetary,
+            expected_reward_monetary=net_benefit,
+            net_financial_benefit=net_benefit,
             effective_rate_percentage=effective_rate,
             is_excluded=False,
             exclusion_reason=None,
+            applicable_offers=applicable_offer_summaries,
+            missing_information_notes=missing_notes,
+            source_references=source_refs,
             breakdown_steps=steps
         )
 
@@ -292,6 +374,8 @@ class RewardOptimizationEngine:
         amount: Decimal,
         category_id: str,
         merchant_name: Optional[str] = None,
+        payment_channel: str = "ONLINE",
+        matched_card_offers_map: Optional[Dict[str, List[Tuple[Any, Decimal]]]] = None,
         language: str = "en"
     ) -> RecommendResponse:
         amount = to_decimal(amount)
@@ -300,6 +384,7 @@ class RewardOptimizationEngine:
                 transaction_amount=amount,
                 category_id=category_id,
                 merchant_name=merchant_name,
+                payment_channel=payment_channel,
                 recommended_card=None,
                 alternatives=[],
                 explanation="No active credit cards registered in your portfolio. Please add a card to receive personalized recommendations.",
@@ -309,20 +394,23 @@ class RewardOptimizationEngine:
 
         evaluations: List[CardRecommendation] = []
         for card in cards:
+            card_offers = matched_card_offers_map.get(card.id, []) if matched_card_offers_map else []
             eval_result = cls.evaluate_card_for_transaction(
                 card=card,
                 amount=amount,
                 category_id=category_id,
-                merchant_name=merchant_name
+                merchant_name=merchant_name,
+                payment_channel=payment_channel,
+                matched_offers=card_offers
             )
             evaluations.append(eval_result)
 
-        # Sort: Highest expected monetary reward, then highest effective rate percentage, then lowest annual fee
+        # Sort: Highest net financial benefit, then highest effective rate percentage, then lowest annual fee
         card_fee_map = {c.id: to_decimal(c.annual_fee) for c in cards}
 
         evaluations.sort(
             key=lambda x: (
-                x.expected_reward_monetary,
+                x.net_financial_benefit,
                 x.effective_rate_percentage,
                 -card_fee_map.get(x.card_id, Decimal("0.00"))
             ),
@@ -346,6 +434,7 @@ class RewardOptimizationEngine:
             transaction_amount=amount,
             category_id=category_id,
             merchant_name=merchant_name,
+            payment_channel=payment_channel,
             recommended_card=recommended,
             alternatives=alternatives,
             explanation=explanation,
@@ -364,8 +453,8 @@ class RewardOptimizationEngine:
         language: str = "en"
     ) -> str:
         target_name = merchant_name if merchant_name else category_id.title()
-        
-        if recommended.expected_reward_monetary == Decimal("0.00"):
+
+        if recommended.net_financial_benefit == Decimal("0.00"):
             if recommended.is_excluded:
                 if language == "hi":
                     return f"{recommended.card_name} पर {target_name} लेन-देन रिवॉर्ड्स से बाहर है ({recommended.exclusion_reason})।"
@@ -374,25 +463,35 @@ class RewardOptimizationEngine:
                 return f"None of your cards earn rewards on {target_name}. Exclusions apply: {recommended.exclusion_reason or 'Category excluded'}."
 
         delta_text = ""
-        if alternatives and alternatives[0].expected_reward_monetary > Decimal("0.00"):
-            delta = recommended.expected_reward_monetary - alternatives[0].expected_reward_monetary
+        if alternatives and alternatives[0].net_financial_benefit > Decimal("0.00"):
+            delta = recommended.net_financial_benefit - alternatives[0].net_financial_benefit
             if delta > Decimal("0.00"):
                 delta_text = f" (₹{delta} more than {alternatives[0].card_name})"
+
+        offer_text_en = ""
+        offer_text_hi = ""
+        offer_text_kn = ""
+        if recommended.instant_discount_monetary > Decimal("0.00"):
+            best_off = recommended.applicable_offers[0] if recommended.applicable_offers else None
+            code_str = f" via coupon '{best_off.promo_code}'" if best_off and best_off.promo_code else ""
+            offer_text_en = f"Includes ₹{recommended.instant_discount_monetary} instant discount{code_str} + ₹{recommended.post_reward_monetary} card rewards. "
+            offer_text_hi = f"कूपन से ₹{recommended.instant_discount_monetary} की तत्काल छूट + ₹{recommended.post_reward_monetary} का कैशबैक। "
+            offer_text_kn = f"ಕೂಪನ್ ಮೂಲಕ ₹{recommended.instant_discount_monetary} ತಕ್ಷಣದ ರಿಯಾಯಿತಿ + ₹{recommended.post_reward_monetary} ಕಾರ್ಡ್ ರಿವಾರ್ಡ್. "
 
         if language == "hi":
             return (
                 f"सर्वश्रेष्ठ विकल्प: {recommended.card_name} ({recommended.bank_name})। "
-                f"इस लेन-देन (₹{amount}) पर आपको {recommended.effective_rate_percentage}% के हिसाब से ₹{recommended.expected_reward_monetary} का लाभ मिलेगा{delta_text}।"
+                f"{offer_text_hi}इस लेन-देन (₹{amount}) पर आपको {recommended.effective_rate_percentage}% के हिसाब से ₹{recommended.net_financial_benefit} का कुल शुद्ध लाभ मिलेगा{delta_text}।"
             )
         elif language == "kn":
             return (
                 f"ಅತ್ಯುತ್ತಮ ಕಾರ್ಡ್: {recommended.card_name} ({recommended.bank_name}). "
-                f"ಈ ವಹಿವಾಟಿಗೆ (₹{amount}) {recommended.effective_rate_percentage}% ದರದಲ್ಲಿ ₹{recommended.expected_reward_monetary} ಲಾಭ ಸಿಗುತ್ತದೆ{delta_text}."
+                f"{offer_text_kn}ಈ ವಹಿವಾಟಿಗೆ (₹{amount}) {recommended.effective_rate_percentage}% ದರದಲ್ಲಿ ₹{recommended.net_financial_benefit} ಒಟ್ಟು ನಿವ್ವಳ ಲಾಭ ಸಿಗುತ್ತದೆ{delta_text}."
             )
         else:
             return (
                 f"Recommended: {recommended.card_name} ({recommended.bank_name}). "
-                f"Yields ₹{recommended.expected_reward_monetary} ({recommended.effective_rate_percentage}% effective rate) on your ₹{amount} spend on {target_name}{delta_text}."
+                f"{offer_text_en}Yields ₹{recommended.net_financial_benefit} net financial benefit ({recommended.effective_rate_percentage}% effective rate) on your ₹{amount} spend on {target_name}{delta_text}."
             )
 
     @classmethod
@@ -443,9 +542,7 @@ class RewardOptimizationEngine:
             if fee == Decimal("0.00"):
                 breakevens[card.id] = Decimal("0.00")
             else:
-                # Assume 2% conservative baseline rate
                 rate = Decimal("0.02")
-                # find card base rate if present
                 for r in card.reward_rules:
                     if r.category_id in ("all", "default", None):
                         rate = to_decimal(r.reward_rate_percentage) / Decimal("100.00")

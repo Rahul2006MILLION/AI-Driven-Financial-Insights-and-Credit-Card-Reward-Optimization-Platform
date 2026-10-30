@@ -38,8 +38,13 @@ Update user language preferences and display name.
 ## 2. Credit Card Endpoints
 
 ### `GET /api/v1/cards`
-List all credit cards belonging to authenticated user.
+List all credit cards belonging to authenticated user with optional search & filtering.
 - **Headers:** `Authorization: Bearer <token>`
+- **Query Parameters:**
+  - `query` (optional string): Search term matching bank name, card name, or variant.
+  - `bank` (optional string): Filter by bank name (e.g., `HDFC Bank`).
+  - `network` (optional string): Filter by network (`VISA`, `MASTERCARD`, `RUPAY`, `AMEX`).
+  - `is_active` (optional bool): Filter by active status (defaults to true).
 - **Response `200 OK`:**
   ```json
   [
@@ -48,8 +53,13 @@ List all credit cards belonging to authenticated user.
       "card_name": "HDFC Millennia",
       "bank_name": "HDFC Bank",
       "network": "VISA",
+      "card_variant": "Millennia Cashback",
       "last_four_digits": "4892",
+      "joining_fee": 1000.0,
       "annual_fee": 1000.0,
+      "fee_waiver_spend_threshold": 100000.0,
+      "fee_waiver_condition_details": "Waived on spends of ₹1,00,000 in a calendar year",
+      "terms_source_url": "https://www.hdfcbank.com/personal/pay/cards/credit-cards/millennia-cards",
       "rules_count": 4,
       "benefits_count": 2
     }
@@ -57,7 +67,7 @@ List all credit cards belonging to authenticated user.
   ```
 
 ### `POST /api/v1/cards`
-Register a new credit card with reward rules.
+Register a new credit card with reward rules, variant, fees, waiver conditions, and structured benefits.
 - **Headers:** `Authorization: Bearer <token>`
 - **Request Body:**
   ```json
@@ -65,8 +75,13 @@ Register a new credit card with reward rules.
     "card_name": "Axis Bank Ace",
     "bank_name": "Axis Bank",
     "network": "VISA",
+    "card_variant": "Ace Contactless",
     "last_four_digits": "1044",
+    "joining_fee": 499.0,
     "annual_fee": 499.0,
+    "fee_waiver_spend_threshold": 200000.0,
+    "fee_waiver_condition_details": "Annual fee reversed on spending ₹2,00,000 in the previous year",
+    "terms_source_url": "https://www.axisbank.com/retail/cards/credit-card/ace-credit-card",
     "rules": [
       {
         "category_id": "utility",
@@ -79,28 +94,86 @@ Register a new credit card with reward rules.
         "reward_type": "CASHBACK",
         "reward_rate_percentage": 2.0
       }
+    ],
+    "benefits": [
+      {
+        "benefit_type": "PERMANENT_BENEFIT",
+        "applicable_category": "utility",
+        "title": "5% Google Pay Bill Pay",
+        "description": "5% cashback on utility bill payments and mobile recharges on Google Pay",
+        "reward_percentage_or_points": 5.0,
+        "reward_basis": "PERCENTAGE",
+        "cap_amount": 500.0,
+        "cap_period": "MONTHLY"
+      }
     ]
   }
   ```
+
+### `PUT /api/v1/cards/{card_id}`
+Update card details, annual fees, waiver terms, and replace or update nested rules and benefits.
 
 ### `GET /api/v1/cards/{card_id}`
 Retrieve card details, specific rules, and benefits.
 
 ### `DELETE /api/v1/cards/{card_id}`
-Deactivate or remove card.
+Deactivate or remove card from portfolio.
 
 ---
 
-## 3. Reward Optimization & Comparison Endpoints
+## 3. Offers Discovery Endpoints
+
+### `GET /api/v1/offers`
+List curated and active merchant offers.
+- **Headers:** `Authorization: Bearer <token>`
+- **Query Parameters:**
+  - `category` (optional string): Filter by category (`shopping`, `dining`, `food_delivery`, `travel`, `entertainment`, `grocery`, `utility`, `all`).
+  - `expiring_soon` (optional bool): Return only offers expiring within 7 days.
+  - `user_cards_only` (optional bool): Filter offers applicable specifically to the user's registered cards.
+  - `query` (optional string): Search by merchant name or offer title.
+- **Response `200 OK`:**
+  ```json
+  [
+    {
+      "id": "off_swiggy_hdfc",
+      "merchant_name": "Swiggy",
+      "offer_title": "₹150 Instant Off on Food Delivery",
+      "discount_type": "PERCENTAGE",
+      "discount_percentage": 15.0,
+      "minimum_transaction_value": 800.0,
+      "maximum_discount": 150.0,
+      "eligible_banks": ["HDFC Bank"],
+      "eligible_card_names": ["HDFC Millennia", "HDFC Regalia"],
+      "valid_from": "2025-01-01T00:00:00Z",
+      "expiry_date": "2026-12-31T23:59:59Z",
+      "applicable_payment_channel": "ONLINE",
+      "promo_code": "HDFCSWIGGY150",
+      "activation_requirement": "Apply coupon at checkout",
+      "verification_status": "VERIFIED",
+      "terms_and_conditions": "Valid once per user per week on food orders above ₹800."
+    }
+  ]
+  ```
+
+### `GET /api/v1/offers/{offer_id}`
+Retrieve detailed offer specifications, terms, and source references.
+
+### `POST /api/v1/offers`
+Register or submit a new card offer (admin or verified source).
+
+---
+
+## 4. Reward Optimization & Comparison Endpoints
 
 ### `POST /api/v1/optimization/recommend`
-Evaluate best card for a specific purchase amount, merchant, and category.
+Evaluate best card for a specific purchase amount, merchant, category, and payment channel. Combines upfront instant discounts with post-transaction rewards to maximize net financial benefit.
 - **Request Body:**
   ```json
   {
-    "amount": 2500.0,
+    "amount": 2000.0,
     "category_id": "dining",
-    "merchant_name": "Swiggy"
+    "merchant_name": "Swiggy",
+    "payment_channel": "ONLINE"
   }
   ```
 - **Response `200 OK`:**
@@ -110,24 +183,40 @@ Evaluate best card for a specific purchase amount, merchant, and category.
       "card_id": "crd_8f11a4...",
       "card_name": "HDFC Millennia",
       "bank_name": "HDFC Bank",
-      "expected_reward_monetary": 125.0,
-      "effective_rate_percentage": 5.0,
-      "reward_type": "CASHBACK"
+      "instant_discount_monetary": 150.0,
+      "post_reward_monetary": 92.5,
+      "net_financial_benefit": 242.5,
+      "expected_reward_monetary": 242.5,
+      "effective_rate_percentage": 12.125,
+      "reward_type": "CASHBACK",
+      "applicable_offers": [
+        {
+          "offer_id": "off_swiggy_hdfc",
+          "merchant_name": "Swiggy",
+          "offer_title": "₹150 Instant Off on Food Delivery",
+          "promo_code": "HDFCSWIGGY150",
+          "instant_discount_amount": 150.0
+        }
+      ]
     },
     "calculation_breakdown": {
       "applied_rule": "5.0% Accelerated Cashback on Dining (Swiggy)",
-      "base_amount": 2500.0,
-      "applied_cap": null,
-      "net_value": 125.0
+      "base_amount": 2000.0,
+      "instant_discount_applied": 150.0,
+      "net_charge_amount": 1850.0,
+      "post_reward_monetary": 92.5,
+      "total_net_benefit": 242.5
     },
     "alternatives": [
       {
         "card_name": "Axis Bank Ace",
-        "expected_reward_monetary": 50.0,
+        "instant_discount_monetary": 0.0,
+        "post_reward_monetary": 40.0,
+        "net_financial_benefit": 40.0,
         "effective_rate_percentage": 2.0
       }
     ],
-    "explanation": "HDFC Millennia provides the highest net reward of ₹125.00 via its 5% accelerated dining partnership."
+    "explanation": "HDFC Millennia delivers maximum net benefit of ₹242.50: ₹150.00 upfront instant discount with coupon HDFCSWIGGY150, plus ₹92.50 in post-transaction cashback (5.0%) on the net charged ₹1,850.00."
   }
   ```
 

@@ -15,6 +15,7 @@ import {
   Activity,
   Bot,
   FileUp,
+  Tag,
   User,
   Settings,
 } from "lucide-react";
@@ -26,6 +27,7 @@ export const Sidebar: React.FC = () => {
   const navItems = [
     { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
     { href: "/cards", label: t.nav.cards, icon: CreditCard },
+    { href: "/offers", label: t.nav.offers, icon: Tag, highlight: true },
     { href: "/cards/new", label: t.nav.addCard, icon: PlusCircle },
     { href: "/cards/compare", label: t.nav.compare, icon: GitCompare },
     { href: "/optimization", label: t.nav.optimizer, icon: Zap, highlight: true },

@@ -84,19 +84,21 @@ async def test_full_application_e2e_journey():
         assert opt_resp.status_code == 200
         opt_data = opt_resp.json()
 
-        # Millennia (5% -> ₹100) must beat Axis Ace (2% -> ₹40)
+        # Millennia (₹150 instant discount + ₹92.50 cashback = ₹242.50) beats Axis Ace (₹120 instant discount + ₹37.60 = ₹157.60)
         assert opt_data["recommended_card"]["card_id"] == card1_id
         assert opt_data["recommended_card"]["card_name"] == "HDFC Millennia"
-        assert float(opt_data["recommended_card"]["expected_reward_monetary"]) == 100.0
-        assert float(opt_data["recommended_card"]["effective_rate_percentage"]) == 5.0
+        assert float(opt_data["recommended_card"]["instant_discount_monetary"]) == 150.0
+        assert float(opt_data["recommended_card"]["post_reward_monetary"]) == 92.5
+        assert float(opt_data["recommended_card"]["expected_reward_monetary"]) == 242.5
+        assert float(opt_data["recommended_card"]["effective_rate_percentage"]) == 12.13
         assert len(opt_data["alternatives"]) == 1
         assert opt_data["alternatives"][0]["card_name"] == "Axis Bank Ace"
-        assert float(opt_data["alternatives"][0]["expected_reward_monetary"]) == 40.0
+        assert float(opt_data["alternatives"][0]["net_financial_benefit"]) == 157.6
 
         # Check calculation breakdown transparency
         steps = opt_data["recommended_card"]["breakdown_steps"]
         assert len(steps) >= 2
-        assert "Swiggy" in steps[0]["reason"]
+        assert "Swiggy" in steps[0]["reason"] or "Swiggy" in steps[1]["reason"]
 
         # 5. Multilingual Profile Update to Hindi ('hi')
         upd_prof = await client.put("/api/v1/profile", headers=headers, json={

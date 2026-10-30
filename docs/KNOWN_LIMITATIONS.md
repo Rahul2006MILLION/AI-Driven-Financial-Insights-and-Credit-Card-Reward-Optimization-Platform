@@ -56,3 +56,4 @@ This document provides a transparent, evidence-based inventory of current techni
 
 - **Current Scope:** CLIQ's default categories, seed cards, and currency formats are optimized for the Indian credit card and fintech ecosystem (INR `₹`, standard cards: HDFC Millennia, Regalia, Infinia; Axis Ace; SBI Cashback; ICICI Amazon Pay; RuPay UPI credit cards).
 - **Extensibility:** The underlying database schema and `RewardOptimizationEngine` accept any currency string and ISO codes, but user interface formatting defaults to `₹`.
+

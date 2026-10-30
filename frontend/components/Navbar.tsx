@@ -87,6 +87,18 @@ export const Navbar: React.FC = () => {
                 {t.nav.dashboard}
               </Link>
               <Link
+                href="/cards"
+                className="text-xs font-medium text-cliq-textSecondary hover:text-cliq-cyan transition-colors"
+              >
+                {t.nav.cards}
+              </Link>
+              <Link
+                href="/offers"
+                className="text-xs font-medium text-cliq-turquoise hover:text-cliq-cyan transition-colors"
+              >
+                {t.nav.offers}
+              </Link>
+              <Link
                 href="/optimization"
                 className="text-xs font-medium text-cliq-textSecondary hover:text-cliq-cyan transition-colors"
               >
@@ -174,6 +186,13 @@ export const Navbar: React.FC = () => {
                 className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
               >
                 {t.nav.cards}
+              </Link>
+              <Link
+                href="/offers"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm text-cliq-turquoise hover:text-cliq-cyan"
+              >
+                {t.nav.offers}
               </Link>
               <Link
                 href="/optimization"

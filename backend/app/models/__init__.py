@@ -10,6 +10,7 @@ from app.models.entities import (
     RewardAnalysis,
     UserPreference,
     AuditLog,
+    CardOffer,
 )
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "CreditCard",
     "CardRewardRule",
     "CardBenefit",
+    "CardOffer",
     "SpendingCategory",
     "Transaction",
     "UploadedDocument",

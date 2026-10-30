@@ -213,3 +213,4 @@ async def test_document_staging_and_verification_workflow():
         doc_refreshed = await client.get(f"/api/v1/documents/{doc_id}", headers=headers1)
         assert doc_refreshed.json()["processing_status"] == "VERIFIED"
         assert doc_refreshed.json()["extracted_data"]["is_verified"] is True
+
