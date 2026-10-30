@@ -1,0 +1,195 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { Sidebar } from "@/components/Sidebar";
+import { useLanguage, Language } from "@/lib/i18n";
+import { apiFetch, getStoredSession, storeSession } from "@/lib/api";
+import { User, Mail, Globe, Coins, CheckCircle2, Loader2, Save } from "lucide-react";
+
+export default function ProfilePage() {
+  const { t, language, setLanguage } = useLanguage();
+  const [profile, setProfile] = useState<any>(null);
+  const [fullName, setFullName] = useState("");
+  const [currency, setCurrency] = useState("INR");
+  const [preferredLang, setPreferredLang] = useState<Language>(language);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [savedSuccess, setSavedSuccess] = useState(false);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data: any = await apiFetch("/profile");
+        setProfile(data);
+        setFullName(data.full_name || "");
+        setCurrency(data.currency || "INR");
+        if (data.preferred_language) {
+          setPreferredLang(data.preferred_language as Language);
+          setLanguage(data.preferred_language as Language);
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setSavedSuccess(false);
+
+    try {
+      const updated: any = await apiFetch("/profile", {
+        method: "PUT",
+        body: JSON.stringify({
+          full_name: fullName,
+          preferred_language: preferredLang,
+          currency,
+        }),
+      });
+
+      setProfile(updated);
+      setLanguage(preferredLang);
+      const session = getStoredSession();
+      if (session) {
+        storeSession({
+          ...session,
+          fullName: updated.full_name,
+          preferredLanguage: updated.preferred_language,
+        });
+      }
+
+      setSavedSuccess(true);
+    } catch (err) {
+      alert("Failed to save profile: " + err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="flex-1 flex flex-col lg:flex-row">
+      <Sidebar />
+
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full space-y-6">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+            {t.nav.profile}
+          </h1>
+          <p className="text-xs text-cliq-textSecondary mt-1">
+            Manage your personal profile, preferred language, and regional financial settings.
+          </p>
+        </div>
+
+        {savedSuccess && (
+          <div className="p-3.5 rounded-xl bg-cliq-emerald/10 border border-cliq-emerald/30 text-cliq-emerald text-xs flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4" />
+            <span>Profile settings successfully updated and synchronized!</span>
+          </div>
+        )}
+
+        {loading ? (
+          <div className="py-20 text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-cliq-cyan mx-auto" />
+            <p className="text-xs text-cliq-textSecondary mt-2">Loading profile...</p>
+          </div>
+        ) : (
+          <div className="glass-panel p-6 sm:p-8 rounded-2xl border-glow-cyan shadow-cardGlass">
+            <form onSubmit={handleSave} className="space-y-6 text-xs">
+              <div className="flex items-center gap-4 border-b border-cliq-border pb-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cliq-cyan to-cliq-emerald p-0.5 shadow-neonCyan">
+                  <div className="w-full h-full bg-cliq-bg rounded-full flex items-center justify-center">
+                    <User className="w-8 h-8 text-cliq-cyan" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">{fullName || "CLIQ User"}</h3>
+                  <div className="text-xs text-cliq-textSecondary">{profile?.email}</div>
+                  <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded bg-cliq-emerald/15 text-cliq-emerald font-semibold">
+                    Verified Account
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
+                    Display Name
+                  </label>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
+                    Email Address (Immutable)
+                  </label>
+                  <input
+                    type="email"
+                    disabled
+                    value={profile?.email || ""}
+                    className="w-full bg-cliq-surface/50 border border-cliq-border/60 rounded-xl px-3.5 py-2.5 text-cliq-textMuted text-sm cursor-not-allowed"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
+                    Display Currency
+                  </label>
+                  <select
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value)}
+                    className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                  >
+                    <option value="INR">INR (₹) - Indian Rupee</option>
+                    <option value="USD">USD ($) - US Dollar</option>
+                    <option value="EUR">EUR (€) - Euro</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
+                    Preferred Language / ಭಾಷೆ / भाषा
+                  </label>
+                  <select
+                    value={preferredLang}
+                    onChange={(e) => setPreferredLang(e.target.value as Language)}
+                    className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                  >
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-cliq-border flex justify-end">
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95 flex items-center gap-2"
+                >
+                  {saving ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      <span>{t.common.save}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}

@@ -1,0 +1,47 @@
+from typing import List, Optional
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+class Settings(BaseSettings):
+    ENVIRONMENT: str = "development"
+    LOG_LEVEL: str = "INFO"
+    APP_SECRET_KEY: str = "cliq_super_secure_default_secret_key_change_in_production_32char"
+    
+    # Database
+    DATABASE_URL: str = f"sqlite+aiosqlite:///{BASE_DIR}/data/cliq.db"
+    
+    # Supabase (optional for cloud integration)
+    SUPABASE_URL: Optional[str] = None
+    SUPABASE_ANON_KEY: Optional[str] = None
+    SUPABASE_SERVICE_ROLE_KEY: Optional[str] = None
+    SUPABASE_JWT_SECRET: Optional[str] = None
+    
+    # AI Providers
+    AI_PROVIDER: str = "gemini"  # "gemini", "openai", "anthropic", "mock"
+    GEMINI_API_KEY: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
+    ANTHROPIC_API_KEY: Optional[str] = None
+    AI_MODEL_NAME: str = "gemini-1.5-flash"
+    
+    # Security
+    ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001"
+    RATE_LIMIT_PER_MINUTE: int = 120
+    MAX_UPLOAD_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB
+    
+    # Token Expiration
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+    
+    @property
+    def cors_origins(self) -> List[str]:
+        return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
+
+    model_config = SettingsConfigDict(
+        env_file=str(BASE_DIR / ".env"),
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+
+settings = Settings()
