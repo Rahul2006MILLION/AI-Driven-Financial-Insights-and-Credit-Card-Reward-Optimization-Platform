@@ -90,6 +90,13 @@ export default function OffersDiscoveryPage() {
 
           <div className="flex items-center gap-3">
             <Link
+              href="/admin/offers"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold text-xs hover:bg-amber-500/25 transition-colors"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              <span>Admin Verification Desk</span>
+            </Link>
+            <Link
               href="/optimization"
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95"
             >
@@ -360,3 +367,4 @@ export default function OffersDiscoveryPage() {
     </div>
   );
 }
+

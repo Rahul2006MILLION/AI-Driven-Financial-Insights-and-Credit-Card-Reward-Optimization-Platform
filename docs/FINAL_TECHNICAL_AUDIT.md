@@ -22,6 +22,8 @@ This technical audit was conducted independently across the full CLIQ stack to v
 | **Multilingual UI (en/hi/kn)** | React Context (`i18n.tsx`) | Fully Implemented | Trilingual dictionary check & UI switch | **PASS** |
 | **Backend API Core** | FastAPI, Pydantic v2, Python 3.12 | Fully Implemented | ASGI lifespan check, schema validation tests | **PASS** |
 | **Reward Optimization Engine** | Python `Decimal`, deterministic math | Fully Implemented | 12 automated unit edge-case tests | **PASS** |
+| **Hybrid Offer Discovery** | Multi-source India connectors + Hashing | Fully Implemented | Automatic discovery + duplicate detection tests | **PASS** |
+| **Admin Offer Verification Desk** | RBAC, Audit trail, Diff inspection | Fully Implemented | Admin review queue, approval & rejection tests | **PASS** |
 | **Document Intelligence (PDF)** | PyMuPDF (fitz) text parsing + Regex | Fully Implemented | Mock PDF upload & extraction test | **PASS** |
 | **Document Intelligence (OCR)** | Tesseract OCR / Vision | Planned Fallback | Dependency analysis (not installed) | **NOT VERIFIED** |
 | **Human-in-the-Loop Staging** | `ExtractedCardData` (`is_verified=False`) | Fully Implemented | End-to-end promotion test | **PASS** |
@@ -50,7 +52,7 @@ This technical audit was conducted independently across the full CLIQ stack to v
 
 ## 3. Frontend Audit (15 Required Screens)
 
-The Next.js 14 production build (`npm run build`) succeeded with zero errors, generating 19 optimized static routes.
+The Next.js 14 production build (`npm run build`) succeeded with zero errors, generating 21 optimized static routes.
 
 ### Screen Verification Matrix
 
@@ -71,6 +73,8 @@ The Next.js 14 production build (`npm run build`) succeeded with zero errors, ge
 | 13 | **Document Upload & Processing** | `/documents` | Drag-and-drop PDF upload, staged rule editor, verification action | **PASS** |
 | 14 | **User Profile** | `/profile` | Profile details, password reset, account deletion | **PASS** |
 | 15 | **Settings & Security** | `/settings` | Security controls, session logs, data export | **PASS** |
+| 16 | **Offers Discovery** | `/offers` | Dedicated verified offers, category tabs, coupon code copy | **PASS** |
+| 17 | **Admin Offer Review Desk** | `/admin/offers` | Human-in-the-loop review queue, diff inspection, 1-click approvals | **PASS** |
 
 - **Design System Fidelity:** Implemented the exact "Neon Mountain Journey" aesthetic:
   - Background: `#020B12`

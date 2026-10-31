@@ -159,11 +159,55 @@ List curated and active merchant offers.
 Retrieve detailed offer specifications, terms, and source references.
 
 ### `POST /api/v1/offers`
-Register or submit a new card offer (admin or verified source).
+Submit a new card offer. For regular users, status is automatically staged as `PENDING_REVIEW` pending administrator verification.
 
 ---
 
-## 4. Reward Optimization & Comparison Endpoints
+## 4. Administrative Offer Verification Endpoints (`/api/v1/admin/offers`)
+
+All administrative offer endpoints are strictly guarded by `require_admin` (`HTTP 403 Forbidden` for non-admin accounts).
+
+### `GET /api/v1/admin/offers/review-queue`
+Retrieve offers across all verification statuses with evidence snippets, extraction confidence, and diff snapshots.
+- **Headers:** `Authorization: Bearer <admin_token>`
+- **Query Parameters:**
+  - `status_filter` (optional string): `PENDING_REVIEW`, `NEEDS_REVERIFICATION`, `VERIFIED`, `REJECTED`, `EXPIRED`, `ALL`.
+  - `query` (optional string): Search term.
+
+### `POST /api/v1/admin/offers/{offer_id}/approve`
+Approve an offer into the `VERIFIED` state.
+- **Request Body:**
+  ```json
+  {
+    "notes": "Verified against official issuer partner portal."
+  }
+  ```
+
+### `POST /api/v1/admin/offers/{offer_id}/reject`
+Reject an offer with a mandatory recorded reason.
+- **Request Body:**
+  ```json
+  {
+    "rejection_reason": "Promotion expired or unverified third party claims.",
+    "notes": "Issuer portal confirmed deal discontinued."
+  }
+  ```
+
+### `PUT /api/v1/admin/offers/{offer_id}`
+Edit extracted offer parameters, correction of caps/variants, and optional immediate promotion to `VERIFIED`.
+
+### `POST /api/v1/admin/offers/{offer_id}/reverification`
+Quarantine an offer into `NEEDS_REVERIFICATION` when material terms change.
+
+### `GET /api/v1/admin/offers/{offer_id}/audit-trail`
+Retrieve the full provenance history, reviewer identities, and state transition logs.
+
+### `POST /api/v1/admin/offers/sync-discovery`
+Trigger the automated India-first multi-source discovery pipeline. Returns ingestion summary counts.
+
+---
+
+## 5. Reward Optimization & Comparison Endpoints
 
 ### `POST /api/v1/optimization/recommend`
 Evaluate best card for a specific purchase amount, merchant, category, and payment channel. Combines upfront instant discounts with post-transaction rewards to maximize net financial benefit.

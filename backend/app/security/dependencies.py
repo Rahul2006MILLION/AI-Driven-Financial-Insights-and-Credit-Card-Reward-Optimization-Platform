@@ -48,3 +48,13 @@ async def get_current_user(
         )
     
     return user
+
+async def require_admin(
+    current_user: Profile = Depends(get_current_user)
+) -> Profile:
+    if not (current_user.is_admin or current_user.role == "ADMIN"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Administrative privileges required to access the offer verification system."
+        )
+    return current_user

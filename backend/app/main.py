@@ -30,8 +30,9 @@ from app.api.v1.optimization import router as optimization_router
 from app.api.v1.documents import router as documents_router
 from app.api.v1.analytics import router as analytics_router
 from app.api.v1.assistant import router as assistant_router
-from app.api.v1.offers import router as offers_router
+from app.api.v1.offers import router as offers_router, admin_router as offers_admin_router
 from app.services.offers.offer_service import OfferService
+from app.security.password import get_password_hash
 from sqlalchemy import text
 
 DEFAULT_CATEGORIES = [
@@ -94,10 +95,64 @@ async def init_db():
                 await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN source_reference VARCHAR(512)"))
             if "last_verified_date" not in ben_cols:
                 await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN last_verified_date DATETIME"))
+
+            # Profiles migrations
+            res_p = await conn.execute(text("PRAGMA table_info(profiles)"))
+            prof_cols = [row[1] for row in res_p.fetchall()]
+            if "role" not in prof_cols:
+                await conn.execute(text("ALTER TABLE profiles ADD COLUMN role VARCHAR(32) DEFAULT 'USER'"))
+            if "is_admin" not in prof_cols:
+                await conn.execute(text("ALTER TABLE profiles ADD COLUMN is_admin BOOLEAN DEFAULT 0"))
+
+            # CardOffers migrations
+            res_o = await conn.execute(text("PRAGMA table_info(card_offers)"))
+            off_cols = [row[1] for row in res_o.fetchall()]
+            if "source_name" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_name VARCHAR(128)"))
+            if "source_evidence" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_evidence TEXT"))
+            if "extraction_confidence" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN extraction_confidence NUMERIC(4, 2) DEFAULT 0.85"))
+            if "content_hash" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN content_hash VARCHAR(64)"))
+            if "version" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN version INTEGER DEFAULT 1"))
+            if "previous_version_json" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN previous_version_json TEXT"))
+            if "rejection_reason" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN rejection_reason VARCHAR(255)"))
+            if "reviewed_by_id" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_by_id VARCHAR(36)"))
+            if "reviewed_by_name" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_by_name VARCHAR(128)"))
+            if "reviewed_at" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_at DATETIME"))
+            if "change_history_json" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN change_history_json TEXT DEFAULT '[]'"))
+            if "updated_at" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN updated_at DATETIME"))
         except Exception:
             pass
 
     async with AsyncSessionLocal() as session:
+        # Seed default admin if not existing
+        admin_email = "admin@cliq.ai"
+        admin_stmt = select(Profile).where(Profile.email == admin_email)
+        admin_user = (await session.execute(admin_stmt)).scalar_one_or_none()
+        if not admin_user:
+            admin_user = Profile(
+                email=admin_email,
+                hashed_password=get_password_hash("AdminPass@123"),
+                full_name="CLIQ Chief Admin",
+                preferred_language="en",
+                currency="INR",
+                role="ADMIN",
+                is_admin=True,
+                is_active=True
+            )
+            session.add(admin_user)
+            await session.commit()
+
         for cat in DEFAULT_CATEGORIES:
             existing = await session.get(SpendingCategory, cat["id"])
             if not existing:
@@ -171,3 +226,4 @@ app.include_router(documents_router, prefix="/api/v1")
 app.include_router(analytics_router, prefix="/api/v1")
 app.include_router(assistant_router, prefix="/api/v1")
 app.include_router(offers_router, prefix="/api/v1")
+app.include_router(offers_admin_router, prefix="/api/v1")

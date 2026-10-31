@@ -18,6 +18,7 @@ import {
   Tag,
   User,
   Settings,
+  ShieldCheck,
 } from "lucide-react";
 
 export const Sidebar: React.FC = () => {
@@ -63,6 +64,22 @@ export const Sidebar: React.FC = () => {
           </Link>
         );
       })}
+
+      <div className="pt-4 mt-3 border-t border-cliq-border/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-cliq-textMuted flex items-center justify-between">
+        <span>Administration</span>
+        <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-extrabold text-[9px]">STAFF</span>
+      </div>
+      <Link
+        href="/admin/offers"
+        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+          pathname === "/admin/offers"
+            ? "bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-amber-400 border border-amber-500/40 shadow-sm"
+            : "text-amber-400/80 hover:text-amber-300 hover:bg-cliq-surface"
+        }`}
+      >
+        <ShieldCheck className="w-4 h-4 text-amber-400" />
+        <span>Offer Review Desk</span>
+      </Link>
     </aside>
   );
 };

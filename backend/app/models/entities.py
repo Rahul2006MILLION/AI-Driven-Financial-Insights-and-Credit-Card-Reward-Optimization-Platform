@@ -20,6 +20,8 @@ class Profile(Base):
     full_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     preferred_language: Mapped[str] = mapped_column(String(10), default="en", nullable=False)
     currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
+    role: Mapped[str] = mapped_column(String(32), default="USER", nullable=False)  # USER, ADMIN
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -125,9 +127,40 @@ class CardOffer(Base):
     activation_requirement: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)  # e.g. "Apply coupon code at checkout"
     terms_and_conditions: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     source_url: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
-    verification_status: Mapped[str] = mapped_column(String(32), default="VERIFIED", nullable=False)  # VERIFIED, SAMPLE, MANUALLY_ENTERED, EXPIRED
+    source_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)  # e.g. "HDFC SmartBuy", "Swiggy Offers"
+    source_evidence: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # Verbatim snippet extracted from source
+    extraction_confidence: Mapped[Decimal] = mapped_column(Numeric(4, 2), default=Decimal("0.85"), nullable=False)
+    verification_status: Mapped[str] = mapped_column(String(32), default="PENDING_REVIEW", nullable=False)  # DISCOVERED, PENDING_REVIEW, VERIFIED, REJECTED, EXPIRED, NEEDS_REVERIFICATION, SOURCE_UNAVAILABLE
+    content_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)  # Hash of canonical terms
+    version: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+    previous_version_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # Prior approved version for diff review
+    rejection_reason: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    reviewed_by_id: Mapped[Optional[str]] = mapped_column(String(36), nullable=True)
+    reviewed_by_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+    reviewed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     last_verified_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    change_history_json: Mapped[str] = mapped_column(Text, default="[]", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    audit_logs: Mapped[List["OfferAuditLog"]] = relationship("OfferAuditLog", back_populates="offer", cascade="all, delete-orphan")
+
+class OfferAuditLog(Base):
+    __tablename__ = "offer_audit_logs"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    offer_id: Mapped[str] = mapped_column(String(36), ForeignKey("card_offers.id", ondelete="CASCADE"), nullable=False, index=True)
+    action: Mapped[str] = mapped_column(String(64), nullable=False, index=True)  # DISCOVERED, EXTRACTED, SUBMITTED_FOR_REVIEW, APPROVED, REJECTED, EDITED, REVERIFICATION_TRIGGERED, EXPIRED, SOURCE_UNAVAILABLE
+    actor_id: Mapped[Optional[str]] = mapped_column(String(36), nullable=True)
+    actor_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+    actor_role: Mapped[str] = mapped_column(String(32), default="SYSTEM", nullable=False)  # SYSTEM, ADMIN
+    from_status: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    to_status: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    snapshot_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+    offer: Mapped["CardOffer"] = relationship("CardOffer", back_populates="audit_logs")
 
 class SpendingCategory(Base):
     __tablename__ = "spending_categories"

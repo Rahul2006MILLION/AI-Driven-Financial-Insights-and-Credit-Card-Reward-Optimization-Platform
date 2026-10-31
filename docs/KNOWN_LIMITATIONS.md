@@ -57,3 +57,12 @@ This document provides a transparent, evidence-based inventory of current techni
 - **Current Scope:** CLIQ's default categories, seed cards, and currency formats are optimized for the Indian credit card and fintech ecosystem (INR `₹`, standard cards: HDFC Millennia, Regalia, Infinia; Axis Ace; SBI Cashback; ICICI Amazon Pay; RuPay UPI credit cards).
 - **Extensibility:** The underlying database schema and `RewardOptimizationEngine` accept any currency string and ISO codes, but user interface formatting defaults to `₹`.
 
+---
+
+## 7. Hybrid Offer Discovery & Connectors Scope
+
+- **Status:** `OPERATIONAL HYBRID (Permitted Connectors + Human Verification Desk)`
+- **Current Behavior:** Automated connectors poll permitted public marketing pages of Indian issuers (HDFC, ICICI, Axis, SBI, RuPay, Swiggy, Blinkit). New deals enter `PENDING_REVIEW` and material alterations trigger `NEEDS_REVERIFICATION`.
+- **Architectural Boundary:** No deal is ever automatically promoted to `VERIFIED` without human administrator sign-off. Connectors strictly respect `robots.txt` and never bypass anti-bot, login walls, or CAPTCHA challenges.
+- **Enterprise Requirement:** For enterprise-scale coverage of 10,000+ localized merchant deals, official Open Banking APIs, affiliate aggregator APIs, or merchant partner direct data feeds should be configured.
+

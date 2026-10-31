@@ -6,6 +6,8 @@ export interface UserSession {
   email: string;
   fullName?: string;
   preferredLanguage?: string;
+  role?: string;
+  isAdmin?: boolean;
 }
 
 export const getStoredSession = (): UserSession | null => {
@@ -20,6 +22,8 @@ export const getStoredSession = (): UserSession | null => {
     email: email || "",
     fullName: localStorage.getItem("cliq_full_name") || "",
     preferredLanguage: localStorage.getItem("cliq_preferred_language") || "en",
+    role: localStorage.getItem("cliq_role") || "USER",
+    isAdmin: localStorage.getItem("cliq_is_admin") === "true",
   };
 };
 
@@ -30,6 +34,8 @@ export const storeSession = (session: UserSession) => {
   localStorage.setItem("cliq_email", session.email);
   if (session.fullName) localStorage.setItem("cliq_full_name", session.fullName);
   if (session.preferredLanguage) localStorage.setItem("cliq_preferred_language", session.preferredLanguage);
+  if (session.role) localStorage.setItem("cliq_role", session.role);
+  if (session.isAdmin !== undefined) localStorage.setItem("cliq_is_admin", String(session.isAdmin));
 };
 
 export const clearSession = () => {
@@ -38,6 +44,8 @@ export const clearSession = () => {
   localStorage.removeItem("cliq_user_id");
   localStorage.removeItem("cliq_email");
   localStorage.removeItem("cliq_full_name");
+  localStorage.removeItem("cliq_role");
+  localStorage.removeItem("cliq_is_admin");
 };
 
 // Generic fetcher with bearer token
@@ -158,11 +166,43 @@ export interface CardOffer {
   activation_requirement?: string;
   terms_and_conditions?: string;
   source_url?: string;
-  verification_status: "VERIFIED" | "SAMPLE" | "MANUALLY_ENTERED" | "EXPIRED";
+  source_name?: string;
+  source_evidence?: string;
+  extraction_confidence?: number | string;
+  verification_status: "DISCOVERED" | "PENDING_REVIEW" | "VERIFIED" | "REJECTED" | "EXPIRED" | "NEEDS_REVERIFICATION" | "SOURCE_UNAVAILABLE" | "SAMPLE" | "MANUALLY_ENTERED";
+  version?: number;
+  previous_version_json?: string;
+  rejection_reason?: string;
+  reviewed_by_name?: string;
+  reviewed_at?: string;
+  content_hash?: string;
   last_verified_timestamp: string;
   created_at: string;
   matching_user_card_names?: string[];
   is_applicable_to_user?: boolean;
+}
+
+export interface OfferAuditLog {
+  id: string;
+  offer_id: string;
+  action: string;
+  actor_id?: string;
+  actor_name?: string;
+  actor_role: string;
+  from_status?: string;
+  to_status?: string;
+  notes?: string;
+  snapshot_json?: string;
+  timestamp: string;
+}
+
+export interface DiscoverySyncResult {
+  discovered_count: number;
+  extracted_count: number;
+  pending_review_count: number;
+  reverification_triggered_count: number;
+  unchanged_count: number;
+  errors: string[];
 }
 
 export interface ApplicableOfferSummary {
@@ -265,4 +305,39 @@ export const api = {
 
   compareCards: (data: { card_ids: string[]; simulation_spend?: number }) =>
     apiFetch<any>("/optimization/compare", { method: "POST", body: JSON.stringify(data) }),
+
+  // Admin Offer Review Desk
+  getAdminReviewQueue: (params?: { status?: string; query?: string }) => {
+    const q = new URLSearchParams();
+    if (params?.status) q.append("status_filter", params.status);
+    if (params?.query) q.append("query", params.query);
+    const qs = q.toString() ? `?${q.toString()}` : "";
+    return apiFetch<CardOffer[]>(`/admin/offers/review-queue${qs}`);
+  },
+  approveOffer: (offerId: string, notes?: string) =>
+    apiFetch<CardOffer>(`/admin/offers/${offerId}/approve`, {
+      method: "POST",
+      body: JSON.stringify({ notes }),
+    }),
+  rejectOffer: (offerId: string, rejectionReason: string, notes?: string) =>
+    apiFetch<CardOffer>(`/admin/offers/${offerId}/reject`, {
+      method: "POST",
+      body: JSON.stringify({ rejection_reason: rejectionReason, notes }),
+    }),
+  editOffer: (offerId: string, data: Partial<CardOffer> & { approve_immediately?: boolean; notes?: string }) =>
+    apiFetch<CardOffer>(`/admin/offers/${offerId}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+  triggerReverification: (offerId: string, reason?: string) =>
+    apiFetch<CardOffer>(`/admin/offers/${offerId}/reverification`, {
+      method: "POST",
+      body: JSON.stringify({ reason: reason || "Material terms changed at source" }),
+    }),
+  getOfferAuditTrail: (offerId: string) =>
+    apiFetch<OfferAuditLog[]>(`/admin/offers/${offerId}/audit-trail`),
+  syncDiscovery: () =>
+    apiFetch<DiscoverySyncResult>("/admin/offers/sync-discovery", {
+      method: "POST",
+    }),
 };

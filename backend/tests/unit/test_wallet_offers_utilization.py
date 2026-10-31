@@ -235,3 +235,4 @@ async def test_smart_card_utilization_channel_filtering():
         assert float(rec_on["instant_discount_monetary"]) == 0.0
         assert float(rec_on["post_reward_monetary"]) == 400.0
         assert float(rec_on["net_financial_benefit"]) == 400.0
+

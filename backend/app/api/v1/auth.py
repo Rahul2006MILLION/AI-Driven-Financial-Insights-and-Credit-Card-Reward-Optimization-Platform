@@ -62,14 +62,16 @@ async def register(req: RegisterRequest, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await db.refresh(user)
 
-    token = create_access_token(data={"sub": user.id, "email": user.email})
+    token = create_access_token(data={"sub": user.id, "email": user.email, "role": user.role, "is_admin": user.is_admin})
     return TokenResponse(
         access_token=token,
         token_type="bearer",
         user_id=user.id,
         email=user.email,
         full_name=user.full_name,
-        preferred_language=user.preferred_language
+        preferred_language=user.preferred_language,
+        role=user.role,
+        is_admin=user.is_admin
     )
 
 @router.post("/auth/login", response_model=TokenResponse)
@@ -100,14 +102,16 @@ async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
     db.add(audit)
     await db.commit()
 
-    token = create_access_token(data={"sub": user.id, "email": user.email})
+    token = create_access_token(data={"sub": user.id, "email": user.email, "role": user.role, "is_admin": user.is_admin})
     return TokenResponse(
         access_token=token,
         token_type="bearer",
         user_id=user.id,
         email=user.email,
         full_name=user.full_name,
-        preferred_language=user.preferred_language
+        preferred_language=user.preferred_language,
+        role=user.role,
+        is_admin=user.is_admin
     )
 
 @router.get("/profile", response_model=ProfileResponse)

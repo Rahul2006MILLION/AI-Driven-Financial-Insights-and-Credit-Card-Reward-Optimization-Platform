@@ -1,13 +1,13 @@
 # CLIQ — AUTOMATED TEST RESULTS REPORT
 
-**Report Generated:** 2026-10-30  
+**Report Generated:** 2026-10-31  
 **Test Framework:** Pytest 9.2.0, AnyIO 4.15.1, Pytest-AsyncIO 1.4.1  
 **Python Environment:** Python 3.12.14 (`backend/.venv`)  
 **Frontend Build Tool:** Next.js 14.2.4 (React 18, TypeScript 5.4)  
-**Total Backend Test Count:** 28  
-**Total Backend Pass Count:** 28 (100% Pass Rate)  
-**Execution Time:** 2.69 seconds  
-**Frontend Static Routes:** 20 / 20 Generated Successfully  
+**Total Backend Test Count:** 32  
+**Total Backend Pass Count:** 32 (100% Pass Rate)  
+**Execution Time:** 3.15 seconds  
+**Frontend Static Routes:** 21 / 21 Generated Successfully  
 
 ---
 
@@ -30,14 +30,23 @@
 | `test_exhausted_monthly_cap` | Zero cap remaining | Monthly spent = cap returns ₹0.00 | **PASSED** |
 | `test_missing_card_rules_fallback` | Unconfigured card | Empty rules list defaults to conservative 1% base reward | **PASSED** |
 
-### 1.2. Wallet, Offers Discovery & Utilization Tests (`backend/tests/unit/test_wallet_offers_utilization.py`)
+### 1.2. Hybrid Offer Discovery & Verification Tests (`backend/tests/unit/test_hybrid_offer_discovery.py`)
 
 | Test Name | Focus Area | Assertions | Status |
 | :--- | :--- | :--- | :---: |
+| `test_hybrid_discovery_pipeline_and_quarantine_reverification` | Automatic India connectors & hashing | Verifies connector discovery, extraction confidence, and duplicate prevention via content hash | **PASSED** |
+| `test_admin_authorization_rbac` | RBAC admin security | Ordinary users calling `/admin/offers/*` receive 403 Forbidden | **PASSED** |
+| `test_admin_approval_and_rejection_workflow` | Human-in-the-loop audit | Verifies admin terms editing, 1-click approval into `VERIFIED`, reviewer identity stamping, and rejection reasoning | **PASSED** |
+| `test_quarantined_offer_excluded_from_user_recommendations` | Safety quarantine | Offers in `NEEDS_REVERIFICATION` or `PENDING_REVIEW` are strictly excluded from recommendation engine | **PASSED** |
+
+### 1.3. Wallet, Offers Discovery & Utilization Tests (`backend/tests/unit/test_wallet_offers_utilization.py`)
+
+| Test Name | Focus Area | Assertions | Status |
+| :--- | :--- | :--- | :---: |
+| `test_card_wallet_search_and_filter` | Search & filters | Filters by query, bank, and network accurately | **PASSED** |
 | `test_card_wallet_update_with_benefits_and_variant` | Card lifecycle & rules | Full update of card variant, annual fee, waiver threshold & structured benefits | **PASSED** |
-| `test_cards_search_and_filter_api` | Search & filters | Filters by query, bank, and network accurately | **PASSED** |
-| `test_offers_discovery_and_filtering_api` | Offers discovery | Filter by category, expiring soon, user cards, and verification status | **PASSED** |
-| `test_smart_utilization_combines_instant_discount_and_rewards` | Net financial benefit | Evaluates upfront instant coupon + post-transaction cashback on charged spend | **PASSED** |
+| `test_offers_discovery_filtering` | Offers discovery | Filter by category, expiring soon, user cards, and verification status | **PASSED** |
+| `test_smart_card_utilization_channel_filtering` | Channel & net benefit | In-store offline purchase matches retail POS offer and ignores online promo codes | **PASSED** |
 
 ### 1.3. Multilingual Assistant Unit Tests (`backend/tests/unit/test_multilingual_assistant.py`)
 
@@ -87,17 +96,18 @@ rootdir: /Users/rahuljain/CLIQ
 configfile: pytest.ini
 plugins: asyncio-1.4.1, anyio-4.15.1
 asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
-collecting ... collected 28 items
+collecting ... collected 32 items
 
 backend/tests/api/test_e2e_flow.py .                                     [  3%]
-backend/tests/security/test_extended_audit.py .....                      [ 21%]
-backend/tests/security/test_security_audit.py ....                       [ 35%]
-backend/tests/unit/test_financial_health.py .                            [ 39%]
-backend/tests/unit/test_multilingual_assistant.py .                      [ 42%]
-backend/tests/unit/test_reward_engine.py ............                    [ 85%]
+backend/tests/security/test_extended_audit.py .....                      [ 18%]
+backend/tests/security/test_security_audit.py ....                       [ 31%]
+backend/tests/unit/test_financial_health.py .                            [ 34%]
+backend/tests/unit/test_hybrid_offer_discovery.py ....                   [ 46%]
+backend/tests/unit/test_multilingual_assistant.py .                      [ 50%]
+backend/tests/unit/test_reward_engine.py ............                    [ 87%]
 backend/tests/unit/test_wallet_offers_utilization.py ....                [100%]
 
-============================== 28 passed in 2.69s ==============================
+============================== 32 passed in 3.15s ==============================
 ```
 
 ---
@@ -114,29 +124,30 @@ backend/tests/unit/test_wallet_offers_utilization.py ....                [100%]
  ✓ Compiled successfully
    Linting and checking validity of types 
    Collecting page data 
-   Generating static pages (20/20)
+ ✓ Generating static pages (21/21)
    Collecting build traces 
    Finalizing page optimization 
 
 Route (app)                              Size     First Load JS
 ┌ ○ /                                    3.61 kB         104 kB
 ├ ○ /_not-found                          875 B          88.2 kB
-├ ○ /analytics                           110 kB          210 kB
-├ ○ /assistant                           6.13 kB         106 kB
-├ ○ /cards                               3.79 kB         108 kB
-├ ○ /cards/compare                       5.67 kB         106 kB
-├ ○ /cards/new                           6.19 kB         106 kB
-├ ○ /dashboard                           8.31 kB         109 kB
-├ ○ /documents                           6.51 kB         107 kB
-├ ○ /financial-health                    2.57 kB         107 kB
-├ ○ /login                               3.54 kB         104 kB
-├ ○ /offers                              5.45 kB         107 kB
-├ ○ /onboarding                          6.04 kB          99 kB
-├ ○ /optimization                        6.06 kB         106 kB
-├ ○ /profile                             5.42 kB         106 kB
-├ ○ /register                            3.87 kB         104 kB
-├ ○ /settings                            5.83 kB         106 kB
-└ ○ /transactions                        3.02 kB         107 kB
+├ ○ /admin/offers                        10.6 kB         105 kB
+├ ○ /analytics                           111 kB          212 kB
+├ ○ /assistant                           7.16 kB         108 kB
+├ ○ /cards                               10.7 kB         112 kB
+├ ○ /cards/compare                       6.67 kB         108 kB
+├ ○ /cards/new                           8 kB            109 kB
+├ ○ /dashboard                           4.92 kB         111 kB
+├ ○ /documents                           7.38 kB         108 kB
+├ ○ /financial-health                    2.4 kB          108 kB
+├ ○ /login                               4.15 kB         105 kB
+├ ○ /offers                              8.45 kB         109 kB
+├ ○ /onboarding                          6.63 kB         100 kB
+├ ○ /optimization                        8.66 kB         110 kB
+├ ○ /profile                             6.44 kB         107 kB
+├ ○ /register                            4.48 kB         105 kB
+├ ○ /settings                            6.74 kB         108 kB
+└ ○ /transactions                        7.23 kB         108 kB
 + First Load JS shared by all            87.3 kB
 
 ○  (Static)  prerendered as static content
@@ -146,5 +157,5 @@ Route (app)                              Size     First Load JS
 
 ## 4. Verification Conclusion
 
-All 28 automated tests passed with 0 failures, 0 warnings, and 0 flaky executions. The Next.js 14 frontend compiled all 20 application routes (including the dedicated `/offers` discovery module) with zero type errors.
+All 32 automated tests passed with 0 failures, 0 warnings, and 0 flaky executions. The Next.js 14 frontend compiled all 21 application routes (including the dedicated `/admin/offers` verification module) with zero type errors.
 

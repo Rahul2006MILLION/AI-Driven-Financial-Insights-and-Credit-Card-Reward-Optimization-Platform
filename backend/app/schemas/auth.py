@@ -8,6 +8,8 @@ class TokenResponse(BaseModel):
     email: str
     full_name: Optional[str] = None
     preferred_language: str = "en"
+    role: str = "USER"
+    is_admin: bool = False
 
 class LoginRequest(BaseModel):
     email: EmailStr
@@ -31,6 +33,8 @@ class ProfileResponse(BaseModel):
     full_name: Optional[str] = None
     preferred_language: str = "en"
     currency: str = "INR"
+    role: str = "USER"
+    is_admin: bool = False
     is_active: bool = True
 
     model_config = {"from_attributes": True}
