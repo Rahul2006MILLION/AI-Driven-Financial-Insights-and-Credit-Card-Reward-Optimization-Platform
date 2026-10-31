@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
-import { apiFetch, getStoredSession } from "@/lib/api";
+import { apiFetch } from "@/lib/api";
 import { DemoBootstrap } from "@/components/DemoBootstrap";
 import {
   CreditCard,
@@ -13,14 +13,15 @@ import {
   Receipt,
   Sparkles,
   ArrowRight,
-  ShieldAlert,
   Loader2,
-  PlusCircle,
-  ExternalLink,
+  Plus,
+  ShieldCheck,
+  ChevronRight,
+  Activity,
 } from "lucide-react";
 
 export default function DashboardPage() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [cards, setCards] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [rewardStats, setRewardStats] = useState<any>(null);
@@ -79,18 +80,18 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-8">
+      <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         {/* Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-              {t.dashboard.title}
+            <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+              Command Center
             </h1>
-            <p className="text-xs text-cliq-textSecondary mt-1">
-              CLIQ Financial Intelligence Core • {t.tagline}
+            <p className="text-xs text-slate-400 mt-0.5">
+              Financial intelligence and real-time portfolio metrics
             </p>
           </div>
 
@@ -98,121 +99,127 @@ export default function DashboardPage() {
             <DemoBootstrap onSeeded={loadDashboardData} />
             <Link
               href="/cards/new"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
             >
-              <PlusCircle className="w-3.5 h-3.5" />
-              <span>{t.cards.addNew}</span>
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Card</span>
             </Link>
           </div>
         </div>
 
-        {/* Metric Cards Row */}
+        {/* Liquid Glass Metric Cards Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Registered Cards */}
-          <div className="glass-panel p-5 rounded-2xl border-glow-cyan/40 relative overflow-hidden">
+          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-cliq-textSecondary">
-                {t.dashboard.registeredCards}
+              <span className="text-xs font-medium text-slate-400">
+                Registered Cards
               </span>
-              <div className="p-2 rounded-lg bg-cliq-cyan/10 text-cliq-cyan">
-                <CreditCard className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <CreditCard className="w-3.5 h-3.5" />
               </div>
             </div>
-            <div className="text-3xl font-extrabold text-white mt-3">
+            <div className="text-3xl font-black text-white mt-3 tracking-tight">
               {cards.length}
             </div>
-            <div className="text-[11px] text-cliq-textMuted mt-1 flex items-center justify-between">
-              <span>{cards.filter((c) => c.is_active).length} Active Portfolio Cards</span>
-              <Link href="/cards" className="text-cliq-cyan hover:underline">
-                View &rarr;
+            <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
+              <span className="text-emerald-400 font-medium">
+                {cards.filter((c) => c.is_active).length} Active in Wallet
+              </span>
+              <Link href="/cards" className="text-slate-400 hover:text-white flex items-center gap-0.5">
+                <span>Fan</span>
+                <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
           </div>
 
           {/* Rewards Earned */}
-          <div className="glass-panel p-5 rounded-2xl border-cliq-border relative overflow-hidden">
+          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-cliq-textSecondary">
-                {t.dashboard.rewardsEarned}
+              <span className="text-xs font-medium text-slate-400">
+                Rewards Realized
               </span>
-              <div className="p-2 rounded-lg bg-cliq-emerald/10 text-cliq-emerald">
-                <TrendingUp className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <TrendingUp className="w-3.5 h-3.5" />
               </div>
             </div>
-            <div className="text-3xl font-extrabold text-cliq-emerald glow-emerald mt-3">
+            <div className="text-3xl font-black text-emerald-400 glow-emerald mt-3 tracking-tight">
               ₹{rewardStats ? Number(rewardStats.total_rewards_earned).toFixed(2) : "0.00"}
             </div>
-            <div className="text-[11px] text-cliq-textMuted mt-1">
-              Out of ₹{rewardStats ? Number(rewardStats.total_optimal_possible).toFixed(2) : "0.00"} Potential
+            <div className="text-[11px] text-slate-400 mt-2">
+              Potential: ₹{rewardStats ? Number(rewardStats.total_optimal_possible).toFixed(2) : "0.00"}
             </div>
           </div>
 
           {/* Efficiency Rate */}
-          <div className="glass-panel p-5 rounded-2xl border-cliq-border relative overflow-hidden">
+          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-cliq-textSecondary">
-                {t.dashboard.efficiencyRate}
+              <span className="text-xs font-medium text-slate-400">
+                Reward Efficiency
               </span>
-              <div className="p-2 rounded-lg bg-cliq-turquoise/10 text-cliq-turquoise">
-                <Zap className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <Zap className="w-3.5 h-3.5" />
               </div>
             </div>
-            <div className="text-3xl font-extrabold text-white mt-3">
+            <div className="text-3xl font-black text-white mt-3 tracking-tight">
               {rewardStats ? `${Number(rewardStats.optimization_efficiency_rate).toFixed(1)}%` : "100%"}
             </div>
-            <div className="text-[11px] text-cliq-textSecondary mt-1">
+            <div className="text-[11px] mt-2">
               {rewardStats && Number(rewardStats.reward_leakage_amount) > 0 ? (
-                <span className="text-cliq-warning">
+                <span className="text-amber-400 font-medium">
                   ₹{Number(rewardStats.reward_leakage_amount).toFixed(2)} Leakage
                 </span>
               ) : (
-                <span className="text-cliq-emerald">Optimal Spend Allocation</span>
+                <span className="text-emerald-400 font-medium">Optimal Spend Rate</span>
               )}
             </div>
           </div>
 
           {/* Health Score */}
-          <div className="glass-panel p-5 rounded-2xl border-cliq-border relative overflow-hidden">
+          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-cliq-textSecondary">
-                {t.health.score}
+              <span className="text-xs font-medium text-slate-400">
+                Financial Health
               </span>
-              <div className="p-2 rounded-lg bg-cliq-cyan/10 text-cliq-cyan">
-                <Sparkles className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <Activity className="w-3.5 h-3.5" />
               </div>
             </div>
-            <div className="text-3xl font-extrabold text-cliq-cyan glow-cyan mt-3">
+            <div className="text-3xl font-black text-white mt-3 tracking-tight">
               {healthData ? `${healthData.health_score}/100` : "92/100"}
             </div>
-            <div className="text-[11px] text-cliq-textMuted mt-1 flex items-center justify-between">
-              <span>{healthData?.recurring_subscriptions?.length || 0} Subscriptions Audited</span>
-              <Link href="/financial-health" className="text-cliq-cyan hover:underline">
-                Audit &rarr;
+            <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
+              <span>{healthData?.recurring_subscriptions?.length || 0} Subscriptions</span>
+              <Link href="/financial-health" className="text-emerald-400 hover:text-emerald-300 flex items-center gap-0.5">
+                <span>Details</span>
+                <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Quick Optimizer + Action Grid */}
+        {/* Quick Optimizer + AI Assistant Teaser */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Quick Optimizer Widget */}
-          <div className="lg:col-span-2 glass-panel p-6 rounded-2xl border-glow-cyan shadow-cardGlass">
-            <div className="flex items-center justify-between border-b border-cliq-border pb-3 mb-4">
+          <div className="lg:col-span-2 p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/[0.07]">
               <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-cliq-cyan" />
-                <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-                  {t.dashboard.quickOptimizer}
+                <div className="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <Zap className="w-3.5 h-3.5" />
+                </div>
+                <h2 className="text-sm font-bold text-white tracking-wide">
+                  Purchase Optimizer
                 </h2>
               </div>
-              <span className="text-[11px] text-cliq-cyan bg-cliq-cyan/10 px-2 py-0.5 rounded font-mono">
-                Exact Math
+              <span className="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-mono font-medium">
+                Decimal Precision
               </span>
             </div>
 
             <form onSubmit={handleQuickOptimize} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block text-[11px] font-semibold text-cliq-textSecondary mb-1">
-                  {t.dashboard.amount}
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                  Spend Amount (₹)
                 </label>
                 <input
                   type="number"
@@ -220,39 +227,39 @@ export default function DashboardPage() {
                   min={1}
                   value={optAmount}
                   onChange={(e) => setOptAmount(Number(e.target.value))}
-                  className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-cliq-cyan"
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2 text-white font-bold text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-cliq-textSecondary mb-1">
-                  {t.dashboard.category}
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                  Category
                 </label>
                 <select
                   value={optCategory}
                   onChange={(e) => setOptCategory(e.target.value)}
-                  className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                  className="w-full bg-[#06100C] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                 >
-                  <option value="dining">Dining & Food Delivery</option>
-                  <option value="shopping">Online & Retail Shopping</option>
-                  <option value="grocery">Groceries & Supermarkets</option>
-                  <option value="utility">Utility & Bill Payments</option>
-                  <option value="travel">Travel, Flights & Hotels</option>
-                  <option value="fuel">Fuel & Petrol Pumps</option>
-                  <option value="other">General / All Spends</option>
+                  <option value="dining">Dining & Delivery</option>
+                  <option value="shopping">Shopping</option>
+                  <option value="grocery">Groceries</option>
+                  <option value="utility">Utility & Bills</option>
+                  <option value="travel">Travel & Hotels</option>
+                  <option value="fuel">Fuel</option>
+                  <option value="other">General Spend</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-cliq-textSecondary mb-1">
-                  {t.dashboard.merchant}
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                  Merchant
                 </label>
                 <input
                   type="text"
                   placeholder="e.g. Swiggy, Amazon"
                   value={optMerchant}
                   onChange={(e) => setOptMerchant(e.target.value)}
-                  className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                 />
               </div>
 
@@ -260,13 +267,13 @@ export default function DashboardPage() {
                 <button
                   type="submit"
                   disabled={optLoading || cards.length === 0}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {optLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
-                      <span>{t.dashboard.findBestCard}</span>
+                      <span>Recommend Best Card</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
@@ -276,35 +283,32 @@ export default function DashboardPage() {
 
             {/* Quick Result Preview */}
             {optResult && optResult.recommended_card && (
-              <div className="mt-4 p-4 rounded-xl bg-cliq-surface/90 border border-cliq-cyan/40 space-y-2">
+              <div className="mt-4 p-4 rounded-2xl bg-white/[0.03] border border-emerald-500/30 space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] text-cliq-textSecondary uppercase tracking-wider font-semibold">
-                      Recommended Card
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
+                      Optimal Recommendation
                     </span>
                     <div className="text-base font-extrabold text-white flex items-center gap-2">
                       <span>{optResult.recommended_card.card_name}</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-cliq-cyan/20 text-cliq-cyan font-bold">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold">
                         {optResult.recommended_card.effective_rate_percentage}% Yield
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] text-cliq-textSecondary">Reward Return</span>
-                    <div className="text-xl font-extrabold text-cliq-emerald glow-emerald">
+                    <span className="text-[10px] text-slate-400">Expected Value</span>
+                    <div className="text-xl font-extrabold text-emerald-400 glow-emerald">
                       ₹{Number(optResult.recommended_card.expected_reward_monetary).toFixed(2)}
                     </div>
                   </div>
                 </div>
-                <p className="text-xs text-cliq-textSecondary pt-1 border-t border-cliq-border/60">
-                  {optResult.explanation}
-                </p>
-                <div className="pt-1 flex justify-end">
+                <div className="pt-2 flex justify-end">
                   <Link
                     href="/optimization"
-                    className="text-xs text-cliq-cyan hover:underline flex items-center gap-1 font-semibold"
+                    className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
                   >
-                    <span>Full Breakdown & Alternatives</span>
+                    <span>Inspect Alternatives</span>
                     <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -312,38 +316,38 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* AI Financial Assistant Teaser */}
-          <div className="glass-panel p-6 rounded-2xl border-cliq-border flex flex-col justify-between">
+          {/* AI Financial Assistant Card */}
+          <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 rounded-xl bg-cliq-turquoise/15 text-cliq-turquoise">
-                  <Sparkles className="w-4 h-4" />
+                <div className="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <Sparkles className="w-3.5 h-3.5" />
                 </div>
-                <h3 className="font-bold text-white text-sm">{t.assistant.title}</h3>
+                <h3 className="font-bold text-white text-sm">Financial Intelligence</h3>
               </div>
-              <p className="text-xs text-cliq-textSecondary leading-relaxed">
-                Ask questions in English, Hindi, or Kannada. Responses are grounded strictly in your verified card portfolio without hallucinations.
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Local-first assistant grounded in your verified card portfolio.
               </p>
 
               <div className="mt-4 space-y-2">
                 <Link
                   href="/assistant"
-                  className="block p-2.5 rounded-xl bg-cliq-surface text-xs text-cliq-cyan border border-cliq-border hover:border-cliq-cyan/40 transition-colors"
+                  className="block p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-300 border border-white/[0.07] hover:border-emerald-500/30 transition-all"
                 >
-                  "Which card is best for Swiggy food delivery?"
+                  "Which card gives 5% cashback on Swiggy?"
                 </Link>
                 <Link
                   href="/assistant"
-                  className="block p-2.5 rounded-xl bg-cliq-surface text-xs text-cliq-turquoise border border-cliq-border hover:border-cliq-turquoise/40 transition-colors"
+                  className="block p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-300 border border-white/[0.07] hover:border-emerald-500/30 transition-all"
                 >
-                  "क्या पेट्रोल पर कैशबैक मिलता है?"
+                  "Show lounge access quotas across my cards"
                 </Link>
               </div>
             </div>
 
             <Link
               href="/assistant"
-              className="mt-4 w-full py-2 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-cyan/40 text-cliq-cyan font-bold text-xs text-center block transition-all"
+              className="mt-5 w-full py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-emerald-400 font-semibold text-xs text-center block transition-all"
             >
               Open Assistant Chat
             </Link>
@@ -353,52 +357,53 @@ export default function DashboardPage() {
         {/* Portfolio & Recent Transactions Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Portfolio Overview */}
-          <div className="glass-panel p-6 rounded-2xl border-cliq-border">
+          <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                {t.dashboard.portfolioOverview}
+              <h3 className="text-sm font-bold text-white tracking-wide">
+                Active Portfolio
               </h3>
-              <Link href="/cards" className="text-xs text-cliq-cyan hover:underline font-semibold">
-                {t.dashboard.viewAllCards} &rarr;
+              <Link href="/cards" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-0.5">
+                <span>View Fan</span>
+                <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
 
             {cards.length === 0 ? (
-              <div className="text-center py-10 space-y-3">
-                <CreditCard className="w-10 h-10 text-cliq-textMuted mx-auto" />
-                <p className="text-xs text-cliq-textSecondary">
-                  No cards registered yet. Add your first card or load sample cards above.
+              <div className="text-center py-8 space-y-3">
+                <CreditCard className="w-8 h-8 text-slate-600 mx-auto" />
+                <p className="text-xs text-slate-400">
+                  No cards registered yet.
                 </p>
                 <Link
                   href="/cards/new"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cliq-cyan text-cliq-bg font-bold text-xs"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#040707] font-bold text-xs"
                 >
-                  <PlusCircle className="w-3.5 h-3.5" />
+                  <Plus className="w-3.5 h-3.5" />
                   <span>Add First Card</span>
                 </Link>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {cards.slice(0, 4).map((c) => (
                   <div
                     key={c.id}
-                    className="p-3.5 rounded-xl bg-cliq-surface/80 border border-cliq-border flex items-center justify-between hover:border-cliq-cyan/30 transition-all"
+                    className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between hover:border-emerald-500/25 transition-all"
                   >
                     <div>
                       <div className="text-xs font-bold text-white flex items-center gap-2">
                         <span>{c.card_name}</span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-cliq-border text-cliq-cyan">
+                        <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/[0.06] text-slate-300 font-mono">
                           {c.network}
                         </span>
                       </div>
-                      <div className="text-[11px] text-cliq-textMuted">
-                        {c.bank_name} • Annual Fee: ₹{Number(c.annual_fee).toFixed(0)}
+                      <div className="text-[11px] text-slate-400 mt-0.5">
+                        {c.bank_name} • Fee: ₹{Number(c.annual_fee).toFixed(0)}
                       </div>
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-cliq-emerald/10 text-cliq-emerald border border-cliq-emerald/20 font-semibold">
-                        {c.reward_rules?.length || 1} Rules
+                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+                        {c.reward_rules?.length || 1} Multipliers
                       </span>
                     </div>
                   </div>
@@ -408,40 +413,41 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent Transactions */}
-          <div className="glass-panel p-6 rounded-2xl border-cliq-border">
+          <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                {t.dashboard.recentTransactions}
+              <h3 className="text-sm font-bold text-white tracking-wide">
+                Recent Transactions
               </h3>
-              <Link href="/transactions" className="text-xs text-cliq-cyan hover:underline font-semibold">
-                All Transactions &rarr;
+              <Link href="/transactions" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-0.5">
+                <span>All History</span>
+                <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
 
             {transactions.length === 0 ? (
-              <div className="text-center py-10 space-y-3">
-                <Receipt className="w-10 h-10 text-cliq-textMuted mx-auto" />
-                <p className="text-xs text-cliq-textSecondary">
-                  No transaction records found. Load sample data or enter a purchase.
+              <div className="text-center py-8 space-y-3">
+                <Receipt className="w-8 h-8 text-slate-600 mx-auto" />
+                <p className="text-xs text-slate-400">
+                  No transaction records found.
                 </p>
                 <Link
                   href="/transactions"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cliq-surface border border-cliq-border text-white font-semibold text-xs"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-slate-300 font-semibold text-xs"
                 >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Enter Transaction</span>
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Log Purchase</span>
                 </Link>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {transactions.slice(0, 4).map((tx) => (
                   <div
                     key={tx.id}
-                    className="p-3.5 rounded-xl bg-cliq-surface/80 border border-cliq-border flex items-center justify-between"
+                    className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between hover:border-emerald-500/25 transition-all"
                   >
                     <div>
                       <div className="text-xs font-bold text-white">{tx.merchant_name}</div>
-                      <div className="text-[11px] text-cliq-textMuted">
+                      <div className="text-[11px] text-slate-400 mt-0.5">
                         {tx.category_id} • {new Date(tx.transaction_date).toLocaleDateString()}
                       </div>
                     </div>
@@ -450,7 +456,7 @@ export default function DashboardPage() {
                       <div className="text-xs font-bold text-white">
                         ₹{Number(tx.amount).toFixed(2)}
                       </div>
-                      <div className="text-[11px] text-cliq-emerald font-semibold">
+                      <div className="text-[11px] text-emerald-400 font-semibold">
                         +₹{Number(tx.reward_earned_monetary).toFixed(2)}
                       </div>
                     </div>

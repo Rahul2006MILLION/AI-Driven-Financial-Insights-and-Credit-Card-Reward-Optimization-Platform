@@ -42,9 +42,9 @@ export const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-64 hidden lg:flex flex-col border-r border-cliq-border bg-cliq-bgSecondary/60 backdrop-blur-md min-h-[calc(100vh-4rem)] p-4 space-y-1">
-      <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-cliq-textMuted">
-        Core Intelligence
+    <aside className="w-64 hidden lg:flex flex-col border-r border-white/[0.08] bg-[#050D0A]/60 backdrop-blur-2xl min-h-[calc(100vh-4rem)] p-4 space-y-1">
+      <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+        Workspace
       </div>
       {navItems.map((item) => {
         const Icon = item.icon;
@@ -53,28 +53,28 @@ export const Sidebar: React.FC = () => {
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+            className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
               isActive
-                ? "bg-gradient-to-r from-cliq-cyan/20 to-cliq-emerald/10 text-cliq-cyan border border-cliq-cyan/40 shadow-sm"
-                : "text-cliq-textSecondary hover:text-white hover:bg-cliq-surface"
-            } ${item.highlight && !isActive ? "text-cliq-turquoise" : ""}`}
+                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+            } ${item.highlight && !isActive ? "text-emerald-300/90" : ""}`}
           >
-            <Icon className={`w-4 h-4 ${isActive ? "text-cliq-cyan" : ""}`} />
+            <Icon className={`w-4 h-4 ${isActive ? "text-emerald-400" : ""}`} />
             <span>{item.label}</span>
           </Link>
         );
       })}
 
-      <div className="pt-4 mt-3 border-t border-cliq-border/60 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-cliq-textMuted flex items-center justify-between">
+      <div className="pt-4 mt-3 border-t border-white/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
         <span>Administration</span>
-        <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-extrabold text-[9px]">STAFF</span>
+        <span className="px-1.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px]">STAFF</span>
       </div>
       <Link
         href="/admin/offers"
-        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+        className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
           pathname === "/admin/offers"
-            ? "bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-amber-400 border border-amber-500/40 shadow-sm"
-            : "text-amber-400/80 hover:text-amber-300 hover:bg-cliq-surface"
+            ? "bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.15)]"
+            : "text-amber-400/80 hover:text-amber-300 hover:bg-white/[0.04]"
         }`}
       >
         <ShieldCheck className="w-4 h-4 text-amber-400" />

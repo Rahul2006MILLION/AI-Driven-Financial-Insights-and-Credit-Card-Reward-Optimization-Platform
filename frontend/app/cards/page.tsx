@@ -5,13 +5,16 @@ import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { api, CreditCard } from "@/lib/api";
-import { DemoBootstrap } from "@/components/DemoBootstrap";
+import { CardFanCollection } from "@/components/CardFanCollection";
+import { CardDetailsPanel } from "@/components/CardDetailsPanel";
+import { CardSelectionFlow } from "@/components/CardSelectionFlow";
+import { DigitalCreditCard } from "@/components/DigitalCreditCard";
 import {
   CreditCard as CardIcon,
   PlusCircle,
   GitCompare,
   Trash2,
-  Shield,
+  ShieldCheck,
   Zap,
   Info,
   Loader2,
@@ -24,6 +27,11 @@ import {
   AlertCircle,
   Award,
   Filter,
+  Sparkles,
+  Plane,
+  Eye,
+  Layers,
+  LayoutGrid,
 } from "lucide-react";
 
 export default function MyCreditCardsPage() {
@@ -33,13 +41,26 @@ export default function MyCreditCardsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNetwork, setSelectedNetwork] = useState<string>("ALL");
   const [selectedBank, setSelectedBank] = useState<string>("ALL");
-  const [selectedCardForDetails, setSelectedCardForDetails] = useState<CreditCard | null>(null);
+
+  // Selected card in the Fan / Details view
+  const [selectedCard, setSelectedCard] = useState<CreditCard | null>(null);
+
+  // View mode for existing users: "fan" vs "grid"
+  const [viewMode, setViewMode] = useState<"fan" | "grid">("fan");
+
+  // Add Card modal / overlay state
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  // Edit card modal state
   const [editingCard, setEditingCard] = useState<CreditCard | null>(null);
   const [editForm, setEditForm] = useState({
     card_name: "",
     bank_name: "",
+    cardholder_name: "",
+    nickname: "",
     network: "VISA",
     card_variant: "",
+    last_four_digits: "",
     annual_fee: 0,
     renewal_waiver_spend: 0,
     fee_waiver_condition_details: "",
@@ -55,7 +76,18 @@ export default function MyCreditCardsPage() {
         network: selectedNetwork !== "ALL" ? selectedNetwork : undefined,
         bank: selectedBank !== "ALL" ? selectedBank : undefined,
       });
-      setCards(data || []);
+      const cardList = data || [];
+      setCards(cardList);
+      if (cardList.length > 0) {
+        // Keep selected card if still present, else default to first
+        setSelectedCard((prev) => {
+          if (!prev) return cardList[0];
+          const found = cardList.find((c) => c.id === prev.id);
+          return found || cardList[0];
+        });
+      } else {
+        setSelectedCard(null);
+      }
     } catch (err) {
       console.error("Failed to load cards:", err);
     } finally {
@@ -68,7 +100,9 @@ export default function MyCreditCardsPage() {
   }, [searchQuery, selectedNetwork, selectedBank]);
 
   const handleDeleteCard = async (cardId: string) => {
-    if (!confirm("Are you sure you want to deactivate this credit card?")) return;
+    if (!confirm("Are you sure you want to deactivate this credit card? Historical transaction links will be preserved.")) {
+      return;
+    }
     setDeletingId(cardId);
     try {
       await api.deleteCard(cardId);
@@ -85,8 +119,11 @@ export default function MyCreditCardsPage() {
     setEditForm({
       card_name: card.card_name,
       bank_name: card.bank_name,
+      cardholder_name: card.cardholder_name || "",
+      nickname: card.nickname || "",
       network: card.network,
       card_variant: card.card_variant || "",
+      last_four_digits: card.last_four_digits || "",
       annual_fee: Number(card.annual_fee),
       renewal_waiver_spend: Number(card.renewal_waiver_spend || 0),
       fee_waiver_condition_details: card.fee_waiver_condition_details || "",
@@ -97,13 +134,22 @@ export default function MyCreditCardsPage() {
   const handleSaveEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingCard) return;
+
+    if (editForm.last_four_digits && !/^[0-9]{4}$/.test(editForm.last_four_digits.trim())) {
+      alert("Last 4 digits must contain exactly 4 numeric digits.");
+      return;
+    }
+
     setSavingEdit(true);
     try {
       await api.updateCard(editingCard.id, {
-        card_name: editForm.card_name,
-        bank_name: editForm.bank_name,
+        card_name: editForm.card_name.trim(),
+        bank_name: editForm.bank_name.trim(),
+        cardholder_name: editForm.cardholder_name.trim() || undefined,
+        nickname: editForm.nickname.trim() || undefined,
         network: editForm.network as any,
-        card_variant: editForm.card_variant || undefined,
+        card_variant: editForm.card_variant.trim() || undefined,
+        last_four_digits: editForm.last_four_digits.trim() || undefined,
         annual_fee: editForm.annual_fee,
         renewal_waiver_spend: editForm.renewal_waiver_spend || undefined,
         fee_waiver_condition_details: editForm.fee_waiver_condition_details || undefined,
@@ -120,538 +166,451 @@ export default function MyCreditCardsPage() {
 
   const uniqueBanks = Array.from(new Set(cards.map((c) => c.bank_name))).filter(Boolean);
 
+  // Aggregate metrics
+  const verifiedCount = cards.filter(
+    (c) => c.terms_source_url && c.terms_source_url.startsWith("https://")
+  ).length;
+
+  const totalAnnualFee = cards.reduce((sum, c) => sum + Number(c.annual_fee || 0), 0);
+  const totalWaiverSpend = cards.reduce((sum, c) => sum + Number(c.renewal_waiver_spend || 0), 0);
+
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
+    <div className="flex-1 flex flex-col lg:flex-row min-h-screen bg-[#070C18]">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
-              <CardIcon className="w-8 h-8 text-cliq-cyan" />
-              <span>{t.cards.title}</span>
-            </h1>
-            <p className="text-xs text-cliq-textSecondary mt-1">{t.cards.subtitle}</p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href="/offers"
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-cyan/40 text-cliq-cyan font-bold text-xs shadow-sm transition-colors"
-            >
-              <Zap className="w-3.5 h-3.5 text-cliq-turquoise" />
-              <span>Active Card Offers</span>
-            </Link>
-            <Link
-              href="/cards/compare"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-white font-semibold text-xs transition-colors"
-            >
-              <GitCompare className="w-3.5 h-3.5 text-cliq-turquoise" />
-              <span>{t.cards.compare}</span>
-            </Link>
-            <Link
-              href="/cards/new"
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95"
-            >
-              <PlusCircle className="w-3.5 h-3.5" />
-              <span>{t.cards.addNew}</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Search & Filter Bar */}
-        <div className="glass-panel p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-96">
-            <Search className="w-4 h-4 text-cliq-textMuted absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search by card name, bank, or variant..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-cliq-surface border border-cliq-border rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-cliq-textMuted focus:border-cliq-cyan focus:outline-none transition-colors"
-            />
-          </div>
-
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="flex items-center gap-1 text-xs text-cliq-textMuted">
-              <Filter className="w-3.5 h-3.5" />
-              <span>Filter:</span>
-            </div>
-
-            <select
-              value={selectedNetwork}
-              onChange={(e) => setSelectedNetwork(e.target.value)}
-              className="bg-cliq-surface border border-cliq-border text-white text-xs rounded-xl px-3 py-2 focus:border-cliq-cyan focus:outline-none"
-            >
-              <option value="ALL">All Networks</option>
-              <option value="VISA">Visa</option>
-              <option value="MASTERCARD">Mastercard</option>
-              <option value="RUPAY">RuPay</option>
-              <option value="AMEX">Amex</option>
-              <option value="DINERS">Diners Club</option>
-            </select>
-
-            <select
-              value={selectedBank}
-              onChange={(e) => setSelectedBank(e.target.value)}
-              className="bg-cliq-surface border border-cliq-border text-white text-xs rounded-xl px-3 py-2 focus:border-cliq-cyan focus:outline-none"
-            >
-              <option value="ALL">All Issuers</option>
-              {uniqueBanks.map((b) => (
-                <option key={b} value={b}>{b}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Card Grid */}
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-7">
+        {/* Loading Spinner */}
         {loading ? (
-          <div className="py-20 text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-cliq-cyan mx-auto" />
-            <p className="text-xs text-cliq-textSecondary mt-2">Loading your card wallet...</p>
+          <div className="flex flex-col items-center justify-center p-24 space-y-4">
+            <Loader2 className="w-9 h-9 text-cliq-cyan animate-spin" />
+            <p className="text-xs text-cliq-textSecondary tracking-wide">
+              Loading your credit card wallet...
+            </p>
           </div>
         ) : cards.length === 0 ? (
-          <div className="glass-panel p-12 rounded-2xl text-center space-y-4 max-w-lg mx-auto">
-            <CardIcon className="w-12 h-12 text-cliq-cyan mx-auto opacity-75" />
-            <h3 className="text-lg font-bold text-white">No Registered Cards Match Your Filter</h3>
-            <p className="text-xs text-cliq-textSecondary">
-              Add your existing cards to unlock personalized reward calculations, instant coupon discovery, and fee waiver tracking.
-            </p>
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <DemoBootstrap onSeeded={fetchCards} />
-              <Link
-                href="/cards/new"
-                className="px-4 py-2 rounded-xl bg-cliq-cyan text-cliq-bg font-bold text-xs"
-              >
-                Add Custom Card
-              </Link>
-            </div>
+          /* ============================================================
+             EXPERIENCE A: FIRST-TIME USER (0 registered cards)
+             Show the bank and card selection experience directly.
+             No empty placeholder wallet!
+             ============================================================ */
+          <div className="space-y-6">
+            <CardSelectionFlow
+              onCardAdded={fetchCards}
+            />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cards.map((card) => {
-              const annualFeeNum = Number(card.annual_fee);
-              const waiverSpendNum = card.renewal_waiver_spend ? Number(card.renewal_waiver_spend) : null;
+          /* ============================================================
+             EXPERIENCE B: EXISTING USER (1+ registered cards)
+             Display the signature FAN-SHAPED card collection!
+             ============================================================ */
+          <div className="space-y-7">
+            {/* Wallet Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/[0.07] pb-5">
+              <div>
+                <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+                  Card Collection
+                </h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Interactive multi-card portfolio & privileges
+                </p>
+              </div>
 
-              return (
-                <div
-                  key={card.id}
-                  className="glass-panel rounded-2xl p-6 border-cliq-border hover:border-cliq-cyan/40 transition-all flex flex-col justify-between relative group"
+              {/* Header Badges & Actions */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                {/* Metrics Badges */}
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs">
+                  <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-slate-400">Cards:</span>
+                  <strong className="text-white font-bold">{cards.length}</strong>
+                </div>
+
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-slate-400">Verified:</span>
+                  <strong className="text-white font-bold">{verifiedCount}</strong>
+                </div>
+
+                {/* View Mode Toggle: Fan vs Grid */}
+                <div className="flex items-center p-0.5 rounded-full bg-white/[0.03] border border-white/10 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("fan")}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold transition-all ${
+                      viewMode === "fan"
+                        ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Fan</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("grid")}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold transition-all ${
+                      viewMode === "grid"
+                        ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    <span>Grid</span>
+                  </button>
+                </div>
+
+                {/* Add Card Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(true)}
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
                 >
-                  <div>
-                    {/* Network & Variant Tag */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-cliq-surface border border-cliq-border text-cliq-cyan">
-                          {card.network}
-                        </span>
-                        {card.card_variant && (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-cliq-surfaceHover text-cliq-turquoise border border-cliq-turquoise/30">
-                            {card.card_variant}
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-xs font-mono text-cliq-textMuted">
-                        {card.last_four_digits ? `•••• ${card.last_four_digits}` : "Active"}
-                      </span>
-                    </div>
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Add Card</span>
+                </button>
+              </div>
+            </div>
 
-                    <h3 className="text-lg font-extrabold text-white group-hover:text-cliq-cyan transition-colors">
-                      {card.card_name}
-                    </h3>
-                    <div className="text-xs text-cliq-textSecondary mt-0.5">
-                      {card.bank_name} • {card.card_type}
-                    </div>
+            {/* Quick Filter Bar */}
+            <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Filter cards by name, bank, or nickname..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
+                />
+              </div>
 
-                    {/* Fees & Waiver Conditions */}
-                    <div className="mt-4 pt-3 border-t border-cliq-border/60 grid grid-cols-2 gap-2 text-xs">
-                      <div>
-                        <span className="text-[10px] text-cliq-textMuted block">Annual Fee</span>
-                        <span className="font-bold text-white">
-                          {annualFeeNum === 0 ? "Lifetime Free" : `₹${annualFeeNum.toLocaleString("en-IN")}`}
-                        </span>
-                      </div>
-                      {waiverSpendNum ? (
-                        <div>
-                          <span className="text-[10px] text-cliq-textMuted block">Spend Waiver</span>
-                          <span className="font-bold text-cliq-turquoise">
-                            ₹{waiverSpendNum.toLocaleString("en-IN")}
-                          </span>
-                        </div>
-                      ) : (
-                        <div>
-                          <span className="text-[10px] text-cliq-textMuted block">Renewal Date</span>
-                          <span className="text-white font-medium">
-                            {card.renewal_date ? new Date(card.renewal_date).toLocaleDateString() : "Annual"}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={selectedBank}
+                  onChange={(e) => setSelectedBank(e.target.value)}
+                  className="px-3 py-1.5 rounded-xl bg-[#06100C] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="ALL">All Banks ({uniqueBanks.length})</option>
+                  {uniqueBanks.map((b) => (
+                    <option key={b} value={b}>
+                      {b}
+                    </option>
+                  ))}
+                </select>
 
-                    {/* Reward Rules Snapshot */}
-                    <div className="mt-4 pt-3 border-t border-cliq-border/60">
-                      <div className="text-[11px] font-bold text-white flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-1">
-                          <Zap className="w-3.5 h-3.5 text-cliq-cyan" />
-                          <span>{t.cards.rules}</span>
-                        </div>
-                        <span className="text-[10px] text-cliq-textMuted font-mono">
-                          {card.reward_rules?.length || 0} active
-                        </span>
-                      </div>
-                      <div className="space-y-1.5 max-h-32 overflow-y-auto pr-1">
-                        {card.reward_rules?.map((rule: any) => (
-                          <div
-                            key={rule.id}
-                            className="text-[11px] p-2 rounded-lg bg-cliq-surface flex items-center justify-between"
-                          >
-                            <span className="text-cliq-textSecondary truncate max-w-[140px]">
-                              {rule.merchant_pattern || rule.category_id}
-                            </span>
-                            {rule.is_excluded ? (
-                              <span className="text-cliq-danger font-semibold text-[10px]">
-                                Excluded (0%)
-                              </span>
-                            ) : (
-                              <span className="text-cliq-emerald font-bold">
-                                {rule.reward_rate_percentage}% {rule.reward_type}
-                              </span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                <select
+                  value={selectedNetwork}
+                  onChange={(e) => setSelectedNetwork(e.target.value)}
+                  className="px-2.5 py-1.5 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                >
+                  <option value="ALL">All Networks</option>
+                  <option value="VISA">VISA</option>
+                  <option value="MASTERCARD">Mastercard</option>
+                  <option value="AMEX">Amex</option>
+                  <option value="RUPAY">RuPay</option>
+                  <option value="DINERS">Diners</option>
+                </select>
+              </div>
+            </div>
 
-                    {/* Benefits Preview */}
-                    {card.benefits && card.benefits.length > 0 && (
-                      <div className="mt-4 pt-3 border-t border-cliq-border/60">
-                        <div className="text-[11px] font-bold text-white flex items-center gap-1 mb-1">
-                          <Shield className="w-3.5 h-3.5 text-cliq-emerald" />
-                          <span>Key Benefits</span>
-                        </div>
-                        <p className="text-[11px] text-cliq-textSecondary line-clamp-2">
-                          {card.benefits.map((b: any) => b.title).join(" • ")}
-                        </p>
-                      </div>
-                    )}
+            {/* PRIMARY SHOWCASE: THE FAN COLLECTION + COMPANION DETAILS PANEL */}
+            {viewMode === "fan" ? (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* LEFT / CENTER: FAN-SHAPED CARD HAND */}
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="p-6 rounded-3xl bg-gradient-to-b from-[#0B1428] via-[#070D1C] to-[#040812] border border-cliq-border/80 shadow-2xl relative overflow-visible">
+                    {/* Ambient subtle backlighting */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-cliq-cyan/5 rounded-full blur-3xl pointer-events-none" />
+
+                    <CardFanCollection
+                      cards={cards}
+                      selectedCard={selectedCard}
+                      onSelectCard={(c) => setSelectedCard(c)}
+                    />
                   </div>
 
-                  {/* Actions Bar */}
-                  <div className="mt-6 pt-4 border-t border-cliq-border flex items-center justify-between">
-                    <button
-                      onClick={() => setSelectedCardForDetails(card)}
-                      className="text-xs font-semibold text-cliq-cyan hover:underline flex items-center gap-1"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                      <span>Full Details & Rules</span>
-                    </button>
+                  {/* Summary metric callout */}
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="p-3 rounded-2xl bg-cliq-surface/60 border border-cliq-border flex items-center justify-between">
+                      <span className="text-cliq-textSecondary">Total Annual Fees:</span>
+                      <strong className="text-white font-bold">
+                        {totalAnnualFee === 0 ? "FREE" : `₹${totalAnnualFee.toLocaleString("en-IN")}`}
+                      </strong>
+                    </div>
 
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => openEditModal(card)}
-                        title="Edit Card Details"
-                        className="p-1.5 rounded-lg text-cliq-textSecondary hover:text-cliq-cyan hover:bg-cliq-surface transition-colors"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-
-                      <button
-                        onClick={() => handleDeleteCard(card.id)}
-                        disabled={deletingId === card.id}
-                        className="p-1.5 rounded-lg text-cliq-textMuted hover:text-cliq-danger hover:bg-cliq-surface transition-colors"
-                        title="Deactivate Card"
-                      >
-                        {deletingId === card.id ? (
-                          <Loader2 className="w-3.5 h-3.5 animate-spin text-cliq-danger" />
-                        ) : (
-                          <Trash2 className="w-3.5 h-3.5" />
-                        )}
-                      </button>
+                    <div className="p-3 rounded-2xl bg-cliq-surface/60 border border-cliq-border flex items-center justify-between">
+                      <span className="text-cliq-textSecondary">Potential Waiver Targets:</span>
+                      <strong className="text-emerald-400 font-bold">
+                        {totalWaiverSpend > 0 ? `₹${totalWaiverSpend.toLocaleString("en-IN")}` : "N/A"}
+                      </strong>
                     </div>
                   </div>
                 </div>
-              );
-            })}
+
+                {/* RIGHT: COMPANION DETAILS PANEL */}
+                <div className="lg:col-span-5 sticky top-6">
+                  <CardDetailsPanel
+                    card={selectedCard}
+                    onEdit={openEditModal}
+                    onDelete={handleDeleteCard}
+                    deletingId={deletingId}
+                  />
+                </div>
+              </div>
+            ) : (
+              /* ALTERNATIVE VIEW: ALL CARDS GRID */
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {cards.map((card) => {
+                  const annualFeeNum = Number(card.annual_fee || 0);
+                  const waiverSpendNum = Number(card.renewal_waiver_spend || 0);
+
+                  return (
+                    <div
+                      key={card.id}
+                      className="rounded-2xl bg-cliq-surface border border-cliq-border hover:border-cliq-cyan/40 p-4 space-y-4 transition-all flex flex-col justify-between shadow-md shadow-black/20"
+                    >
+                      <div
+                        onClick={() => {
+                          setSelectedCard(card);
+                          setViewMode("fan");
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <DigitalCreditCard
+                          bankName={card.bank_name}
+                          cardName={card.card_name}
+                          cardVariant={card.card_variant}
+                          cardholderName={card.cardholder_name}
+                          nickname={card.nickname}
+                          lastFourDigits={card.last_four_digits}
+                          network={card.network}
+                          isCompact
+                        />
+                      </div>
+
+                      <div className="space-y-2 pt-1 text-xs">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="text-[10px] text-cliq-textSecondary block">Annual Fee</span>
+                            <span className="font-bold text-white">
+                              {annualFeeNum === 0 ? "FREE" : `₹${annualFeeNum.toLocaleString("en-IN")}`}
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-[10px] text-cliq-textSecondary block">Renewal Waiver</span>
+                            <span className="font-bold text-emerald-400">
+                              {waiverSpendNum > 0 ? `₹${waiverSpendNum.toLocaleString("en-IN")}` : "N/A"}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-cliq-border/60">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedCard(card);
+                              setViewMode("fan");
+                            }}
+                            className="text-cliq-cyan hover:underline text-xs font-semibold flex items-center gap-1"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>View in Fan</span>
+                          </button>
+
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => openEditModal(card)}
+                              className="p-1.5 rounded-lg bg-cliq-surfaceHover hover:bg-cliq-border text-cliq-textSecondary hover:text-white"
+                              title="Edit Card"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteCard(card.id)}
+                              className="p-1.5 rounded-lg bg-cliq-surfaceHover hover:bg-red-950/60 text-cliq-textSecondary hover:text-red-400"
+                              title="Deactivate Card"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
-        {/* Modal: Card Details & Full Benefit Manifesto */}
-        {selectedCardForDetails && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="glass-panel border-cliq-cyan/30 rounded-2xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto space-y-6">
-              <div className="flex items-start justify-between border-b border-cliq-border pb-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-cliq-surface text-cliq-cyan border border-cliq-border">
-                      {selectedCardForDetails.network}
-                    </span>
-                    {selectedCardForDetails.card_variant && (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-cliq-surface text-cliq-turquoise border border-cliq-turquoise/30">
-                        {selectedCardForDetails.card_variant}
-                      </span>
-                    )}
-                  </div>
-                  <h2 className="text-xl font-extrabold text-white mt-1">
-                    {selectedCardForDetails.card_name}
-                  </h2>
-                  <p className="text-xs text-cliq-textSecondary">
-                    Issued by {selectedCardForDetails.bank_name} • {selectedCardForDetails.card_type}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setSelectedCardForDetails(null)}
-                  className="p-1 rounded-lg text-cliq-textSecondary hover:text-white"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Fee & Waiver Summary */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-cliq-surface border border-cliq-border text-xs">
-                <div>
-                  <span className="text-[10px] text-cliq-textMuted block">Joining / Annual Fee</span>
-                  <span className="font-bold text-white text-sm">
-                    ₹{Number(selectedCardForDetails.annual_fee).toLocaleString("en-IN")}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-cliq-textMuted block">Fee Waiver Target</span>
-                  <span className="font-bold text-cliq-turquoise text-sm">
-                    {selectedCardForDetails.renewal_waiver_spend
-                      ? `₹${Number(selectedCardForDetails.renewal_waiver_spend).toLocaleString("en-IN")}`
-                      : "None"}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-cliq-textMuted block">Billing Cycle</span>
-                  <span className="font-medium text-white">
-                    Day {selectedCardForDetails.billing_cycle_day || 15} of each month
-                  </span>
-                </div>
-                {selectedCardForDetails.fee_waiver_condition_details && (
-                  <div className="sm:col-span-3 pt-2 border-t border-cliq-border/60 text-cliq-textSecondary text-[11px]">
-                    <span className="font-bold text-white">Waiver Condition: </span>
-                    {selectedCardForDetails.fee_waiver_condition_details}
-                  </div>
-                )}
-              </div>
-
-              {/* Complete Rules Table */}
-              <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                  <Zap className="w-4 h-4 text-cliq-cyan" />
-                  <span>Verified Reward Multipliers & Caps</span>
-                </h4>
-                <div className="space-y-2">
-                  {selectedCardForDetails.reward_rules?.map((rule: any) => (
-                    <div
-                      key={rule.id}
-                      className="p-3 rounded-xl bg-cliq-surface border border-cliq-border flex items-center justify-between text-xs"
-                    >
-                      <div>
-                        <div className="font-bold text-white">
-                          {rule.merchant_pattern ? `Merchant: ${rule.merchant_pattern}` : `Category: ${rule.category_id}`}
-                        </div>
-                        <div className="text-[10px] text-cliq-textMuted mt-0.5">
-                          {rule.is_excluded ? (
-                            <span className="text-cliq-danger">{rule.exclusion_reason || "Excluded from rewards"}</span>
-                          ) : (
-                            <span>
-                              Min spend: ₹{Number(rule.min_transaction_amount || 0)} • Cap:{" "}
-                              {rule.monthly_cap_amount ? `₹${Number(rule.monthly_cap_amount)}/mo` : "No limit"}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className={`text-sm font-extrabold ${rule.is_excluded ? "text-cliq-danger" : "text-cliq-emerald"}`}>
-                          {rule.is_excluded ? "0.0%" : `${rule.reward_rate_percentage}%`}
-                        </span>
-                        <span className="text-[10px] block text-cliq-textMuted uppercase font-mono">
-                          {rule.reward_type}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Verified Benefits */}
-              {selectedCardForDetails.benefits && selectedCardForDetails.benefits.length > 0 && (
-                <div>
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                    <Shield className="w-4 h-4 text-cliq-emerald" />
-                    <span>Perks & Privileges ({selectedCardForDetails.benefits.length})</span>
-                  </h4>
-                  <div className="space-y-2">
-                    {selectedCardForDetails.benefits.map((ben: any) => (
-                      <div
-                        key={ben.id || ben.title}
-                        className="p-3 rounded-xl bg-cliq-surface border border-cliq-border text-xs space-y-1"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-white flex items-center gap-1.5">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-cliq-emerald" />
-                            {ben.title}
-                          </span>
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-cliq-surfaceHover text-cliq-cyan font-mono">
-                            {ben.benefit_type}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-cliq-textSecondary">{ben.description}</p>
-                        {Number(ben.annual_value_estimate) > 0 && (
-                          <span className="text-[10px] text-cliq-turquoise font-medium block">
-                            Estimated annual value: ₹{Number(ben.annual_value_estimate).toLocaleString("en-IN")}
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Source Reference Link */}
-              {selectedCardForDetails.terms_source_url && (
-                <div className="pt-2 border-t border-cliq-border flex items-center justify-between text-xs text-cliq-textSecondary">
-                  <span>Official Issuer Schedule:</span>
-                  <a
-                    href={selectedCardForDetails.terms_source_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-cliq-cyan hover:underline flex items-center gap-1"
-                  >
-                    <span>View Official Bank Terms</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-              )}
+        {/* ADD CARD MODAL (FOR EXISTING USERS CLICKING "+ Add Another Card") */}
+        {showAddModal && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-[#070C18] border border-cliq-border rounded-3xl max-w-5xl w-full p-6 space-y-6 shadow-2xl relative my-8 max-h-[90vh] overflow-y-auto">
+              <CardSelectionFlow
+                isModal
+                onCancel={() => setShowAddModal(false)}
+                onCardAdded={() => {
+                  setShowAddModal(false);
+                  fetchCards();
+                }}
+              />
             </div>
           </div>
         )}
 
-        {/* Modal: Edit Card */}
+        {/* EDIT METADATA MODAL */}
         {editingCard && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="glass-panel border-cliq-cyan/30 rounded-2xl p-6 sm:p-8 max-w-lg w-full space-y-6">
-              <div className="flex items-center justify-between border-b border-cliq-border pb-3">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Edit2 className="w-5 h-5 text-cliq-cyan" />
-                  <span>Edit Card Details</span>
-                </h3>
-                <button onClick={() => setEditingCard(null)} className="text-cliq-textSecondary hover:text-white">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-[#0B1120] border border-cliq-border rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl relative">
+              <button
+                type="button"
+                onClick={() => setEditingCard(null)}
+                className="absolute right-4 top-4 p-1.5 rounded-lg text-cliq-textSecondary hover:text-white hover:bg-cliq-surfaceHover"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-              <form onSubmit={handleSaveEdit} className="space-y-4 text-xs">
-                <div>
-                  <label className="block text-cliq-textMuted mb-1 font-semibold">Card Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={editForm.card_name}
-                    onChange={(e) => setEditForm({ ...editForm, card_name: e.target.value })}
-                    className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
-                  />
-                </div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Edit2 className="w-4 h-4 text-cliq-cyan" />
+                <span>Edit Card Specifications</span>
+              </h3>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-cliq-textMuted mb-1 font-semibold">Issuer / Bank</label>
+              <form onSubmit={handleSaveEdit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Card Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={editForm.card_name}
+                      onChange={(e) => setEditForm({ ...editForm, card_name: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Bank Name *</label>
                     <input
                       type="text"
                       required
                       value={editForm.bank_name}
                       onChange={(e) => setEditForm({ ...editForm, bank_name: e.target.value })}
-                      className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     />
                   </div>
-                  <div>
-                    <label className="block text-cliq-textMuted mb-1 font-semibold">Network</label>
+
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Cardholder Name</label>
+                    <input
+                      type="text"
+                      value={editForm.cardholder_name}
+                      onChange={(e) => setEditForm({ ...editForm, cardholder_name: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs uppercase focus:outline-none focus:border-cliq-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Nickname</label>
+                    <input
+                      type="text"
+                      value={editForm.nickname}
+                      onChange={(e) => setEditForm({ ...editForm, nickname: e.target.value })}
+                      placeholder="e.g. Travel Card"
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Last 4 Digits</label>
+                    <input
+                      type="text"
+                      maxLength={4}
+                      value={editForm.last_four_digits}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, last_four_digits: e.target.value.replace(/\D/g, "") })
+                      }
+                      placeholder="e.g. 8821"
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs font-mono focus:outline-none focus:border-cliq-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Network</label>
                     <select
                       value={editForm.network}
                       onChange={(e) => setEditForm({ ...editForm, network: e.target.value })}
-                      className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     >
                       <option value="VISA">VISA</option>
-                      <option value="MASTERCARD">MASTERCARD</option>
-                      <option value="RUPAY">RUPAY</option>
-                      <option value="AMEX">AMEX</option>
-                      <option value="DINERS">DINERS</option>
+                      <option value="MASTERCARD">Mastercard</option>
+                      <option value="AMEX">American Express</option>
+                      <option value="RUPAY">RuPay</option>
+                      <option value="DINERS">Diners Club</option>
                     </select>
                   </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-cliq-textMuted mb-1 font-semibold">Card Variant</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Signature, Metal, Gold"
-                      value={editForm.card_variant}
-                      onChange={(e) => setEditForm({ ...editForm, card_variant: e.target.value })}
-                      className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-cliq-textMuted mb-1 font-semibold">Annual Fee (₹)</label>
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Annual Fee (₹)</label>
                     <input
                       type="number"
                       min="0"
                       value={editForm.annual_fee}
                       onChange={(e) => setEditForm({ ...editForm, annual_fee: Number(e.target.value) })}
-                      className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-cliq-textSecondary font-semibold">Renewal Waiver Spend (₹)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={editForm.renewal_waiver_spend}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, renewal_waiver_spend: Number(e.target.value) })
+                      }
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-1 sm:col-span-2">
+                    <label className="text-cliq-textSecondary font-semibold">Waiver Condition Details</label>
+                    <input
+                      type="text"
+                      value={editForm.fee_waiver_condition_details}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, fee_waiver_condition_details: e.target.value })
+                      }
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                    />
+                  </div>
+
+                  <div className="space-y-1 sm:col-span-2">
+                    <label className="text-cliq-textSecondary font-semibold">Terms URL</label>
+                    <input
+                      type="url"
+                      value={editForm.terms_source_url}
+                      onChange={(e) => setEditForm({ ...editForm, terms_source_url: e.target.value })}
+                      placeholder="https://www.bank.com/terms"
+                      className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-cliq-textMuted mb-1 font-semibold">Annual Fee Waiver Spend (₹)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    placeholder="e.g. 100000"
-                    value={editForm.renewal_waiver_spend}
-                    onChange={(e) => setEditForm({ ...editForm, renewal_waiver_spend: Number(e.target.value) })}
-                    className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-cliq-textMuted mb-1 font-semibold">Waiver Condition Details</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Spend ₹1,00,000 in anniversary year to waive fee"
-                    value={editForm.fee_waiver_condition_details}
-                    onChange={(e) => setEditForm({ ...editForm, fee_waiver_condition_details: e.target.value })}
-                    className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-cliq-textMuted mb-1 font-semibold">Official Terms URL</label>
-                  <input
-                    type="url"
-                    placeholder="https://bank.com/terms"
-                    value={editForm.terms_source_url}
-                    onChange={(e) => setEditForm({ ...editForm, terms_source_url: e.target.value })}
-                    className="w-full bg-cliq-surface border border-cliq-border rounded-xl px-3 py-2 text-white focus:border-cliq-cyan focus:outline-none"
-                  />
-                </div>
-
-                <div className="pt-2 flex items-center justify-end gap-3">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-cliq-border/60">
                   <button
                     type="button"
                     onClick={() => setEditingCard(null)}
-                    className="px-4 py-2 rounded-xl text-cliq-textSecondary hover:text-white"
+                    className="px-4 py-2 rounded-xl bg-cliq-surfaceHover text-white text-xs font-semibold hover:bg-cliq-border"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={savingEdit}
-                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold shadow-neonCyan hover:opacity-95 flex items-center gap-1.5"
+                    className="px-5 py-2 rounded-xl bg-cliq-cyan text-cliq-navy text-xs font-extrabold hover:opacity-95 disabled:opacity-50 flex items-center gap-1.5"
                   >
                     {savingEdit && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                     <span>Save Changes</span>

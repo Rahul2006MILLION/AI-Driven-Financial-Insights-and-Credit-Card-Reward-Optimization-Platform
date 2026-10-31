@@ -34,43 +34,38 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 glass-panel border-b border-cliq-border backdrop-blur-md">
+    <header className="sticky top-0 z-50 bg-[#050D0A]/70 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <Link href={session ? "/dashboard" : "/"} className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cliq-cyan via-cliq-turquoise to-cliq-emerald flex items-center justify-center p-0.5 shadow-neonCyan group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-cliq-bg rounded-[10px] flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-cliq-cyan animate-pulse" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 flex items-center justify-center p-0.5 shadow-[0_0_20px_rgba(16,185,129,0.35)] group-hover:scale-105 transition-transform">
+            <div className="w-full h-full bg-[#050D0A] rounded-[10px] flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
             </div>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-2xl tracking-tight text-white glow-cyan">
-                CLIQ
-              </span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-cliq-surface border border-cliq-cyan/40 text-cliq-cyan">
-                AI
-              </span>
-            </div>
-            <p className="text-[10px] text-cliq-textSecondary hidden sm:block">
-              {t.tagline}
-            </p>
+          <div className="flex items-center gap-2">
+            <span className="font-extrabold text-xl tracking-tight text-white glow-emerald">
+              CLIQ
+            </span>
+            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
+              PRO
+            </span>
           </div>
         </Link>
 
         {/* Desktop Controls */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-5">
           {/* Language Selector */}
-          <div className="flex items-center gap-1.5 bg-cliq-surface px-2.5 py-1.5 rounded-lg border border-cliq-border">
-            <Globe className="w-4 h-4 text-cliq-cyan" />
+          <div className="flex items-center gap-1 bg-white/[0.04] px-2 py-1 rounded-full border border-white/[0.08] backdrop-blur-md">
+            <Globe className="w-3.5 h-3.5 text-emerald-400 ml-1" />
             {(["en", "hi", "kn"] as Language[]).map((lang) => (
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
-                className={`px-2 py-0.5 text-xs font-semibold rounded transition-colors ${
+                className={`px-2 py-0.5 text-[11px] font-semibold rounded-full transition-all ${
                   language === lang
-                    ? "bg-cliq-cyan text-cliq-bg font-bold shadow-sm"
-                    : "text-cliq-textSecondary hover:text-white"
+                    ? "bg-emerald-500 text-[#040707] font-bold shadow-[0_0_12px_rgba(16,185,129,0.4)]"
+                    : "text-slate-400 hover:text-white"
                 }`}
               >
                 {lang === "en" ? "EN" : lang === "hi" ? "हिन्दी" : "ಕನ್ನಡ"}
@@ -79,47 +74,47 @@ export const Navbar: React.FC = () => {
           </div>
 
           {session ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Link
                 href="/dashboard"
-                className="text-xs font-medium text-cliq-textSecondary hover:text-cliq-cyan transition-colors"
+                className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
               >
                 {t.nav.dashboard}
               </Link>
               <Link
                 href="/cards"
-                className="text-xs font-medium text-cliq-textSecondary hover:text-cliq-cyan transition-colors"
+                className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
               >
                 {t.nav.cards}
               </Link>
               <Link
                 href="/offers"
-                className="text-xs font-medium text-cliq-turquoise hover:text-cliq-cyan transition-colors"
+                className="text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
               >
                 {t.nav.offers}
               </Link>
               <Link
                 href="/optimization"
-                className="text-xs font-medium text-cliq-textSecondary hover:text-cliq-cyan transition-colors"
+                className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
               >
                 {t.nav.optimizer}
               </Link>
               <Link
                 href="/assistant"
-                className="text-xs font-medium text-cliq-textSecondary hover:text-cliq-cyan transition-colors flex items-center gap-1"
+                className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors flex items-center gap-1"
               >
-                <Sparkles className="w-3.5 h-3.5 text-cliq-turquoise" />
+                <Sparkles className="w-3 h-3 text-emerald-400" />
                 {t.nav.assistant}
               </Link>
 
-              <div className="h-4 w-px bg-cliq-border" />
+              <div className="h-4 w-px bg-white/10" />
 
               <Link
                 href="/profile"
-                className="flex items-center gap-1.5 text-xs text-cliq-textSecondary hover:text-white"
+                className="flex items-center gap-2 text-xs text-slate-300 hover:text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] px-2.5 py-1 rounded-full transition-all"
               >
-                <div className="w-7 h-7 rounded-full bg-cliq-surface border border-cliq-cyan/30 flex items-center justify-center">
-                  <User className="w-3.5 h-3.5 text-cliq-cyan" />
+                <div className="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                  <User className="w-3 h-3 text-emerald-400" />
                 </div>
                 <span className="max-w-[100px] truncate">{session.fullName || session.email}</span>
               </Link>
@@ -127,22 +122,22 @@ export const Navbar: React.FC = () => {
               <button
                 onClick={handleLogout}
                 title={t.nav.logout}
-                className="p-1.5 rounded-lg text-cliq-textSecondary hover:text-cliq-danger hover:bg-cliq-surface transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/[0.04] transition-colors"
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <Link
                 href="/login"
-                className="text-xs font-medium px-3.5 py-1.5 rounded-lg text-cliq-textSecondary hover:text-white border border-transparent hover:border-cliq-border transition-colors"
+                className="text-xs font-medium px-3.5 py-1.5 rounded-full text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors"
               >
                 {t.nav.login}
               </Link>
               <Link
                 href="/register"
-                className="text-xs font-semibold px-4 py-1.5 rounded-lg bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg shadow-neonCyan hover:opacity-95 transition-opacity"
+                className="text-xs font-semibold px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] shadow-[0_0_20px_rgba(16,185,129,0.35)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transition-all"
               >
                 {t.nav.register}
               </Link>
@@ -155,85 +150,85 @@ export const Navbar: React.FC = () => {
           {/* Quick Lang Switch */}
           <button
             onClick={() => setLanguage(language === "en" ? "hi" : language === "hi" ? "kn" : "en")}
-            className="text-xs px-2 py-1 bg-cliq-surface rounded border border-cliq-border text-cliq-cyan"
+            className="text-xs px-2.5 py-1 bg-white/[0.05] rounded-full border border-white/10 text-emerald-400"
           >
             {language.toUpperCase()}
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-cliq-textSecondary hover:text-white"
+            className="p-2 text-slate-300 hover:text-white"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-cliq-bgSecondary border-b border-cliq-border p-4 space-y-3">
+        <div className="md:hidden bg-[#06100C]/95 backdrop-blur-2xl border-b border-white/[0.08] p-5 space-y-3.5 shadow-2xl">
           {session ? (
             <>
               <Link
                 href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.dashboard}
               </Link>
               <Link
                 href="/cards"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.cards}
               </Link>
               <Link
                 href="/offers"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-turquoise hover:text-cliq-cyan"
+                className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
               >
                 {t.nav.offers}
               </Link>
               <Link
                 href="/optimization"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.optimizer}
               </Link>
               <Link
                 href="/analytics"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.analytics}
               </Link>
               <Link
                 href="/financial-health"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.health}
               </Link>
               <Link
                 href="/assistant"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.assistant}
               </Link>
               <Link
                 href="/documents"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-cliq-textSecondary hover:text-cliq-cyan"
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.documents}
               </Link>
-              <div className="pt-2 border-t border-cliq-border flex items-center justify-between">
+              <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between">
                 <Link
                   href="/profile"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-xs text-cliq-cyan"
+                  className="text-xs text-slate-300 hover:text-white"
                 >
                   {session.email}
                 </Link>
@@ -242,7 +237,7 @@ export const Navbar: React.FC = () => {
                     handleLogout();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-xs text-cliq-danger flex items-center gap-1"
+                  className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   {t.nav.logout}
@@ -250,18 +245,18 @@ export const Navbar: React.FC = () => {
               </div>
             </>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2.5 pt-2">
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-center text-sm py-2 bg-cliq-surface rounded border border-cliq-border text-white"
+                className="block text-center text-xs py-2.5 bg-white/[0.04] rounded-full border border-white/10 text-slate-300 font-medium hover:bg-white/[0.08]"
               >
                 {t.nav.login}
               </Link>
               <Link
                 href="/register"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-center text-sm py-2 bg-gradient-to-r from-cliq-cyan to-cliq-emerald rounded font-semibold text-cliq-bg"
+                className="block text-center text-xs py-2.5 bg-emerald-500 hover:bg-emerald-400 rounded-full font-semibold text-[#040707] shadow-[0_0_20px_rgba(16,185,129,0.35)]"
               >
                 {t.nav.register}
               </Link>

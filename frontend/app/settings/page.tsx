@@ -7,8 +7,6 @@ import { clearSession } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import {
   ShieldCheck,
-  Key,
-  Lock,
   Download,
   Trash2,
   Sliders,
@@ -31,83 +29,83 @@ export default function SettingsPage() {
   };
 
   const handleExportData = () => {
-    alert("Exporting all verified card rules and transactions to JSON encrypted format...");
+    alert("Exporting verified portfolio records to encrypted JSON archive...");
   };
 
   const handleDeleteAccount = () => {
-    if (confirm("Are you sure you want to delete your account? All stored card profiles and transaction logs will be permanently scrubbed.")) {
+    if (confirm("Are you sure you want to delete your account? All stored card profiles and transaction logs will be scrubbed.")) {
       clearSession();
       router.push("/register");
     }
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full space-y-8">
+      <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-4xl mx-auto w-full space-y-7">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            {t.nav.settings}
+          <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            Settings & Security
           </h1>
-          <p className="text-xs text-cliq-textSecondary mt-1">
-            Row-Level Security controls, optimization parameters, audit logging, and data privacy.
+          <p className="text-xs text-slate-400 mt-0.5">
+            Cryptographic protections, optimization parameters, and data sovereignty
           </p>
         </div>
 
         {savedSettings && (
-          <div className="p-3.5 rounded-xl bg-cliq-emerald/10 border border-cliq-emerald/30 text-cliq-emerald text-xs flex items-center gap-2">
+          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Optimization parameters saved.</span>
+            <span>Optimization preferences saved.</span>
           </div>
         )}
 
         {/* Security & RLS Status */}
-        <div className="glass-panel p-6 rounded-2xl border-glow-cyan shadow-cardGlass space-y-4">
+        <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-4">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-cliq-cyan" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            <ShieldCheck className="w-5 h-5 text-emerald-400" />
+            <h3 className="text-sm font-bold text-white tracking-wide">
               Security Architecture & Tenant Isolation
             </h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <div className="p-3.5 rounded-xl bg-cliq-surface border border-cliq-border flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-bold text-white block">Supabase Row-Level Security</span>
-                <span className="text-[10px] text-cliq-textSecondary">Enforced on all 11 tables</span>
+                <span className="font-semibold text-white block">Row-Level Security</span>
+                <span className="text-[10px] text-slate-500">Enforced on database tables</span>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cliq-emerald/15 text-cliq-emerald">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 ACTIVE
               </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-cliq-surface border border-cliq-border flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-bold text-white block">Zero Sensitive Card Storage</span>
-                <span className="text-[10px] text-cliq-textSecondary">No CVV, No 16-digit PANs</span>
+                <span className="font-semibold text-white block">Zero Sensitive Card Storage</span>
+                <span className="text-[10px] text-slate-500">No CVV, No 16-digit PANs</span>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cliq-emerald/15 text-cliq-emerald">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 COMPLIANT
               </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-cliq-surface border border-cliq-border flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-bold text-white block">JWT Cryptographic Validation</span>
-                <span className="text-[10px] text-cliq-textSecondary">Bearer Token Auth</span>
+                <span className="font-semibold text-white block">JWT Cryptographic Validation</span>
+                <span className="text-[10px] text-slate-500">Bearer Token Auth</span>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cliq-cyan/15 text-cliq-cyan">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 HS256 VERIFIED
               </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-cliq-surface border border-cliq-border flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-bold text-white block">Rate Limiting & Security Headers</span>
-                <span className="text-[10px] text-cliq-textSecondary">CSP, HSTS, 120 req/min</span>
+                <span className="font-semibold text-white block">Rate Limiting & Headers</span>
+                <span className="text-[10px] text-slate-500">CSP, HSTS, 120 req/min</span>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cliq-emerald/15 text-cliq-emerald">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 ENFORCED
               </span>
             </div>
@@ -115,92 +113,92 @@ export default function SettingsPage() {
         </div>
 
         {/* Engine Optimization Preferences */}
-        <div className="glass-panel p-6 rounded-2xl border-cliq-border space-y-4">
+        <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-4">
           <div className="flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-cliq-turquoise" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            <Sliders className="w-5 h-5 text-emerald-400" />
+            <h3 className="text-sm font-bold text-white tracking-wide">
               Optimization Preferences
             </h3>
           </div>
 
-          <form onSubmit={handleSavePreferences} className="space-y-4 text-xs">
-            <div className="flex items-center justify-between p-3.5 rounded-xl bg-cliq-surface border border-cliq-border">
+          <form onSubmit={handleSavePreferences} className="space-y-3.5 text-xs">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
               <div>
-                <span className="font-bold text-white block">Prioritize Direct Cashback over Miles</span>
-                <span className="text-[10px] text-cliq-textSecondary">
-                  Give higher weighting to liquid monetary credits over travel points
+                <span className="font-semibold text-white block">Prioritize Direct Cashback over Points</span>
+                <span className="text-[10px] text-slate-500">
+                  Weight liquid statement credits higher than air miles
                 </span>
               </div>
               <input
                 type="checkbox"
                 checked={prioritizeCashback}
                 onChange={(e) => setPrioritizeCashback(e.target.checked)}
-                className="w-4 h-4 rounded text-cliq-cyan"
+                className="w-4 h-4 rounded text-emerald-500 focus:ring-0"
               />
             </div>
 
-            <div className="flex items-center justify-between p-3.5 rounded-xl bg-cliq-surface border border-cliq-border">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
               <div>
-                <span className="font-bold text-white block">Deduct Annual Fees in Net Yield</span>
-                <span className="text-[10px] text-cliq-textSecondary">
-                  Account for amortized annual fee in ranking calculations
+                <span className="font-semibold text-white block">Deduct Annual Fees in Net Yield</span>
+                <span className="text-[10px] text-slate-500">
+                  Amortize annual fee across transaction calculations
                 </span>
               </div>
               <input
                 type="checkbox"
                 checked={includeFeeNet}
                 onChange={(e) => setIncludeFeeNet(e.target.checked)}
-                className="w-4 h-4 rounded text-cliq-cyan"
+                className="w-4 h-4 rounded text-emerald-500 focus:ring-0"
               />
             </div>
 
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-cyan/40 text-cliq-cyan font-bold text-xs shadow-sm transition-all"
+              className="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all"
             >
               Update Preferences
             </button>
           </form>
         </div>
 
-        {/* Privacy & Danger Zone */}
-        <div className="glass-panel p-6 rounded-2xl border-cliq-danger/30 space-y-4">
+        {/* Privacy & Account Management */}
+        <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-rose-500/20 backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-cliq-danger" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-              Data Sovereignty & Account Deletion
+            <AlertTriangle className="w-5 h-5 text-rose-400" />
+            <h3 className="text-sm font-bold text-white tracking-wide">
+              Data Sovereignty
             </h3>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
             <div>
-              <span className="text-xs font-bold text-white block">Export Personal Financial Data</span>
-              <span className="text-[10px] text-cliq-textSecondary">
-                Download a JSON archive of all registered card rules, transaction histories, and analytics logs.
+              <span className="text-xs font-semibold text-white block">Export Portfolio Data</span>
+              <span className="text-[10px] text-slate-400">
+                Download JSON archive of all registered card rules and logs.
               </span>
             </div>
             <button
               onClick={handleExportData}
-              className="px-4 py-2 rounded-xl bg-cliq-surface border border-cliq-border text-white text-xs font-semibold hover:border-cliq-cyan flex items-center gap-1.5 shrink-0"
+              className="px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Export JSON</span>
+              <span>Export Archive</span>
             </button>
           </div>
 
-          <div className="pt-4 border-t border-cliq-border/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <span className="text-xs font-bold text-cliq-danger block">Permanently Delete Account</span>
-              <span className="text-[10px] text-cliq-textSecondary">
-                Irreversibly scrubs all stored profiles, credit card rules, and transactions.
+              <span className="text-xs font-semibold text-rose-400 block">Delete Account</span>
+              <span className="text-[10px] text-slate-400">
+                Permanently purge all stored credit cards and transactions.
               </span>
             </div>
             <button
               onClick={handleDeleteAccount}
-              className="px-4 py-2 rounded-xl bg-cliq-danger/10 hover:bg-cliq-danger/20 border border-cliq-danger/40 text-cliq-danger text-xs font-bold flex items-center gap-1.5 shrink-0 transition-colors"
+              className="px-4 py-2 rounded-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>Delete Account & Data</span>
+              <span>Delete Account</span>
             </button>
           </div>
         </div>

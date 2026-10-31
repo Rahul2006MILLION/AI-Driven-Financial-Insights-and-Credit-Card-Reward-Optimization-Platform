@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage, Language } from "@/lib/i18n";
 import { apiFetch, getStoredSession, storeSession } from "@/lib/api";
-import { User, Mail, Globe, Coins, CheckCircle2, Loader2, Save } from "lucide-react";
+import { User, CheckCircle2, Loader2, Save } from "lucide-react";
 
 export default function ProfilePage() {
   const { t, language, setLanguage } = useLanguage();
@@ -71,82 +71,82 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full space-y-6">
+      <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-4xl mx-auto w-full space-y-7">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            {t.nav.profile}
+          <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            Profile Settings
           </h1>
-          <p className="text-xs text-cliq-textSecondary mt-1">
-            Manage your personal profile, preferred language, and regional financial settings.
+          <p className="text-xs text-slate-400 mt-0.5">
+            Personal credentials and language configuration
           </p>
         </div>
 
         {savedSuccess && (
-          <div className="p-3.5 rounded-xl bg-cliq-emerald/10 border border-cliq-emerald/30 text-cliq-emerald text-xs flex items-center gap-2">
+          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Profile settings successfully updated and synchronized!</span>
+            <span>Profile successfully updated.</span>
           </div>
         )}
 
         {loading ? (
           <div className="py-20 text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-cliq-cyan mx-auto" />
-            <p className="text-xs text-cliq-textSecondary mt-2">Loading profile...</p>
+            <Loader2 className="w-8 h-8 animate-spin text-emerald-400 mx-auto" />
+            <p className="text-xs text-slate-400 mt-2">Loading profile...</p>
           </div>
         ) : (
-          <div className="glass-panel p-6 sm:p-8 rounded-2xl border-glow-cyan shadow-cardGlass">
+          <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
             <form onSubmit={handleSave} className="space-y-6 text-xs">
-              <div className="flex items-center gap-4 border-b border-cliq-border pb-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cliq-cyan to-cliq-emerald p-0.5 shadow-neonCyan">
-                  <div className="w-full h-full bg-cliq-bg rounded-full flex items-center justify-center">
-                    <User className="w-8 h-8 text-cliq-cyan" />
+              <div className="flex items-center gap-4 border-b border-white/[0.07] pb-6">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 shadow-[0_0_20px_rgba(16,185,129,0.35)]">
+                  <div className="w-full h-full bg-[#050D0A] rounded-full flex items-center justify-center">
+                    <User className="w-6 h-6 text-emerald-400" />
                   </div>
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">{fullName || "CLIQ User"}</h3>
-                  <div className="text-xs text-cliq-textSecondary">{profile?.email}</div>
-                  <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded bg-cliq-emerald/15 text-cliq-emerald font-semibold">
-                    Verified Account
+                  <div className="text-xs text-slate-400">{profile?.email}</div>
+                  <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
+                    Active Member
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
+                  <label className="block text-slate-400 font-medium mb-1.5">
                     Display Name
                   </label>
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
-                    Email Address (Immutable)
+                  <label className="block text-slate-400 font-medium mb-1.5">
+                    Email Address
                   </label>
                   <input
                     type="email"
                     disabled
                     value={profile?.email || ""}
-                    className="w-full bg-cliq-surface/50 border border-cliq-border/60 rounded-xl px-3.5 py-2.5 text-cliq-textMuted text-sm cursor-not-allowed"
+                    className="w-full bg-white/[0.02] border border-white/[0.05] rounded-2xl px-4 py-2.5 text-slate-500 text-sm cursor-not-allowed"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
+                  <label className="block text-slate-400 font-medium mb-1.5">
                     Display Currency
                   </label>
                   <select
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                    className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   >
                     <option value="INR">INR (₹) - Indian Rupee</option>
                     <option value="USD">USD ($) - US Dollar</option>
@@ -155,13 +155,13 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-cliq-textSecondary font-semibold mb-1.5">
-                    Preferred Language / ಭಾಷೆ / भाषा
+                  <label className="block text-slate-400 font-medium mb-1.5">
+                    Language / ಭಾಷೆ / भाषा
                   </label>
                   <select
                     value={preferredLang}
                     onChange={(e) => setPreferredLang(e.target.value as Language)}
-                    className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan"
+                    className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   >
                     <option value="en">English</option>
                     <option value="hi">हिन्दी (Hindi)</option>
@@ -170,18 +170,18 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-cliq-border flex justify-end">
+              <div className="pt-4 border-t border-white/[0.07] flex justify-end">
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95 flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
                 >
                   {saving ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
                       <Save className="w-4 h-4" />
-                      <span>{t.common.save}</span>
+                      <span>Save Changes</span>
                     </>
                   )}
                 </button>

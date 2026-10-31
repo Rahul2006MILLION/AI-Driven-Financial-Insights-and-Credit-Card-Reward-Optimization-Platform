@@ -12,6 +12,16 @@ export interface UserSession {
 
 export const getStoredSession = (): UserSession | null => {
   if (typeof window === "undefined") return null;
+  if (typeof window !== "undefined" && window.location && window.location.search) {
+    const params = new URLSearchParams(window.location.search);
+    const qToken = params.get("token");
+    if (qToken) {
+      localStorage.setItem("cliq_access_token", qToken);
+      if (params.get("userId")) localStorage.setItem("cliq_user_id", params.get("userId")!);
+      if (params.get("email")) localStorage.setItem("cliq_email", params.get("email")!);
+      if (params.get("fullName")) localStorage.setItem("cliq_full_name", params.get("fullName")!);
+    }
+  }
   const token = localStorage.getItem("cliq_access_token");
   const userId = localStorage.getItem("cliq_user_id");
   const email = localStorage.getItem("cliq_email");
@@ -133,6 +143,8 @@ export interface CreditCard {
   network: "VISA" | "MASTERCARD" | "AMEX" | "RUPAY" | "DINERS";
   card_type: string;
   card_variant?: string;
+  cardholder_name?: string;
+  nickname?: string;
   last_four_digits?: string;
   joining_fee: number | string;
   annual_fee: number | string;

@@ -184,9 +184,9 @@ export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded })
 
   if (seeded) {
     return (
-      <div className="flex items-center gap-2 text-xs text-cliq-emerald bg-cliq-emerald/10 border border-cliq-emerald/30 px-3 py-2 rounded-xl">
-        <CheckCircle2 className="w-4 h-4" />
-        <span>Demo portfolio provisioned with HDFC Millennia, Axis Ace, ICICI Amazon Pay & transactions!</span>
+      <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-3.5 py-1.5 rounded-full">
+        <CheckCircle2 className="w-3.5 h-3.5" />
+        <span>Sample portfolio initialized</span>
       </div>
     );
   }
@@ -195,17 +195,17 @@ export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded })
     <button
       onClick={seedSamplePortfolio}
       disabled={loading}
-      className="flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-cyan/40 text-cliq-cyan hover:shadow-neonCyan transition-all"
+      className="flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-emerald-400 hover:text-emerald-300 transition-all disabled:opacity-50"
     >
       {loading ? (
         <>
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          <span>Provisioning Verified Cards...</span>
+          <span>Provisioning Portfolio...</span>
         </>
       ) : (
         <>
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Load 3 Verified Sample Cards & Data</span>
+          <span>Sample Portfolio</span>
         </>
       )}
     </button>

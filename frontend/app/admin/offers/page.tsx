@@ -635,23 +635,22 @@ export default function AdminOfferReviewPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-16">
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-cliq-bgSecondary via-cliq-surface to-cliq-bgSecondary p-8 border border-cliq-border/80 shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cliq-cyan/5 rounded-full blur-3xl pointer-events-none" />
+      {/* Header Banner in Liquid Glass */}
+      <div className="relative overflow-hidden rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] p-7 sm:p-8">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2.5 mb-2">
-              <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-cliq-cyan/15 text-cliq-cyan border border-cliq-cyan/40 flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                OFFER INTELLIGENCE & VERIFICATION DESK
+                ADMINISTRATION
               </span>
-              <span className="text-xs text-cliq-textMuted">Phase 2 Source-Adaptive Ingestion</span>
             </div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
-              Central Offer Intelligence Infrastructure
+            <h1 className="text-3xl font-black text-white tracking-tight glow-emerald">
+              Offer Review Desk
             </h1>
-            <p className="text-sm text-cliq-textSecondary max-w-2xl mt-1">
-              Multi-channel ingestion across HTML, PDF circulars, authorized feeds, and manual registry with mandatory human verification.
+            <p className="text-xs text-slate-400 mt-1 max-w-xl">
+              Verification queue and automated source ingestion controls
             </p>
           </div>
 
@@ -659,16 +658,16 @@ export default function AdminOfferReviewPage() {
             <button
               onClick={handleSyncDiscovery}
               disabled={syncing}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-90 transition-all flex items-center gap-2"
+              className="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
             >
-              <RefreshCw className={`w-4 h-4 ${syncing ? "animate-spin" : ""}`} />
-              {syncing ? "Running Ingestion Pipeline..." : "Run Discovery Sync"}
+              <RefreshCw className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} />
+              {syncing ? "Syncing..." : "Run Discovery Sync"}
             </button>
             <Link
               href="/offers"
-              className="px-4 py-2.5 rounded-xl bg-cliq-surface border border-cliq-border text-xs font-semibold text-cliq-textSecondary hover:text-white transition-colors flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
             >
-              Public View
+              <span>Public Offers</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -676,64 +675,64 @@ export default function AdminOfferReviewPage() {
       </div>
 
       {/* Primary Sub-Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-cliq-border/80 pb-4 overflow-x-auto scrollbar-none">
+      <div className="flex items-center gap-2 border-b border-white/[0.07] pb-4 overflow-x-auto scrollbar-none">
         <button
           onClick={() => setActiveTab("review")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "review"
-              ? "bg-cliq-cyan text-cliq-bg shadow-neonCyan"
-              : "bg-cliq-surface text-cliq-textSecondary border border-cliq-border hover:text-white"
+              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
-          <Layers className="w-4 h-4" />
+          <Layers className="w-3.5 h-3.5" />
           Review Queue ({offers.length})
         </button>
 
         <button
           onClick={() => setActiveTab("sources")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "sources"
-              ? "bg-cliq-cyan text-cliq-bg shadow-neonCyan"
-              : "bg-cliq-surface text-cliq-textSecondary border border-cliq-border hover:text-white"
+              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
-          <Server className="w-4 h-4" />
-          Source Registry & Health ({sources.length || 8})
+          <Server className="w-3.5 h-3.5" />
+          Source Registry ({sources.length || 8})
         </button>
 
         <button
           onClick={() => setActiveTab("upload_circular")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "upload_circular"
-              ? "bg-cliq-cyan text-cliq-bg shadow-neonCyan"
-              : "bg-cliq-surface text-cliq-textSecondary border border-cliq-border hover:text-white"
+              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
-          <FileUp className="w-4 h-4" />
-          Upload Circular (PDF)
+          <FileUp className="w-3.5 h-3.5" />
+          Upload Circular
         </button>
 
         <button
           onClick={() => setActiveTab("manual_entry")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "manual_entry"
-              ? "bg-cliq-cyan text-cliq-bg shadow-neonCyan"
-              : "bg-cliq-surface text-cliq-textSecondary border border-cliq-border hover:text-white"
+              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
-          <PlusCircle className="w-4 h-4" />
-          Manual Offer Entry
+          <PlusCircle className="w-3.5 h-3.5" />
+          Manual Entry
         </button>
 
         <button
           onClick={() => setActiveTab("failures")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "failures"
-              ? "bg-cliq-cyan text-cliq-bg shadow-neonCyan"
-              : "bg-cliq-surface text-cliq-textSecondary border border-cliq-border hover:text-white"
+              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
-          <AlertCircle className="w-4 h-4" />
+          <AlertCircle className="w-3.5 h-3.5" />
           Failure Logs ({failures.length})
         </button>
       </div>

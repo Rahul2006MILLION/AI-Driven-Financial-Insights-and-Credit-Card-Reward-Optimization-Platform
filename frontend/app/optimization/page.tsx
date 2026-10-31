@@ -10,8 +10,6 @@ import {
   ArrowRight,
   Loader2,
   CheckCircle2,
-  ShieldAlert,
-  HelpCircle,
   TrendingDown,
   Tag,
   Copy,
@@ -19,8 +17,8 @@ import {
   Globe,
   Store,
   ExternalLink,
-  Info,
   Gift,
+  ChevronRight,
 } from "lucide-react";
 
 export default function RewardOptimizationPage() {
@@ -62,31 +60,30 @@ export default function RewardOptimizationPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-8">
+      <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
-            <Zap className="w-8 h-8 text-cliq-cyan" />
-            <span>Smart Card Utilization & Reward Optimizer</span>
+          <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            Purchase Intelligence
           </h1>
-          <p className="text-xs text-cliq-textSecondary mt-1">
-            Evaluates your credit cards, promotional bank offers, instant coupon codes, and reward caps using exact Decimal logic.
+          <p className="text-xs text-slate-400 mt-0.5">
+            Real-time reward maximization and instant coupon detection
           </p>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-xl bg-cliq-danger/10 border border-cliq-danger/30 text-cliq-danger text-xs">
+          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium">
             {error}
           </div>
         )}
 
-        {/* Input Form */}
-        <div className="glass-panel p-6 rounded-2xl border-glow-cyan shadow-cardGlass">
+        {/* Input Form Glass Panel */}
+        <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
           <form onSubmit={handleOptimize} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
+              <label className="block text-xs font-medium text-slate-400 mb-1.5">
                 Spend Amount (₹)
               </label>
               <input
@@ -95,57 +92,57 @@ export default function RewardOptimizationPage() {
                 min={1}
                 value={amount}
                 onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-4 py-2.5 text-white font-bold text-sm focus:outline-none focus:border-cliq-cyan"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white font-bold text-sm focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
-                Spending Category
+              <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
               >
                 <option value="food_delivery">Food Delivery (Swiggy, Zomato)</option>
                 <option value="dining">Dining & Restaurants</option>
-                <option value="shopping">Online Shopping (Amazon, Flipkart)</option>
-                <option value="grocery">Grocery & Quick Commerce (Blinkit, DMart)</option>
-                <option value="travel">Travel, Flights & Hotels (MakeMyTrip, IRCTC)</option>
-                <option value="entertainment">Movies & Entertainment (BookMyShow)</option>
-                <option value="utility">Utility & Bill Payments</option>
+                <option value="shopping">Shopping (Amazon, Flipkart)</option>
+                <option value="grocery">Groceries (Blinkit, DMart)</option>
+                <option value="travel">Travel & Flights</option>
+                <option value="entertainment">Movies & Entertainment</option>
+                <option value="utility">Utility & Bills</option>
                 <option value="fuel">Fuel & Petrol Pumps</option>
                 <option value="international">International Spends</option>
-                <option value="other">General / Other Spends</option>
+                <option value="other">General Spends</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
-                Merchant / Store Name
+              <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                Merchant / Store
               </label>
               <input
                 type="text"
                 placeholder="e.g. Swiggy, Amazon, Croma"
                 value={merchant}
                 onChange={(e) => setMerchant(e.target.value)}
-                className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-cliq-cyan"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
-                Transaction Channel
+              <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                Channel
               </label>
-              <div className="grid grid-cols-2 gap-1.5 bg-cliq-bgSecondary p-1 rounded-xl border border-cliq-border">
+              <div className="grid grid-cols-2 gap-1.5 bg-white/[0.03] p-1 rounded-2xl border border-white/10">
                 <button
                   type="button"
                   onClick={() => setPaymentChannel("ONLINE")}
-                  className={`py-1.5 text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-colors ${
+                  className={`py-1.5 text-xs font-semibold rounded-xl flex items-center justify-center gap-1 transition-all ${
                     paymentChannel === "ONLINE"
-                      ? "bg-cliq-surface text-cliq-cyan border border-cliq-cyan/40"
-                      : "text-cliq-textMuted hover:text-white"
+                      ? "bg-emerald-500 text-[#040707] font-bold shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                      : "text-slate-400 hover:text-white"
                   }`}
                 >
                   <Globe className="w-3.5 h-3.5" />
@@ -154,10 +151,10 @@ export default function RewardOptimizationPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentChannel("OFFLINE")}
-                  className={`py-1.5 text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-colors ${
+                  className={`py-1.5 text-xs font-semibold rounded-xl flex items-center justify-center gap-1 transition-all ${
                     paymentChannel === "OFFLINE"
-                      ? "bg-cliq-surface text-cliq-turquoise border border-cliq-turquoise/40"
-                      : "text-cliq-textMuted hover:text-white"
+                      ? "bg-emerald-500 text-[#040707] font-bold shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                      : "text-slate-400 hover:text-white"
                   }`}
                 >
                   <Store className="w-3.5 h-3.5" />
@@ -170,14 +167,14 @@ export default function RewardOptimizationPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-cliq-cyan via-cliq-turquoise to-cliq-emerald text-cliq-bg font-extrabold text-sm shadow-neonCyan hover:opacity-95 transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_25px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
                     <Zap className="w-4 h-4" />
-                    <span>Calculate Optimal Card & Benefits</span>
+                    <span>Calculate Optimal Benefits</span>
                   </>
                 )}
               </button>
@@ -189,77 +186,77 @@ export default function RewardOptimizationPage() {
         {result && result.recommended_card && (
           <div className="space-y-6">
             {/* Top Recommended Hero Card */}
-            <div className="glass-panel p-6 sm:p-8 rounded-2xl border-glow-emerald shadow-neonEmerald relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-cliq-emerald/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.04] border border-emerald-500/40 backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-cliq-border/60 pb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-6">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cliq-emerald/20 text-cliq-emerald text-xs font-bold border border-cliq-emerald/40 mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-xs font-semibold border border-emerald-500/30 mb-2.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Top Recommendation</span>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                     {result.recommended_card.card_name}
                   </h2>
-                  <div className="text-xs text-cliq-textSecondary mt-0.5">
+                  <div className="text-xs text-slate-400 mt-0.5">
                     {result.recommended_card.bank_name} • {result.recommended_card.network}
                     {result.recommended_card.card_variant && ` • ${result.recommended_card.card_variant}`}
                   </div>
                 </div>
 
                 <div className="sm:text-right">
-                  <span className="text-xs text-cliq-textSecondary block">Total Net Benefit</span>
-                  <div className="text-3xl sm:text-4xl font-extrabold text-cliq-emerald glow-emerald">
+                  <span className="text-xs text-slate-400 block font-medium">Total Net Benefit</span>
+                  <div className="text-3xl sm:text-4xl font-black text-emerald-400 glow-emerald tracking-tight">
                     ₹{Number(result.recommended_card.net_financial_benefit).toFixed(2)}
                   </div>
-                  <span className="text-xs font-bold text-cliq-cyan">
-                    {result.recommended_card.effective_rate_percentage}% Effective Combined Yield
+                  <span className="text-xs font-semibold text-emerald-300">
+                    {result.recommended_card.effective_rate_percentage}% Effective Yield
                   </span>
                 </div>
               </div>
 
               {/* Benefit Split: Instant Discount vs Post Rewards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-                <div className="p-4 rounded-xl bg-cliq-surface border border-cliq-border flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] text-cliq-textMuted uppercase font-bold block">
+                    <span className="text-[10px] text-slate-500 uppercase font-semibold block">
                       Upfront Instant Discount
                     </span>
-                    <span className="text-lg font-extrabold text-cliq-turquoise">
+                    <span className="text-lg font-black text-emerald-400">
                       ₹{Number(result.recommended_card.instant_discount_monetary).toFixed(2)}
                     </span>
                   </div>
-                  <Tag className="w-6 h-6 text-cliq-turquoise opacity-80" />
+                  <Tag className="w-5 h-5 text-emerald-400 opacity-80" />
                 </div>
 
-                <div className="p-4 rounded-xl bg-cliq-surface border border-cliq-border flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] text-cliq-textMuted uppercase font-bold block">
+                    <span className="text-[10px] text-slate-500 uppercase font-semibold block">
                       Card Rewards & Cashback
                     </span>
-                    <span className="text-lg font-extrabold text-cliq-cyan">
+                    <span className="text-lg font-black text-white">
                       ₹{Number(result.recommended_card.post_reward_monetary).toFixed(2)}
                     </span>
                   </div>
-                  <Gift className="w-6 h-6 text-cliq-cyan opacity-80" />
+                  <Gift className="w-5 h-5 text-emerald-400 opacity-80" />
                 </div>
               </div>
 
               {/* Applicable Coupon Offer Highlight */}
               {result.recommended_card.applicable_offers && result.recommended_card.applicable_offers.length > 0 && (
-                <div className="mt-4 p-4 rounded-xl bg-cliq-bg border border-cliq-turquoise/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="mt-4 p-4 rounded-2xl bg-white/[0.03] border border-emerald-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cliq-turquoise/20 text-cliq-turquoise uppercase">
-                        Active Promo Offer
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 uppercase">
+                        Matched Coupon
                       </span>
-                      <span className="text-xs font-extrabold text-white">
+                      <span className="text-xs font-bold text-white">
                         {result.recommended_card.applicable_offers[0].offer_title}
                       </span>
                     </div>
                     {result.recommended_card.applicable_offers[0].terms_and_conditions && (
-                      <p className="text-[11px] text-cliq-textSecondary mt-1">
+                      <p className="text-[11px] text-slate-400 mt-1">
                         {result.recommended_card.applicable_offers[0].terms_and_conditions}
                       </p>
                     )}
@@ -267,18 +264,17 @@ export default function RewardOptimizationPage() {
 
                   {result.recommended_card.applicable_offers[0].promo_code && (
                     <div className="flex items-center gap-2 shrink-0">
-                      <div className="font-mono text-xs font-extrabold text-cliq-cyan bg-cliq-surface px-3 py-1.5 rounded-lg border border-cliq-border">
+                      <div className="font-mono text-xs font-bold text-emerald-400 bg-white/[0.05] px-3 py-1.5 rounded-xl border border-white/10">
                         {result.recommended_card.applicable_offers[0].promo_code}
                       </div>
                       <button
                         onClick={() => handleCopyCode(result.recommended_card!.applicable_offers[0].promo_code!)}
-                        className="p-1.5 rounded-lg bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-white text-xs flex items-center gap-1"
-                        title="Copy coupon"
+                        className="p-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 text-white text-xs flex items-center gap-1"
                       >
                         {copiedCode === result.recommended_card.applicable_offers[0].promo_code ? (
-                          <Check className="w-3.5 h-3.5 text-cliq-emerald" />
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
                         ) : (
-                          <Copy className="w-3.5 h-3.5 text-cliq-textSecondary" />
+                          <Copy className="w-3.5 h-3.5 text-slate-400" />
                         )}
                       </button>
                     </div>
@@ -286,38 +282,38 @@ export default function RewardOptimizationPage() {
                 </div>
               )}
 
-              {/* Localized Explanation */}
-              <div className="mt-4 p-4 rounded-xl bg-cliq-surface/90 border border-cliq-cyan/30 text-xs text-cliq-textSecondary flex items-start gap-3">
-                <Sparkles className="w-4 h-4 text-cliq-cyan mt-0.5 shrink-0" />
-                <div className="leading-relaxed text-white font-medium">
+              {/* Explanation */}
+              <div className="mt-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-300 flex items-start gap-3">
+                <Sparkles className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                <div className="leading-relaxed font-medium">
                   {result.explanation}
                 </div>
               </div>
 
-              {/* Step-by-Step Breakdown */}
-              <div className="mt-6 pt-6 border-t border-cliq-border/60">
+              {/* Calculation Steps */}
+              <div className="mt-6 pt-6 border-t border-white/[0.07]">
                 <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">
-                  Deterministic Step-by-Step Calculation Breakdown
+                  Calculation Breakdown
                 </h4>
 
                 <div className="space-y-2">
                   {result.recommended_card.breakdown_steps?.map((step: any) => (
                     <div
                       key={step.step_number}
-                      className="p-3 rounded-xl bg-cliq-surface/70 border border-cliq-border flex items-center justify-between text-xs"
+                      className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-xs"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="w-5 h-5 rounded-full bg-cliq-cyan/15 text-cliq-cyan flex items-center justify-center font-bold text-[10px]">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
                           {step.step_number}
                         </span>
                         <div>
-                          <span className="font-bold text-white">{step.rule_name}</span>
-                          <p className="text-[11px] text-cliq-textSecondary">{step.reason}</p>
+                          <span className="font-semibold text-white">{step.rule_name}</span>
+                          <p className="text-[11px] text-slate-400">{step.reason}</p>
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <span className="font-bold text-cliq-emerald">
+                        <span className="font-bold text-emerald-400">
                           ₹{Number(step.final_monetary_value).toFixed(2)}
                         </span>
                       </div>
@@ -326,31 +322,31 @@ export default function RewardOptimizationPage() {
                 </div>
               </div>
 
-              {/* Missing Information & Official Terms Links */}
+              {/* Source Verification Link */}
               {result.recommended_card.source_references && result.recommended_card.source_references.length > 0 && (
-                <div className="mt-4 pt-3 border-t border-cliq-border flex items-center justify-between text-xs text-cliq-textMuted">
+                <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-slate-500">
                   <span>Source Verification:</span>
                   <a
                     href={result.recommended_card.source_references[0]}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-cliq-cyan hover:underline flex items-center gap-1 font-semibold"
+                    className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium"
                   >
-                    <span>View Official Bank Terms</span>
+                    <span>Official Schedule of Charges</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
               )}
             </div>
 
-            {/* Alternative Cards Comparison Table */}
+            {/* Alternative Cards Comparison */}
             {result.alternatives && result.alternatives.length > 0 && (
-              <div className="glass-panel p-6 rounded-2xl border-cliq-border space-y-4">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Alternative Cards in Your Wallet
+              <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-4">
+                <h3 className="text-sm font-bold text-white tracking-wide">
+                  Alternative Cards in Portfolio
                 </h3>
 
-                <div className="divide-y divide-cliq-border/60">
+                <div className="divide-y divide-white/[0.06]">
                   {result.alternatives.map((alt: any) => {
                     const delta =
                       Number(result.recommended_card!.net_financial_benefit) -
@@ -358,14 +354,14 @@ export default function RewardOptimizationPage() {
                     return (
                       <div
                         key={alt.card_id}
-                        className="py-3 flex items-center justify-between text-xs"
+                        className="py-3.5 flex items-center justify-between text-xs"
                       >
                         <div>
                           <div className="font-bold text-white">{alt.card_name}</div>
-                          <div className="text-[11px] text-cliq-textMuted">
+                          <div className="text-[11px] text-slate-400">
                             {alt.bank_name} • {alt.effective_rate_percentage}% Yield
                             {Number(alt.instant_discount_monetary) > 0 && (
-                              <span className="text-cliq-turquoise ml-1 font-medium">
+                              <span className="text-emerald-400 ml-1 font-medium">
                                 (includes ₹{Number(alt.instant_discount_monetary)} instant discount)
                               </span>
                             )}
@@ -377,9 +373,9 @@ export default function RewardOptimizationPage() {
                             ₹{Number(alt.net_financial_benefit).toFixed(2)}
                           </div>
                           {delta > 0 && (
-                            <div className="text-[11px] text-cliq-danger flex items-center gap-0.5 justify-end">
+                            <div className="text-[11px] text-rose-400 flex items-center gap-0.5 justify-end">
                               <TrendingDown className="w-3 h-3" />
-                              <span>-₹{delta.toFixed(2)} Difference</span>
+                              <span>-₹{delta.toFixed(2)} Delta</span>
                             </div>
                           )}
                         </div>

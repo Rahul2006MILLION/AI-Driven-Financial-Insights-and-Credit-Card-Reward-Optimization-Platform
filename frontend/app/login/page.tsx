@@ -48,55 +48,58 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4">
-      <div className="max-w-md w-full glass-panel p-8 rounded-2xl border-glow-cyan shadow-cardGlass">
+    <div className="flex-1 flex items-center justify-center p-4 min-h-[calc(100vh-4rem)] bg-[#040707] relative overflow-hidden">
+      {/* Ambient Emerald Glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-md w-full p-8 sm:p-9 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)]">
         <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-gradient-to-br from-cliq-cyan to-cliq-emerald p-0.5 mb-3 shadow-neonCyan">
-            <div className="w-full h-full bg-cliq-bg rounded-[10px] flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-cliq-cyan" />
+          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 mb-3 shadow-[0_0_20px_rgba(16,185,129,0.35)]">
+            <div className="w-full h-full bg-[#050D0A] rounded-[14px] flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-emerald-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-extrabold text-white">Welcome Back to CLIQ</h2>
-          <p className="text-xs text-cliq-textSecondary mt-1.5">{t.tagline}</p>
+          <h2 className="text-2xl font-black text-white glow-emerald">Welcome Back</h2>
+          <p className="text-xs text-slate-400 mt-1">Sign in to your financial command center</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-xl bg-cliq-danger/10 border border-cliq-danger/30 text-cliq-danger text-xs">
+          <div className="mb-6 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
+            <label className="block text-slate-400 font-medium mb-1.5">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-cliq-textMuted absolute left-3.5 top-3" />
+              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan transition-colors"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-cliq-textSecondary mb-1.5">
+            <label className="block text-slate-400 font-medium mb-1.5">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-cliq-textMuted absolute left-3.5 top-3" />
+              <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-cliq-bgSecondary border border-cliq-border rounded-xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-cliq-cyan transition-colors"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
           </div>
@@ -104,7 +107,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-sm shadow-neonCyan hover:opacity-95 transition-all flex items-center justify-center gap-2 mt-2"
+            className="w-full py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-40"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -117,18 +120,18 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-cliq-border text-center space-y-3">
+        <div className="mt-6 pt-6 border-t border-white/[0.06] text-center space-y-3">
           <button
             type="button"
             onClick={fillDemoAccount}
-            className="text-xs text-cliq-turquoise hover:underline font-medium"
+            className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
           >
-            Fill Demo Credentials
+            Auto-fill Demo Credentials
           </button>
 
-          <p className="text-xs text-cliq-textSecondary">
+          <p className="text-xs text-slate-400">
             Don't have an account yet?{" "}
-            <Link href="/register" className="text-cliq-cyan font-bold hover:underline">
+            <Link href="/register" className="text-emerald-400 font-bold hover:underline">
               Create an account
             </Link>
           </p>

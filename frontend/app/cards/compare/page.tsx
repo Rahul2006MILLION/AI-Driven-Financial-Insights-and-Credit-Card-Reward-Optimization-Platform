@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
-import { GitCompare, Loader2, Sparkles, Check, CheckCircle2, Shield } from "lucide-react";
+import { GitCompare, Loader2, Sparkles, Check } from "lucide-react";
 
 export default function CompareCardsPage() {
   const { t } = useLanguage();
@@ -20,7 +20,6 @@ export default function CompareCardsPage() {
         const data: any = await apiFetch("/cards");
         setCards(data || []);
         if (data && data.length >= 2) {
-          // Default select first 2 or 3
           setSelectedIds(data.slice(0, 3).map((c: any) => c.id));
         }
       } catch (err) {
@@ -60,7 +59,6 @@ export default function CompareCardsPage() {
     }
   };
 
-  // Run automatically when selections load
   useEffect(() => {
     if (selectedIds.length >= 2) {
       handleRunComparison();
@@ -68,32 +66,32 @@ export default function CompareCardsPage() {
   }, [selectedIds.length]);
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
       <Sidebar />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-8">
+      <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            {t.cards.compare}
+          <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            Card Comparison
           </h1>
-          <p className="text-xs text-cliq-textSecondary mt-1">
-            Side-by-side comparative analysis of reward yields, category multipliers, and fee breakeven.
+          <p className="text-xs text-slate-400 mt-0.5">
+            Side-by-side multiplier matrix and annual fee breakeven analysis
           </p>
         </div>
 
-        {/* Card Selector Pills */}
-        <div className="glass-panel p-5 rounded-2xl border-cliq-border space-y-3">
+        {/* Card Selector Pills in Liquid Glass */}
+        <div className="p-5 sm:p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-white uppercase tracking-wider">
-              Select 2 to 5 Cards to Compare ({selectedIds.length} Selected)
+              Select 2 to 5 Cards ({selectedIds.length} Selected)
             </span>
             <button
               onClick={handleRunComparison}
               disabled={comparing || selectedIds.length < 2}
-              className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-cliq-cyan to-cliq-emerald text-cliq-bg font-bold text-xs shadow-neonCyan hover:opacity-95 flex items-center gap-1.5"
+              className="px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all flex items-center gap-1.5 disabled:opacity-40"
             >
               {comparing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <GitCompare className="w-3.5 h-3.5" />}
-              <span>Compare Selected</span>
+              <span>Compare</span>
             </button>
           </div>
 
@@ -104,15 +102,15 @@ export default function CompareCardsPage() {
                 <button
                   key={c.id}
                   onClick={() => toggleSelectCard(c.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border flex items-center gap-2 transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border flex items-center gap-2 transition-all ${
                     isSelected
-                      ? "bg-cliq-cyan/20 border-cliq-cyan text-cliq-cyan shadow-neonCyan"
-                      : "bg-cliq-surface border-cliq-border text-cliq-textSecondary hover:text-white"
+                      ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.25)]"
+                      : "bg-white/[0.03] border-white/10 text-slate-400 hover:text-white"
                   }`}
                 >
                   <div
                     className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] ${
-                      isSelected ? "bg-cliq-cyan text-cliq-bg" : "border border-cliq-border"
+                      isSelected ? "bg-emerald-500 text-[#040707]" : "border border-white/20"
                     }`}
                   >
                     {isSelected && <Check className="w-2.5 h-2.5 stroke-[3]" />}
@@ -134,20 +132,20 @@ export default function CompareCardsPage() {
                 return (
                   <div
                     key={card.card_id}
-                    className="glass-panel p-5 rounded-2xl border-glow-cyan/40 flex flex-col justify-between"
+                    className="p-5 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] flex flex-col justify-between"
                   >
                     <div>
-                      <span className="text-[10px] uppercase font-bold text-cliq-cyan px-2 py-0.5 rounded bg-cliq-surface border border-cliq-border">
+                      <span className="text-[10px] uppercase font-bold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                         {card.network}
                       </span>
                       <h3 className="text-base font-extrabold text-white mt-2">
                         {card.card_name}
                       </h3>
-                      <div className="text-xs text-cliq-textSecondary">{card.bank_name}</div>
+                      <div className="text-xs text-slate-400">{card.bank_name}</div>
 
-                      <div className="mt-4 pt-3 border-t border-cliq-border space-y-2 text-xs">
+                      <div className="mt-4 pt-3 border-t border-white/[0.06] space-y-2 text-xs">
                         <div className="flex items-center justify-between">
-                          <span className="text-cliq-textMuted">Annual Fee:</span>
+                          <span className="text-slate-500">Annual Fee:</span>
                           <span className="font-bold text-white">
                             {Number(cardMeta?.annual_fee) === 0
                               ? "Lifetime Free"
@@ -155,8 +153,8 @@ export default function CompareCardsPage() {
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-cliq-textMuted">Fee Breakeven Spend:</span>
-                          <span className="font-bold text-cliq-turquoise">
+                          <span className="text-slate-500">Breakeven Spend:</span>
+                          <span className="font-bold text-emerald-400">
                             ₹{Number(comparisonResult.annual_break_even_spends[card.card_id] || 0).toFixed(0)}/yr
                           </span>
                         </div>
@@ -168,36 +166,35 @@ export default function CompareCardsPage() {
             </div>
 
             {/* Category Yield Matrix Table */}
-            <div className="glass-panel rounded-2xl border-cliq-border overflow-hidden">
-              <div className="p-4 bg-cliq-surface border-b border-cliq-border flex items-center justify-between">
+            <div className="rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] overflow-hidden">
+              <div className="p-4 bg-white/[0.02] border-b border-white/[0.06] flex items-center justify-between">
                 <span className="text-xs font-bold text-white uppercase tracking-wider">
-                  Category Yield Matrix (Effective Return %)
+                  Category Yield Matrix (%)
                 </span>
-                <span className="text-[11px] text-cliq-emerald font-semibold">
-                  Highest Yield Highlighted in Neon
+                <span className="text-[11px] text-emerald-400 font-medium">
+                  Leading Yield Highlighted
                 </span>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-cliq-bgSecondary/80 text-cliq-textMuted uppercase border-b border-cliq-border">
+                  <thead className="bg-white/[0.01] text-slate-400 uppercase text-[10px] tracking-wider border-b border-white/[0.06]">
                     <tr>
-                      <th className="py-3 px-4 font-semibold">Category</th>
+                      <th className="py-3.5 px-4 font-semibold">Category</th>
                       {comparisonResult.cards.map((c: any) => (
-                        <th key={c.card_id} className="py-3 px-4 font-semibold text-center">
+                        <th key={c.card_id} className="py-3.5 px-4 font-semibold text-center">
                           {c.card_name}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-cliq-border/60">
+                  <tbody className="divide-y divide-white/[0.06]">
                     {comparisonResult.category_matrix.map((row: any) => {
-                      // find max yield in row
                       const yields = Object.values(row.card_yields).map((y: any) => Number(y));
                       const maxYield = Math.max(...yields);
 
                       return (
-                        <tr key={row.category_id} className="hover:bg-cliq-surface/40 transition-colors">
+                        <tr key={row.category_id} className="hover:bg-white/[0.02] transition-colors">
                           <td className="py-3.5 px-4 font-bold text-white">
                             {row.display_name}
                           </td>
@@ -207,15 +204,15 @@ export default function CompareCardsPage() {
                             return (
                               <td key={c.card_id} className="py-3.5 px-4 text-center">
                                 <span
-                                  className={`inline-block px-2.5 py-1 rounded-lg font-extrabold ${
+                                  className={`inline-block px-2.5 py-0.5 rounded-full font-bold ${
                                     isWinner
-                                      ? "bg-cliq-emerald/20 text-cliq-emerald border border-cliq-emerald/40 shadow-neonEmerald"
+                                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.25)]"
                                       : val === 0
-                                      ? "text-cliq-danger font-medium"
-                                      : "text-cliq-textSecondary"
+                                      ? "text-rose-400 font-medium"
+                                      : "text-slate-300"
                                   }`}
                                 >
-                                  {val > 0 ? `${val.toFixed(1)}%` : "0.0% (Excl)"}
+                                  {val > 0 ? `${val.toFixed(1)}%` : "0.0%"}
                                 </span>
                               </td>
                             );
@@ -229,8 +226,8 @@ export default function CompareCardsPage() {
             </div>
 
             {/* Verdict */}
-            <div className="p-4 rounded-xl bg-cliq-surface border border-cliq-cyan/30 text-xs text-cliq-textSecondary flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-cliq-cyan shrink-0" />
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-300 flex items-center gap-3">
+              <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{comparisonResult.summary_verdict}</span>
             </div>
           </div>
