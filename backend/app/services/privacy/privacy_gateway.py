@@ -27,8 +27,10 @@ class DataClassification(str, Enum):
 class AiTaskType(str, Enum):
     FINANCIAL_EDUCATION = "FINANCIAL_EDUCATION"
     CARD_RECOMMENDATION_EXPLANATION = "CARD_RECOMMENDATION_EXPLANATION"
+    CARD_RECOMMENDATION = "CARD_RECOMMENDATION"  # Reconciled canonical alias
     OFFER_INTERPRETATION = "OFFER_INTERPRETATION"
     SPENDING_ANALYSIS_SUMMARY = "SPENDING_ANALYSIS_SUMMARY"
+    SPENDING_SUMMARY = "SPENDING_SUMMARY"        # Reconciled canonical alias
     GENERAL_QUERY = "GENERAL_QUERY"
 
 class ConsentStatus(str, Enum):
@@ -44,7 +46,9 @@ APPROVED_AI_TASKS = {
     AiTaskType.OFFER_INTERPRETATION: DataClassification.PUBLIC,
     AiTaskType.GENERAL_QUERY: DataClassification.PUBLIC,
     AiTaskType.CARD_RECOMMENDATION_EXPLANATION: DataClassification.SENSITIVE,
+    AiTaskType.CARD_RECOMMENDATION: DataClassification.SENSITIVE,
     AiTaskType.SPENDING_ANALYSIS_SUMMARY: DataClassification.SENSITIVE,
+    AiTaskType.SPENDING_SUMMARY: DataClassification.SENSITIVE,
 }
 
 # ==============================================================================
@@ -99,7 +103,7 @@ class SensitiveDataRedactor:
 
     # 9. Passwords, Tokens, Bearer Credentials
     AUTH_TOKEN_REGEX = re.compile(
-        r"(?i)\b(?:bearer\s+[A-Za-z0-9\-_.~+/]+=*|password[\s:=]+[^\s]+|secret[\s:=]+[^\s]+|api[_-]?key[\s:=]+[A-Za-z0-9\-_]+)\b"
+        r"(?i)\b(?:bearer\s+[A-Za-z0-9\-_.~+/]+=*|(?<!one-time\s)(?<!one-time-)(?<!one\stime\s)password(?:\s+is|\s*[:=])?\s*[^\s]+|secret(?:\s+is|\s*[:=])?\s*[^\s]+|api[_-]?key(?:\s+is|\s*[:=])?\s*[A-Za-z0-9\-_]+)\b"
     )
 
     @classmethod
@@ -116,12 +120,12 @@ class SensitiveDataRedactor:
         total_redactions = 0
         contains_highly_sensitive = False
 
-        # Redact Auth Tokens & Passwords
-        if cls.AUTH_TOKEN_REGEX.search(sanitized):
-            sanitized, count = cls.AUTH_TOKEN_REGEX.subn("[REDACTED_AUTH_TOKEN]", sanitized)
+        # Redact Bank Account Numbers (checked before PAN to avoid classifying 15/16 digit a/c numbers as PAN)
+        if cls.BANK_ACCOUNT_REGEX.search(sanitized):
+            sanitized, count = cls.BANK_ACCOUNT_REGEX.subn("[REDACTED_BANK_ACCOUNT]", sanitized)
             if count > 0:
                 total_redactions += count
-                redacted_types.append("AUTH_TOKEN")
+                redacted_types.append("BANK_ACCOUNT")
                 contains_highly_sensitive = True
 
         # Redact Full Card PAN
@@ -164,12 +168,12 @@ class SensitiveDataRedactor:
                 redacted_types.append("TAX_PAN")
                 contains_highly_sensitive = True
 
-        # Redact Bank Account Numbers
-        if cls.BANK_ACCOUNT_REGEX.search(sanitized):
-            sanitized, count = cls.BANK_ACCOUNT_REGEX.subn("[REDACTED_BANK_ACCOUNT]", sanitized)
+        # Redact Auth Tokens & Passwords
+        if cls.AUTH_TOKEN_REGEX.search(sanitized):
+            sanitized, count = cls.AUTH_TOKEN_REGEX.subn("[REDACTED_AUTH_TOKEN]", sanitized)
             if count > 0:
                 total_redactions += count
-                redacted_types.append("BANK_ACCOUNT")
+                redacted_types.append("AUTH_TOKEN")
                 contains_highly_sensitive = True
 
         # Redact Emails
@@ -228,7 +232,7 @@ class PrivacyContextBuilder:
                 ), DataClassification.PUBLIC
             return "No offer context.", DataClassification.PUBLIC
 
-        if task_type == AiTaskType.CARD_RECOMMENDATION_EXPLANATION:
+        if task_type in (AiTaskType.CARD_RECOMMENDATION_EXPLANATION, AiTaskType.CARD_RECOMMENDATION):
             if not allow_card_context:
                 return "User has not consented to external card context sharing.", DataClassification.SENSITIVE
 
@@ -246,7 +250,7 @@ class PrivacyContextBuilder:
                 return "Registered Cards (Minimized Summary):\n" + "\n".join(lines), DataClassification.SENSITIVE
             return "User has no registered cards.", DataClassification.SENSITIVE
 
-        if task_type == AiTaskType.SPENDING_ANALYSIS_SUMMARY:
+        if task_type in (AiTaskType.SPENDING_ANALYSIS_SUMMARY, AiTaskType.SPENDING_SUMMARY):
             if not allow_spending_context:
                 return "User has not consented to external spending context sharing.", DataClassification.SENSITIVE
 
@@ -426,7 +430,7 @@ class PrivacyGateway:
         request_id = f"ai_req_{uuid.uuid4().hex[:12]}"
         start_time = datetime.utcnow()
         provider = settings.AI_PROVIDER
-        model_name = settings.AI_MODEL_NAME
+        model_name = settings.effective_ai_model
 
         # 1. Task Validation
         if task_type not in APPROVED_AI_TASKS:
@@ -447,6 +451,27 @@ class PrivacyGateway:
         # 2. Sensitive Field Detection & Redaction on User Query
         clean_query, redaction_count, redacted_types, has_highly_sensitive = SensitiveDataRedactor.redact(user_query)
 
+        # 2b. Deprecated Model Enforcement: refuse to silently call retired models
+        DEPRECATED_MODELS = {
+            "gemini-1.5-flash",
+            "gemini-1.5-pro",
+            "gemini-1.0-pro",
+            "gemini-1.5-flash-001",
+            "gemini-1.5-flash-002"
+        }
+        if model_name in DEPRECATED_MODELS and provider == "gemini":
+            logger.error(f"Configured model '{model_name}' has been retired by Google. Please upgrade to 'gemini-2.5-flash'.")
+            return {
+                "success": False,
+                "response": f"The configured AI model '{model_name}' was retired by Google on September 29, 2025. Please upgrade to an active production model (e.g. gemini-2.5-flash).",
+                "is_external_ai_used": False,
+                "provider_used": "local_grounded_engine",
+                "privacy_status": "DEPRECATED_MODEL_REJECTED",
+                "data_classification": classification.value,
+                "redacted_items_count": redaction_count,
+                "audit_request_id": request_id
+            }
+
         # 3. User Consent Evaluation
         consent_status = ConsentStatus.NOT_REQUIRED
         allow_cards = False
@@ -460,6 +485,8 @@ class PrivacyGateway:
                 external_ai_permitted = True
                 allow_cards = consent.allow_card_context
                 allow_spending = consent.allow_spending_context
+                if consent.provider_preference in cls.ALLOWED_PROVIDERS:
+                    provider = consent.provider_preference
             else:
                 consent_status = ConsentStatus.WITHDRAWN if consent.revoked_at else ConsentStatus.DENIED
                 external_ai_permitted = False

@@ -1,7 +1,7 @@
 from typing import List, Optional
 from decimal import Decimal
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 class CardRewardRuleCreate(BaseModel):
     category_id: Optional[str] = Field("all", max_length=64)
@@ -52,6 +52,8 @@ class CreditCardCreate(BaseModel):
     network: str = Field("VISA", pattern="^(VISA|MASTERCARD|AMEX|RUPAY|DINERS)$")
     card_type: str = Field("CREDIT", max_length=32)
     card_variant: Optional[str] = Field(None, max_length=64)
+    cardholder_name: Optional[str] = Field(None, min_length=2, max_length=128)
+    nickname: Optional[str] = Field(None, max_length=128)
     last_four_digits: Optional[str] = Field(None, min_length=4, max_length=4, pattern="^[0-9]{4}$")
     joining_fee: Decimal = Field(Decimal("0.00"), ge=Decimal("0.00"))
     annual_fee: Decimal = Field(Decimal("0.00"), ge=Decimal("0.00"))
@@ -63,11 +65,20 @@ class CreditCardCreate(BaseModel):
     rules: List[CardRewardRuleCreate] = []
     benefits: List[CardBenefitCreate] = []
 
+    @field_validator("terms_source_url")
+    @classmethod
+    def validate_terms_url(cls, v: Optional[str]) -> Optional[str]:
+        if v and not (v.startswith("https://") or v.startswith("http://")):
+            raise ValueError("Terms source URL must begin with https:// or http://")
+        return v
+
 class CreditCardUpdate(BaseModel):
     card_name: Optional[str] = Field(None, min_length=2, max_length=128)
     bank_name: Optional[str] = Field(None, min_length=2, max_length=128)
     network: Optional[str] = Field(None, pattern="^(VISA|MASTERCARD|AMEX|RUPAY|DINERS)$")
     card_variant: Optional[str] = Field(None, max_length=64)
+    cardholder_name: Optional[str] = Field(None, min_length=2, max_length=128)
+    nickname: Optional[str] = Field(None, max_length=128)
     last_four_digits: Optional[str] = Field(None, min_length=4, max_length=4, pattern="^[0-9]{4}$")
     joining_fee: Optional[Decimal] = Field(None, ge=Decimal("0.00"))
     annual_fee: Optional[Decimal] = Field(None, ge=Decimal("0.00"))
@@ -80,6 +91,13 @@ class CreditCardUpdate(BaseModel):
     rules: Optional[List[CardRewardRuleCreate]] = None
     benefits: Optional[List[CardBenefitCreate]] = None
 
+    @field_validator("terms_source_url")
+    @classmethod
+    def validate_terms_url(cls, v: Optional[str]) -> Optional[str]:
+        if v and not (v.startswith("https://") or v.startswith("http://")):
+            raise ValueError("Terms source URL must begin with https:// or http://")
+        return v
+
 class CreditCardResponse(BaseModel):
     id: str
     user_id: str
@@ -88,6 +106,8 @@ class CreditCardResponse(BaseModel):
     network: str
     card_type: str
     card_variant: Optional[str] = None
+    cardholder_name: Optional[str] = None
+    nickname: Optional[str] = None
     last_four_digits: Optional[str] = None
     joining_fee: Decimal = Decimal("0.00")
     annual_fee: Decimal

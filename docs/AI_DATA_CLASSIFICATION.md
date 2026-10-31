@@ -115,3 +115,4 @@ When sensitive or highly sensitive fields are encountered in untrusted user quer
 ```
 
 These tokens provide semantic context to the AI model (allowing it to inform the user that credentials were detected and safely removed) without disclosing any secret values.
+

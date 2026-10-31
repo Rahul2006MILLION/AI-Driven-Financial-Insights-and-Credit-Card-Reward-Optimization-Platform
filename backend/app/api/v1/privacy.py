@@ -40,6 +40,7 @@ async def get_user_ai_consent(
         external_ai_enabled=consent.external_ai_enabled,
         allow_card_context=consent.allow_card_context,
         allow_spending_context=consent.allow_spending_context,
+        allow_spending_summary_context=consent.allow_spending_context,
         provider_preference=consent.provider_preference,
         consent_version=consent.consent_version,
         consent_timestamp=consent.consent_timestamp,
@@ -70,6 +71,7 @@ async def update_user_ai_consent(
         external_ai_enabled=consent.external_ai_enabled,
         allow_card_context=consent.allow_card_context,
         allow_spending_context=consent.allow_spending_context,
+        allow_spending_summary_context=consent.allow_spending_context,
         provider_preference=consent.provider_preference,
         consent_version=consent.consent_version,
         consent_timestamp=consent.consent_timestamp,
@@ -175,3 +177,4 @@ async def get_data_minimization_rules():
             rationale="General educational queries are processed without personal financial context."
         ),
     ]
+

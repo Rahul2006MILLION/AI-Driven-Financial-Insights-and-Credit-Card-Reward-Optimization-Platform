@@ -24,7 +24,12 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
-    AI_MODEL_NAME: str = "gemini-1.5-flash"
+    AI_MODEL_NAME: str = "gemini-2.5-flash"
+    GEMINI_MODEL: Optional[str] = None  # Configurable override for Google Gemini model
+
+    @property
+    def effective_ai_model(self) -> str:
+        return self.GEMINI_MODEL or self.AI_MODEL_NAME
     
     # Security
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001"

@@ -365,3 +365,4 @@ async def test_privacy_api_endpoints_consent_lifecycle():
         latest = logs[0]
         assert latest["redaction_count"] >= 2
         assert "CARD_PAN" in latest["redacted_types"]
+

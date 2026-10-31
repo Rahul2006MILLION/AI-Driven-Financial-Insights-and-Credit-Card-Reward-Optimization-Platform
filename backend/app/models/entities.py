@@ -44,6 +44,8 @@ class CreditCard(Base):
     network: Mapped[str] = mapped_column(String(32), default="VISA", nullable=False)  # VISA, MASTERCARD, AMEX, RUPAY, DINERS
     card_type: Mapped[str] = mapped_column(String(32), default="CREDIT", nullable=False)
     card_variant: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)  # e.g. Metal, Signature, Platinum, Select
+    cardholder_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+    nickname: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
     last_four_digits: Mapped[Optional[str]] = mapped_column(String(4), nullable=True)
     joining_fee: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
     annual_fee: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)

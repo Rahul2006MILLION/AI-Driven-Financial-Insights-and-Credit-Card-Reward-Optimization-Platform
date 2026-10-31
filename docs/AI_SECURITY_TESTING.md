@@ -74,7 +74,7 @@ A user asks:
 ### BEFORE (Without Privacy Gateway — Insecure Direct LLM Call)
 ```json
 {
-  "model": "gemini-1.5-flash",
+  "model": "gemini-2.5-flash",
   "contents": [
     {
       "role": "user",
@@ -133,3 +133,4 @@ I want to buy a ₹45,000 laptop on Amazon using my HDFC Regalia card [REDACTED_
 - **Zero Profile PII:** Name, email, and user UUID are completely excluded.
 - **Strict Data Minimization:** Credit limits, outstanding balances, and medical transaction records are stripped. Only relevant card multiplier metadata is retained.
 - **Delimited Context:** Instruction boundaries prevent the prompt from being manipulated by untrusted query contents.
+

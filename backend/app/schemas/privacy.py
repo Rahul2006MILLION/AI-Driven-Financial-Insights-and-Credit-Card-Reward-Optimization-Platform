@@ -1,12 +1,13 @@
-from typing import Optional, List
+from typing import Optional, List, Any
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 class AiConsentResponse(BaseModel):
     user_id: str
     external_ai_enabled: bool = False
     allow_card_context: bool = False
     allow_spending_context: bool = False
+    allow_spending_summary_context: bool = False  # Reconciled backward-compatible alias
     provider_preference: str = "gemini"
     consent_version: str = "1.0"
     consent_timestamp: datetime
@@ -20,7 +21,19 @@ class AiConsentUpdateRequest(BaseModel):
     external_ai_enabled: bool
     allow_card_context: bool = False
     allow_spending_context: bool = False
+    allow_spending_summary_context: Optional[bool] = None  # Reconciled backward-compatible alias
     provider_preference: Optional[str] = Field("gemini", pattern="^(gemini|mock)$")
+
+    @model_validator(mode="before")
+    @classmethod
+    def reconcile_spending_context_aliases(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # If allow_spending_summary_context is provided and allow_spending_context is omitted
+            if "allow_spending_summary_context" in data and "allow_spending_context" not in data:
+                data["allow_spending_context"] = data["allow_spending_summary_context"]
+            elif "allow_spending_context" in data and "allow_spending_summary_context" not in data:
+                data["allow_spending_summary_context"] = data["allow_spending_context"]
+        return data
 
 class AiAuditLogResponse(BaseModel):
     id: str
@@ -44,3 +57,4 @@ class DataMinimizationAuditItem(BaseModel):
     classification: str  # PUBLIC, INTERNAL, SENSITIVE, HIGHLY_SENSITIVE
     action_taken: str    # RETAINED, AGGREGATED, REDACTED, BLOCKED
     rationale: str
+

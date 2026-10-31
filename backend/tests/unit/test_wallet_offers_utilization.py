@@ -133,6 +133,68 @@ async def test_card_wallet_update_with_benefits_and_variant():
         assert data["benefits"][1]["benefit_type"] == "PERMANENT"
 
 @pytest.mark.asyncio
+async def test_card_wallet_duplicate_prevention_and_metadata_persistence():
+    """Validates duplicate card registration prevention, cardholder name, and nickname persistence."""
+    unique = uuid.uuid4().hex[:8]
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        reg = await client.post("/api/v1/auth/register", json={
+            "email": f"meta_{unique}@cliq.finance",
+            "password": "Password123!",
+            "full_name": "Priya Sharma",
+            "preferred_language": "en"
+        })
+        token = reg.json()["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # 1. Register card with cardholder_name, nickname, last_four_digits
+        card1_resp = await client.post("/api/v1/cards", headers=headers, json={
+            "card_name": "HDFC Regalia Gold",
+            "bank_name": "HDFC Bank",
+            "network": "VISA",
+            "card_variant": "Gold Metal",
+            "cardholder_name": "PRIYA SHARMA",
+            "nickname": "Primary Travel Card",
+            "last_four_digits": "8821",
+            "annual_fee": 2500.0,
+            "terms_source_url": "https://www.hdfcbank.com/regalia-gold",
+            "rules": []
+        })
+        assert card1_resp.status_code == 201
+        card1_data = card1_resp.json()
+        assert card1_data["cardholder_name"] == "PRIYA SHARMA"
+        assert card1_data["nickname"] == "Primary Travel Card"
+        assert card1_data["last_four_digits"] == "8821"
+
+        # 2. Attempt duplicate card with same bank, name, and last 4 digits -> Should fail with 409 Conflict
+        dup_resp = await client.post("/api/v1/cards", headers=headers, json={
+            "card_name": "HDFC Regalia Gold",
+            "bank_name": "HDFC Bank",
+            "network": "VISA",
+            "cardholder_name": "PRIYA SHARMA",
+            "last_four_digits": "8821",
+            "annual_fee": 2500.0,
+            "terms_source_url": "https://www.hdfcbank.com/regalia-gold",
+            "rules": []
+        })
+        assert dup_resp.status_code == 409
+        assert "already have an active" in dup_resp.json()["detail"]
+
+        # 3. Query search by nickname
+        search_nick = await client.get("/api/v1/cards?query=Primary+Travel", headers=headers)
+        assert search_nick.status_code == 200
+        assert len(search_nick.json()) == 1
+        assert search_nick.json()[0]["id"] == card1_data["id"]
+
+        # 4. Inactive card deactivation and soft delete
+        del_resp = await client.delete(f"/api/v1/cards/{card1_data['id']}", headers=headers)
+        assert del_resp.status_code == 204
+
+        # Verify it no longer appears in active list
+        active_list = await client.get("/api/v1/cards", headers=headers)
+        assert active_list.status_code == 200
+        assert len(active_list.json()) == 0
+
+@pytest.mark.asyncio
 async def test_offers_discovery_filtering():
     """Validates offers discovery filtering by category, query, and user card match."""
     unique = uuid.uuid4().hex[:8]

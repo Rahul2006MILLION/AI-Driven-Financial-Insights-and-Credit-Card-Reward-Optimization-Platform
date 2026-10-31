@@ -27,13 +27,12 @@ CREATE TABLE user_ai_consents (
     user_id VARCHAR(36) NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE CASCADE,
     external_ai_enabled BOOLEAN NOT NULL DEFAULT FALSE,
     allow_card_context BOOLEAN NOT NULL DEFAULT FALSE,
-    allow_spending_summary_context BOOLEAN NOT NULL DEFAULT FALSE,
-    allow_personalized_recommendations BOOLEAN NOT NULL DEFAULT FALSE,
-    consent_version VARCHAR(16) NOT NULL DEFAULT '1.0.0',
-    consented_at TIMESTAMP WITH TIME ZONE NULL,
+    allow_spending_context BOOLEAN NOT NULL DEFAULT FALSE,
+    provider_preference VARCHAR(32) NOT NULL DEFAULT 'gemini',
+    consent_version VARCHAR(16) NOT NULL DEFAULT '1.0',
+    consent_timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     revoked_at TIMESTAMP WITH TIME ZONE NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    purpose_description VARCHAR(255) NULL
 );
 ```
 
@@ -43,8 +42,8 @@ CREATE TABLE user_ai_consents (
 |---|---|---|---|
 | `external_ai_enabled` | Master switch for third-party AI (Gemini) | `False` | All queries route to the local deterministic engine |
 | `allow_card_context` | Permits passing card names & banks to AI | `False` | AI answers in generic terms without knowledge of owned cards |
-| `allow_spending_summary_context` | Permits passing aggregated monthly categories | `False` | AI has zero visibility into user spending patterns |
-| `allow_personalized_recommendations` | Permits tailored card reward comparisons | `False` | AI provides standard public reward comparison charts |
+| `allow_spending_context` *(alias: `allow_spending_summary_context`)* | Permits passing aggregated monthly categories | `False` | AI has zero visibility into user spending patterns |
+| `provider_preference` | AI Provider selection (`gemini`, `mock`) | `gemini` | Configures target provider when AI is enabled |
 
 ---
 
@@ -103,3 +102,4 @@ The multilingual assistant page (`frontend/app/assistant/page.tsx`) features nat
 4. **Redaction Notice:**
    - If a user inadvertently pastes a credit card number or OTP in the chat, the system displays an alert informing them:
      * *“Sensitive data was detected and removed for your protection.”*
+

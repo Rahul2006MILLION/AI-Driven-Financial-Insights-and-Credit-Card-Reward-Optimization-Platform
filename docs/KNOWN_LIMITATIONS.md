@@ -29,7 +29,7 @@ This document provides a transparent, evidence-based inventory of current techni
 ## 3. Generative AI & External LLM Connectivity
 
 - **Status:** `CONFIGURABLE ABSTRACTION (Deterministic Fallback Active)`
-- **Current Behavior:** The Language Intelligence service (`MultilingualAssistantService`) includes an HTTP client abstraction for Google Gemini (`gemini-1.5-flash`). When `GEMINI_API_KEY` is not supplied in the environment, the system automatically falls back to the deterministic grounded multilingual engine.
+- **Current Behavior:** The Language Intelligence service (`MultilingualAssistantService`) includes an HTTP client abstraction for Google Gemini (`gemini-2.5-flash`). When `GEMINI_API_KEY` is not supplied in the environment, the system automatically falls back to the deterministic grounded multilingual engine.
 - **Limitation:** The deterministic engine accurately grounds and answers merchant-specific queries (Swiggy, Amazon, Fuel, Dining, Lounge access, and Portfolio summaries) across English, Hindi, and Kannada. However, open-ended conversational queries outside these intents return the portfolio summary rather than dynamic conversational responses until a live `GEMINI_API_KEY` is provided.
 
 ---

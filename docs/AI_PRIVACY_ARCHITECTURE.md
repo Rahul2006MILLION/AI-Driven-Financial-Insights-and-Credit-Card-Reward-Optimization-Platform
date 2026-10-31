@@ -23,7 +23,7 @@ A comprehensive static and runtime audit of the entire CLIQ codebase establishes
 
 | Service / Component | File Location | External LLM Provider | Model / Library | Status | Privacy Risk Level | Architectural Mitigation |
 |---|---|---|---|---|---|---|
-| **Multilingual Assistant Service** | `backend/app/services/language_intelligence/assistant.py` | Google Gemini (SDK) / Local Heuristic | `gemini-1.5-flash` (configurable) / Deterministic Regex Engine | **CONNECTED** (with Fallback) | Medium | Routed strictly through `PrivacyGateway` with PII redaction and context minimization |
+| **Multilingual Assistant Service** | `backend/app/services/language_intelligence/assistant.py` | Google Gemini (SDK) / Local Heuristic | `gemini-2.5-flash` (configurable) / Deterministic Regex Engine | **CONNECTED** (with Fallback) | Medium | Routed strictly through `PrivacyGateway` with PII redaction and context minimization |
 | **Credit Card Document Parser** | `backend/app/services/document_processing/parser.py` | None (Local Native) | `PyMuPDF` (fitz) + Deterministic Regex | **CONNECTED (LOCAL)** | Low | Runs 100% locally on server; no external LLM API called |
 | **Bank Circular Parser** | `backend/app/services/offer_ingestion/circular_parser.py` | None (Local Native) | `pypdf` + Deterministic Regex Rules | **CONNECTED (LOCAL)** | Low | Runs 100% locally on server; no external LLM API called |
 | **Reward Optimization Engine** | `backend/app/services/reward_engine/reward_engine.py` | None (Pure Math) | Python `Decimal` + SQL Queries | **CONNECTED (LOCAL)** | Zero | Zero external calls; mathematical determinism enforced |
@@ -115,3 +115,4 @@ Which card should I use for flight booking?
 Compliance tracking requires auditing AI operations without leaking sensitive data:
 - **Logged:** User ID, task type, provider name, model name, input token count, output token count, latency (ms), redaction count, list of redacted types, and timestamp.
 - **NEVER Logged:** Raw user query text, prompt templates, full LLM responses, credit card numbers, passwords, or document binary data.
+

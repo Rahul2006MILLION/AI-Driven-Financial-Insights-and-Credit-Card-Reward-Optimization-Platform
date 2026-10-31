@@ -19,7 +19,7 @@ A fundamental design rule in CLIQ is the **Separation of Computation and Convers
 ## 2. LLM Provider Abstraction
 
 CLIQ implements a provider-agnostic interface (`AIProvider` protocol) supporting multiple backends:
-- **Google Gemini** (`gemini-1.5-flash`, `gemini-1.5-pro` via official SDK)
+- **Google Gemini** (`gemini-2.5-flash` via official SDK, configurable via `AI_MODEL_NAME` or `GEMINI_MODEL`)
 - **OpenAI** (`gpt-4o-mini`, `gpt-4o`)
 - **Anthropic** (`claude-3-5-sonnet`)
 - **Local Fallback Heuristic Engine:** Operates without external API keys, ensuring CLIQ remains completely functional offline or during development with rich grounded responses in English, Hindi, and Kannada.

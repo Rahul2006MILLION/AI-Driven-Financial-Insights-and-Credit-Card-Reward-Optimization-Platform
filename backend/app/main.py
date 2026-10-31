@@ -64,6 +64,10 @@ async def init_db():
             existing_cols = [row[1] for row in res.fetchall()]
             if "card_variant" not in existing_cols:
                 await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN card_variant VARCHAR(64)"))
+            if "cardholder_name" not in existing_cols:
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN cardholder_name VARCHAR(128)"))
+            if "nickname" not in existing_cols:
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN nickname VARCHAR(128)"))
             if "joining_fee" not in existing_cols:
                 await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN joining_fee NUMERIC(10, 2) DEFAULT 0.00"))
             if "renewal_date" not in existing_cols:

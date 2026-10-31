@@ -50,7 +50,9 @@ async def list_cards(
                 CreditCard.card_name.ilike(q_clean),
                 CreditCard.bank_name.ilike(q_clean),
                 CreditCard.card_variant.ilike(q_clean),
-                CreditCard.network.ilike(q_clean)
+                CreditCard.network.ilike(q_clean),
+                CreditCard.cardholder_name.ilike(q_clean),
+                CreditCard.nickname.ilike(q_clean),
             )
         )
 
@@ -65,6 +67,22 @@ async def create_card(
     current_user: Profile = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+    # Duplicate prevention: Check if user already registered this active card
+    dup_stmt = select(CreditCard).where(
+        CreditCard.user_id == current_user.id,
+        CreditCard.is_active == True,
+        CreditCard.bank_name.ilike(req.bank_name.strip()),
+        CreditCard.card_name.ilike(req.card_name.strip()),
+    )
+    if req.last_four_digits:
+        dup_stmt = dup_stmt.where(CreditCard.last_four_digits == req.last_four_digits)
+    existing_dup = (await db.execute(dup_stmt)).first()
+    if existing_dup:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"You already have an active {req.bank_name} {req.card_name} registered" + (f" ending in {req.last_four_digits}." if req.last_four_digits else ".")
+        )
+
     card = CreditCard(
         user_id=current_user.id,
         card_name=req.card_name.strip(),
@@ -72,6 +90,8 @@ async def create_card(
         network=req.network,
         card_type=req.card_type,
         card_variant=req.card_variant.strip() if req.card_variant else None,
+        cardholder_name=req.cardholder_name.strip() if req.cardholder_name else None,
+        nickname=req.nickname.strip() if req.nickname else None,
         last_four_digits=req.last_four_digits,
         joining_fee=req.joining_fee,
         annual_fee=req.annual_fee,
@@ -214,6 +234,10 @@ async def update_card(
         card.network = req.network
     if req.card_variant is not None:
         card.card_variant = req.card_variant.strip()
+    if req.cardholder_name is not None:
+        card.cardholder_name = req.cardholder_name.strip() if req.cardholder_name else None
+    if req.nickname is not None:
+        card.nickname = req.nickname.strip() if req.nickname else None
     if req.last_four_digits is not None:
         card.last_four_digits = req.last_four_digits
     if req.joining_fee is not None:
