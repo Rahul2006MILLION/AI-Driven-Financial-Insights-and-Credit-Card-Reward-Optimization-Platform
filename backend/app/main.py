@@ -18,7 +18,11 @@ from app.models.entities import (
     RewardAnalysis,
     UserPreference,
     AuditLog,
-    CardOffer
+    CardOffer,
+    OfferAuditLog,
+    OfferSource,
+    SourceFailureLog,
+    AdminOfferDocument
 )
 from app.security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware
 
@@ -32,6 +36,7 @@ from app.api.v1.analytics import router as analytics_router
 from app.api.v1.assistant import router as assistant_router
 from app.api.v1.offers import router as offers_router, admin_router as offers_admin_router
 from app.services.offers.offer_service import OfferService
+from app.services.offers.source_registry import SourceRegistryService
 from app.security.password import get_password_hash
 from sqlalchemy import text
 
@@ -131,6 +136,14 @@ async def init_db():
                 await conn.execute(text("ALTER TABLE card_offers ADD COLUMN change_history_json TEXT DEFAULT '[]'"))
             if "updated_at" not in off_cols:
                 await conn.execute(text("ALTER TABLE card_offers ADD COLUMN updated_at DATETIME"))
+            if "source_id" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_id VARCHAR(36)"))
+            if "ingestion_channel" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN ingestion_channel VARCHAR(32) DEFAULT 'MANUAL_ENTRY'"))
+            if "source_document_id" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_document_id VARCHAR(36)"))
+            if "freshness_state" not in off_cols:
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN freshness_state VARCHAR(32) DEFAULT 'FRESH'"))
         except Exception:
             pass
 
@@ -168,6 +181,8 @@ async def init_db():
 
         # Seed initial card offers
         await OfferService.seed_initial_offers_if_empty(session)
+        # Seed centralized source registry
+        await SourceRegistryService.seed_default_sources(session)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

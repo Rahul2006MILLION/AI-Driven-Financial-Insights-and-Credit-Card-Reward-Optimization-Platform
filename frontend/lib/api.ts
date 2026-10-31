@@ -180,6 +180,124 @@ export interface CardOffer {
   created_at: string;
   matching_user_card_names?: string[];
   is_applicable_to_user?: boolean;
+  freshness_state?: string;
+  source_id?: string;
+  ingestion_channel?: string;
+  source_document_id?: string;
+}
+
+export interface OfferSource {
+  id: string;
+  source_key: string;
+  source_name: string;
+  domain: string;
+  source_type: "BANK" | "MERCHANT" | "NETWORK" | "PARTNER";
+  supported_ingestion_methods: string[];
+  access_permission_status: string;
+  connector_status: "IMPLEMENTED" | "PARTIALLY_IMPLEMENTED" | "MANUAL_ONLY" | "BLOCKED" | "ROBOTS_DISALLOWED" | "SOURCE_UNAVAILABLE" | "NOT_INTEGRATED";
+  source_health: "HEALTHY" | "DEGRADED" | "FAILING" | "BLOCKED" | "UNKNOWN";
+  last_successful_fetch?: string;
+  last_attempted_fetch?: string;
+  last_http_status?: number;
+  last_extraction_result?: string;
+  failure_reason?: string;
+  consecutive_failures: number;
+  rate_limit_per_minute: number;
+  active_offers_count: number;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SourceHealthProbe {
+  source_key: string;
+  http_status: number;
+  latency_ms?: number;
+  health: string;
+  waf: string[];
+  robots_allowed?: boolean;
+  message?: string;
+  error?: string;
+}
+
+export interface SourceFailureLog {
+  id: string;
+  source_id: string;
+  http_status?: number;
+  error_type: string;
+  error_message: string;
+  attempt_number: number;
+  retry_after_seconds?: number;
+  context_json?: string;
+  timestamp: string;
+}
+
+export interface AdminOfferDocument {
+  id: string;
+  source_id?: string;
+  filename: string;
+  file_path: string;
+  mime_type: string;
+  file_size_bytes: number;
+  sha256_hash: string;
+  uploaded_by_id: string;
+  uploaded_by_name: string;
+  processing_status: string;
+  extracted_offers_count: number;
+  ocr_supported: boolean;
+  error_message?: string;
+  raw_text_sample?: string;
+  uploaded_at: string;
+}
+
+export interface ManualOfferCreateRequest {
+  merchant_name: string;
+  offer_title: string;
+  category_id?: string;
+  discount_type: "PERCENTAGE" | "FLAT_AMOUNT";
+  discount_value: number;
+  min_transaction_value?: number;
+  max_discount_amount?: number;
+  eligible_bank?: string;
+  eligible_network?: string;
+  eligible_card_names?: string[];
+  valid_from?: string;
+  valid_to: string;
+  payment_channel?: "ONLINE" | "OFFLINE" | "BOTH";
+  promo_code?: string;
+  activation_requirement?: string;
+  terms_and_conditions?: string;
+  source_url: string;
+  source_name?: string;
+  source_evidence: string;
+  source_id?: string;
+}
+
+export interface PartnerFeedOfferItem {
+  merchant_name: string;
+  offer_title: string;
+  category_id?: string;
+  discount_type?: "PERCENTAGE" | "FLAT_AMOUNT";
+  discount_value: number;
+  min_transaction_value?: number;
+  max_discount_amount?: number;
+  eligible_bank?: string;
+  eligible_network?: string;
+  eligible_card_names?: string[];
+  valid_from?: string;
+  valid_to?: string;
+  payment_channel?: "ONLINE" | "OFFLINE" | "BOTH";
+  promo_code?: string;
+  activation_requirement?: string;
+  terms_and_conditions?: string;
+  source_url?: string;
+  source_evidence?: string;
+}
+
+export interface PartnerFeedIngestRequest {
+  partner_id: string;
+  offers: PartnerFeedOfferItem[];
+  feed_timestamp?: string;
 }
 
 export interface OfferAuditLog {
@@ -340,4 +458,37 @@ export const api = {
     apiFetch<DiscoverySyncResult>("/admin/offers/sync-discovery", {
       method: "POST",
     }),
+
+  // Offer Sources & Intelligence Ingestion
+  getOfferSources: () => apiFetch<OfferSource[]>("/offers/sources"),
+  probeSource: (sourceId: string) =>
+    apiFetch<SourceHealthProbe>(`/offers/sources/${sourceId}/probe`, { method: "POST" }),
+  probeAllSources: () =>
+    apiFetch<SourceHealthProbe[]>("/offers/sources/probe-all", { method: "POST" }),
+  getSourceFailures: (params?: { source_id?: string; limit?: number }) => {
+    const q = new URLSearchParams();
+    if (params?.source_id) q.append("source_id", params.source_id);
+    if (params?.limit) q.append("limit", String(params.limit));
+    const qs = q.toString() ? `?${q.toString()}` : "";
+    return apiFetch<SourceFailureLog[]>(`/offers/failures${qs}`);
+  },
+  uploadCircular: (formData: FormData) =>
+    apiFetch<{
+      success: boolean;
+      document_id: string;
+      extracted_count: number;
+      staged_count: number;
+      quarantined_count: number;
+      ocr_supported: boolean;
+      message: string;
+      staged_offers: CardOffer[];
+    }>("/offers/upload-circular", { method: "POST", body: formData }),
+  createManualOffer: (data: ManualOfferCreateRequest) =>
+    apiFetch<CardOffer>("/offers/manual", { method: "POST", body: JSON.stringify(data) }),
+  ingestPartnerFeed: (data: PartnerFeedIngestRequest) =>
+    apiFetch<{ success: boolean; received_count: number; staged_count: number; quarantined_count: number; errors: string[] }>(
+      "/offers/partner-feed",
+      { method: "POST", body: JSON.stringify(data) }
+    ),
+  getAdminDocuments: () => apiFetch<AdminOfferDocument[]>("/offers/documents"),
 };

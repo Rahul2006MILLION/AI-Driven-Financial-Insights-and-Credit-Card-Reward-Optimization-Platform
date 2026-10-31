@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_, and_
 
 from app.models.entities import CardOffer, CreditCard, OfferAuditLog, Profile
+from app.services.offers.normalization import OfferNormalizer
 from app.schemas.offer import (
     CardOfferCreate,
     CardOfferResponse,
@@ -366,6 +367,10 @@ class OfferService:
                 source_evidence=o.source_evidence,
                 extraction_confidence=o.extraction_confidence,
                 verification_status=o.verification_status,
+                freshness_state=getattr(o, "freshness_state", None) or OfferNormalizer.compute_freshness_state(o),
+                source_id=getattr(o, "source_id", None),
+                ingestion_channel=getattr(o, "ingestion_channel", "MANUAL_ENTRY"),
+                source_document_id=getattr(o, "source_document_id", None),
                 version=o.version,
                 previous_version_json=o.previous_version_json,
                 rejection_reason=o.rejection_reason,
@@ -568,6 +573,10 @@ class OfferService:
                     source_evidence=o.source_evidence,
                     extraction_confidence=o.extraction_confidence,
                     verification_status=o.verification_status,
+                    freshness_state=getattr(o, "freshness_state", None) or OfferNormalizer.compute_freshness_state(o),
+                    source_id=getattr(o, "source_id", None),
+                    ingestion_channel=getattr(o, "ingestion_channel", "MANUAL_ENTRY"),
+                    source_document_id=getattr(o, "source_document_id", None),
                     version=o.version,
                     previous_version_json=o.previous_version_json,
                     rejection_reason=o.rejection_reason,

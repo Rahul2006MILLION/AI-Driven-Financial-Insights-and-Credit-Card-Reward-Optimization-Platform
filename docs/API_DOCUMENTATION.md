@@ -316,3 +316,72 @@ Conversational financial guidance grounded in user's cards.
     "citations": ["HDFC Millennia Dining Policy"]
   }
   ```
+
+---
+
+## 7. Offer Discovery & Intelligence Infrastructure Endpoints
+
+### `GET /api/v1/offers`
+Retrieve verified offers matching filters or applicable to the authenticated user's card portfolio.
+- **Query Parameters:** `category`, `merchant`, `only_user_cards` (bool), `expiring_soon` (bool), `query`.
+
+### `GET /api/v1/offers/sources`
+List all registered bank and merchant offer sources with integration statuses and health metrics.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+- **Response `200 OK`:** Array of `OfferSourceResponse` objects (`source_key`, `connector_status`, `source_health`, `supported_ingestion_methods`, etc.).
+
+### `POST /api/v1/offers/sources/{source_id}/probe`
+Execute live HTTP and compliance probe for an upstream source (status, latency, WAF, robots.txt).
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+
+### `POST /api/v1/offers/sources/probe-all`
+Trigger parallel live probes across all 8 registered sources.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+
+### `GET /api/v1/offers/failures`
+Audit log of upstream connection errors, WAF bot mitigations, and backoff retry delays.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+- **Query Parameters:** `source_id` (optional), `limit` (default: 50).
+
+### `POST /api/v1/offers/upload-circular`
+Upload official bank or merchant PDF circular (multipart/form-data).
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+- **Form Data:** `file` (.pdf, max 10MB), `source_id` (optional).
+- **Security:** Scanned raster image PDFs are rejected; OCR is explicitly unsupported to prevent financial hallucination.
+
+### `POST /api/v1/offers/manual`
+Register an offer manually with mandatory primary source URL and verbatim evidence snippet.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+- **Request Body:** `ManualOfferCreateRequest`
+
+### `POST /api/v1/offers/partner-feed`
+Ingest structured B2B JSON feed from authorized partners.
+- **Headers:** `Authorization: Bearer <token>` (Admin / Partner)
+- **Request Body:** `PartnerFeedIngestRequest`
+
+### `GET /api/v1/offers/documents`
+List uploaded official circular documents with SHA-256 fingerprints and extraction counts.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+
+### `GET /api/v1/admin/offers/review-queue`
+Review queue for newly discovered and quarantined offers.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+- **Query Parameters:** `status_filter` (`PENDING_REVIEW`, `NEEDS_REVERIFICATION`, `VERIFIED`, `REJECTED`, `ALL`), `query`.
+
+### `POST /api/v1/admin/offers/{offer_id}/approve`
+Promote a staged offer to `VERIFIED` state for recommendation engine eligibility.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+
+### `POST /api/v1/admin/offers/{offer_id}/reject`
+Reject an offer with mandatory audit rationale.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+- **Request Body:** `{"rejection_reason": "string", "notes": "string"}`
+
+### `PUT /api/v1/admin/offers/{offer_id}`
+Edit extracted offer terms, minimum spend, discount caps, or eligible card variants.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+
+### `POST /api/v1/admin/offers/{offer_id}/reverification`
+Manually quarantine an active offer into `NEEDS_REVERIFICATION`.
+- **Headers:** `Authorization: Bearer <token>` (Admin)
+

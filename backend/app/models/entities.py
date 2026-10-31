@@ -106,10 +106,78 @@ class CardBenefit(Base):
 
     card: Mapped["CreditCard"] = relationship("CreditCard", back_populates="benefits")
 
+class OfferSource(Base):
+    __tablename__ = "offer_sources"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    source_key: Mapped[str] = mapped_column(String(64), unique=True, nullable=False, index=True)
+    source_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    domain: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    source_type: Mapped[str] = mapped_column(String(32), nullable=False, index=True)  # BANK, MERCHANT, NETWORK, PARTNER
+    supported_ingestion_methods_json: Mapped[str] = mapped_column(Text, default="[]", nullable=False)  # JSON array
+    access_permission_status: Mapped[str] = mapped_column(String(64), nullable=False)  # PUBLIC_PERMITTED, ROBOTS_RESTRICTED, BLOCKED_WAF, AUTHORIZED_PARTNER, MANUAL_ONLY, SPA_CLIENT_SIDE
+    connector_status: Mapped[str] = mapped_column(String(64), default="NOT_INTEGRATED", nullable=False, index=True)  # IMPLEMENTED, PARTIALLY_IMPLEMENTED, MANUAL_ONLY, BLOCKED, ROBOTS_DISALLOWED, SOURCE_UNAVAILABLE, NOT_INTEGRATED
+    source_health: Mapped[str] = mapped_column(String(32), default="UNKNOWN", nullable=False)  # HEALTHY, DEGRADED, FAILING, BLOCKED, UNKNOWN
+    last_successful_fetch: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    last_attempted_fetch: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    last_http_status: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    last_extraction_result: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    failure_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    consecutive_failures: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    rate_limit_per_minute: Mapped[int] = mapped_column(Integer, default=10, nullable=False)
+    active_offers_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    offers: Mapped[List["CardOffer"]] = relationship("CardOffer", back_populates="source")
+    failure_logs: Mapped[List["SourceFailureLog"]] = relationship("SourceFailureLog", back_populates="source", cascade="all, delete-orphan")
+    documents: Mapped[List["AdminOfferDocument"]] = relationship("AdminOfferDocument", back_populates="source")
+
+class AdminOfferDocument(Base):
+    __tablename__ = "admin_offer_documents"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    source_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("offer_sources.id", ondelete="SET NULL"), nullable=True, index=True)
+    filename: Mapped[str] = mapped_column(String(255), nullable=False)
+    file_path: Mapped[str] = mapped_column(String(512), nullable=False)
+    mime_type: Mapped[str] = mapped_column(String(64), default="application/pdf", nullable=False)
+    file_size_bytes: Mapped[int] = mapped_column(Integer, nullable=False)
+    sha256_hash: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    uploaded_by_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    uploaded_by_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    processing_status: Mapped[str] = mapped_column(String(32), default="PROCESSING", nullable=False)  # PENDING, PROCESSING, EXTRACTED, FAILED
+    extracted_offers_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    ocr_supported: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    error_message: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    raw_text_sample: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    uploaded_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+    source: Mapped[Optional["OfferSource"]] = relationship("OfferSource", back_populates="documents")
+    offers: Mapped[List["CardOffer"]] = relationship("CardOffer", back_populates="source_document")
+
+class SourceFailureLog(Base):
+    __tablename__ = "source_failure_logs"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    source_id: Mapped[str] = mapped_column(String(36), ForeignKey("offer_sources.id", ondelete="CASCADE"), nullable=False, index=True)
+    http_status: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    error_type: Mapped[str] = mapped_column(String(64), nullable=False, index=True)  # WAF_BLOCKED, ROBOTS_DISALLOWED, TIMEOUT, PARSE_ERROR, 404_NOT_FOUND, RATE_LIMITED
+    error_message: Mapped[str] = mapped_column(Text, nullable=False)
+    attempt_number: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+    retry_after_seconds: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    context_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+    source: Mapped["OfferSource"] = relationship("OfferSource", back_populates="failure_logs")
+
 class CardOffer(Base):
     __tablename__ = "card_offers"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    source_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("offer_sources.id", ondelete="SET NULL"), nullable=True, index=True)
+    ingestion_channel: Mapped[str] = mapped_column(String(32), default="MANUAL_ENTRY", nullable=False)  # HTML_EXTRACTION, PDF_CIRCULAR, AUTHORIZED_API, ADMIN_DOCUMENT, MANUAL_ENTRY
+    source_document_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("admin_offer_documents.id", ondelete="SET NULL"), nullable=True, index=True)
     merchant_name: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     offer_title: Mapped[str] = mapped_column(String(255), nullable=False)
     category_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)  # food_delivery, dining, shopping, travel, entertainment, grocery, utility
@@ -131,6 +199,7 @@ class CardOffer(Base):
     source_evidence: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # Verbatim snippet extracted from source
     extraction_confidence: Mapped[Decimal] = mapped_column(Numeric(4, 2), default=Decimal("0.85"), nullable=False)
     verification_status: Mapped[str] = mapped_column(String(32), default="PENDING_REVIEW", nullable=False)  # DISCOVERED, PENDING_REVIEW, VERIFIED, REJECTED, EXPIRED, NEEDS_REVERIFICATION, SOURCE_UNAVAILABLE
+    freshness_state: Mapped[str] = mapped_column(String(32), default="FRESH", nullable=False)  # FRESH, EXPIRING_SOON, STALE, EXPIRED, QUARANTINED, UNAVAILABLE
     content_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)  # Hash of canonical terms
     version: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     previous_version_json: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # Prior approved version for diff review
@@ -143,6 +212,8 @@ class CardOffer(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
+    source: Mapped[Optional["OfferSource"]] = relationship("OfferSource", back_populates="offers")
+    source_document: Mapped[Optional["AdminOfferDocument"]] = relationship("AdminOfferDocument", back_populates="offers")
     audit_logs: Mapped[List["OfferAuditLog"]] = relationship("OfferAuditLog", back_populates="offer", cascade="all, delete-orphan")
 
 class OfferAuditLog(Base):
