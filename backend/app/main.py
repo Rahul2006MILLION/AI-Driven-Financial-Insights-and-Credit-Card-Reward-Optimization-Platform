@@ -35,6 +35,7 @@ from app.api.v1.documents import router as documents_router
 from app.api.v1.analytics import router as analytics_router
 from app.api.v1.assistant import router as assistant_router
 from app.api.v1.offers import router as offers_router, admin_router as offers_admin_router
+from app.api.v1.privacy import router as privacy_router
 from app.services.offers.offer_service import OfferService
 from app.services.offers.source_registry import SourceRegistryService
 from app.security.password import get_password_hash
@@ -242,3 +243,4 @@ app.include_router(analytics_router, prefix="/api/v1")
 app.include_router(assistant_router, prefix="/api/v1")
 app.include_router(offers_router, prefix="/api/v1")
 app.include_router(offers_admin_router, prefix="/api/v1")
+app.include_router(privacy_router, prefix="/api/v1")

@@ -1,5 +1,7 @@
 from typing import List, Dict, Any, Optional
 from decimal import Decimal
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.models.entities import CreditCard, Transaction
 from app.schemas.assistant import ChatQueryResponse
 from app.services.reward_optimization.engine import RewardOptimizationEngine
@@ -10,6 +12,7 @@ class MultilingualAssistantService:
     Multilingual Language Intelligence Engine for CLIQ.
     Grounded strictly in verified user card data and platform rules.
     Natively supports English, Hindi, and Kannada.
+    Routes all external processing strictly through the Privacy Gateway.
     """
 
     @classmethod
@@ -18,65 +21,62 @@ class MultilingualAssistantService:
         query: str,
         language: str,
         user_cards: List[CreditCard],
-        user_transactions: List[Transaction]
+        user_transactions: List[Transaction],
+        db: Optional[AsyncSession] = None,
+        user_id: Optional[str] = None
     ) -> ChatQueryResponse:
         query_clean = query.strip()
         lower_query = query_clean.lower()
-        
-        # Build grounding context from user's actual cards
-        card_summaries = []
-        card_ids = []
-        for c in user_cards:
-            card_ids.append(c.id)
-            rule_texts = []
-            for r in c.reward_rules:
-                if r.is_excluded:
-                    rule_texts.append(f"{r.category_id or 'all'}: 0% (Excluded: {r.exclusion_reason or 'No rewards'})")
-                else:
-                    rule_texts.append(f"{r.category_id or r.merchant_pattern or 'all'}: {r.reward_rate_percentage}% {r.reward_type}")
-            card_summaries.append(f"- {c.card_name} ({c.bank_name}, {c.network}): Annual fee ₹{c.annual_fee}. Rules: {'; '.join(rule_texts)}")
+        citations = [c.card_name for c in user_cards]
+        card_ids = [c.id for c in user_cards]
 
-        grounded_context = "\n".join(card_summaries) if card_summaries else "User has no registered credit cards."
+        # Determine task type for privacy minimization
+        from app.services.privacy.privacy_gateway import AiTaskType
+        task_type = AiTaskType.GENERAL_QUERY
+        if any(w in lower_query for w in ["what is", "explain", "how does", "apr", "interest", "billing cycle", "cvv", "credit score"]):
+            task_type = AiTaskType.FINANCIAL_EDUCATION
+        elif any(w in lower_query for w in ["spend", "spending", "expenses", "expense", "transaction", "transactions"]):
+            task_type = AiTaskType.SPENDING_ANALYSIS_SUMMARY
+        elif any(w in lower_query for w in ["swiggy", "amazon", "flipkart", "fuel", "petrol", "best card", "which card", "recommend", "lounge"]):
+            task_type = AiTaskType.CARD_RECOMMENDATION_EXPLANATION
 
-        # Check if external Gemini API key is configured
-        if settings.GEMINI_API_KEY and settings.AI_PROVIDER == "gemini":
-            try:
-                import httpx
-                api_url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.AI_MODEL_NAME}:generateContent?key={settings.GEMINI_API_KEY}"
-                prompt = (
-                    f"You are CLIQ's AI Financial Intelligence Assistant. Tagline: 'Money Made Simple. In Your Language.'\n"
-                    f"Target language code: '{language}' (en=English, hi=Hindi, kn=Kannada).\n"
-                    f"Strict rules:\n"
-                    f"1. Respond ONLY using the verified card details provided below.\n"
-                    f"2. Never invent reward rates or fees.\n"
-                    f"3. All numerical amounts and calculations must remain exact.\n"
-                    f"4. Respond naturally and fluently in the requested language ({language}).\n\n"
-                    f"USER'S REGISTERED CARDS:\n{grounded_context}\n\n"
-                    f"USER QUERY: {query_clean}"
-                )
-                async with httpx.AsyncClient(timeout=10.0) as client:
-                    resp = await client.post(api_url, json={"contents": [{"parts": [{"text": prompt}]}]})
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        text = data["candidates"][0]["content"]["parts"][0]["text"]
-                        return ChatQueryResponse(
-                            query=query_clean,
-                            response=text,
-                            language=language,
-                            grounded_card_ids=card_ids,
-                            citations=[c.card_name for c in user_cards]
-                        )
-            except Exception:
-                pass  # Gracefully fall back to deterministic grounded engine
+        # If database session is present, process strictly via PrivacyGateway
+        if db:
+            from app.services.privacy.privacy_gateway import PrivacyGateway
+            gw_result = await PrivacyGateway.execute_request(
+                db=db,
+                user_id=user_id,
+                task_type=task_type,
+                user_query=query_clean,
+                language=language,
+                user_cards=user_cards,
+                user_transactions=user_transactions
+            )
+            return ChatQueryResponse(
+                query=query_clean,
+                response=gw_result["response"],
+                language=language,
+                grounded_card_ids=card_ids,
+                citations=citations,
+                confidence=0.95,
+                is_external_ai_used=gw_result["is_external_ai_used"],
+                provider_used=gw_result["provider_used"],
+                data_classification=gw_result["data_classification"],
+                redacted_items_count=gw_result["redacted_items_count"],
+                privacy_status=gw_result["privacy_status"],
+                audit_request_id=gw_result.get("audit_request_id")
+            )
 
-        # Deterministic Grounded Multilingual Engine
-        return cls._generate_grounded_response(
+        # Deterministic Grounded Multilingual Engine fallback
+        res = cls._generate_grounded_response(
             query=query_clean,
             lower_query=lower_query,
             language=language,
             user_cards=user_cards,
             card_ids=card_ids
         )
+        res.privacy_status = "LOCAL_PROCESSING_STANDALONE"
+        return res
 
     @classmethod
     def _generate_grounded_response(

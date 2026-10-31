@@ -60,11 +60,26 @@ Security is a primary non-negotiable architectural pillar in CLIQ. The platform 
 
 ## 5. AI & LLM Security Safeguards
 
-- **Untrusted Input Treatment:**
-  - All user queries, prompts, and extracted document texts are treated as unauthenticated, untrusted strings.
-- **Prompt Injection Defense:**
-  - User input is wrapped in isolated boundary tags with system directives instructing the model to reject commands that seek to ignore guidelines, reveal system prompts, or execute arbitrary operations.
+- **Centralized Privacy Gateway:**
+  - All AI requests pass through `PrivacyGateway.execute_request` (`backend/app/services/privacy/privacy_gateway.py`). Direct calls from application endpoints or background jobs to third-party AI APIs are strictly forbidden.
+- **Untrusted Input Treatment & Redaction:**
+  - All user queries are processed by `SensitiveDataRedactor` prior to prompt assembly. Full card PANs (15/16 digits), CVVs, OTPs, PINs, Aadhaar, Income Tax PAN, bank account numbers, and passwords are automatically scrubbed and replaced with deterministic redaction tokens.
+- **Prompt Injection Defense & Boundary Delimitation:**
+  - Instructions and user queries are wrapped in strict XML boundary tags (`<system_instructions>`, `<verified_context>`, `<untrusted_user_query>`). Boundary tags inside user input are neutralized to prevent instruction breakout.
 - **No LLM Decision Authority:**
-  - The LLM does NOT calculate rewards, does NOT mutate database records directly, and does NOT approve financial transactions.
-- **Data Minimization:**
-  - Prompts sent to external AI providers omit user email addresses, IP addresses, full names, or any sensitive financial identifiers.
+  - The LLM does NOT calculate rewards, does NOT mutate database records directly, and does NOT approve financial transactions. All monetary math is handled deterministically via Python `Decimal`.
+- **Data Minimization & Aggregation:**
+  - Raw transaction line-items are never transmitted to external AI; only monthly category aggregates are provided. If consent is absent, card and spending context is completely withheld.
+
+---
+
+## 6. AI Consent, Transparency & Audit Trails
+
+- **Explicit Opt-in Consent:**
+  - New user profiles default to `external_ai_enabled = False`. Unless opted in, queries are resolved by the server's local deterministic engine with zero network egress.
+- **Granular Permissions:**
+  - Users independently configure `allow_card_context`, `allow_spending_summary_context`, and `allow_personalized_recommendations` via `/api/v1/privacy/consent`.
+- **Immediate Revocation:**
+  - Consent revocation is immediate and synchronously terminates external provider dispatch.
+- **Privacy-Safe Audit Logging:**
+  - `AiRequestAuditLog` tracks provider names, model IDs, token counts, latency, and redaction counts for compliance. Raw user queries, prompts, and PII are strictly excluded from logs.

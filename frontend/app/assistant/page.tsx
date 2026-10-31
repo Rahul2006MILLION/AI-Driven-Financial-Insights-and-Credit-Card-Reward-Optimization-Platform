@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage, Language } from "@/lib/i18n";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, api, AiConsent } from "@/lib/api";
 import {
   Bot,
   Send,
@@ -13,6 +13,13 @@ import {
   Loader2,
   Globe,
   CheckCircle2,
+  Lock,
+  Sliders,
+  AlertCircle,
+  Eye,
+  ShieldAlert,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 interface Message {
@@ -20,6 +27,10 @@ interface Message {
   content: string;
   citations?: string[];
   timestamp: string;
+  is_external_ai_used?: boolean;
+  provider_used?: string;
+  privacy_status?: string;
+  redacted_items_count?: number;
 }
 
 export default function AssistantPage() {
@@ -29,16 +40,26 @@ export default function AssistantPage() {
       role: "assistant",
       content:
         language === "hi"
-          ? "नमस्ते! मैं आपका CLIQ वित्तीय सहायक हूँ। आप मुझसे अपने क्रेडिट कार्ड्स, कैशबैक दरों, पेट्रोल नियमों या किसी भी खरीद के बारे में पूछ सकते हैं।"
+          ? "नमस्ते! मैं आपका CLIQ वित्तीय सहायक हूँ। गोपनीयता नीति के तहत, आपका डेटा डिफ़ॉल्ट रूप से स्थानीय रूप से सुरक्षित रखा जाता है।"
           : language === "kn"
-          ? "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ CLIQ ಆರ್ಥಿಕ ಸಹಾಯಕ. ನಿಮ್ಮ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು, ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಮತ್ತು ರಿವಾರ್ಡ್ ನಿಯಮಗಳ ಬಗ್ಗೆ ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಿ."
-          : "Hello! I am your CLIQ Financial Intelligence Assistant. Ask me anything about your registered cards, reward caps, exclusion policies, or optimal cards for specific purchases.",
+          ? "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ CLIQ ಆರ್ಥಿಕ ಸಹಾಯಕ. ಗೌಪ್ಯತೆ ನೀತಿಯಂತೆ, ನಿಮ್ಮ ಹಣಕಾಸಿನ ಮಾಹಿತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಸುರಕ್ಷಿತವಾಗಿಡಲಾಗುತ್ತದೆ."
+          : "Hello! I am your CLIQ Financial Intelligence Assistant. Under our Privacy-First Architecture, all queries are processed locally by default with zero cloud exposure.",
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      is_external_ai_used: false,
+      provider_used: "local_grounded_engine",
+      privacy_status: "LOCAL_PROCESSING_PROTECTED",
     },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Privacy & AI Consent State
+  const [consent, setConsent] = useState<AiConsent | null>(null);
+  const [consentLoading, setConsentLoading] = useState(false);
+  const [showPrivacyPanel, setShowPrivacyPanel] = useState(false);
+  const [savingConsent, setSavingConsent] = useState(false);
+  const [consentSuccessMsg, setConsentSuccessMsg] = useState<string | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,6 +68,46 @@ export default function AssistantPage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    loadConsent();
+  }, []);
+
+  const loadConsent = async () => {
+    setConsentLoading(true);
+    try {
+      const data = await api.getAiConsent();
+      setConsent(data);
+    } catch (_) {
+      // Unauthenticated or default fallback
+    } finally {
+      setConsentLoading(false);
+    }
+  };
+
+  const handleToggleConsent = async (field: "external_ai_enabled" | "allow_card_context" | "allow_spending_context", value: boolean) => {
+    if (!consent) return;
+    setSavingConsent(true);
+    setConsentSuccessMsg(null);
+    try {
+      const updated = await api.updateAiConsent({
+        external_ai_enabled: field === "external_ai_enabled" ? value : consent.external_ai_enabled,
+        allow_card_context: field === "allow_card_context" ? value : consent.allow_card_context,
+        allow_spending_context: field === "allow_spending_context" ? value : consent.allow_spending_context,
+        provider_preference: consent.provider_preference,
+      });
+      setConsent(updated);
+      setConsentSuccessMsg(
+        value
+          ? `Preference updated: ${field.replace(/_/g, " ")} is now ACTIVE.`
+          : `Preference updated: ${field.replace(/_/g, " ")} is now DISABLED (Local processing only).`
+      );
+      setTimeout(() => setConsentSuccessMsg(null), 3000);
+    } catch (_) {
+    } finally {
+      setSavingConsent(false);
+    }
+  };
 
   const handleSend = async (queryText?: string) => {
     const q = queryText || input;
@@ -76,6 +137,10 @@ export default function AssistantPage() {
         content: data.response,
         citations: data.citations,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        is_external_ai_used: data.is_external_ai_used,
+        provider_used: data.provider_used,
+        privacy_status: data.privacy_status,
+        redacted_items_count: data.redacted_items_count,
       };
       setMessages((prev) => [...prev, botMsg]);
     } catch (err: any) {
@@ -96,7 +161,7 @@ export default function AssistantPage() {
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full flex flex-col h-[calc(100vh-4rem)]">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-cliq-border pb-4 mb-4">
+        <div className="flex items-center justify-between border-b border-cliq-border pb-4 mb-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cliq-cyan to-cliq-emerald p-0.5 shadow-neonCyan">
               <div className="w-full h-full bg-cliq-bg rounded-[10px] flex items-center justify-center">
@@ -106,29 +171,129 @@ export default function AssistantPage() {
             <div>
               <h1 className="text-lg font-extrabold text-white flex items-center gap-2">
                 <span>{t.assistant.title}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cliq-emerald/20 text-cliq-emerald border border-cliq-emerald/40 font-bold">
-                  Grounded
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cliq-emerald/20 text-cliq-emerald border border-cliq-emerald/40 font-bold flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  Privacy-First
                 </span>
               </h1>
               <p className="text-[11px] text-cliq-textSecondary">{t.assistant.groundedIn}</p>
             </div>
           </div>
 
-          {/* Quick Language Toggle */}
-          <div className="flex items-center gap-1 bg-cliq-surface px-2 py-1 rounded-lg border border-cliq-border text-xs">
-            {(["en", "hi", "kn"] as Language[]).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLanguage(l)}
-                className={`px-2 py-0.5 rounded font-bold transition-colors ${
-                  language === l ? "bg-cliq-cyan text-cliq-bg" : "text-cliq-textSecondary"
-                }`}
-              >
-                {l.toUpperCase()}
-              </button>
-            ))}
+          <div className="flex items-center gap-2">
+            {/* Privacy Controls Button */}
+            <button
+              onClick={() => setShowPrivacyPanel(!showPrivacyPanel)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-xs text-cliq-textSecondary hover:text-white transition-colors"
+            >
+              <Sliders className="w-3.5 h-3.5 text-cliq-cyan" />
+              <span className="font-semibold">AI Privacy</span>
+              {showPrivacyPanel ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
+
+            {/* Quick Language Toggle */}
+            <div className="flex items-center gap-1 bg-cliq-surface px-2 py-1 rounded-xl border border-cliq-border text-xs">
+              {(["en", "hi", "kn"] as Language[]).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLanguage(l)}
+                  className={`px-2 py-0.5 rounded font-bold transition-colors ${
+                    language === l ? "bg-cliq-cyan text-cliq-bg" : "text-cliq-textSecondary"
+                  }`}
+                >
+                  {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
+
+        {/* Expandable Privacy Disclosure & Consent Settings Panel */}
+        {showPrivacyPanel && (
+          <div className="mb-4 p-4 rounded-2xl bg-cliq-surface/95 border border-cliq-cyan/40 backdrop-blur-md space-y-3 text-xs">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2 font-bold text-white text-sm">
+                  <Lock className="w-4 h-4 text-cliq-cyan" />
+                  Privacy Gateway & AI Governance
+                </div>
+                <p className="text-cliq-textSecondary text-[11px] mt-0.5 leading-relaxed">
+                  CLIQ enforces a strict Privacy-First AI Architecture. By default, all answers are generated locally with zero cloud exposure.
+                </p>
+              </div>
+              <div className="shrink-0 text-right">
+                <span
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${
+                    consent?.external_ai_enabled
+                      ? "bg-cliq-cyan/15 text-cliq-cyan border-cliq-cyan/40"
+                      : "bg-cliq-emerald/15 text-cliq-emerald border-cliq-emerald/40"
+                  }`}
+                >
+                  {consent?.external_ai_enabled ? "External AI (Gemini 1.5)" : "Local Engine (Zero Exposure)"}
+                </span>
+              </div>
+            </div>
+
+            {consentSuccessMsg && (
+              <div className="p-2 rounded-lg bg-cliq-emerald/10 text-cliq-emerald text-[11px] font-semibold border border-cliq-emerald/30">
+                {consentSuccessMsg}
+              </div>
+            )}
+
+            {/* Toggles */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+              <div className="p-3 rounded-xl bg-cliq-bg border border-cliq-border flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-white block">External AI Mode</span>
+                  <span className="text-[10px] text-cliq-textMuted">Use Google Gemini</span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={Boolean(consent?.external_ai_enabled)}
+                  disabled={savingConsent}
+                  onChange={(e) => handleToggleConsent("external_ai_enabled", e.target.checked)}
+                  className="rounded text-cliq-cyan focus:ring-cliq-cyan cursor-pointer"
+                />
+              </div>
+
+              <div className="p-3 rounded-xl bg-cliq-bg border border-cliq-border flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-white block">Card Context</span>
+                  <span className="text-[10px] text-cliq-textMuted">Share card names & rates</span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={Boolean(consent?.allow_card_context)}
+                  disabled={savingConsent || !consent?.external_ai_enabled}
+                  onChange={(e) => handleToggleConsent("allow_card_context", e.target.checked)}
+                  className="rounded text-cliq-cyan focus:ring-cliq-cyan cursor-pointer disabled:opacity-40"
+                />
+              </div>
+
+              <div className="p-3 rounded-xl bg-cliq-bg border border-cliq-border flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-white block">Spending Context</span>
+                  <span className="text-[10px] text-cliq-textMuted">Aggregated totals only</span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={Boolean(consent?.allow_spending_context)}
+                  disabled={savingConsent || !consent?.external_ai_enabled}
+                  onChange={(e) => handleToggleConsent("allow_spending_context", e.target.checked)}
+                  className="rounded text-cliq-cyan focus:ring-cliq-cyan cursor-pointer disabled:opacity-40"
+                />
+              </div>
+            </div>
+
+            {/* PII Redaction Guarantee Box */}
+            <div className="p-2.5 rounded-xl bg-cliq-bgSecondary/80 border border-cliq-border/60 text-[10px] text-cliq-textSecondary leading-relaxed flex items-start gap-2">
+              <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-white">Strict Redaction Guarantee:</strong> Full 16-digit card numbers, CVVs, PINs, OTPs, Aadhaar, Income Tax PAN, bank account numbers, passwords, and raw statements are <strong className="text-amber-300">never transmitted</strong> to any external AI provider.
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Messages Scroll Area */}
         <div className="flex-1 overflow-y-auto space-y-4 pr-2">
@@ -168,7 +333,35 @@ export default function AssistantPage() {
                   </div>
                 )}
 
-                <div className="text-[9px] text-cliq-textMuted text-right mt-1.5">{m.timestamp}</div>
+                {/* Privacy Badge on Assistant Replies */}
+                {m.role === "assistant" && (
+                  <div className="mt-2.5 pt-2 border-t border-cliq-border/40 flex items-center justify-between text-[10px]">
+                    <div className="flex items-center gap-1.5">
+                      {m.is_external_ai_used ? (
+                        <span className="text-cliq-cyan font-semibold flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-cliq-cyan" />
+                          Gemini 1.5 Flash • PII Redacted
+                        </span>
+                      ) : (
+                        <span className="text-cliq-emerald font-semibold flex items-center gap-1">
+                          <ShieldCheck className="w-3 h-3 text-cliq-emerald" />
+                          Local Engine • Zero Cloud Exposure
+                        </span>
+                      )}
+
+                      {m.redacted_items_count && m.redacted_items_count > 0 ? (
+                        <span className="text-amber-400 font-bold ml-1">
+                          ({m.redacted_items_count} items redacted)
+                        </span>
+                      ) : null}
+                    </div>
+                    <span className="text-cliq-textMuted">{m.timestamp}</span>
+                  </div>
+                )}
+
+                {m.role === "user" && (
+                  <div className="text-[9px] text-cliq-textMuted text-right mt-1.5">{m.timestamp}</div>
+                )}
               </div>
 
               {m.role === "user" && (
@@ -185,7 +378,7 @@ export default function AssistantPage() {
                 <Loader2 className="w-4 h-4 text-cliq-cyan animate-spin" />
               </div>
               <div className="glass-panel p-3.5 rounded-2xl text-xs text-cliq-textSecondary flex items-center gap-2">
-                <span>Analyzing grounded card rules...</span>
+                <span>Processing through Privacy Gateway...</span>
               </div>
             </div>
           )}

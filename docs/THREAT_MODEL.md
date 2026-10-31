@@ -45,3 +45,15 @@ This document outlines the threat modeling assessment conducted for the CLIQ pla
 - **Safe Storage Location:** Uploads are written to isolated directories with randomized UUID filenames; original client filenames are never used for disk paths.
 - **Processing Timeouts:** Document parsing tasks enforce a hard 15-second execution timeout.
 - **Untrusted Staging:** Extracted rules are held in `extracted_card_data` with `is_verified = False` and can only be promoted to active rules after explicit user review.
+
+---
+
+## 5. AI & External LLM Threat Analysis
+
+| Threat Category | Potential Attack Vector | Impact | Mitigation Strategy in CLIQ | Residual Risk |
+|---|---|---|---|---|
+| **Information Disclosure** | Accidental transmission of user PAN, CVV, OTP, or Aadhaar to external AI provider | Exposure of financial credentials to third-party logs | Mandatory `SensitiveDataRedactor` deterministic regex scrubbing before prompt formation. Absolute ban on `HIGHLY_SENSITIVE` fields. | Negligible |
+| **Information Disclosure** | User spending patterns or card portfolios leaked without consent | Violation of DPDPA 2023 & user privacy expectations | Default-opt-out consent model (`external_ai_enabled = False`); granular toggles for card and spend context; immediate revocation. | Low |
+| **Tampering** | Prompt injection (direct or indirect) manipulating assistant advice or leaking instructions | User receives deceptive advice or internal prompt leaks | System/data separation via `<system_instructions>`, `<verified_context>`, and `<untrusted_user_query>` XML boundaries; tag escaping. | Low |
+| **Repudiation** | Dispute over third-party AI data usage or consent state | Regulatory non-compliance penalties | Versioned, timestamped `UserAiConsent` records and privacy-safe `AiRequestAuditLog` entries with token counts and latency metrics. | Low |
+| **Denial of Service** | External LLM API outage, rate limits (HTTP 429), or network failure | Complete assistant service unavailability | Automatic failover to local deterministic heuristic engine supporting English, Hindi, and Kannada without external API dependencies. | Very Low |

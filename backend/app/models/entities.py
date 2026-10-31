@@ -31,6 +31,7 @@ class Profile(Base):
     transactions: Mapped[List["Transaction"]] = relationship("Transaction", back_populates="user", cascade="all, delete-orphan")
     documents: Mapped[List["UploadedDocument"]] = relationship("UploadedDocument", back_populates="user", cascade="all, delete-orphan")
     preferences: Mapped[Optional["UserPreference"]] = relationship("UserPreference", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    ai_consent: Mapped[Optional["UserAiConsent"]] = relationship("UserAiConsent", back_populates="user", uselist=False, cascade="all, delete-orphan")
     audit_logs: Mapped[List["AuditLog"]] = relationship("AuditLog", back_populates="user", cascade="all, delete-orphan")
 
 class CreditCard(Base):
@@ -342,3 +343,42 @@ class AuditLog(Base):
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False, index=True)
 
     user: Mapped[Optional["Profile"]] = relationship("Profile", back_populates="audit_logs")
+
+
+class UserAiConsent(Base):
+    __tablename__ = "user_ai_consents"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("profiles.id", ondelete="CASCADE"), unique=True, nullable=False, index=True)
+    external_ai_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)  # Privacy by default: disabled until explicitly enabled
+    allow_card_context: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    allow_spending_context: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    provider_preference: Mapped[str] = mapped_column(String(32), default="gemini", nullable=False)
+    consent_version: Mapped[str] = mapped_column(String(16), default="1.0", nullable=False)
+    consent_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    revoked_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    purpose_description: Mapped[Optional[str]] = mapped_column(String(255), default="Conversational financial assistant and card rewards explanation", nullable=True)
+
+    user: Mapped["Profile"] = relationship("Profile", back_populates="ai_consent")
+
+
+class AiRequestAuditLog(Base):
+    __tablename__ = "ai_request_audit_logs"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    request_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    user_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("profiles.id", ondelete="SET NULL"), nullable=True, index=True)
+    task_type: Mapped[str] = mapped_column(String(64), nullable=False)  # FINANCIAL_EDUCATION, CARD_RECOMMENDATION_EXPLANATION, etc.
+    data_classification: Mapped[str] = mapped_column(String(32), nullable=False)  # PUBLIC, INTERNAL, SENSITIVE, HIGHLY_SENSITIVE
+    provider: Mapped[str] = mapped_column(String(32), nullable=False)  # gemini, mock, local
+    model_name: Mapped[str] = mapped_column(String(64), nullable=False)
+    consent_status: Mapped[str] = mapped_column(String(32), nullable=False)  # GRANTED, DENIED, WITHDRAWN, LOCAL_FALLBACK, NOT_REQUIRED
+    redaction_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    redacted_types_json: Mapped[str] = mapped_column(String(255), default="[]", nullable=False)
+    prompt_tokens: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    completion_tokens: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    latency_ms: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    status: Mapped[str] = mapped_column(String(32), default="SUCCESS", nullable=False)  # SUCCESS, LOCAL_FALLBACK, REJECTED, ERROR
+    rejection_reason: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+

@@ -300,6 +300,49 @@ export interface PartnerFeedIngestRequest {
   feed_timestamp?: string;
 }
 
+export interface AiConsent {
+  user_id: string;
+  external_ai_enabled: boolean;
+  allow_card_context: boolean;
+  allow_spending_context: boolean;
+  provider_preference: string;
+  consent_version: string;
+  consent_timestamp: string;
+  revoked_at?: string;
+  purpose_description?: string;
+  privacy_disclosure: string;
+}
+
+export interface AiConsentUpdateRequest {
+  external_ai_enabled: boolean;
+  allow_card_context?: boolean;
+  allow_spending_context?: boolean;
+  provider_preference?: string;
+}
+
+export interface AiAuditLog {
+  id: string;
+  request_id: string;
+  task_type: string;
+  data_classification: string;
+  provider: string;
+  model_name: string;
+  consent_status: string;
+  redaction_count: number;
+  redacted_types: string[];
+  status: string;
+  rejection_reason?: string;
+  latency_ms?: number;
+  timestamp: string;
+}
+
+export interface DataMinimizationRule {
+  field_name: string;
+  classification: string;
+  action_taken: string;
+  rationale: string;
+}
+
 export interface OfferAuditLog {
   id: string;
   offer_id: string;
@@ -491,4 +534,11 @@ export const api = {
       { method: "POST", body: JSON.stringify(data) }
     ),
   getAdminDocuments: () => apiFetch<AdminOfferDocument[]>("/offers/documents"),
+
+  // Privacy & AI Governance
+  getAiConsent: () => apiFetch<AiConsent>("/privacy/consent"),
+  updateAiConsent: (data: AiConsentUpdateRequest) =>
+    apiFetch<AiConsent>("/privacy/consent", { method: "PUT", body: JSON.stringify(data) }),
+  getAiAuditLogs: () => apiFetch<AiAuditLog[]>("/privacy/audit-logs"),
+  getDataMinimizationRules: () => apiFetch<DataMinimizationRule[]>("/privacy/data-minimization-rules"),
 };

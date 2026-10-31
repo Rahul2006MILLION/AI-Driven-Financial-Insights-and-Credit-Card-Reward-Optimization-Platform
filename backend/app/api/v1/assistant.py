@@ -44,7 +44,9 @@ async def chat_with_assistant(
         query=req.query,
         language=lang,
         user_cards=user_cards,
-        user_transactions=user_txns
+        user_transactions=user_txns,
+        db=db,
+        user_id=current_user.id
     )
 
     # Audit log
