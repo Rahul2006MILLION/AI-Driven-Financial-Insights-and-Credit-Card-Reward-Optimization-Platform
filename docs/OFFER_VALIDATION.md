@@ -54,3 +54,4 @@ Administrators must verify each field before clicking **Approve & Verify**:
 - [ ] **Minimum Spend & Maximum Discount Caps:** Confirm whether taxes, delivery fees, or packaging fees are included in the minimum spend threshold.
 - [ ] **Coupon Code Activation Requirements:** Note whether the coupon must be manually entered or if it is auto-applied on payment card selection.
 - [ ] **Transaction Channel:** Ensure online-only vouchers are not matched with offline retail point-of-sale swipes.
+

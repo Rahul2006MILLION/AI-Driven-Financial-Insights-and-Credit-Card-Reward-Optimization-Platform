@@ -58,3 +58,4 @@ Every offer event is logged in the dedicated `offer_audit_logs` table:
 - `timestamp`: UTC timestamp of the operation.
 
 Audit entries are append-only and cannot be updated or deleted via API endpoints.
+

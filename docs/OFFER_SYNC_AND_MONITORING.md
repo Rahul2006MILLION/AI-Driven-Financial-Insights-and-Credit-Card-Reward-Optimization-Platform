@@ -57,3 +57,4 @@ All connectors conform to strict access guidelines:
 2. **7-Day Expiry Warning Window:**
    - Offers expiring within 7 days are highlighted with an orange timer pill and surfaced via the `expiring_soon=true` API filter.
    - Admin review desk prompts verification staff to check if issuers plan to renew the campaign before the month-end deadline.
+

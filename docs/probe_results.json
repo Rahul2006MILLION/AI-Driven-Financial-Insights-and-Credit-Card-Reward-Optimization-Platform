@@ -1,0 +1,106 @@
+[
+  {
+    "name": "HDFC Bank",
+    "url": "https://www.hdfcbank.com/personal/pay/cards/credit-cards/card-offers",
+    "error": "ReadTimeout: The read operation timed out",
+    "latency_ms": 12050,
+    "robots_status": 403,
+    "robots_allowed": true
+  },
+  {
+    "name": "ICICI Bank",
+    "url": "https://www.icicibank.com/offers",
+    "final_url": "https://www.icici.bank.in/offers",
+    "robots_status": 200,
+    "robots_allowed": true,
+    "http_status": 200,
+    "latency_ms": 348,
+    "content_type": "text/html;charset=utf-8",
+    "server": "unknown",
+    "waf": [
+      "None detected"
+    ],
+    "body_length": 401415,
+    "body_preview": "<!DOCTYPE HTML> <html lang=\"en-IN\">     <head>                <meta charset=\"UTF-8\"/>     <title>ICI"
+  },
+  {
+    "name": "Axis Bank",
+    "url": "https://www.axisbank.com/grabdeals",
+    "final_url": "https://grabdeals.axis.bank.in/home?utm_source=CA&utm_medium=sms&utm_campaign=grabdeals-campaignca",
+    "robots_status": 200,
+    "robots_allowed": true,
+    "http_status": 200,
+    "latency_ms": 569,
+    "content_type": "text/html; charset=UTF-8",
+    "server": "Server",
+    "waf": [
+      "Akamai"
+    ],
+    "body_length": 43023,
+    "body_preview": "<!DOCTYPE html><html lang=\"en\"><head><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossor"
+  },
+  {
+    "name": "RuPay (NPCI)",
+    "url": "https://www.rupay.co.in/rupay-offers",
+    "final_url": "https://www.rupay.co.in/rupay-offers",
+    "robots_status": 200,
+    "robots_allowed": false,
+    "http_status": 200,
+    "latency_ms": 104,
+    "content_type": "text/html",
+    "server": "unknown",
+    "waf": [
+      "None detected"
+    ],
+    "body_length": 3997,
+    "body_preview": "<!doctype html><html lang=\"en\" class=\"scrollable-container\" id=\"main-container\"><head><meta charset="
+  },
+  {
+    "name": "Blinkit",
+    "url": "https://blinkit.com/offers",
+    "final_url": "https://blinkit.com/offers",
+    "robots_status": 403,
+    "robots_allowed": true,
+    "http_status": 403,
+    "latency_ms": 214,
+    "content_type": "text/html; charset=UTF-8",
+    "server": "cloudflare",
+    "waf": [
+      "Cloudflare"
+    ],
+    "body_length": 564351,
+    "body_preview": "<!DOCTYPE html> <html lang=\"en\" dir=\"ltr\"   prefix=\"content: http://purl.org/rss/1.0/modules/content"
+  },
+  {
+    "name": "SBI Card",
+    "url": "https://www.sbicard.com/en/personal/special-offers.page",
+    "final_url": "https://www.sbicard.com/en/personal/special-offers.page",
+    "robots_status": 200,
+    "robots_allowed": true,
+    "http_status": 404,
+    "latency_ms": 338,
+    "content_type": "text/html; charset=UTF-8",
+    "server": "unknown",
+    "waf": [
+      "None detected"
+    ],
+    "body_length": 83629,
+    "body_preview": "<!DOCTYPE html>\r <!DOCTYPE HTML><html lang=\"en\">    <head>       <meta http-equiv=\"Content-Type\" con"
+  },
+  {
+    "name": "Swiggy",
+    "url": "https://www.swiggy.com/",
+    "final_url": "https://www.swiggy.com/",
+    "robots_status": 200,
+    "robots_allowed": true,
+    "http_status": 403,
+    "latency_ms": 81,
+    "content_type": "unknown",
+    "server": "CloudFront",
+    "waf": [
+      "AWS CloudFront"
+    ],
+    "body_length": 0,
+    "body_preview": ""
+  }
+]

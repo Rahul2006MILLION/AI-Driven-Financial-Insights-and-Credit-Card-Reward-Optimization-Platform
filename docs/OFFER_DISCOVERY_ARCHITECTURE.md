@@ -81,3 +81,4 @@ stateDiagram-v2
 Extraction confidence and verification status are strictly decoupled:
 - **Extraction Confidence (0.00 – 1.00):** A probabilistic indicator reflecting field completeness, data consistency, and regex boundary conformity.
 - **Verification Status (`VERIFIED`, `PENDING_REVIEW`, etc.):** A deterministic governance state set solely by human approval or explicit system status rules. A high extraction confidence score (e.g., `0.98`) **never** bypasses administrator approval.
+

@@ -62,3 +62,4 @@ The review interface ([`frontend/app/admin/offers/page.tsx`](file:///Users/rahul
 2. Inspects the side-by-side diff comparing `Previous Approved Version` with `Proposed Source Terms`.
 3. If new terms are valid: clicks **Approve & Verify**.
 4. If new terms are unfavorable or defunct: clicks **Reject Offer**.
+
