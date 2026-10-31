@@ -82,3 +82,4 @@ class AdminManualIngestionChannel(BaseIngestionChannel):
                 "confidence_score": str(canonical.extraction_confidence)
             }
         )
+

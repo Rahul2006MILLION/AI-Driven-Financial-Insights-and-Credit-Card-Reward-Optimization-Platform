@@ -193,3 +193,4 @@ class HtmlIngestionChannel(BaseIngestionChannel):
                 "final_url": str(resp.url)
             }
         )
+

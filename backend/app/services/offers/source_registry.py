@@ -424,3 +424,4 @@ class SourceRegistryService:
             res = await cls.probe_source_health(db, src)
             results.append(res)
         return results
+

@@ -60,3 +60,4 @@ To prevent excessive server load, denial of service, or IP bans:
 Authorized administrators can audit and manage sources from the **Offer Intelligence Desk** (`/admin/offers` -> **Source Registry & Health**):
 - **Live Single-Source Probe**: `POST /api/v1/offers/sources/{id}/probe` fetches headers, checks `robots.txt`, detects WAF signatures (Akamai, Cloudflare, CloudFront, AWS WAF), records latency, and updates health.
 - **Parallel Source Probe**: `POST /api/v1/offers/sources/probe-all` probes all 8 sources concurrently with a 5.0-second safety timeout.
+

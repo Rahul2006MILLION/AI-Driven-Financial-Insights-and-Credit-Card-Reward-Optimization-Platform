@@ -98,3 +98,4 @@ class PartnerFeedIngestionChannel(BaseIngestionChannel):
                 "source_name": source.source_name if source else "Partner Network"
             }
         )
+

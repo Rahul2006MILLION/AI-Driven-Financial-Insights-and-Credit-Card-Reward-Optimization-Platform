@@ -140,3 +140,4 @@ class PdfCircularIngestionChannel(BaseIngestionChannel):
                 "extracted_count": len(extracted_offers)
             }
         )
+

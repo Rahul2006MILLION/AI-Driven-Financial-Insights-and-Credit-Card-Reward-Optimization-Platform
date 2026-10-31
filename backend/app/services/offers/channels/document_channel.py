@@ -150,3 +150,4 @@ class AdminDocumentIngestionChannel(BaseIngestionChannel):
                 "extracted_count": len(canonical_offers)
             }
         )
+

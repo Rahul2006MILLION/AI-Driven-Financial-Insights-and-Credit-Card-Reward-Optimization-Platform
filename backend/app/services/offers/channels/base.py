@@ -42,3 +42,4 @@ class BaseIngestionChannel:
         actor_role: str = "SYSTEM"
     ) -> IngestionResult:
         raise NotImplementedError("Ingestion channels must implement ingest()")
+

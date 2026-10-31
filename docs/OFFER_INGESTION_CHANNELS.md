@@ -154,3 +154,4 @@ $$\text{Canonical String} = \text{merchant} \mid \text{category} \mid \text{disc
 $$\text{Content Hash} = \text{SHA-256}(\text{Canonical String})$$
 
 If an incoming payload shares an identical hash with an existing offer, it is recognized as unchanged. If core terms differ, the system flags a material change and quarantines the offer.
+

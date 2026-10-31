@@ -80,3 +80,4 @@ In consumer fintech and credit card optimization:
 - Misreading a single character (e.g., misinterpreting `₹1,500` as `₹15,000`, or `10%` as `1.0%`, or a zero `0` as an `8`) directly causes financial loss or incorrect card recommendations to users.
 - OCR engines (Tesseract, EasyOCR, etc.) introduce character confusion on low-resolution flyers, stylized festival fonts, and skewed mobile camera photos.
 - **Architectural Policy**: Only official vector/text-encoded digital PDF circulars containing native text layers are parsed automatically. If a merchant flyer is only available as an image photo, it must be verified and entered manually by an authorized administrator through the **Manual Offer Entry** channel.
+

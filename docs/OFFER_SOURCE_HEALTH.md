@@ -115,3 +115,4 @@ If **any** material change is detected:
 - The offer is **immediately excluded from user recommendations** (`applicable_offers` filtering excludes any non-`VERIFIED` status).
 - An audit entry `REVERIFICATION_TRIGGERED` is logged with exact reasons.
 - The offer appears in the admin review queue with a visual side-by-side diff.
+

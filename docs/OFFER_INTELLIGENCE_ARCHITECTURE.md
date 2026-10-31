@@ -121,3 +121,4 @@ Before issuing HTTP requests, the channel validates:
   - Offers with `status != 'VERIFIED'` are **strictly excluded**.
   - Verified instant discounts are calculated using `Decimal` arithmetic.
   - Transparent step-by-step breakdown is presented to the user with verbatim evidence links.
+
