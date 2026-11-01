@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
+import NumericInput from "@/components/NumericInput";
 import {
   FileUp,
   CheckCircle2,
@@ -25,7 +26,7 @@ export default function DocumentProcessingPage() {
   const [cardName, setCardName] = useState("");
   const [bankName, setBankName] = useState("");
   const [network, setNetwork] = useState("VISA");
-  const [annualFee, setAnnualFee] = useState<number>(0);
+  const [annualFee, setAnnualFee] = useState<string | number>("");
   const [stagedRules, setStagedRules] = useState<any[]>([]);
 
   const fetchDocuments = async () => {
@@ -52,7 +53,11 @@ export default function DocumentProcessingPage() {
       setCardName(doc.extracted_data.extracted_card_name || "New Card");
       setBankName(doc.extracted_data.extracted_bank_name || "Bank");
       setNetwork(doc.extracted_data.extracted_network || "VISA");
-      setAnnualFee(Number(doc.extracted_data.extracted_annual_fee || 0));
+      setAnnualFee(
+        doc.extracted_data.extracted_annual_fee !== undefined
+          ? String(doc.extracted_data.extracted_annual_fee)
+          : ""
+      );
       setStagedRules(doc.extracted_data.rules || []);
     }
   };
@@ -100,13 +105,14 @@ export default function DocumentProcessingPage() {
     setError(null);
 
     try {
+      const parsedAnnualFee = annualFee === "" ? 0 : Number(annualFee);
       await apiFetch(`/documents/${selectedDoc.id}/verify`, {
         method: "POST",
         body: JSON.stringify({
           card_name: cardName,
           bank_name: bankName,
           network,
-          annual_fee: annualFee,
+          annual_fee: parsedAnnualFee,
           rules: stagedRules,
           benefits: selectedDoc.extracted_data?.benefits || [],
         }),
@@ -285,10 +291,11 @@ export default function DocumentProcessingPage() {
                     <label className="block text-slate-400 font-medium mb-1">
                       {t.cardSelection.annualFeeLabel} (₹)
                     </label>
-                    <input
-                      type="number"
+                    <NumericInput
+                      allowDecimal
                       value={annualFee}
-                      onChange={(e) => setAnnualFee(Number(e.target.value))}
+                      onChange={(val) => setAnnualFee(val)}
+                      placeholder="0"
                       className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3.5 py-2 text-white font-bold focus:outline-none focus:border-emerald-500"
                     />
                   </div>

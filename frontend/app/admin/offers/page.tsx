@@ -17,6 +17,7 @@ import {
   storeSession,
   UserSession,
 } from "@/lib/api";
+import NumericInput from "@/components/NumericInput";
 import {
   ShieldCheck,
   Search,
@@ -292,9 +293,9 @@ export default function AdminOfferReviewPage() {
       merchant_name: offer.merchant_name,
       category_id: offer.category_id,
       discount_type: offer.discount_type,
-      discount_value: offer.discount_value,
-      min_transaction_value: offer.min_transaction_value,
-      max_discount_amount: offer.max_discount_amount || "",
+      discount_value: offer.discount_value !== undefined ? String(offer.discount_value) : "",
+      min_transaction_value: offer.min_transaction_value !== undefined ? String(offer.min_transaction_value) : "",
+      max_discount_amount: offer.max_discount_amount ? String(offer.max_discount_amount) : "",
       eligible_bank: offer.eligible_bank || "",
       eligible_network: offer.eligible_network || "",
       eligible_card_names_str: (offer.eligible_card_names || []).join(", "),
@@ -314,14 +315,18 @@ export default function AdminOfferReviewPage() {
         ? editFormData.eligible_card_names_str.split(",").map((s: string) => s.trim()).filter(Boolean)
         : [];
 
+      const parsedDiscount = editFormData.discount_value === "" ? 0 : parseFloat(editFormData.discount_value);
+      const parsedMinTxn = editFormData.min_transaction_value === "" ? 0 : parseFloat(editFormData.min_transaction_value);
+      const parsedMaxDiscount = editFormData.max_discount_amount ? parseFloat(editFormData.max_discount_amount) : undefined;
+
       await api.editOffer(editingOffer.id, {
         offer_title: editFormData.offer_title,
         merchant_name: editFormData.merchant_name,
         category_id: editFormData.category_id,
         discount_type: editFormData.discount_type,
-        discount_value: parseFloat(editFormData.discount_value),
-        min_transaction_value: parseFloat(editFormData.min_transaction_value),
-        max_discount_amount: editFormData.max_discount_amount ? parseFloat(editFormData.max_discount_amount) : undefined,
+        discount_value: parsedDiscount,
+        min_transaction_value: parsedMinTxn,
+        max_discount_amount: parsedMaxDiscount,
         eligible_bank: editFormData.eligible_bank || undefined,
         eligible_network: editFormData.eligible_network || undefined,
         eligible_card_names: cardNames,
@@ -444,11 +449,15 @@ export default function AdminOfferReviewPage() {
     setSuccessMsg(null);
 
     try {
+      const parsedDiscount = !manualForm.discount_value ? 0 : Number(manualForm.discount_value);
+      const parsedMinTxn = !manualForm.min_transaction_value ? 0 : Number(manualForm.min_transaction_value);
+      const parsedMaxDiscount = !manualForm.max_discount_amount ? undefined : Number(manualForm.max_discount_amount);
+
       const res = await api.createManualOffer({
         ...manualForm,
-        discount_value: Number(manualForm.discount_value),
-        min_transaction_value: Number(manualForm.min_transaction_value || 0),
-        max_discount_amount: manualForm.max_discount_amount ? Number(manualForm.max_discount_amount) : undefined,
+        discount_value: parsedDiscount,
+        min_transaction_value: parsedMinTxn,
+        max_discount_amount: parsedMaxDiscount,
       });
       setSuccessMsg(`Manual offer "${res.offer_title}" created and staged into PENDING_REVIEW with canonical hash.`);
       // Reset form
@@ -1493,35 +1502,34 @@ export default function AdminOfferReviewPage() {
                 <label className="block text-cliq-textMuted font-bold mb-1">
                   Discount Value ({manualForm.discount_type === "PERCENTAGE" ? "%" : "₹"}) *
                 </label>
-                <input
-                  type="number"
-                  step="0.01"
+                <NumericInput
+                  allowDecimal
                   required
                   value={manualForm.discount_value}
-                  onChange={(e) => setManualForm({ ...manualForm, discount_value: parseFloat(e.target.value) || 0 })}
+                  onChange={(val) => setManualForm({ ...manualForm, discount_value: val as any })}
+                  placeholder="e.g. 10"
                   className="w-full bg-cliq-bg border border-cliq-border rounded-xl px-3 py-2 text-white"
                 />
               </div>
 
               <div>
                 <label className="block text-cliq-textMuted font-bold mb-1">Minimum Transaction Spend (₹)</label>
-                <input
-                  type="number"
-                  step="0.01"
+                <NumericInput
+                  allowDecimal
                   value={manualForm.min_transaction_value}
-                  onChange={(e) => setManualForm({ ...manualForm, min_transaction_value: parseFloat(e.target.value) || 0 })}
+                  onChange={(val) => setManualForm({ ...manualForm, min_transaction_value: val as any })}
+                  placeholder="e.g. 500"
                   className="w-full bg-cliq-bg border border-cliq-border rounded-xl px-3 py-2 text-white"
                 />
               </div>
 
               <div>
                 <label className="block text-cliq-textMuted font-bold mb-1">Max Discount Cap (₹, optional)</label>
-                <input
-                  type="number"
-                  step="0.01"
+                <NumericInput
+                  allowDecimal
                   placeholder="Leave empty if uncapped"
                   value={manualForm.max_discount_amount || ""}
-                  onChange={(e) => setManualForm({ ...manualForm, max_discount_amount: e.target.value ? parseFloat(e.target.value) : undefined })}
+                  onChange={(val) => setManualForm({ ...manualForm, max_discount_amount: val as any })}
                   className="w-full bg-cliq-bg border border-cliq-border rounded-xl px-3 py-2 text-white"
                 />
               </div>
@@ -1748,23 +1756,22 @@ export default function AdminOfferReviewPage() {
                 </div>
                 <div>
                   <label className="block text-cliq-textMuted font-bold mb-1">Discount Value</label>
-                  <input
-                    type="number"
-                    step="0.01"
+                  <NumericInput
+                    allowDecimal
                     required
                     value={editFormData.discount_value}
-                    onChange={(e) => setEditFormData({ ...editFormData, discount_value: e.target.value })}
+                    onChange={(val) => setEditFormData({ ...editFormData, discount_value: val })}
+                    placeholder="0.00"
                     className="w-full bg-cliq-bg border border-cliq-border rounded-lg px-3 py-2 text-white"
                   />
                 </div>
                 <div>
                   <label className="block text-cliq-textMuted font-bold mb-1">Max Discount Cap (₹)</label>
-                  <input
-                    type="number"
-                    step="0.01"
+                  <NumericInput
+                    allowDecimal
                     placeholder="None"
                     value={editFormData.max_discount_amount}
-                    onChange={(e) => setEditFormData({ ...editFormData, max_discount_amount: e.target.value })}
+                    onChange={(val) => setEditFormData({ ...editFormData, max_discount_amount: val })}
                     className="w-full bg-cliq-bg border border-cliq-border rounded-lg px-3 py-2 text-white"
                   />
                 </div>
@@ -1773,11 +1780,11 @@ export default function AdminOfferReviewPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-cliq-textMuted font-bold mb-1">Min Transaction (₹)</label>
-                  <input
-                    type="number"
-                    step="0.01"
+                  <NumericInput
+                    allowDecimal
                     value={editFormData.min_transaction_value}
-                    onChange={(e) => setEditFormData({ ...editFormData, min_transaction_value: e.target.value })}
+                    onChange={(val) => setEditFormData({ ...editFormData, min_transaction_value: val })}
+                    placeholder="0.00"
                     className="w-full bg-cliq-bg border border-cliq-border rounded-lg px-3 py-2 text-white"
                   />
                 </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
+import NumericInput from "@/components/NumericInput";
 import {
   Receipt,
   Plus,
@@ -33,7 +34,7 @@ export default function TransactionsPage() {
 
   // New manual transaction form
   const [merchant, setMerchant] = useState("");
-  const [amount, setAmount] = useState<number>(1000);
+  const [amount, setAmount] = useState<string | number>("");
   const [category, setCategory] = useState("dining");
   const [cardId, setCardId] = useState("");
   const [isRecurring, setIsRecurring] = useState(false);
@@ -78,13 +79,19 @@ export default function TransactionsPage() {
 
   const handleAddTransaction = async (e: React.FormEvent) => {
     e.preventDefault();
+    const numAmount = typeof amount === "number" ? amount : parseFloat(amount);
+    if (!amount || isNaN(numAmount) || numAmount <= 0) {
+      alert("Please enter a valid transaction amount greater than 0.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       await apiFetch("/transactions", {
         method: "POST",
         body: JSON.stringify({
           merchant_name: merchant,
-          amount,
+          amount: numAmount,
           category_id: category,
           card_id: cardId || null,
           is_recurring: isRecurring,
@@ -92,7 +99,7 @@ export default function TransactionsPage() {
       });
       setShowAddModal(false);
       setMerchant("");
-      setAmount(1000);
+      setAmount("");
       await fetchData();
     } catch (err) {
       alert("Failed to create transaction: " + err);
@@ -650,12 +657,12 @@ export default function TransactionsPage() {
                   <label className="block text-slate-400 mb-1 font-medium">
                     {t.transactions.amountLabel} *
                   </label>
-                  <input
-                    type="number"
+                  <NumericInput
                     required
-                    min={1}
+                    allowDecimal
                     value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
+                    onChange={(val) => setAmount(val)}
+                    placeholder="e.g. 1000"
                     className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3.5 py-2 text-white font-bold focus:outline-none focus:border-emerald-500"
                   />
                 </div>

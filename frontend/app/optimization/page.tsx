@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
+import NumericInput from "@/components/NumericInput";
 import { api, RecommendResponse } from "@/lib/api";
 import {
   Zap,
@@ -24,7 +25,7 @@ import {
 export default function RewardOptimizationPage() {
   const { t, language } = useLanguage();
 
-  const [amount, setAmount] = useState<number>(2000);
+  const [amount, setAmount] = useState<string | number>("2000");
   const [category, setCategory] = useState<string>("food_delivery");
   const [merchant, setMerchant] = useState<string>("Swiggy");
   const [paymentChannel, setPaymentChannel] = useState<string>("ONLINE");
@@ -35,12 +36,18 @@ export default function RewardOptimizationPage() {
 
   const handleOptimize = async (e: React.FormEvent) => {
     e.preventDefault();
+    const numericAmount = typeof amount === "number" ? amount : parseFloat(amount);
+    if (!amount || isNaN(numericAmount) || numericAmount <= 0) {
+      setError("Please enter a valid spend amount greater than 0.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
       const res = await api.recommendCard({
-        amount,
+        amount: numericAmount,
         category_id: category,
         merchant_name: merchant,
         payment_channel: paymentChannel,
@@ -87,12 +94,12 @@ export default function RewardOptimizationPage() {
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
                 {t.optimizer.amountLabel}
               </label>
-              <input
-                type="number"
+              <NumericInput
                 required
-                min={1}
+                allowDecimal
                 value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
+                onChange={(val) => setAmount(val)}
+                placeholder="e.g. 2000"
                 className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white font-bold text-sm focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>

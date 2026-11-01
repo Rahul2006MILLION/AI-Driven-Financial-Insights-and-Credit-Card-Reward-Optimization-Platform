@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
 import { DemoBootstrap } from "@/components/DemoBootstrap";
+import NumericInput from "@/components/NumericInput";
 import {
   CreditCard,
   Zap,
@@ -29,7 +30,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   // Quick Optimizer state
-  const [optAmount, setOptAmount] = useState<number>(3500);
+  const [optAmount, setOptAmount] = useState<string | number>("3500");
   const [optCategory, setOptCategory] = useState<string>("dining");
   const [optMerchant, setOptMerchant] = useState<string>("Swiggy");
   const [optLoading, setOptLoading] = useState<boolean>(false);
@@ -61,12 +62,16 @@ export default function DashboardPage() {
 
   const handleQuickOptimize = async (e: React.FormEvent) => {
     e.preventDefault();
+    const numAmount = typeof optAmount === "number" ? optAmount : parseFloat(optAmount);
+    if (!optAmount || isNaN(numAmount) || numAmount <= 0) {
+      return;
+    }
     setOptLoading(true);
     try {
       const res: any = await apiFetch("/optimization/recommend", {
         method: "POST",
         body: JSON.stringify({
-          amount: optAmount,
+          amount: numAmount,
           category_id: optCategory,
           merchant_name: optMerchant,
         }),
@@ -221,12 +226,12 @@ export default function DashboardPage() {
                 <label className="block text-[11px] font-medium text-slate-400 mb-1">
                   {t.dashboard?.amount || "Spend Amount (₹)"}
                 </label>
-                <input
-                  type="number"
+                <NumericInput
                   required
-                  min={1}
+                  allowDecimal
                   value={optAmount}
-                  onChange={(e) => setOptAmount(Number(e.target.value))}
+                  onChange={(val) => setOptAmount(val)}
+                  placeholder="e.g. 3500"
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2 text-white font-bold text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                 />
               </div>

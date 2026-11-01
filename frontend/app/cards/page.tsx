@@ -9,6 +9,7 @@ import { CardFanCollection } from "@/components/CardFanCollection";
 import { CardDetailsPanel } from "@/components/CardDetailsPanel";
 import { CardSelectionFlow } from "@/components/CardSelectionFlow";
 import { DigitalCreditCard } from "@/components/DigitalCreditCard";
+import NumericInput from "@/components/NumericInput";
 import {
   CreditCard as CardIcon,
   PlusCircle,
@@ -61,8 +62,8 @@ export default function MyCreditCardsPage() {
     network: "VISA",
     card_variant: "",
     last_four_digits: "",
-    annual_fee: 0,
-    renewal_waiver_spend: 0,
+    annual_fee: "" as string | number,
+    renewal_waiver_spend: "" as string | number,
     fee_waiver_condition_details: "",
     terms_source_url: "",
   });
@@ -124,8 +125,8 @@ export default function MyCreditCardsPage() {
       network: card.network,
       card_variant: card.card_variant || "",
       last_four_digits: card.last_four_digits || "",
-      annual_fee: Number(card.annual_fee),
-      renewal_waiver_spend: Number(card.renewal_waiver_spend || 0),
+      annual_fee: card.annual_fee !== undefined && card.annual_fee !== null ? String(card.annual_fee) : "",
+      renewal_waiver_spend: card.renewal_waiver_spend ? String(card.renewal_waiver_spend) : "",
       fee_waiver_condition_details: card.fee_waiver_condition_details || "",
       terms_source_url: card.terms_source_url || "",
     });
@@ -142,6 +143,10 @@ export default function MyCreditCardsPage() {
 
     setSavingEdit(true);
     try {
+      const parsedAnnualFee = editForm.annual_fee === "" ? 0 : Number(editForm.annual_fee);
+      const parsedWaiverSpend =
+        editForm.renewal_waiver_spend === "" ? undefined : Number(editForm.renewal_waiver_spend);
+
       await api.updateCard(editingCard.id, {
         card_name: editForm.card_name.trim(),
         bank_name: editForm.bank_name.trim(),
@@ -150,8 +155,8 @@ export default function MyCreditCardsPage() {
         network: editForm.network as any,
         card_variant: editForm.card_variant.trim() || undefined,
         last_four_digits: editForm.last_four_digits.trim() || undefined,
-        annual_fee: editForm.annual_fee,
-        renewal_waiver_spend: editForm.renewal_waiver_spend || undefined,
+        annual_fee: parsedAnnualFee,
+        renewal_waiver_spend: parsedWaiverSpend,
         fee_waiver_condition_details: editForm.fee_waiver_condition_details || undefined,
         terms_source_url: editForm.terms_source_url || undefined,
       });
@@ -553,24 +558,24 @@ export default function MyCreditCardsPage() {
 
                   <div className="space-y-1">
                     <label className="text-cliq-textSecondary font-semibold">Annual Fee (₹)</label>
-                    <input
-                      type="number"
-                      min="0"
+                    <NumericInput
+                      allowDecimal
                       value={editForm.annual_fee}
-                      onChange={(e) => setEditForm({ ...editForm, annual_fee: Number(e.target.value) })}
+                      onChange={(val) => setEditForm({ ...editForm, annual_fee: val })}
+                      placeholder="0"
                       className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     />
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-cliq-textSecondary font-semibold">Renewal Waiver Spend (₹)</label>
-                    <input
-                      type="number"
-                      min="0"
+                    <NumericInput
+                      allowDecimal
                       value={editForm.renewal_waiver_spend}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, renewal_waiver_spend: Number(e.target.value) })
+                      onChange={(val) =>
+                        setEditForm({ ...editForm, renewal_waiver_spend: val })
                       }
+                      placeholder="Optional waiver spend"
                       className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     />
                   </div>

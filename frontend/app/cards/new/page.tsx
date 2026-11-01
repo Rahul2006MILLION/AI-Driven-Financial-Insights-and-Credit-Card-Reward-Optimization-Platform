@@ -14,6 +14,7 @@ import {
   CatalogueBenefit,
 } from "@/lib/cardCatalogue";
 import { DigitalCreditCard } from "@/components/DigitalCreditCard";
+import NumericInput from "@/components/NumericInput";
 import {
   CreditCard as CardIcon,
   PlusCircle,
@@ -57,11 +58,19 @@ export default function AddCreditCardPage() {
   const [network, setNetwork] = useState<"VISA" | "MASTERCARD" | "AMEX" | "RUPAY" | "DINERS">(
     currentCatalogueCard.defaultNetwork
   );
-  const [joiningFee, setJoiningFee] = useState<number>(currentCatalogueCard.joiningFee);
-  const [annualFee, setAnnualFee] = useState<number>(currentCatalogueCard.annualFee);
-  const [waiverSpend, setWaiverSpend] = useState<number>(currentCatalogueCard.renewalWaiverSpend || 0);
+  const [joiningFee, setJoiningFee] = useState<string | number>(
+    currentCatalogueCard.joiningFee !== undefined ? String(currentCatalogueCard.joiningFee) : "0"
+  );
+  const [annualFee, setAnnualFee] = useState<string | number>(
+    currentCatalogueCard.annualFee !== undefined ? String(currentCatalogueCard.annualFee) : "0"
+  );
+  const [waiverSpend, setWaiverSpend] = useState<string | number>(
+    currentCatalogueCard.renewalWaiverSpend ? String(currentCatalogueCard.renewalWaiverSpend) : ""
+  );
   const [waiverDetails, setWaiverDetails] = useState(currentCatalogueCard.feeWaiverConditionDetails || "");
-  const [cycleDay, setCycleDay] = useState<number>(currentCatalogueCard.billingCycleDay || 15);
+  const [cycleDay, setCycleDay] = useState<string | number>(
+    String(currentCatalogueCard.billingCycleDay || 15)
+  );
   const [termsUrl, setTermsUrl] = useState(currentCatalogueCard.termsSourceUrl || "");
   const [badgeType, setBadgeType] = useState<"VERIFIED_CATALOGUE" | "MANUAL_CUSTOM">(
     currentCatalogueCard.badgeType
@@ -96,11 +105,11 @@ export default function AddCreditCardPage() {
     setCardName(card.cardName);
     setCardVariant(card.cardVariant);
     setNetwork(card.defaultNetwork);
-    setJoiningFee(card.joiningFee);
-    setAnnualFee(card.annualFee);
-    setWaiverSpend(card.renewalWaiverSpend || 0);
+    setJoiningFee(card.joiningFee !== undefined ? String(card.joiningFee) : "0");
+    setAnnualFee(card.annualFee !== undefined ? String(card.annualFee) : "0");
+    setWaiverSpend(card.renewalWaiverSpend ? String(card.renewalWaiverSpend) : "");
     setWaiverDetails(card.feeWaiverConditionDetails || "");
-    setCycleDay(card.billingCycleDay || 15);
+    setCycleDay(String(card.billingCycleDay || 15));
     setTermsUrl(card.termsSourceUrl || "");
     setBadgeType(card.badgeType);
     setRules([...card.rules]);
@@ -177,7 +186,12 @@ export default function AddCreditCardPage() {
     }
 
     // 3. Validate Non-negative fees
-    if (joiningFee < 0 || annualFee < 0 || waiverSpend < 0) {
+    const parsedJoiningFee = joiningFee === "" ? 0 : Number(joiningFee);
+    const parsedAnnualFee = annualFee === "" ? 0 : Number(annualFee);
+    const parsedWaiverSpend = waiverSpend === "" ? 0 : Number(waiverSpend);
+    const parsedCycleDay = cycleDay === "" ? 15 : Number(cycleDay);
+
+    if (parsedJoiningFee < 0 || parsedAnnualFee < 0 || parsedWaiverSpend < 0) {
       setError("Fees and renewal waiver thresholds cannot be negative numbers.");
       return;
     }
@@ -200,19 +214,20 @@ export default function AddCreditCardPage() {
         card_type: "CREDIT",
         card_variant: cardVariant.trim() || undefined,
         last_four_digits: lastFour.trim() || undefined,
-        joining_fee: joiningFee,
-        annual_fee: annualFee,
-        renewal_waiver_spend: waiverSpend > 0 ? waiverSpend : undefined,
+        joining_fee: parsedJoiningFee,
+        annual_fee: parsedAnnualFee,
+        renewal_waiver_spend: parsedWaiverSpend > 0 ? parsedWaiverSpend : undefined,
         fee_waiver_condition_details: waiverDetails.trim() || undefined,
-        billing_cycle_day: cycleDay,
+        billing_cycle_day: parsedCycleDay,
         terms_source_url: termsUrl.trim() || undefined,
         rules: rules.map((r) => ({
           category_id: r.category_id,
           merchant_pattern: r.merchant_pattern || undefined,
           reward_type: r.reward_type,
-          reward_rate_percentage: r.reward_rate_percentage,
+          reward_rate_percentage: Number(r.reward_rate_percentage) || 0,
           point_monetary_value: r.point_monetary_value || 1.0,
-          monthly_cap_amount: r.monthly_cap_amount || undefined,
+          monthly_cap_amount:
+            r.monthly_cap_amount ? Number(r.monthly_cap_amount) : undefined,
           is_excluded: false,
         })),
         benefits: benefits.map((b) => ({
@@ -548,12 +563,12 @@ export default function AddCreditCardPage() {
                       <label className="text-xs font-semibold text-cliq-textSecondary">
                         Joining Fee (₹)
                       </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1"
+                      <NumericInput
+                        min={0}
+                        allowDecimal
                         value={joiningFee}
-                        onChange={(e) => setJoiningFee(Number(e.target.value))}
+                        onChange={(val) => setJoiningFee(val)}
+                        placeholder="0"
                         className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                       />
                     </div>
@@ -562,12 +577,12 @@ export default function AddCreditCardPage() {
                       <label className="text-xs font-semibold text-cliq-textSecondary">
                         Annual Fee (₹)
                       </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1"
+                      <NumericInput
+                        min={0}
+                        allowDecimal
                         value={annualFee}
-                        onChange={(e) => setAnnualFee(Number(e.target.value))}
+                        onChange={(val) => setAnnualFee(val)}
+                        placeholder="0"
                         className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                       />
                     </div>
@@ -576,12 +591,12 @@ export default function AddCreditCardPage() {
                       <label className="text-xs font-semibold text-cliq-textSecondary">
                         Renewal Waiver Spend (₹)
                       </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1"
+                      <NumericInput
+                        min={0}
+                        allowDecimal
                         value={waiverSpend}
-                        onChange={(e) => setWaiverSpend(Number(e.target.value))}
+                        onChange={(val) => setWaiverSpend(val)}
+                        placeholder="0"
                         className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                       />
                     </div>
@@ -603,12 +618,13 @@ export default function AddCreditCardPage() {
                       <label className="text-xs font-semibold text-cliq-textSecondary">
                         Billing Cycle Day
                       </label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="31"
+                      <NumericInput
+                        min={1}
+                        max={31}
+                        allowDecimal={false}
                         value={cycleDay}
-                        onChange={(e) => setCycleDay(Number(e.target.value))}
+                        onChange={(val) => setCycleDay(val)}
+                        placeholder="15"
                         className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                       />
                     </div>
@@ -725,15 +741,13 @@ export default function AddCreditCardPage() {
                                 <label className="text-[10px] text-cliq-textSecondary font-semibold">
                                   Rate (% or Pts per 100)
                                 </label>
-                                <input
-                                  type="number"
-                                  min="0"
-                                  max="100"
-                                  step="0.01"
+                                <NumericInput
+                                  allowDecimal
                                   value={rule.reward_rate_percentage}
-                                  onChange={(e) =>
-                                    updateRuleField(idx, "reward_rate_percentage", parseFloat(e.target.value) || 0)
+                                  onChange={(val) =>
+                                    updateRuleField(idx, "reward_rate_percentage", val)
                                   }
+                                  placeholder="2.0"
                                   className="w-full px-2.5 py-1.5 rounded-lg bg-cliq-surface border border-cliq-border text-white text-xs"
                                 />
                               </div>
@@ -755,16 +769,15 @@ export default function AddCreditCardPage() {
                                 <label className="text-[10px] text-cliq-textSecondary font-semibold">
                                   Monthly Cap (₹)
                                 </label>
-                                <input
-                                  type="number"
-                                  min="0"
+                                <NumericInput
+                                  allowDecimal
                                   placeholder="No cap"
                                   value={rule.monthly_cap_amount ?? ""}
-                                  onChange={(e) =>
+                                  onChange={(val) =>
                                     updateRuleField(
                                       idx,
                                       "monthly_cap_amount",
-                                      e.target.value ? parseFloat(e.target.value) : null
+                                      val
                                     )
                                   }
                                   className="w-full px-2.5 py-1.5 rounded-lg bg-cliq-surface border border-cliq-border text-white text-xs"
@@ -927,14 +940,18 @@ export default function AddCreditCardPage() {
                     <div className="p-2.5 rounded-xl bg-cliq-surfaceHover/60 border border-cliq-border">
                       <span className="text-[10px] text-cliq-textSecondary block">Annual Fee</span>
                       <span className="font-bold text-white text-sm">
-                        {annualFee === 0 ? "FREE" : `₹${annualFee.toLocaleString("en-IN")}`}
+                        {annualFee === "" || Number(annualFee) === 0
+                          ? "FREE"
+                          : `₹${Number(annualFee).toLocaleString("en-IN")}`}
                       </span>
                     </div>
 
                     <div className="p-2.5 rounded-xl bg-cliq-surfaceHover/60 border border-cliq-border">
                       <span className="text-[10px] text-cliq-textSecondary block">Renewal Waiver</span>
                       <span className="font-bold text-emerald-400 text-sm">
-                        {waiverSpend > 0 ? `₹${waiverSpend.toLocaleString("en-IN")}` : "N/A"}
+                        {waiverSpend !== "" && Number(waiverSpend) > 0
+                          ? `₹${Number(waiverSpend).toLocaleString("en-IN")}`
+                          : "N/A"}
                       </span>
                     </div>
                   </div>
