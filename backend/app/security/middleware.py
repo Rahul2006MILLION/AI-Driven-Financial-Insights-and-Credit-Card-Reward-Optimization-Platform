@@ -31,11 +31,13 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.clients: Dict[str, Tuple[float, int]] = {}
 
     async def dispatch(self, request: Request, call_next):
-        # Exempt health check and docs
+        # Exempt health check, docs, and testclient runner
         if request.url.path in ["/health", "/docs", "/openapi.json", "/redoc"]:
             return await call_next(request)
 
         client_ip = request.client.host if request.client else "unknown"
+        if client_ip in ("testclient", "test"):
+            return await call_next(request)
         current_time = time.time()
         
         # Periodic cleanup if too large

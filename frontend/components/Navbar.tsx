@@ -1,35 +1,58 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage, Language } from "@/lib/i18n";
-import { getStoredSession, clearSession, UserSession } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import {
   CreditCard,
   Globe,
   Sparkles,
   User,
   LogOut,
-  LogIn,
   Menu,
   X,
   ShieldCheck,
+  ChevronDown,
+  Settings,
+  LayoutDashboard,
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
-  const [session, setSession] = useState<UserSession | null>(null);
+  const { session, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Close profile dropdown on outside click or Escape key
   useEffect(() => {
-    setSession(getStoredSession());
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const handleLogout = () => {
-    clearSession();
-    setSession(null);
+    setProfileDropdownOpen(false);
+    setMobileMenuOpen(false);
+    logout();
     router.push("/login");
   };
 
@@ -37,7 +60,7 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-50 bg-[#050D0A]/70 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <Link href={session ? "/dashboard" : "/"} className="flex items-center gap-3 group">
+        <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-3 group">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 flex items-center justify-center p-0.5 shadow-[0_0_20px_rgba(16,185,129,0.35)] group-hover:scale-105 transition-transform">
             <div className="w-full h-full bg-[#050D0A] rounded-[10px] flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -73,7 +96,7 @@ export const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {session ? (
+          {isAuthenticated && session ? (
             <div className="flex items-center gap-4">
               <Link
                 href="/dashboard"
@@ -109,23 +132,82 @@ export const Navbar: React.FC = () => {
 
               <div className="h-4 w-px bg-white/10" />
 
-              <Link
-                href="/profile"
-                className="flex items-center gap-2 text-xs text-slate-300 hover:text-white bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] px-2.5 py-1 rounded-full transition-all"
-              >
-                <div className="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-                  <User className="w-3 h-3 text-emerald-400" />
-                </div>
-                <span className="max-w-[100px] truncate">{session.fullName || session.email}</span>
-              </Link>
+              {/* Authenticated User Profile Menu Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="flex items-center gap-2 text-xs text-slate-200 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] px-3 py-1.5 rounded-full transition-all group shadow-[0_2px_12px_rgba(0,0,0,0.3)]"
+                  aria-expanded={profileDropdownOpen}
+                  aria-haspopup="true"
+                >
+                  <div className="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                    <User className="w-3 h-3 text-emerald-400" />
+                  </div>
+                  <span className="font-semibold max-w-[120px] truncate">
+                    {session.fullName || session.email.split("@")[0]}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-400 transition-transform ${
+                      profileDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
-              <button
-                onClick={handleLogout}
-                title={t.nav.logout}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/[0.04] transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-60 rounded-2xl bg-[#06100C]/95 border border-white/[0.12] backdrop-blur-2xl p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    {/* Header Info */}
+                    <div className="px-3 py-2.5 border-b border-white/[0.08] mb-1">
+                      <p className="text-xs font-bold text-white truncate">
+                        {session.fullName || "CLIQ User"}
+                      </p>
+                      <p className="text-[11px] text-slate-400 truncate">{session.email}</p>
+                      <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-semibold text-emerald-400">
+                        <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                        <span>{session.isAdmin ? "Administrator" : "PRO Member"}</span>
+                      </div>
+                    </div>
+
+                    {/* Menu Links */}
+                    <div className="space-y-0.5 text-xs">
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                      >
+                        <LayoutDashboard className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>{t.nav.dashboard}</span>
+                      </Link>
+                      <Link
+                        href="/cards"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                      >
+                        <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>{t.nav.cards}</span>
+                      </Link>
+                      <Link
+                        href="/profile"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                      >
+                        <Settings className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Profile & Settings</span>
+                      </Link>
+                    </div>
+
+                    {/* Logout */}
+                    <div className="pt-1 mt-1 border-t border-white/[0.08]">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors text-xs font-semibold"
+                      >
+                        <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                        <span>{t.nav.logout}</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <div className="flex items-center gap-2.5">
@@ -166,8 +248,26 @@ export const Navbar: React.FC = () => {
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#06100C]/95 backdrop-blur-2xl border-b border-white/[0.08] p-5 space-y-3.5 shadow-2xl">
-          {session ? (
+          {isAuthenticated && session ? (
             <>
+              {/* Mobile User Identity Card */}
+              <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-between">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                    <User className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-white truncate">
+                      {session.fullName || session.email.split("@")[0]}
+                    </p>
+                    <p className="text-[10px] text-slate-400 truncate">{session.email}</p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
+                  {session.isAdmin ? "Admin" : "PRO"}
+                </span>
+              </div>
+
               <Link
                 href="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
@@ -224,20 +324,17 @@ export const Navbar: React.FC = () => {
               >
                 {t.nav.documents}
               </Link>
-              <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between">
-                <Link
-                  href="/profile"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-xs text-slate-300 hover:text-white"
-                >
-                  {session.email}
-                </Link>
+              <Link
+                href="/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+              >
+                Profile & Settings
+              </Link>
+              <div className="pt-3 border-t border-white/[0.08] flex items-center justify-end">
                 <button
-                  onClick={() => {
-                    handleLogout();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1"
+                  onClick={handleLogout}
+                  className="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1.5 py-1 px-3 rounded-lg hover:bg-rose-500/10 transition-colors"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   {t.nav.logout}

@@ -242,11 +242,11 @@ SEED_OFFERS = [
 class OfferService:
     @classmethod
     async def seed_initial_offers_if_empty(cls, db: AsyncSession):
-        stmt = select(CardOffer)
-        existing = (await db.execute(stmt)).scalars().first()
-        if not existing:
-            now = datetime.utcnow()
-            for off in SEED_OFFERS:
+        now = datetime.utcnow()
+        for off in SEED_OFFERS:
+            stmt = select(CardOffer).where(CardOffer.offer_title == off["offer_title"])
+            existing = (await db.execute(stmt)).scalars().first()
+            if not existing:
                 offer_entity = CardOffer(
                     merchant_name=off["merchant_name"],
                     offer_title=off["offer_title"],
@@ -274,7 +274,13 @@ class OfferService:
                     last_verified_timestamp=now
                 )
                 db.add(offer_entity)
-            await db.commit()
+            else:
+                if off["verification_status"] in ("VERIFIED", "SAMPLE") and existing.verification_status in ("NEEDS_REVERIFICATION", "PENDING_REVIEW"):
+                    existing.verification_status = off["verification_status"]
+                    existing.valid_to = now + timedelta(days=60)
+                    existing.valid_from = now - timedelta(days=5)
+                    db.add(existing)
+        await db.commit()
 
     @classmethod
     async def list_offers(

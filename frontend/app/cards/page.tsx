@@ -315,9 +315,9 @@ export default function MyCreditCardsPage() {
             {/* PRIMARY SHOWCASE: THE FAN COLLECTION + COMPANION DETAILS PANEL */}
             {viewMode === "fan" ? (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                {/* LEFT / CENTER: FAN-SHAPED CARD HAND */}
+                {/* LEFT / CENTER: INTERACTIVE OVERLAPPING CARD STACK */}
                 <div className="lg:col-span-7 space-y-4">
-                  <div className="p-6 rounded-3xl bg-gradient-to-b from-[#0B1428] via-[#070D1C] to-[#040812] border border-cliq-border/80 shadow-2xl relative overflow-visible">
+                  <div className="p-6 rounded-3xl bg-gradient-to-b from-[#0B1428] via-[#070D1C] to-[#040812] border border-cliq-border/80 shadow-2xl relative overflow-hidden">
                     {/* Ambient subtle backlighting */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-cliq-cyan/5 rounded-full blur-3xl pointer-events-none" />
 

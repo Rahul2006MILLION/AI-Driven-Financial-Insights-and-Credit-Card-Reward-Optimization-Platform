@@ -114,6 +114,7 @@ async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
         is_admin=user.is_admin
     )
 
+@router.get("/auth/me", response_model=ProfileResponse)
 @router.get("/profile", response_model=ProfileResponse)
 async def get_profile(current_user: Profile = Depends(get_current_user)):
     return current_user

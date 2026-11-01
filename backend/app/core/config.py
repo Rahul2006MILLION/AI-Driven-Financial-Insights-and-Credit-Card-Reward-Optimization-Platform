@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     
     # Security
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001"
-    RATE_LIMIT_PER_MINUTE: int = 120
+    RATE_LIMIT_PER_MINUTE: int = 600
     MAX_UPLOAD_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB
     
     # Token Expiration

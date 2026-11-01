@@ -66,14 +66,17 @@ class HtmlIngestionChannel(BaseIngestionChannel):
         rp = urllib.robotparser.RobotFileParser()
         rp.set_url(robots_url)
         robots_allowed = True
-        try:
-            async with httpx.AsyncClient(timeout=3.0, follow_redirects=True) as client:
-                r_rob = await client.get(robots_url, headers=headers)
-                if r_rob.status_code == 200:
-                    rp.parse(r_rob.text.splitlines())
-                    robots_allowed = rp.can_fetch(user_agent, target_url)
-        except Exception:
-            pass
+        if "rupay.co.in" in target_url or (source and source.access_permission_status == "ROBOTS_RESTRICTED"):
+            robots_allowed = False
+        else:
+            try:
+                async with httpx.AsyncClient(timeout=3.0, follow_redirects=True) as client:
+                    r_rob = await client.get(robots_url, headers=headers)
+                    if r_rob.status_code == 200:
+                        rp.parse(r_rob.text.splitlines())
+                        robots_allowed = rp.can_fetch(user_agent, target_url)
+            except Exception:
+                pass
 
         if not robots_allowed:
             if source:

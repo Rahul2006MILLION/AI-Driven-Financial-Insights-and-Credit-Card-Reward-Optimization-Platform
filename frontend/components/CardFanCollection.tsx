@@ -1,16 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { CreditCard } from "@/lib/api";
 import { DigitalCreditCard } from "@/components/DigitalCreditCard";
 import {
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   Layers,
-  ArrowRight,
-  CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 
 interface CardFanCollectionProps {
@@ -20,6 +18,16 @@ interface CardFanCollectionProps {
   className?: string;
 }
 
+interface StackMetric {
+  x: number;
+  y: number;
+  rotate: number;
+  scale: number;
+  zIndex: number;
+  opacity: number;
+  pointerEvents: "auto" | "none";
+}
+
 export function CardFanCollection({
   cards,
   selectedCard,
@@ -27,36 +35,33 @@ export function CardFanCollection({
   className = "",
 }: CardFanCollectionProps) {
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
-  const [pageIndex, setPageIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  // Maximum visible cards in one fan hand
-  const MAX_VISIBLE = 5;
   const totalCards = cards.length;
+  const selectedIndex = cards.findIndex((c) => c.id === selectedCard?.id);
+  const currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
 
-  // Window of cards to display in fan
-  const visibleCards = totalCards <= MAX_VISIBLE
-    ? cards
-    : cards.slice(pageIndex * MAX_VISIBLE, (pageIndex + 1) * MAX_VISIBLE);
-
-  // Keep page index valid if cards count changes
+  // Responsive breakpoint tracking for layout metrics
   useEffect(() => {
-    if (pageIndex * MAX_VISIBLE >= totalCards && totalCards > 0) {
-      setPageIndex(0);
-    }
-  }, [totalCards, pageIndex]);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  // Synchronize selection if none selected
+  // Synchronize selection if none selected on load
   useEffect(() => {
     if (!selectedCard && cards.length > 0) {
       onSelectCard(cards[0]);
     }
   }, [cards, selectedCard, onSelectCard]);
 
-  // Keyboard navigation for accessible interaction
+  // Keyboard navigation for accessible interaction (ArrowLeft, ArrowRight)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (cards.length <= 1) return;
-      const currentIndex = cards.findIndex((c) => c.id === selectedCard?.id);
       if (e.key === "ArrowRight") {
         const nextIndex = (currentIndex + 1) % cards.length;
         onSelectCard(cards[nextIndex]);
@@ -67,105 +72,173 @@ export function CardFanCollection({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [cards, selectedCard, onSelectCard]);
+  }, [cards, currentIndex, onSelectCard]);
 
-  // Calculate fan position metrics for an index in visibleCards
-  const getFanMetrics = (index: number, count: number) => {
-    if (count === 1) {
-      return { rotate: 0, x: 0, y: 0, z: 20 };
-    }
-
-    const mid = (count - 1) / 2;
-    const diff = index - mid;
-
-    switch (count) {
-      case 2:
-        return {
-          rotate: diff * 12, // -6deg, +6deg
-          x: diff * 120,    // -60px, +60px
-          y: Math.abs(diff) * 14,
-          z: 20 + index,
-        };
-      case 3:
-        return {
-          rotate: diff * 13, // -13deg, 0deg, +13deg
-          x: diff * 130,    // -130px, 0px, +130px
-          y: Math.abs(diff) * 18,
-          z: 20 + index,
-        };
-      case 4:
-        return {
-          rotate: diff * 10.5, // -15.75, -5.25, +5.25, +15.75
-          x: diff * 105,     // -157px, -52px, +52px, +157px
-          y: Math.abs(diff) * 14,
-          z: 20 + index,
-        };
-      case 5:
-      default:
-        return {
-          rotate: diff * 9,   // -18deg, -9deg, 0deg, +9deg, +18deg
-          x: diff * 95,      // -190px, -95px, 0px, +95px, +190px
-          y: Math.abs(diff) * 14,
-          z: 20 + index,
-        };
-    }
+  // Step to previous card
+  const handlePrevCard = () => {
+    if (cards.length <= 1) return;
+    const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
+    onSelectCard(cards[prevIndex]);
   };
 
-  const handleNextBatch = () => {
-    if ((pageIndex + 1) * MAX_VISIBLE < totalCards) {
-      setPageIndex(pageIndex + 1);
-      const nextCard = cards[(pageIndex + 1) * MAX_VISIBLE];
-      if (nextCard) onSelectCard(nextCard);
-    }
+  // Step to next card
+  const handleNextCard = () => {
+    if (cards.length <= 1) return;
+    const nextIndex = (currentIndex + 1) % cards.length;
+    onSelectCard(cards[nextIndex]);
   };
 
-  const handlePrevBatch = () => {
-    if (pageIndex > 0) {
-      setPageIndex(pageIndex - 1);
-      const prevCard = cards[(pageIndex - 1) * MAX_VISIBLE];
-      if (prevCard) onSelectCard(prevCard);
+  /**
+   * Calculate deterministic stack positions.
+   * Uses shortest circular distance when totalCards >= 3 to ensure continuous,
+   * smooth transitions without asymmetrical cliffs.
+   */
+  const getCardMetrics = (cardIndex: number): StackMetric => {
+    if (totalCards <= 1) {
+      const isHovered = hoveredCardId === cards[cardIndex]?.id;
+      return {
+        x: 0,
+        y: isHovered ? -16 : 0,
+        rotate: 0,
+        scale: isHovered ? 1.04 : 1.0,
+        zIndex: 50,
+        opacity: 1,
+        pointerEvents: "auto",
+      };
     }
+
+    let d: number;
+    if (totalCards === 2) {
+      // 2-card portfolio: active is center, other card is offset right
+      d = cardIndex === currentIndex ? 0 : 1;
+    } else {
+      // Circular shortest distance around current active card
+      let rawDiff = cardIndex - currentIndex;
+      if (rawDiff > totalCards / 2) rawDiff -= totalCards;
+      else if (rawDiff < -totalCards / 2) rawDiff += totalCards;
+      d = rawDiff;
+    }
+
+    const isHovered = hoveredCardId === cards[cardIndex]?.id;
+
+    // Active Card (Front & Center)
+    if (d === 0) {
+      return {
+        x: 0,
+        y: isHovered ? -20 : -10,
+        rotate: 0,
+        scale: isHovered ? 1.05 : 1.02,
+        zIndex: 50,
+        opacity: 1,
+        pointerEvents: "auto",
+      };
+    }
+
+    // Previous Card (Offset Left, ~ -12° rotation)
+    if (d === -1) {
+      return {
+        x: isMobile ? -48 : -72,
+        y: isHovered ? -2 : 12,
+        rotate: isHovered ? -6 : -12,
+        scale: isHovered ? 0.98 : 0.94,
+        zIndex: isHovered ? 48 : 40,
+        opacity: 0.88,
+        pointerEvents: "auto",
+      };
+    }
+
+    // Next Card (Offset Right, ~ +12° rotation)
+    if (d === 1) {
+      return {
+        x: isMobile ? 48 : 72,
+        y: isHovered ? -2 : 12,
+        rotate: isHovered ? 6 : 12,
+        scale: isHovered ? 0.98 : 0.94,
+        zIndex: isHovered ? 48 : 40,
+        opacity: 0.88,
+        pointerEvents: "auto",
+      };
+    }
+
+    // 2nd Previous Card (Further Left, ~ -18° rotation)
+    if (d === -2) {
+      return {
+        x: isMobile ? -84 : -130,
+        y: isHovered ? 14 : 26,
+        rotate: isHovered ? -12 : -18,
+        scale: isHovered ? 0.92 : 0.88,
+        zIndex: isHovered ? 38 : 30,
+        opacity: 0.65,
+        pointerEvents: "auto",
+      };
+    }
+
+    // 2nd Next Card (Further Right, ~ +18° rotation)
+    if (d === 2) {
+      return {
+        x: isMobile ? 84 : 130,
+        y: isHovered ? 14 : 26,
+        rotate: isHovered ? 12 : 18,
+        scale: isHovered ? 0.92 : 0.88,
+        zIndex: isHovered ? 38 : 30,
+        opacity: 0.65,
+        pointerEvents: "auto",
+      };
+    }
+
+    // Background Wing Cards (|d| >= 3) for portfolios with 6+ cards
+    const sign = d < 0 ? -1 : 1;
+    return {
+      x: sign * (isMobile ? 105 : 155),
+      y: 38,
+      rotate: sign * 20,
+      scale: 0.82,
+      zIndex: Math.max(10, 20 - Math.abs(d)),
+      opacity: 0,
+      pointerEvents: "none",
+    };
   };
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* Hand Status Bar */}
+      {/* Hand / Stack Status Bar */}
       <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-2">
-          <span className="p-1.5 rounded-lg bg-cliq-cyan/10 border border-cliq-cyan/20 text-cliq-cyan">
+          <span className="p-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
             <Layers className="w-4 h-4" />
           </span>
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-              Interactive Card Hand
+            <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+              <span>Card Stack Showcase</span>
+              <Sparkles className="w-3 h-3 text-emerald-400" />
             </h3>
-            <p className="text-[10px] text-cliq-textSecondary">
-              Hover or tap to pull card forward • Arrow keys to switch
+            <p className="text-[10px] text-slate-400">
+              Click cards or use arrow keys to browse • Front card active
             </p>
           </div>
         </div>
 
-        {/* Multi-page controls if user owns more than 5 cards */}
-        {totalCards > MAX_VISIBLE && (
+        {/* Counter and Stepper */}
+        {totalCards > 1 && (
           <div className="flex items-center gap-2">
             <button
               type="button"
-              disabled={pageIndex === 0}
-              onClick={handlePrevBatch}
-              className="p-1.5 rounded-lg bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-white disabled:opacity-30 disabled:cursor-not-allowed"
-              title="Previous Cards"
+              onClick={handlePrevCard}
+              className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors"
+              title="Previous Card (Left Arrow)"
+              aria-label="Previous Card"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-[11px] font-semibold text-cliq-textSecondary">
-              {pageIndex * MAX_VISIBLE + 1}–{Math.min((pageIndex + 1) * MAX_VISIBLE, totalCards)} of {totalCards}
+            <span className="text-[11px] font-semibold text-slate-300 min-w-[55px] text-center">
+              {currentIndex + 1} of {totalCards}
             </span>
             <button
               type="button"
-              disabled={(pageIndex + 1) * MAX_VISIBLE >= totalCards}
-              onClick={handleNextBatch}
-              className="p-1.5 rounded-lg bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-white disabled:opacity-30 disabled:cursor-not-allowed"
-              title="Next Cards"
+              onClick={handleNextCard}
+              className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors"
+              title="Next Card (Right Arrow)"
+              aria-label="Next Card"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -173,89 +246,106 @@ export function CardFanCollection({
         )}
       </div>
 
-      {/* Main Fan Stage Area */}
-      <div className="relative w-full h-[320px] sm:h-[360px] flex items-center justify-center overflow-visible select-none py-6">
-        <div className="relative w-full max-w-[560px] h-[220px] sm:h-[240px] flex items-center justify-center">
-          {visibleCards.map((card, idx) => {
+      {/* Main Interactive Card Stack Stage Area */}
+      <div className="relative w-full h-[320px] sm:h-[360px] md:h-[380px] flex items-center justify-center overflow-hidden rounded-2xl select-none py-4">
+        {/* Subtle Ambient Background Lighting */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+        {/* Left Floating Step Button (Desktop) */}
+        {totalCards > 1 && (
+          <button
+            type="button"
+            onClick={handlePrevCard}
+            className="absolute left-2 z-50 p-2 rounded-full bg-black/40 hover:bg-black/60 border border-white/10 text-slate-300 hover:text-emerald-400 backdrop-blur-md transition-all hidden sm:flex items-center justify-center shadow-lg hover:scale-110"
+            title="Previous Card"
+            aria-label="Previous Card"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+        )}
+
+        {/* Relative Positioning Container for Overlapping Stack */}
+        <div className="relative w-full max-w-[500px] h-[220px] sm:h-[240px] flex items-center justify-center">
+          {cards.map((card, idx) => {
             const isHovered = hoveredCardId === card.id;
             const isSelected = selectedCard?.id === card.id;
-            const anyHovered = hoveredCardId !== null;
+            const metrics = getCardMetrics(idx);
 
-            const base = getFanMetrics(idx, visibleCards.length);
-
-            // Responsive scale factor for mobile screens
-            // On desktop, card width ~320px, on mobile ~260px
             return (
               <motion.div
                 key={card.id}
-                onMouseEnter={() => {
-                  setHoveredCardId(card.id);
-                  onSelectCard(card);
-                }}
+                onMouseEnter={() => setHoveredCardId(card.id)}
                 onMouseLeave={() => setHoveredCardId(null)}
                 onClick={() => onSelectCard(card)}
                 animate={{
-                  x: isHovered ? base.x * 0.9 : base.x,
-                  y: isHovered
-                    ? -42
-                    : isSelected && !anyHovered
-                    ? -18
-                    : base.y,
-                  rotate: isHovered
-                    ? 0
-                    : isSelected && !anyHovered
-                    ? base.rotate * 0.35
-                    : base.rotate,
-                  scale: isHovered
-                    ? 1.07
-                    : anyHovered
-                    ? 0.94
-                    : isSelected
-                    ? 1.03
-                    : 1,
-                  zIndex: isHovered ? 60 : isSelected ? 45 : base.z,
-                  opacity: anyHovered && !isHovered ? 0.65 : 1,
+                  x: metrics.x,
+                  y: metrics.y,
+                  rotate: metrics.rotate,
+                  scale: metrics.scale,
+                  zIndex: metrics.zIndex,
+                  opacity: metrics.opacity,
                 }}
                 transition={{
                   type: "spring",
-                  stiffness: 280,
+                  stiffness: 260,
                   damping: 24,
+                  mass: 0.8,
                 }}
                 style={{
                   position: "absolute",
                   transformOrigin: "bottom center",
+                  pointerEvents: metrics.pointerEvents,
                 }}
-                className="w-[280px] sm:w-[330px] cursor-pointer drop-shadow-2xl"
+                className="w-[250px] xs:w-[270px] sm:w-[310px] cursor-pointer drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)]"
               >
                 {/* Active Selection Glow Ring */}
                 {isSelected && (
                   <motion.div
-                    layoutId="activeGlowRing"
-                    className="absolute -inset-1 rounded-[22px] bg-gradient-to-r from-emerald-500/40 via-teal-400/30 to-emerald-400/40 blur-sm pointer-events-none"
-                    transition={{ duration: 0.2 }}
+                    layoutId="activeCardGlow"
+                    className="absolute -inset-1.5 rounded-[22px] bg-gradient-to-r from-emerald-500/40 via-teal-400/30 to-emerald-400/40 blur-md pointer-events-none"
+                    transition={{ duration: 0.25 }}
                   />
                 )}
 
-                <DigitalCreditCard
-                  bankName={card.bank_name}
-                  cardName={card.card_name}
-                  cardVariant={card.card_variant}
-                  cardholderName={card.cardholder_name}
-                  nickname={card.nickname}
-                  lastFourDigits={card.last_four_digits}
-                  network={card.network}
-                  disableInternalTilt
-                  glowShadow={isHovered || isSelected}
-                />
+                <div
+                  className={`transition-all duration-300 ${
+                    !isSelected && !isHovered ? "brightness-95 contrast-[0.98]" : "brightness-100"
+                  }`}
+                >
+                  <DigitalCreditCard
+                    bankName={card.bank_name}
+                    cardName={card.card_name}
+                    cardVariant={card.card_variant}
+                    cardholderName={card.cardholder_name}
+                    nickname={card.nickname}
+                    lastFourDigits={card.last_four_digits}
+                    network={card.network}
+                    disableInternalTilt
+                    glowShadow={isHovered || isSelected}
+                  />
+                </div>
               </motion.div>
             );
           })}
         </div>
+
+        {/* Right Floating Step Button (Desktop) */}
+        {totalCards > 1 && (
+          <button
+            type="button"
+            onClick={handleNextCard}
+            className="absolute right-2 z-50 p-2 rounded-full bg-black/40 hover:bg-black/60 border border-white/10 text-slate-300 hover:text-emerald-400 backdrop-blur-md transition-all hidden sm:flex items-center justify-center shadow-lg hover:scale-110"
+            title="Next Card"
+            aria-label="Next Card"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Card Selector Pills for Touch & Quick Switch */}
       <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-        {cards.map((c, i) => {
+        {cards.map((c) => {
           const isCurrent = selectedCard?.id === c.id;
           return (
             <button
@@ -282,4 +372,3 @@ export function CardFanCollection({
     </div>
   );
 }
-

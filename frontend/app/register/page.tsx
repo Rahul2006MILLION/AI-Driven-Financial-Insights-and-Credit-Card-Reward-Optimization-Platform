@@ -3,13 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { apiFetch, storeSession } from "@/lib/api";
+import { apiFetch } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import { useLanguage, Language } from "@/lib/i18n";
 import { Sparkles, Lock, Mail, User, Loader2, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
   const { t, language, setLanguage } = useLanguage();
+  const { login } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,15 +38,23 @@ export default function RegisterPage() {
 
       setLanguage(preferredLanguage);
 
-      storeSession({
-        accessToken: data.access_token,
-        userId: data.user_id,
-        email: data.email,
-        fullName: data.full_name,
-        preferredLanguage: data.preferred_language,
-      });
+      // If backend supports automatic login (returns token), establish session immediately.
+      // Otherwise, redirect user to login with success parameter.
+      if (data && data.access_token) {
+        login({
+          accessToken: data.access_token,
+          userId: data.user_id,
+          email: data.email,
+          fullName: data.full_name,
+          preferredLanguage: data.preferred_language,
+          role: data.role,
+          isAdmin: data.is_admin,
+        });
 
-      router.push("/onboarding");
+        router.push("/onboarding");
+      } else {
+        router.push("/login?registered=true");
+      }
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
     } finally {

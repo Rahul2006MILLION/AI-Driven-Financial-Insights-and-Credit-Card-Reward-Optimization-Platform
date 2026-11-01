@@ -1,12 +1,14 @@
 {
   "name": "cliq-frontend",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --test --experimental-strip-types __tests__/*.test.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

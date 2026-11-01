@@ -1,17 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
-from typing import List
+from typing import List, Optional, Dict, Tuple, Any
+from datetime import datetime
+from decimal import Decimal
 import json
 
 from app.core.database import get_db
-from app.models.entities import Profile, CreditCard, RewardAnalysis, AuditLog
+from app.models.entities import Profile, CreditCard, RewardAnalysis, Transaction, CardOffer
 from app.schemas.optimization import (
     RecommendRequest,
     RecommendResponse,
     CompareRequest,
     CompareResponse,
+    SimulateRequest,
+    SimulateResponse
 )
 from app.security.dependencies import get_current_user
 from app.services.reward_optimization.engine import RewardOptimizationEngine
@@ -47,6 +51,21 @@ async def recommend_card(
             payment_channel=req.payment_channel
         )
 
+    # Compute current month's spent rewards per card for monthly cap tracking
+    now = datetime.utcnow()
+    month_start = datetime(now.year, now.month, 1)
+    tx_stmt = (
+        select(Transaction.card_id, func.sum(Transaction.reward_earned_monetary))
+        .where(
+            Transaction.user_id == current_user.id,
+            Transaction.transaction_date >= month_start,
+            Transaction.card_id.isnot(None)
+        )
+        .group_by(Transaction.card_id)
+    )
+    month_results = (await db.execute(tx_stmt)).all()
+    card_monthly_spend_map = {row[0]: Decimal(str(row[1])) for row in month_results if row[0]}
+
     result = RewardOptimizationEngine.optimize_transaction(
         cards=user_cards,
         amount=req.amount,
@@ -54,6 +73,8 @@ async def recommend_card(
         merchant_name=req.merchant_name,
         payment_channel=req.payment_channel,
         matched_card_offers_map=matched_card_offers_map,
+        card_monthly_spend_map=card_monthly_spend_map,
+        reward_basis_mode=req.reward_basis_mode or "NET_CHARGED_AMOUNT",
         language=current_user.preferred_language or "en"
     )
 
@@ -73,6 +94,96 @@ async def recommend_card(
         )
         db.add(analysis)
         await db.commit()
+
+    return result
+
+@router.post("/simulate", response_model=SimulateResponse)
+async def simulate_purchase_scenarios(
+    req: SimulateRequest,
+    current_user: Profile = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    What-If Purchase Simulator:
+    Reuses the exact same purchase intelligence engine across multiple purchase brackets.
+    Determines optimal spend thresholds, cap limits, and tier changes.
+    """
+    card_query = (
+        select(CreditCard)
+        .where(CreditCard.user_id == current_user.id, CreditCard.is_active == True)
+        .options(
+            selectinload(CreditCard.reward_rules),
+            selectinload(CreditCard.benefits)
+        )
+    )
+    if req.card_ids:
+        card_query = card_query.where(CreditCard.id.in_(req.card_ids))
+
+    target_cards = (await db.execute(card_query)).scalars().all()
+
+    if not target_cards:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No active credit cards available for simulation."
+        )
+
+    # Resolve simulation amounts
+    test_amounts: List[Decimal] = []
+    if req.amounts:
+        test_amounts = [Decimal(str(a)) for a in req.amounts if Decimal(str(a)) > Decimal("0.00")]
+    elif req.start_amount and req.end_amount and req.step_amount:
+        curr = Decimal(str(req.start_amount))
+        end = Decimal(str(req.end_amount))
+        step = Decimal(str(req.step_amount))
+        while curr <= end and len(test_amounts) < 25:
+            test_amounts.append(curr)
+            curr += step
+    else:
+        test_amounts = [Decimal("500.00"), Decimal("1000.00"), Decimal("2500.00"), Decimal("5000.00"), Decimal("10000.00")]
+
+    test_amounts = sorted(list(set(test_amounts)))
+
+    # Compute current month rewards per card
+    now = datetime.utcnow()
+    month_start = datetime(now.year, now.month, 1)
+    tx_stmt = (
+        select(Transaction.card_id, func.sum(Transaction.reward_earned_monetary))
+        .where(
+            Transaction.user_id == current_user.id,
+            Transaction.transaction_date >= month_start,
+            Transaction.card_id.isnot(None)
+        )
+        .group_by(Transaction.card_id)
+    )
+    month_results = (await db.execute(tx_stmt)).all()
+    card_monthly_spend_map = {row[0]: Decimal(str(row[1])) for row in month_results if row[0]}
+
+    # Pre-fetch applicable offers for each test amount
+    offers_cache: Dict[Tuple[str, Decimal], List[Tuple[CardOffer, Decimal]]] = {}
+    for amt in test_amounts:
+        for card in target_cards:
+            offers_cache[(card.id, amt)] = await OfferService.get_applicable_offers_for_card(
+                db=db,
+                card=card,
+                amount=amt,
+                category_id=req.category_id,
+                merchant_name=req.merchant_name,
+                payment_channel=req.payment_channel
+            )
+
+    def offers_generator(amt: Decimal) -> Dict[str, List[Any]]:
+        return {c.id: offers_cache.get((c.id, amt), []) for c in target_cards}
+
+    result = RewardOptimizationEngine.simulate_scenarios(
+        cards=target_cards,
+        category_id=req.category_id,
+        amounts=test_amounts,
+        merchant_name=req.merchant_name,
+        payment_channel=req.payment_channel,
+        matched_card_offers_map_generator=offers_generator,
+        card_monthly_spend_map=card_monthly_spend_map,
+        language=req.language or current_user.preferred_language or "en"
+    )
 
     return result
 
@@ -98,11 +209,11 @@ async def compare_cards(
     if len(cards) < 2:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Comparison requires at least 2 valid active cards owned by your account."
+            detail="At least 2 active credit cards from your portfolio are required for comparison."
         )
 
-    res = RewardOptimizationEngine.compare_cards(
+    result = RewardOptimizationEngine.compare_cards(
         cards=cards,
         simulation_spend=req.simulation_spend
     )
-    return res
+    return result

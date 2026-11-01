@@ -1,19 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { apiFetch, storeSession } from "@/lib/api";
+import { apiFetch } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
-import { Sparkles, Lock, Mail, Loader2, ArrowRight } from "lucide-react";
+import { Sparkles, Lock, Mail, Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const { t } = useLanguage();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("registered") === "true") {
+        setSuccessMessage("Account created successfully! Please sign in with your credentials.");
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +38,15 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      storeSession({
+      // Update global authentication state immediately
+      login({
         accessToken: data.access_token,
         userId: data.user_id,
         email: data.email,
         fullName: data.full_name,
         preferredLanguage: data.preferred_language,
+        role: data.role,
+        isAdmin: data.is_admin,
       });
 
       router.push("/dashboard");
@@ -62,6 +77,13 @@ export default function LoginPage() {
           <h2 className="text-2xl font-black text-white glow-emerald">Welcome Back</h2>
           <p className="text-xs text-slate-400 mt-1">Sign in to your financial command center</p>
         </div>
+
+        {successMessage && (
+          <div className="mb-6 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{successMessage}</span>
+          </div>
+        )}
 
         {error && (
           <div className="mb-6 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium">

@@ -10,6 +10,8 @@ export interface UserSession {
   isAdmin?: boolean;
 }
 
+export const AUTH_CHANGE_EVENT = "cliq-auth-state-change";
+
 export const getStoredSession = (): UserSession | null => {
   if (typeof window === "undefined") return null;
   if (typeof window !== "undefined" && window.location && window.location.search) {
@@ -42,10 +44,14 @@ export const storeSession = (session: UserSession) => {
   localStorage.setItem("cliq_access_token", session.accessToken);
   localStorage.setItem("cliq_user_id", session.userId);
   localStorage.setItem("cliq_email", session.email);
-  if (session.fullName) localStorage.setItem("cliq_full_name", session.fullName);
-  if (session.preferredLanguage) localStorage.setItem("cliq_preferred_language", session.preferredLanguage);
-  if (session.role) localStorage.setItem("cliq_role", session.role);
+  if (session.fullName !== undefined) localStorage.setItem("cliq_full_name", session.fullName);
+  if (session.preferredLanguage !== undefined) localStorage.setItem("cliq_preferred_language", session.preferredLanguage);
+  if (session.role !== undefined) localStorage.setItem("cliq_role", session.role);
   if (session.isAdmin !== undefined) localStorage.setItem("cliq_is_admin", String(session.isAdmin));
+
+  try {
+    window.dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT, { detail: session }));
+  } catch (_) {}
 };
 
 export const clearSession = () => {
@@ -54,8 +60,13 @@ export const clearSession = () => {
   localStorage.removeItem("cliq_user_id");
   localStorage.removeItem("cliq_email");
   localStorage.removeItem("cliq_full_name");
+  localStorage.removeItem("cliq_preferred_language");
   localStorage.removeItem("cliq_role");
   localStorage.removeItem("cliq_is_admin");
+
+  try {
+    window.dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT, { detail: null }));
+  } catch (_) {}
 };
 
 // Generic fetcher with bearer token
@@ -79,6 +90,9 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
   });
 
   if (!res.ok) {
+    if (res.status === 401 && session?.accessToken) {
+      clearSession();
+    }
     let errMsg = "An error occurred while communicating with the server.";
     try {
       const errData = await res.json();
