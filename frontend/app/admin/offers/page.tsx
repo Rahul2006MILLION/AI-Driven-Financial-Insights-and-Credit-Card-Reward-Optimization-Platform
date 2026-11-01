@@ -51,8 +51,11 @@ import {
   Zap,
 } from "lucide-react";
 
+import { useLanguage } from "@/lib/i18n";
+
 export default function AdminOfferReviewPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [session, setSession] = useState<UserSession | null>(null);
 
   // Active top-level sub-tab
@@ -643,14 +646,14 @@ export default function AdminOfferReviewPage() {
             <div className="flex items-center gap-2.5 mb-2">
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                ADMINISTRATION
+                {t.sidebar.administration}
               </span>
             </div>
             <h1 className="text-3xl font-black text-white tracking-tight glow-emerald">
-              Offer Review Desk
+              {t.adminOffers.title}
             </h1>
             <p className="text-xs text-slate-400 mt-1 max-w-xl">
-              Verification queue and automated source ingestion controls
+              {t.adminOffers.subtitle}
             </p>
           </div>
 
@@ -661,13 +664,13 @@ export default function AdminOfferReviewPage() {
               className="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} />
-              {syncing ? "Syncing..." : "Run Discovery Sync"}
+              {syncing ? t.adminOffers.syncing : t.adminOffers.syncButton}
             </button>
             <Link
               href="/offers"
               className="px-4 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
             >
-              <span>Public Offers</span>
+              <span>{t.offers.allOffers}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -685,7 +688,7 @@ export default function AdminOfferReviewPage() {
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
-          Review Queue ({offers.length})
+          {t.adminOffers.tabReview} ({offers.length})
         </button>
 
         <button
@@ -697,7 +700,7 @@ export default function AdminOfferReviewPage() {
           }`}
         >
           <Server className="w-3.5 h-3.5" />
-          Source Registry ({sources.length || 8})
+          {t.adminOffers.tabSources} ({sources.length || 8})
         </button>
 
         <button
@@ -709,7 +712,7 @@ export default function AdminOfferReviewPage() {
           }`}
         >
           <FileUp className="w-3.5 h-3.5" />
-          Upload Circular
+          {t.adminOffers.tabUpload}
         </button>
 
         <button
@@ -721,7 +724,7 @@ export default function AdminOfferReviewPage() {
           }`}
         >
           <PlusCircle className="w-3.5 h-3.5" />
-          Manual Entry
+          {t.adminOffers.tabManual}
         </button>
 
         <button
@@ -733,7 +736,7 @@ export default function AdminOfferReviewPage() {
           }`}
         >
           <AlertCircle className="w-3.5 h-3.5" />
-          Failure Logs ({failures.length})
+          {t.adminOffers.tabFailures} ({failures.length})
         </button>
       </div>
 

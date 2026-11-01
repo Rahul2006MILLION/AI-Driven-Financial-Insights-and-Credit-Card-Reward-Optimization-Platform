@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { CreditCard } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n";
 import {
   ShieldCheck,
   Zap,
@@ -35,15 +36,17 @@ export function CardDetailsPanel({
   deletingId,
   className = "",
 }: CardDetailsPanelProps) {
+  const { t } = useLanguage();
+
   if (!card) {
     return (
       <div className={`p-6 rounded-3xl bg-white/[0.02] border border-dashed border-white/10 text-center flex flex-col items-center justify-center min-h-[420px] backdrop-blur-xl ${className}`}>
         <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3">
           <Sparkles className="w-5 h-5" />
         </div>
-        <h4 className="text-sm font-bold text-white">Select a Card</h4>
+        <h4 className="text-sm font-bold text-white">{t.cardDetails?.selectCardPrompt || "Select a Card"}</h4>
         <p className="text-xs text-slate-400 mt-1 max-w-xs">
-          Hover or tap any card in the collection to inspect multipliers, fee waivers, and verified benefits.
+          {t.cardDetails?.selectCardHelper || "Hover or tap any card in the collection to inspect multipliers, fee waivers, and verified benefits."}
         </p>
       </div>
     );
@@ -98,12 +101,12 @@ export function CardDetailsPanel({
           {isVerifiedBankData ? (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold">
               <CheckCircle2 className="w-3 h-3" />
-              <span>Verified Bank Data</span>
+              <span>{t.common?.verified || "Verified Bank Data"}</span>
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-bold">
               <AlertCircle className="w-3 h-3" />
-              <span>User-Entered</span>
+              <span>{t.cards?.active || "User-Entered"}</span>
             </span>
           )}
         </div>
@@ -112,25 +115,25 @@ export function CardDetailsPanel({
       {/* FEES & WAIVER METRICS */}
       <div className="space-y-2">
         <span className="text-[10px] font-bold uppercase tracking-wider text-cliq-textSecondary block">
-          Schedule of Charges & Fee Waivers
+          {t.cardSelection?.feeStructureTitle || "Schedule of Charges & Fee Waivers"}
         </span>
         <div className="grid grid-cols-3 gap-2.5 text-xs">
           <div className="p-3 rounded-xl bg-cliq-surface/80 border border-cliq-border">
-            <span className="text-[10px] text-cliq-textSecondary block">Joining Fee</span>
+            <span className="text-[10px] text-cliq-textSecondary block">{t.cardSelection?.joiningFeeLabel || "Joining Fee"}</span>
             <span className="font-bold text-white text-sm">
               {joiningFeeNum === 0 ? "FREE" : `₹${joiningFeeNum.toLocaleString("en-IN")}`}
             </span>
           </div>
 
           <div className="p-3 rounded-xl bg-cliq-surface/80 border border-cliq-border">
-            <span className="text-[10px] text-cliq-textSecondary block">Annual Fee</span>
+            <span className="text-[10px] text-cliq-textSecondary block">{t.cardDetails?.annualFeeLabel || "Annual Fee"}</span>
             <span className="font-bold text-white text-sm">
               {annualFeeNum === 0 ? "FREE" : `₹${annualFeeNum.toLocaleString("en-IN")}`}
             </span>
           </div>
 
           <div className="p-3 rounded-xl bg-cliq-surface/80 border border-cliq-border">
-            <span className="text-[10px] text-cliq-textSecondary block">Renewal Waiver</span>
+            <span className="text-[10px] text-cliq-textSecondary block">{t.cardDetails?.feeWaiverLabel || "Renewal Waiver"}</span>
             <span className="font-bold text-emerald-400 text-sm">
               {waiverSpendNum > 0 ? `₹${waiverSpendNum.toLocaleString("en-IN")}` : "No Waiver"}
             </span>
@@ -139,14 +142,10 @@ export function CardDetailsPanel({
 
         {card.fee_waiver_condition_details ? (
           <div className="p-2.5 rounded-xl bg-cliq-surface/50 border border-cliq-border text-[11px] text-cliq-textSecondary">
-            <strong className="text-white font-semibold">Waiver Condition: </strong>
+            <strong className="text-white font-semibold">{t.cardDetails?.feeWaiverLabel || "Waiver Condition"}: </strong>
             {card.fee_waiver_condition_details}
           </div>
-        ) : (
-          <div className="p-2 rounded-xl bg-cliq-surface/30 border border-cliq-border text-[10px] text-cliq-textSecondary italic">
-            Specific waiver spend conditions: Not configured
-          </div>
-        )}
+        ) : null}
       </div>
 
       {/* REWARD MULTIPLIERS */}
@@ -154,10 +153,10 @@ export function CardDetailsPanel({
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
             <Zap className="w-3.5 h-3.5" />
-            <span>Category Multipliers & Cashback</span>
+            <span>{t.cardDetails?.multipliersRulesTitle || "Category Multipliers & Cashback"}</span>
           </span>
           <span className="text-[10px] text-cliq-textSecondary">
-            {card.reward_rules?.length || 0} active {card.reward_rules?.length === 1 ? "rule" : "rules"}
+            {card.reward_rules?.length || 0} {t.cards?.rules || "rules"}
           </span>
         </div>
 
@@ -170,7 +169,7 @@ export function CardDetailsPanel({
               >
                 <div>
                   <div className="font-semibold text-white flex items-center gap-1.5">
-                    <span className="capitalize">{rule.category_id} Spends</span>
+                    <span className="capitalize">{rule.category_id}</span>
                     {rule.merchant_pattern && (
                       <span className="text-[10px] font-normal text-cliq-textSecondary">
                         ({rule.merchant_pattern})
@@ -178,7 +177,7 @@ export function CardDetailsPanel({
                     )}
                   </div>
                   <div className="text-[10px] text-cliq-textSecondary mt-0.5">
-                    Type: {rule.reward_type} {rule.monthly_cap_amount ? `• Cap: ₹${Number(rule.monthly_cap_amount).toLocaleString("en-IN")}/mo` : "• Unlimited"}
+                    {rule.reward_type} {rule.monthly_cap_amount ? `• ${t.cardDetails?.monthlyCapPrefix || "Cap: ₹"}${Number(rule.monthly_cap_amount).toLocaleString("en-IN")}/mo` : ""}
                   </div>
                 </div>
 
@@ -192,7 +191,7 @@ export function CardDetailsPanel({
           </div>
         ) : (
           <div className="p-3 rounded-xl bg-cliq-surface/40 border border-cliq-border text-xs text-cliq-textSecondary">
-            Standard baseline 1.0% cashback across all categories.
+            {t.cardDetails?.noRulesAvailable || "Standard baseline 1.0% cashback across all categories."}
           </div>
         )}
       </div>
@@ -202,10 +201,10 @@ export function CardDetailsPanel({
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-            <span>Lounge & Lifestyle Perks</span>
+            <span>{t.cardDetails?.perksBenefitsTitle || "Lounge & Lifestyle Perks"}</span>
           </span>
           <span className="text-[10px] text-cliq-textSecondary">
-            {card.benefits?.length || 0} configured
+            {card.benefits?.length || 0} {t.cards?.benefits || "configured"}
           </span>
         </div>
 
@@ -235,7 +234,7 @@ export function CardDetailsPanel({
           </div>
         ) : (
           <div className="p-2.5 rounded-xl bg-cliq-surface/40 border border-cliq-border text-xs text-cliq-textSecondary">
-            Lounge & lifestyle benefits: Not configured for this card.
+            {t.cardDetails?.noBenefitsAvailable || "Lounge & lifestyle benefits: Not configured for this card."}
           </div>
         )}
       </div>
@@ -243,14 +242,14 @@ export function CardDetailsPanel({
       {/* Terms Link */}
       {card.terms_source_url && (
         <div className="pt-2 border-t border-cliq-border/60 flex items-center justify-between text-xs">
-          <span className="text-cliq-textSecondary">Verified Source:</span>
+          <span className="text-cliq-textSecondary">{t.common?.verified || "Verified Source"}:</span>
           <a
             href={card.terms_source_url}
             target="_blank"
             rel="noopener noreferrer"
             className="text-cliq-cyan hover:underline flex items-center gap-1 font-semibold"
           >
-            <span>Official Schedule of Charges</span>
+            <span>{t.cardSelection?.termsUrlLabel || "Official Schedule of Charges"}</span>
             <ExternalLink className="w-3 h-3" />
           </a>
         </div>
@@ -264,7 +263,7 @@ export function CardDetailsPanel({
           className="flex-1 py-2 px-3.5 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
         >
           <Edit2 className="w-3.5 h-3.5 text-cliq-cyan" />
-          <span>Edit Specs</span>
+          <span>{t.cardDetails?.editCard || "Edit Specs"}</span>
         </button>
 
         <Link
@@ -272,7 +271,7 @@ export function CardDetailsPanel({
           className="py-2 px-3.5 rounded-xl bg-cliq-surface hover:bg-cliq-surfaceHover border border-cliq-border text-white text-xs font-semibold flex items-center gap-1.5 transition-colors"
         >
           <GitCompare className="w-3.5 h-3.5 text-cliq-turquoise" />
-          <span>Compare</span>
+          <span>{t.cards?.compare || "Compare"}</span>
         </Link>
 
         <button
@@ -280,7 +279,7 @@ export function CardDetailsPanel({
           disabled={deletingId === card.id}
           onClick={() => onDelete(card.id)}
           className="py-2 px-3 rounded-xl bg-cliq-surface hover:bg-red-950/50 border border-cliq-border text-cliq-textSecondary hover:text-red-400 text-xs font-semibold transition-colors disabled:opacity-50"
-          title="Deactivate Card"
+          title={t.cardDetails?.deleteCard || "Deactivate Card"}
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>

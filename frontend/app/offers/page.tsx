@@ -77,10 +77,10 @@ export default function OffersDiscoveryPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-              Offers & Promotions
+              {t.offers?.title || "Offers & Promotions"}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
-              Verified merchant partnerships and credit card discounts
+              {t.offers?.subtitle || "Verified merchant partnerships and credit card discounts"}
             </p>
           </div>
 
@@ -90,14 +90,14 @@ export default function OffersDiscoveryPage() {
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-semibold text-xs hover:bg-amber-500/20 transition-all"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Review Desk</span>
+              <span>{t.offers?.reviewDeskCta || "Review Desk"}</span>
             </Link>
             <Link
               href="/optimization"
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Optimize Spend</span>
+              <span>{t.offers?.optimizeSpendCta || "Optimize Spend"}</span>
             </Link>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function OffersDiscoveryPage() {
               <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search merchant, coupon, or deal..."
+                placeholder={t.offers?.searchPlaceholder || "Search merchant, coupon, or deal..."}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white/[0.04] border border-white/10 rounded-full pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none transition-colors"
@@ -125,7 +125,7 @@ export default function OffersDiscoveryPage() {
                   onChange={(e) => setOnlyUserCards(e.target.checked)}
                   className="rounded border-white/20 bg-white/[0.05] text-emerald-500 focus:ring-0 h-4 w-4"
                 />
-                <span className="font-semibold text-emerald-400">My Cards Only</span>
+                <span className="font-semibold text-emerald-400">{t.offers?.myCardsOnly || "My Cards Only"}</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-300">
@@ -133,12 +133,9 @@ export default function OffersDiscoveryPage() {
                   type="checkbox"
                   checked={expiringSoon}
                   onChange={(e) => setExpiringSoon(e.target.checked)}
-                  className="rounded border-white/20 bg-white/[0.05] text-rose-500 focus:ring-0 h-4 w-4"
+                  className="rounded border-white/20 bg-white/[0.05] text-emerald-500 focus:ring-0 h-4 w-4"
                 />
-                <span className="font-semibold text-rose-400 flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Expiring Soon</span>
-                </span>
+                <span>{t.offers?.expiringSoon || "Expiring Soon"}</span>
               </label>
             </div>
           </div>

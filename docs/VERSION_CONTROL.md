@@ -8,9 +8,9 @@ This document outlines the professional Git version-control, branching strategy,
 
 | Property | Value |
 | :--- | :--- |
-| **Current Active Version** | `v0.1.0` |
-| **Published Release Commit** | `97f1c04c839ead71d300afec46d05d8ebc0be620` |
-| **Release Tag** | `v0.1.0` (Annotated: `CLIQ foundation and authentication`) |
+| **Current Active Version** | `v0.2.0` |
+| **Published Release Commit** | *To be finalized upon commit creation* |
+| **Release Tag** | `v0.2.0` (Annotated: `CLIQ v0.2.0 - Complete multilingual localization`) |
 | **Production Branch** | `main` |
 | **Integration / Development Branch** | `first` |
 | **Remote Repository** | `https://github.com/Rahul2006MILLION/AI-Driven-Financial-Insights-and-Credit-Card-Reward-Optimization-Platform.git` |
@@ -35,7 +35,7 @@ $$\text{Format: } \mathbf{MAJOR.MINOR.PATCH}$$
 | Milestone | Target Scope | Current Status |
 | :--- | :--- | :--- |
 | **`v0.1.0`** | **Foundation and Authentication** (FastAPI backend, Next.js Liquid Glass UI, session lifecycle, token persistence, IDOR enforcement, basic card models, 100 backend / 13 frontend tests). | **RELEASED & VERIFIED** |
-| **`v0.2.0`** | **Credit Card Management** (Interactive Fan Wallet, card catalogue, issuer selection, custom card addition, reward rule configuration, benefit tracking). | *In Development* |
+| **`v0.2.0`** | **Multilingual Localization & Digital Card Wallet** (Application-wide localization in EN, HI, KN across all 18 pages and 7 components; typed dictionary architecture; reactive `LanguageProvider` with `localStorage` persistence; localized Privacy Gateway and assistant; 100 backend / 19 frontend tests). | **RELEASED & VERIFIED** |
 | **`v0.3.0`** | **Offer Intelligence** (Hybrid offer ingestion, HTML/PDF circular parsing, staged human-in-the-loop review, source health monitoring, deduplication). | *In Development* |
 | **`v0.4.0`** | **Purchase Intelligence** (Real-time merchant normalization, Decimal reward calculation engine, monthly reward cap tracking, card recommendation API). | *In Verification* |
 | **`v0.5.0`** | **AI Assistant & Privacy Gateway** (Zero-trust Privacy Gateway, PII/PCI redactor, user consent enforcement, Google Gemini 2.5 Flash integration, local fallback). | *In Verification* |

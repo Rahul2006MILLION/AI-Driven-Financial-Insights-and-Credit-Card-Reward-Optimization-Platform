@@ -10,6 +10,7 @@ class RecommendRequest(BaseModel):
     payment_channel: str = Field("ONLINE", pattern="^(ONLINE|OFFLINE|BOTH)$")
     include_annual_fee_net: bool = False
     reward_basis_mode: Optional[str] = Field("NET_CHARGED_AMOUNT", pattern="^(NET_CHARGED_AMOUNT|ORIGINAL_TRANSACTION_AMOUNT)$")
+    language: Optional[str] = Field(None, pattern="^(en|hi|kn)$")
 
 class CalculationStep(BaseModel):
     step_number: int

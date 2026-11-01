@@ -56,17 +56,17 @@ export default function AnalyticsPage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-            Spending Analytics
+            {t.analytics.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Category distributions, reward yields, and spend velocity
+            {t.analytics.subtitle}
           </p>
         </div>
 
         {loading ? (
           <div className="py-20 text-center">
             <Loader2 className="w-8 h-8 animate-spin text-emerald-400 mx-auto" />
-            <p className="text-xs text-slate-400 mt-2">Computing analytics...</p>
+            <p className="text-xs text-slate-400 mt-2">{t.analytics.computingAnalytics}</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -74,37 +74,37 @@ export default function AnalyticsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)]">
                 <span className="text-xs text-slate-400 font-medium">
-                  Total Spending Tracked
+                  {t.analytics.totalSpendingTracked}
                 </span>
                 <div className="text-3xl font-black text-white mt-2 tracking-tight">
                   ₹{spending ? Number(spending.total_spending).toFixed(2) : "0.00"}
                 </div>
                 <div className="text-[11px] text-slate-500 mt-1">
-                  Across {spending?.total_transactions || 0} purchases
+                  {spending?.total_transactions || 0} {t.analytics.acrossPurchases}
                 </div>
               </div>
 
               <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)]">
                 <span className="text-xs text-slate-400 font-medium">
-                  Realized Rewards
+                  {t.analytics.rewardsRealized}
                 </span>
                 <div className="text-3xl font-black text-emerald-400 glow-emerald mt-2 tracking-tight">
                   ₹{rewards ? Number(rewards.total_rewards_earned).toFixed(2) : "0.00"}
                 </div>
                 <div className="text-[11px] text-emerald-400 mt-1 font-semibold">
-                  {rewards ? `${Number(rewards.optimization_efficiency_rate).toFixed(1)}% Efficiency` : ""}
+                  {rewards ? `${Number(rewards.optimization_efficiency_rate).toFixed(1)}% ${t.analytics.efficiencyRate}` : ""}
                 </div>
               </div>
 
               <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)]">
                 <span className="text-xs text-slate-400 font-medium">
-                  Avoidable Reward Leakage
+                  {t.analytics.avoidableLeakage}
                 </span>
                 <div className="text-3xl font-black text-rose-400 mt-2 tracking-tight">
                   ₹{rewards ? Number(rewards.reward_leakage_amount).toFixed(2) : "0.00"}
                 </div>
                 <div className="text-[11px] text-slate-500 mt-1">
-                  Suboptimal card selection
+                  {t.analytics.leakage}
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function AnalyticsPage() {
                 <div className="flex items-center gap-2 mb-4">
                   <PieIcon className="w-4 h-4 text-emerald-400" />
                   <h3 className="text-sm font-bold text-white tracking-wide">
-                    Spend by Category
+                    {t.analytics.spendByCategory}
                   </h3>
                 </div>
 
@@ -154,7 +154,7 @@ export default function AnalyticsPage() {
                   </div>
                 ) : (
                   <div className="h-64 flex items-center justify-center text-xs text-slate-500">
-                    No category data available.
+                    {t.transactions.noTransactionsFound}
                   </div>
                 )}
               </div>
@@ -164,7 +164,7 @@ export default function AnalyticsPage() {
                 <div className="flex items-center gap-2 mb-4">
                   <BarChart3 className="w-4 h-4 text-emerald-400" />
                   <h3 className="text-sm font-bold text-white tracking-wide">
-                    Monthly Velocity
+                    {t.analytics.monthlyVelocity}
                   </h3>
                 </div>
 
@@ -193,7 +193,7 @@ export default function AnalyticsPage() {
                   </div>
                 ) : (
                   <div className="h-64 flex items-center justify-center text-xs text-slate-500">
-                    No monthly trend data recorded.
+                    {t.transactions.noTransactionsFound}
                   </div>
                 )}
               </div>
@@ -203,7 +203,7 @@ export default function AnalyticsPage() {
             {spending?.top_merchants?.length > 0 && (
               <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
                 <h3 className="text-sm font-bold text-white tracking-wide mb-4">
-                  Top Merchants by Volume
+                  {t.analytics.categoryAllocation}
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                   {spending.top_merchants.map((m: any, idx: number) => (

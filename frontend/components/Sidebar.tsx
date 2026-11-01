@@ -44,7 +44,7 @@ export const Sidebar: React.FC = () => {
   return (
     <aside className="w-64 hidden lg:flex flex-col border-r border-white/[0.08] bg-[#050D0A]/60 backdrop-blur-2xl min-h-[calc(100vh-4rem)] p-4 space-y-1">
       <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-        Workspace
+        {t.sidebar?.workspace || "Workspace"}
       </div>
       {navItems.map((item) => {
         const Icon = item.icon;
@@ -66,8 +66,10 @@ export const Sidebar: React.FC = () => {
       })}
 
       <div className="pt-4 mt-3 border-t border-white/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-        <span>Administration</span>
-        <span className="px-1.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px]">STAFF</span>
+        <span>{t.sidebar?.administration || "Administration"}</span>
+        <span className="px-1.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px]">
+          {t.sidebar?.staffBadge || "STAFF"}
+        </span>
       </div>
       <Link
         href="/admin/offers"
@@ -78,7 +80,7 @@ export const Sidebar: React.FC = () => {
         }`}
       >
         <ShieldCheck className="w-4 h-4 text-amber-400" />
-        <span>Offer Review Desk</span>
+        <span>{t.sidebar?.offerReviewDesk || t.nav?.adminDesk || "Offer Review Desk"}</span>
       </Link>
     </aside>
   );

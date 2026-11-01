@@ -88,10 +88,10 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-              Command Center
+              {t.dashboard?.commandCenter || "Command Center"}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
-              Financial intelligence and real-time portfolio metrics
+              {t.dashboard?.subtitle || "Financial intelligence and real-time portfolio metrics"}
             </p>
           </div>
 
@@ -102,7 +102,7 @@ export default function DashboardPage() {
               className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Add Card</span>
+              <span>{t.dashboard?.addCardCta || t.nav?.addCard || "Add Card"}</span>
             </Link>
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function DashboardPage() {
           <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-slate-400">
-                Registered Cards
+                {t.dashboard?.registeredCards || "Registered Cards"}
               </span>
               <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <CreditCard className="w-3.5 h-3.5" />
@@ -124,10 +124,10 @@ export default function DashboardPage() {
             </div>
             <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
               <span className="text-emerald-400 font-medium">
-                {cards.filter((c) => c.is_active).length} Active in Wallet
+                {cards.filter((c) => c.is_active).length} {t.dashboard?.activeInWallet || "Active in Wallet"}
               </span>
               <Link href="/cards" className="text-slate-400 hover:text-white flex items-center gap-0.5">
-                <span>Fan</span>
+                <span>{t.dashboard?.viewFan || "Fan"}</span>
                 <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
           <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-slate-400">
-                Rewards Realized
+                {t.dashboard?.rewardsRealized || "Rewards Realized"}
               </span>
               <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <TrendingUp className="w-3.5 h-3.5" />
@@ -147,7 +147,7 @@ export default function DashboardPage() {
               ₹{rewardStats ? Number(rewardStats.total_rewards_earned).toFixed(2) : "0.00"}
             </div>
             <div className="text-[11px] text-slate-400 mt-2">
-              Potential: ₹{rewardStats ? Number(rewardStats.total_optimal_possible).toFixed(2) : "0.00"}
+              {t.dashboard?.potentialReward || "Potential"}: ₹{rewardStats ? Number(rewardStats.total_optimal_possible).toFixed(2) : "0.00"}
             </div>
           </div>
 
@@ -155,7 +155,7 @@ export default function DashboardPage() {
           <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-slate-400">
-                Reward Efficiency
+                {t.dashboard?.rewardEfficiency || "Reward Efficiency"}
               </span>
               <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <Zap className="w-3.5 h-3.5" />
@@ -167,10 +167,10 @@ export default function DashboardPage() {
             <div className="text-[11px] mt-2">
               {rewardStats && Number(rewardStats.reward_leakage_amount) > 0 ? (
                 <span className="text-amber-400 font-medium">
-                  ₹{Number(rewardStats.reward_leakage_amount).toFixed(2)} Leakage
+                  ₹{Number(rewardStats.reward_leakage_amount).toFixed(2)} {t.dashboard?.leakage || "Leakage"}
                 </span>
               ) : (
-                <span className="text-emerald-400 font-medium">Optimal Spend Rate</span>
+                <span className="text-emerald-400 font-medium">{t.dashboard?.optimalSpendRate || "Optimal Spend Rate"}</span>
               )}
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function DashboardPage() {
           <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-slate-400">
-                Financial Health
+                {t.dashboard?.financialHealth || "Financial Health"}
               </span>
               <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <Activity className="w-3.5 h-3.5" />
@@ -189,9 +189,9 @@ export default function DashboardPage() {
               {healthData ? `${healthData.health_score}/100` : "92/100"}
             </div>
             <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
-              <span>{healthData?.recurring_subscriptions?.length || 0} Subscriptions</span>
+              <span>{healthData?.recurring_subscriptions?.length || 0} {t.dashboard?.subscriptions || "Subscriptions"}</span>
               <Link href="/financial-health" className="text-emerald-400 hover:text-emerald-300 flex items-center gap-0.5">
-                <span>Details</span>
+                <span>{t.dashboard?.viewDetails || "Details"}</span>
                 <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
@@ -208,18 +208,18 @@ export default function DashboardPage() {
                   <Zap className="w-3.5 h-3.5" />
                 </div>
                 <h2 className="text-sm font-bold text-white tracking-wide">
-                  Purchase Optimizer
+                  {t.dashboard?.quickOptimizer || "Purchase Optimizer"}
                 </h2>
               </div>
               <span className="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-mono font-medium">
-                Decimal Precision
+                {t.dashboard?.decimalPrecision || "Decimal Precision"}
               </span>
             </div>
 
             <form onSubmit={handleQuickOptimize} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                  Spend Amount (₹)
+                  {t.dashboard?.amount || "Spend Amount (₹)"}
                 </label>
                 <input
                   type="number"
@@ -233,26 +233,26 @@ export default function DashboardPage() {
 
               <div>
                 <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                  Category
+                  {t.dashboard?.category || "Category"}
                 </label>
                 <select
                   value={optCategory}
                   onChange={(e) => setOptCategory(e.target.value)}
                   className="w-full bg-[#06100C] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                 >
-                  <option value="dining">Dining & Delivery</option>
-                  <option value="shopping">Shopping</option>
-                  <option value="grocery">Groceries</option>
-                  <option value="utility">Utility & Bills</option>
-                  <option value="travel">Travel & Hotels</option>
-                  <option value="fuel">Fuel</option>
-                  <option value="other">General Spend</option>
+                  <option value="dining">{t.categories?.dining || "Dining & Delivery"}</option>
+                  <option value="shopping">{t.categories?.shopping || "Shopping"}</option>
+                  <option value="grocery">{t.categories?.grocery || "Groceries"}</option>
+                  <option value="utility">{t.categories?.utility || "Utility & Bills"}</option>
+                  <option value="travel">{t.categories?.travel || "Travel & Hotels"}</option>
+                  <option value="fuel">{t.categories?.fuel || "Fuel"}</option>
+                  <option value="other">{t.categories?.other || "General Spend"}</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                  Merchant
+                  {t.dashboard?.merchant || "Merchant"}
                 </label>
                 <input
                   type="text"
@@ -273,7 +273,7 @@ export default function DashboardPage() {
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
-                      <span>Recommend Best Card</span>
+                      <span>{t.dashboard?.recommendBestCard || "Recommend Best Card"}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
@@ -287,17 +287,17 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
-                      Optimal Recommendation
+                      {t.dashboard?.optimalRecommendation || "Optimal Recommendation"}
                     </span>
                     <div className="text-base font-extrabold text-white flex items-center gap-2">
                       <span>{optResult.recommended_card.card_name}</span>
                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold">
-                        {optResult.recommended_card.effective_rate_percentage}% Yield
+                        {optResult.recommended_card.effective_rate_percentage}% {t.dashboard?.yield || "Yield"}
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] text-slate-400">Expected Value</span>
+                    <span className="text-[10px] text-slate-400">{t.dashboard?.expectedValue || "Expected Value"}</span>
                     <div className="text-xl font-extrabold text-emerald-400 glow-emerald">
                       ₹{Number(optResult.recommended_card.expected_reward_monetary).toFixed(2)}
                     </div>
@@ -308,7 +308,7 @@ export default function DashboardPage() {
                     href="/optimization"
                     className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
                   >
-                    <span>Inspect Alternatives</span>
+                    <span>{t.dashboard?.inspectAlternatives || "Inspect Alternatives"}</span>
                     <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -323,10 +323,10 @@ export default function DashboardPage() {
                 <div className="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                   <Sparkles className="w-3.5 h-3.5" />
                 </div>
-                <h3 className="font-bold text-white text-sm">Financial Intelligence</h3>
+                <h3 className="font-bold text-white text-sm">{t.dashboard?.financialIntelligenceTitle || "Financial Intelligence"}</h3>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Local-first assistant grounded in your verified card portfolio.
+                {t.dashboard?.financialIntelligenceDesc || "Local-first assistant grounded in your verified card portfolio."}
               </p>
 
               <div className="mt-4 space-y-2">
@@ -334,13 +334,13 @@ export default function DashboardPage() {
                   href="/assistant"
                   className="block p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-300 border border-white/[0.07] hover:border-emerald-500/30 transition-all"
                 >
-                  "Which card gives 5% cashback on Swiggy?"
+                  "{t.dashboard?.sampleSuggestion1 || "Which card gives the highest cashback on Swiggy?"}"
                 </Link>
                 <Link
                   href="/assistant"
                   className="block p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-300 border border-white/[0.07] hover:border-emerald-500/30 transition-all"
                 >
-                  "Show lounge access quotas across my cards"
+                  "{t.dashboard?.sampleSuggestion2 || "Show lounge access quotas across my cards"}"
                 </Link>
               </div>
             </div>
@@ -349,7 +349,7 @@ export default function DashboardPage() {
               href="/assistant"
               className="mt-5 w-full py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-emerald-400 font-semibold text-xs text-center block transition-all"
             >
-              Open Assistant Chat
+              {t.dashboard?.askAssistant || "Ask Assistant"}
             </Link>
           </div>
         </div>
@@ -360,10 +360,10 @@ export default function DashboardPage() {
           <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-white tracking-wide">
-                Active Portfolio
+                {t.dashboard?.portfolioShowcase || "Active Portfolio"}
               </h3>
               <Link href="/cards" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-0.5">
-                <span>View Fan</span>
+                <span>{t.dashboard?.viewFan || "View Fan"}</span>
                 <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
@@ -372,14 +372,14 @@ export default function DashboardPage() {
               <div className="text-center py-8 space-y-3">
                 <CreditCard className="w-8 h-8 text-slate-600 mx-auto" />
                 <p className="text-xs text-slate-400">
-                  No cards registered yet.
+                  {t.dashboard?.noCardsInPortfolio || "No cards registered yet."}
                 </p>
                 <Link
                   href="/cards/new"
                   className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#040707] font-bold text-xs"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Add First Card</span>
+                  <span>{t.dashboard?.addYourFirstCard || "Add First Card"}</span>
                 </Link>
               </div>
             ) : (
@@ -397,13 +397,13 @@ export default function DashboardPage() {
                         </span>
                       </div>
                       <div className="text-[11px] text-slate-400 mt-0.5">
-                        {c.bank_name} • Fee: ₹{Number(c.annual_fee).toFixed(0)}
+                        {c.bank_name} • {t.cards?.annualFee || "Fee"}: ₹{Number(c.annual_fee).toFixed(0)}
                       </div>
                     </div>
 
                     <div className="text-right">
                       <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
-                        {c.reward_rules?.length || 1} Multipliers
+                        {c.reward_rules?.length || 1} {t.cards?.rules || "Multipliers"}
                       </span>
                     </div>
                   </div>
@@ -416,10 +416,10 @@ export default function DashboardPage() {
           <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-white tracking-wide">
-                Recent Transactions
+                {t.dashboard?.recentActivity || "Recent Transactions"}
               </h3>
               <Link href="/transactions" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-0.5">
-                <span>All History</span>
+                <span>{t.dashboard?.viewAllTransactions || "All History"}</span>
                 <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
@@ -428,14 +428,14 @@ export default function DashboardPage() {
               <div className="text-center py-8 space-y-3">
                 <Receipt className="w-8 h-8 text-slate-600 mx-auto" />
                 <p className="text-xs text-slate-400">
-                  No transaction records found.
+                  {t.dashboard?.noRecentActivity || "No transaction records found."}
                 </p>
                 <Link
                   href="/transactions"
                   className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-slate-300 font-semibold text-xs"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Log Purchase</span>
+                  <span>{t.dashboard?.recordFirstTransaction || "Log Purchase"}</span>
                 </Link>
               </div>
             ) : (

@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n";
 import { Sparkles, CheckCircle2, Loader2 } from "lucide-react";
 
 export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded }) => {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [seeded, setSeeded] = useState(false);
 
@@ -186,7 +188,7 @@ export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded })
     return (
       <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-3.5 py-1.5 rounded-full">
         <CheckCircle2 className="w-3.5 h-3.5" />
-        <span>Sample portfolio initialized</span>
+        <span>{t.common?.samplePortfolioInitialized || "Sample portfolio initialized"}</span>
       </div>
     );
   }
@@ -200,12 +202,12 @@ export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded })
       {loading ? (
         <>
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          <span>Provisioning Portfolio...</span>
+          <span>{t.common?.provisioningPortfolio || "Provisioning Portfolio..."}</span>
         </>
       ) : (
         <>
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Sample Portfolio</span>
+          <span>{t.common?.samplePortfolio || "Sample Portfolio"}</span>
         </>
       )}
     </button>

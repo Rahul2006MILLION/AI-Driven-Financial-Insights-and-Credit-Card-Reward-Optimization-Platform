@@ -40,17 +40,17 @@ export default function FinancialHealthPage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-            Financial Health
+            {t.health.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Credit efficiency auditing, subscription tracking, and fee justification
+            {t.health.subtitle}
           </p>
         </div>
 
         {loading ? (
           <div className="py-20 text-center">
             <Loader2 className="w-8 h-8 animate-spin text-emerald-400 mx-auto" />
-            <p className="text-xs text-slate-400 mt-2">Auditing financial metrics...</p>
+            <p className="text-xs text-slate-400 mt-2">{t.health.auditingMetrics}</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -59,7 +59,7 @@ export default function FinancialHealthPage() {
               {/* Health Score Gauge */}
               <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] flex flex-col justify-between items-center text-center">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Health Index
+                  {t.health.healthIndex}
                 </span>
 
                 <div className="relative my-4 flex items-center justify-center">
@@ -72,7 +72,7 @@ export default function FinancialHealthPage() {
 
                 <div className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>{health?.optimization_efficiency_rate}% Efficiency Rate</span>
+                  <span>{health?.optimization_efficiency_rate}% {t.health.efficiencyRate}</span>
                 </div>
               </div>
 
@@ -82,14 +82,14 @@ export default function FinancialHealthPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingUp className="w-4 h-4 text-emerald-400" />
                     <h3 className="text-sm font-bold text-white tracking-wide">
-                      30-Day Spending Forecast
+                      {t.health.projectionsTitle}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 mt-4">
                     <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
                       <span className="text-[10px] text-slate-500 uppercase font-semibold block">
-                        Estimated Outflow
+                        {t.health.projectedSpend}
                       </span>
                       <span className="text-2xl font-black text-white tracking-tight">
                         ₹{Number(health?.forecast_30d_spending || 0).toFixed(2)}
@@ -98,7 +98,7 @@ export default function FinancialHealthPage() {
 
                     <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
                       <span className="text-[10px] text-slate-500 uppercase font-semibold block">
-                        Potential Rewards
+                        {t.health.projectedRewards}
                       </span>
                       <span className="text-2xl font-black text-emerald-400 glow-emerald tracking-tight">
                         ₹{Number(health?.forecast_30d_potential_rewards || 0).toFixed(2)}
@@ -119,7 +119,7 @@ export default function FinancialHealthPage() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-emerald-400" />
                   <h3 className="text-sm font-bold text-white tracking-wide">
-                    Optimization Recommendations
+                    {t.health.actionableAdvice}
                   </h3>
                 </div>
 
@@ -143,11 +143,11 @@ export default function FinancialHealthPage() {
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-emerald-400" />
                   <h3 className="text-sm font-bold text-white tracking-wide">
-                    Subscriptions Tracked
+                    {t.health.subscriptions}
                   </h3>
                 </div>
                 <span className="text-xs text-slate-400">
-                  {health?.recurring_subscriptions?.length || 0} Active
+                  {health?.recurring_subscriptions?.length || 0} {t.cards.active}
                 </span>
               </div>
 
@@ -185,7 +185,7 @@ export default function FinancialHealthPage() {
               <div className="flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-sm font-bold text-white tracking-wide">
-                  Annual Fee Justification
+                  {t.health.feeAudit}
                 </h3>
               </div>
 
@@ -193,11 +193,11 @@ export default function FinancialHealthPage() {
                 <table className="w-full text-xs text-left">
                   <thead className="bg-white/[0.02] text-slate-400 uppercase text-[10px] tracking-wider border-b border-white/[0.06]">
                     <tr>
-                      <th className="py-3 px-4 font-semibold">Card Name</th>
-                      <th className="py-3 px-4 font-semibold text-right">Annual Fee</th>
-                      <th className="py-3 px-4 font-semibold text-right">Rewards Earned</th>
-                      <th className="py-3 px-4 font-semibold text-right">Net Value</th>
-                      <th className="py-3 px-4 font-semibold text-center">Status</th>
+                      <th className="py-3 px-4 font-semibold">{t.compare.title}</th>
+                      <th className="py-3 px-4 font-semibold text-right">{t.health.annualFee}</th>
+                      <th className="py-3 px-4 font-semibold text-right">{t.health.earnedRewards}</th>
+                      <th className="py-3 px-4 font-semibold text-right">{t.health.netRoi}</th>
+                      <th className="py-3 px-4 font-semibold text-center">{t.optimizer.breakdown}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/[0.06]">
@@ -216,11 +216,11 @@ export default function FinancialHealthPage() {
                         <td className="py-3.5 px-4 text-center">
                           {item.is_justified ? (
                             <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
-                              Justified
+                              {t.health.justifiedCards}
                             </span>
                           ) : (
                             <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">
-                              Suboptimal
+                              {t.health.atRiskCards}
                             </span>
                           )}
                         </td>

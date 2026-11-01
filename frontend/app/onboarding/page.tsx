@@ -38,7 +38,7 @@ export default function OnboardingPage() {
                 step === s ? "text-white" : "text-slate-400"
               }`}
             >
-              {s === 1 ? "Language & Region" : s === 2 ? "Portfolio" : "Complete"}
+              {s === 1 ? t.onboarding.stepLangTitle : s === 2 ? t.onboarding.stepPortfolioTitle : t.onboarding.stepCompleteTitle}
             </span>
             {s < 3 && <div className="w-12 h-px bg-white/10" />}
           </div>
@@ -52,9 +52,9 @@ export default function OnboardingPage() {
               <div className="inline-flex w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 items-center justify-center text-emerald-400 mb-3">
                 <Globe className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-black text-white glow-emerald">Select Your Language</h2>
+              <h2 className="text-2xl font-black text-white glow-emerald">{t.onboarding.selectLanguageHeading}</h2>
               <p className="text-xs text-slate-400 mt-1.5">
-                All recommendations, assistant dialogues, and analytics adapt to your language.
+                {t.onboarding.selectLanguageSub}
               </p>
             </div>
 
@@ -86,7 +86,7 @@ export default function OnboardingPage() {
                 onClick={() => setStep(2)}
                 className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] flex items-center gap-2"
               >
-                <span>Continue</span>
+                <span>{t.onboarding.continueButton}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -99,9 +99,9 @@ export default function OnboardingPage() {
               <div className="inline-flex w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 items-center justify-center text-emerald-400 mb-3">
                 <CreditCard className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-black text-white glow-emerald">Initialize Your Portfolio</h2>
+              <h2 className="text-2xl font-black text-white glow-emerald">{t.onboarding.portfolioHeading}</h2>
               <p className="text-xs text-slate-400 mt-1.5">
-                Load verified Indian credit cards into your wallet, or start with a pre-configured sample set.
+                {t.onboarding.portfolioSub}
               </p>
             </div>
 
@@ -115,14 +115,14 @@ export default function OnboardingPage() {
                 onClick={() => setStep(1)}
                 className="text-xs text-slate-400 hover:text-white"
               >
-                &larr; Back
+                &larr; {t.cards.cancel}
               </button>
               <button
                 type="button"
                 onClick={() => setStep(3)}
                 className="px-6 py-2.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] text-white font-semibold text-xs border border-white/10"
               >
-                Skip For Now
+                {t.onboarding.continueButton}
               </button>
             </div>
           </div>
@@ -133,9 +133,9 @@ export default function OnboardingPage() {
             <div className="inline-flex w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 items-center justify-center text-emerald-400 mb-2 shadow-[0_0_25px_rgba(16,185,129,0.25)]">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h2 className="text-3xl font-black text-white glow-emerald">You're All Set!</h2>
+            <h2 className="text-3xl font-black text-white glow-emerald">{t.onboarding.readyHeading}</h2>
             <p className="text-xs text-slate-400 max-w-md mx-auto">
-              Your financial command center is configured with liquid glass precision.
+              {t.onboarding.readySub}
             </p>
 
             <div className="pt-4">
@@ -144,7 +144,7 @@ export default function OnboardingPage() {
                 onClick={finishOnboarding}
                 className="px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all"
               >
-                Enter Command Center
+                {t.onboarding.finishButton}
               </button>
             </div>
           </div>

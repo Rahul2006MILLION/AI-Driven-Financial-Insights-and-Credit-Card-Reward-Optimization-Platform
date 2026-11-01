@@ -74,8 +74,8 @@ export default function RegisterPage() {
               <Sparkles className="w-5 h-5 text-emerald-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-black text-white glow-emerald">Create Account</h2>
-          <p className="text-xs text-slate-400 mt-1">Get started with CLIQ financial intelligence</p>
+          <h2 className="text-2xl font-black text-white glow-emerald">{t.auth.createAccountTitle}</h2>
+          <p className="text-xs text-slate-400 mt-1">{t.auth.createAccountSubtitle}</p>
         </div>
 
         {error && (
@@ -87,7 +87,7 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
             <label className="block text-slate-400 font-medium mb-1.5">
-              Full Name
+              {t.auth.fullNameLabel}
             </label>
             <div className="relative">
               <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -104,7 +104,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-slate-400 font-medium mb-1.5">
-              Email Address
+              {t.auth.emailLabel}
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -121,7 +121,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-slate-400 font-medium mb-1.5">
-              Password
+              {t.auth.passwordLabel}
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -139,7 +139,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-slate-400 font-medium mb-1.5">
-              Preferred Language
+              {t.auth.preferredLanguageLabel}
             </label>
             <select
               value={preferredLanguage}
@@ -158,10 +158,13 @@ export default function RegisterPage() {
             className="w-full py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-40"
           >
             {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <div className="flex items-center gap-1.5">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>{t.auth.creatingAccount}</span>
+              </div>
             ) : (
               <>
-                <span>Create Account</span>
+                <span>{t.auth.createAccountButton}</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -170,9 +173,9 @@ export default function RegisterPage() {
 
         <div className="mt-6 pt-6 border-t border-white/[0.06] text-center">
           <p className="text-xs text-slate-400">
-            Already have an account?{" "}
+            {t.auth.haveAccountPrompt}{" "}
             <Link href="/login" className="text-emerald-400 font-bold hover:underline">
-              Sign In
+              {t.auth.signInButton}
             </Link>
           </p>
         </div>

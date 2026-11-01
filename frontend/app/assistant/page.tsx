@@ -34,12 +34,7 @@ export default function AssistantPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content:
-        language === "hi"
-          ? "नमस्ते! मैं आपका CLIQ वित्तीय सहायक हूँ। गोपनीयता नीति के तहत, आपका डेटा डिफ़ॉल्ट रूप से स्थानीय रूप से सुरक्षित रखा जाता है।"
-          : language === "kn"
-          ? "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ CLIQ ಆರ್ಥಿಕ ಸಹಾಯಕ. ಗೌಪ್ಯತೆ ನೀತಿಯಂತೆ, ನಿಮ್ಮ ಹಣಕಾಸಿನ ಮಾಹಿತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಸುರಕ್ಷಿತವಾಗಿಡಲಾಗುತ್ತದೆ."
-          : "Hello. I am your CLIQ Financial Intelligence Assistant. In accordance with our Privacy-First Architecture, all queries are processed locally by default with zero cloud exposure.",
+      content: t.assistant.welcomeMessage,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       is_external_ai_used: false,
       provider_used: "local_grounded_engine",
@@ -49,6 +44,21 @@ export default function AssistantPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Update initial message if language changes and only initial message is present
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].role === "assistant") {
+        return [
+          {
+            ...prev[0],
+            content: t.assistant.welcomeMessage,
+          },
+        ];
+      }
+      return prev;
+    });
+  }, [language, t.assistant.welcomeMessage]);
 
   // Privacy & AI Consent State
   const [consent, setConsent] = useState<AiConsent | null>(null);
@@ -165,13 +175,13 @@ export default function AssistantPage() {
             </div>
             <div>
               <h1 className="text-base font-extrabold text-white flex items-center gap-2">
-                <span>Assistant</span>
+                <span>{t.assistant.title}</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-semibold flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3" />
-                  Privacy-First
+                  {t.assistant.localProtectedStatus}
                 </span>
               </h1>
-              <p className="text-[11px] text-slate-400">Grounded in your verified portfolio</p>
+              <p className="text-[11px] text-slate-400">{t.assistant.subtitle}</p>
             </div>
           </div>
 
@@ -210,10 +220,10 @@ export default function AssistantPage() {
               <div>
                 <div className="flex items-center gap-2 font-bold text-white text-xs">
                   <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                  Privacy Gateway & AI Governance
+                  {t.assistant.privacyGatewayTitle}
                 </div>
                 <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">
-                  Queries are answered by the deterministic local engine unless external AI is explicitly granted.
+                  {t.assistant.privacyGatewaySubtitle}
                 </p>
               </div>
               <div className="shrink-0 text-right">
@@ -224,7 +234,7 @@ export default function AssistantPage() {
                       : "bg-white/[0.05] text-slate-400 border-white/10"
                   }`}
                 >
-                  {consent?.external_ai_enabled ? "External AI (Gemini 2.5 Flash)" : "Local Engine (Protected)"}
+                  {consent?.external_ai_enabled ? t.assistant.activeProviderLabel : t.assistant.localProtectedStatus}
                 </span>
               </div>
             </div>
@@ -239,7 +249,7 @@ export default function AssistantPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
               <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="font-semibold text-white block">External AI</span>
+                  <span className="font-semibold text-white block">{t.assistant.externalAiToggleLabel}</span>
                   <span className="text-[10px] text-slate-500">Google Gemini</span>
                 </div>
                 <input
@@ -253,7 +263,7 @@ export default function AssistantPage() {
 
               <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="font-semibold text-white block">Card Context</span>
+                  <span className="font-semibold text-white block">{t.assistant.allowCardContextLabel}</span>
                   <span className="text-[10px] text-slate-500">Card names & rates</span>
                 </div>
                 <input
@@ -267,7 +277,7 @@ export default function AssistantPage() {
 
               <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <span className="font-semibold text-white block">Spend Context</span>
+                  <span className="font-semibold text-white block">{t.assistant.allowSpendingContextLabel}</span>
                   <span className="text-[10px] text-slate-500">Aggregated totals</span>
                 </div>
                 <input
@@ -381,11 +391,24 @@ export default function AssistantPage() {
 
         {/* Suggestion Chips */}
         <div className="py-2 flex items-center gap-2 overflow-x-auto scrollbar-none">
-          {[
-            "Which card is best for dining?",
-            "Show lounge visit limits",
-            "How do I waive the annual fee on Regalia?",
-          ].map((prompt, idx) => (
+          {(language === "hi"
+            ? [
+                "भोजन के लिए कौन सा कार्ड सबसे अच्छा है?",
+                "लाउंज विज़िट सीमाएं दिखाएं",
+                "रेगलिया पर वार्षिक शुल्क कैसे माफ करें?",
+              ]
+            : language === "kn"
+            ? [
+                "ಡೈನಿಂಗ್‌ಗಾಗಿ ಯಾವ ಕಾರ್ಡ್ ಅತ್ಯುತ್ತಮವಾಗಿದೆ?",
+                "ಲೌಂಜ್ ಪ್ರವೇಶ ಮಿತಿಗಳನ್ನು ತೋರಿಸಿ",
+                "ರೆಗಾಲಿಯಾ ವಾರ್ಷಿಕ ಶುಲ್ಕವನ್ನು ಮನ್ನಾ ಮಾಡುವುದು ಹೇಗೆ?",
+              ]
+            : [
+                "Which card is best for dining?",
+                "Show lounge visit limits",
+                "How do I waive the annual fee on Regalia?",
+              ]
+          ).map((prompt, idx) => (
             <button
               key={idx}
               onClick={() => handleSend(prompt)}
@@ -407,7 +430,7 @@ export default function AssistantPage() {
           >
             <input
               type="text"
-              placeholder="Ask about rewards, fee waivers, or transaction optimization..."
+              placeholder={t.assistant.placeholder}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={loading}

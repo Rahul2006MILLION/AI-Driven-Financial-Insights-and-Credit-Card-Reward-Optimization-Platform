@@ -75,7 +75,7 @@ async def recommend_card(
         matched_card_offers_map=matched_card_offers_map,
         card_monthly_spend_map=card_monthly_spend_map,
         reward_basis_mode=req.reward_basis_mode or "NET_CHARGED_AMOUNT",
-        language=current_user.preferred_language or "en"
+        language=req.language or current_user.preferred_language or "en"
     )
 
     # Persist audit record in reward_analysis table if card recommended

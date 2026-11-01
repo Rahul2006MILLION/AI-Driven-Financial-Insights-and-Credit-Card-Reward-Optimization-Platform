@@ -208,10 +208,10 @@ export default function MyCreditCardsPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/[0.07] pb-5">
               <div>
                 <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-                  Card Collection
+                  {t.cards?.cardCollectionTitle || "Card Collection"}
                 </h1>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Interactive multi-card portfolio & privileges
+                  {t.cards?.cardCollectionSubtitle || "Interactive multi-card portfolio & privileges"}
                 </p>
               </div>
 
@@ -220,13 +220,13 @@ export default function MyCreditCardsPage() {
                 {/* Metrics Badges */}
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs">
                   <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-slate-400">Cards:</span>
+                  <span className="text-slate-400">{t.cards?.cardsCountLabel || "Cards:"}</span>
                   <strong className="text-white font-bold">{cards.length}</strong>
                 </div>
 
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-slate-400">Verified:</span>
+                  <span className="text-slate-400">{t.cards?.verifiedCountLabel || "Verified:"}</span>
                   <strong className="text-white font-bold">{verifiedCount}</strong>
                 </div>
 
@@ -242,7 +242,7 @@ export default function MyCreditCardsPage() {
                     }`}
                   >
                     <Layers className="w-3.5 h-3.5" />
-                    <span>Fan</span>
+                    <span>{t.cards?.viewFan || "Fan"}</span>
                   </button>
                   <button
                     type="button"
@@ -254,7 +254,7 @@ export default function MyCreditCardsPage() {
                     }`}
                   >
                     <LayoutGrid className="w-3.5 h-3.5" />
-                    <span>Grid</span>
+                    <span>{t.cards?.viewGrid || "Grid"}</span>
                   </button>
                 </div>
 
@@ -265,7 +265,7 @@ export default function MyCreditCardsPage() {
                   className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
                 >
                   <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Add Card</span>
+                  <span>{t.cards?.addNew || "Add Card"}</span>
                 </button>
               </div>
             </div>
@@ -276,7 +276,7 @@ export default function MyCreditCardsPage() {
                 <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder="Filter cards by name, bank, or nickname..."
+                  placeholder={t.cards?.searchPlaceholder || "Filter cards by name, bank, or nickname..."}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
@@ -289,7 +289,7 @@ export default function MyCreditCardsPage() {
                   onChange={(e) => setSelectedBank(e.target.value)}
                   className="px-3 py-1.5 rounded-xl bg-[#06100C] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
                 >
-                  <option value="ALL">All Banks ({uniqueBanks.length})</option>
+                  <option value="ALL">{t.cards?.allBanks || "All Banks"} ({uniqueBanks.length})</option>
                   {uniqueBanks.map((b) => (
                     <option key={b} value={b}>
                       {b}
@@ -302,7 +302,7 @@ export default function MyCreditCardsPage() {
                   onChange={(e) => setSelectedNetwork(e.target.value)}
                   className="px-2.5 py-1.5 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                 >
-                  <option value="ALL">All Networks</option>
+                  <option value="ALL">{t.cards?.allNetworks || "All Networks"}</option>
                   <option value="VISA">VISA</option>
                   <option value="MASTERCARD">Mastercard</option>
                   <option value="AMEX">Amex</option>

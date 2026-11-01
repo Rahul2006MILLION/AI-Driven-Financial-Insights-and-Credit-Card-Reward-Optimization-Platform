@@ -74,14 +74,14 @@ export default function LoginPage() {
               <Sparkles className="w-5 h-5 text-emerald-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-black text-white glow-emerald">Welcome Back</h2>
-          <p className="text-xs text-slate-400 mt-1">Sign in to your financial command center</p>
+          <h2 className="text-2xl font-black text-white glow-emerald">{t.auth.signInTitle}</h2>
+          <p className="text-xs text-slate-400 mt-1">{t.auth.signInSubtitle}</p>
         </div>
 
         {successMessage && (
           <div className="mb-6 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
-            <span>{successMessage}</span>
+            <span>{t.auth.registeredSuccessBanner}</span>
           </div>
         )}
 
@@ -94,7 +94,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
             <label className="block text-slate-400 font-medium mb-1.5">
-              Email Address
+              {t.auth.emailLabel}
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -111,7 +111,7 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-slate-400 font-medium mb-1.5">
-              Password
+              {t.auth.passwordLabel}
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -132,10 +132,13 @@ export default function LoginPage() {
             className="w-full py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-40"
           >
             {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <div className="flex items-center gap-1.5">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>{t.auth.signingIn}</span>
+              </div>
             ) : (
               <>
-                <span>Sign In</span>
+                <span>{t.auth.signInButton}</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -148,13 +151,13 @@ export default function LoginPage() {
             onClick={fillDemoAccount}
             className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
           >
-            Auto-fill Demo Credentials
+            {t.auth.quickDemoCredentials}
           </button>
 
           <p className="text-xs text-slate-400">
-            Don't have an account yet?{" "}
+            {t.auth.noAccountPrompt}{" "}
             <Link href="/register" className="text-emerald-400 font-bold hover:underline">
-              Create an account
+              {t.auth.createAccountButton}
             </Link>
           </p>
         </div>

@@ -62,12 +62,12 @@ export default function DocumentProcessingPage() {
     if (!file) return;
 
     if (!file.name.toLowerCase().endsWith(".pdf")) {
-      setError("Only PDF documents (.pdf) are supported.");
+      setError(t.documents.pdfOnlyError);
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      setError("File size exceeds 10MB limit.");
+      setError(t.documents.fileSizeError);
       return;
     }
 
@@ -128,10 +128,10 @@ export default function DocumentProcessingPage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-            Document Intelligence
+            {t.documents.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            PDF statement parsing, policy rule extraction, and human verification
+            {t.documents.subtitle}
           </p>
         </div>
 
@@ -151,7 +151,7 @@ export default function DocumentProcessingPage() {
         {/* Upload Dropzone */}
         <div className="p-8 rounded-3xl border-dashed border-2 border-emerald-500/30 hover:border-emerald-500/60 bg-white/[0.02] backdrop-blur-2xl text-center transition-all">
           <FileUp className="w-8 h-8 text-emerald-400 mx-auto mb-2.5 animate-pulse" />
-          <h3 className="text-sm font-bold text-white">Upload Schedule of Charges or Statement PDF</h3>
+          <h3 className="text-sm font-bold text-white">{t.documents.dragDrop}</h3>
           <p className="text-xs text-slate-400 mt-1">
             Max 10MB • Extracts reward tiers, caps, annual fees, and exclusions into staging
           </p>
@@ -160,10 +160,10 @@ export default function DocumentProcessingPage() {
             {uploading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Extracting Rules...</span>
+                <span>{t.documents.uploading}</span>
               </>
             ) : (
-              <span>Select PDF</span>
+              <span>{t.documents.uploadButton}</span>
             )}
             <input
               type="file"
@@ -179,7 +179,7 @@ export default function DocumentProcessingPage() {
           {/* Uploaded Documents List */}
           <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-3">
             <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-              Documents ({documents.length})
+              {t.documents.uploadedDocumentsList} ({documents.length})
             </h3>
 
             <div className="space-y-2">
@@ -226,13 +226,13 @@ export default function DocumentProcessingPage() {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-sm font-bold text-white tracking-wide">
-                  Verification Workbench
+                  {t.documents.extractedSpecTitle}
                 </h3>
               </div>
               {selectedDoc?.extracted_data?.is_verified && (
                 <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-semibold flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Verified</span>
+                  <span>{t.documents.verified}</span>
                 </span>
               )}
             </div>
@@ -242,7 +242,7 @@ export default function DocumentProcessingPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div>
                     <label className="block text-slate-400 font-medium mb-1">
-                      Card Name
+                      {t.cardSelection.nicknameLabel}
                     </label>
                     <input
                       type="text"
@@ -254,7 +254,7 @@ export default function DocumentProcessingPage() {
 
                   <div>
                     <label className="block text-slate-400 font-medium mb-1">
-                      Issuer Bank
+                      {t.cards.allBanks}
                     </label>
                     <input
                       type="text"
@@ -266,7 +266,7 @@ export default function DocumentProcessingPage() {
 
                   <div>
                     <label className="block text-slate-400 font-medium mb-1">
-                      Network
+                      {t.cardSelection.networkLabel}
                     </label>
                     <select
                       value={network}
@@ -283,7 +283,7 @@ export default function DocumentProcessingPage() {
 
                   <div>
                     <label className="block text-slate-400 font-medium mb-1">
-                      Annual Fee (₹)
+                      {t.cardSelection.annualFeeLabel} (₹)
                     </label>
                     <input
                       type="number"
@@ -297,7 +297,7 @@ export default function DocumentProcessingPage() {
                 {/* Staged Rules Table */}
                 <div className="pt-2">
                   <span className="text-xs font-bold text-white uppercase tracking-wider block mb-2">
-                    Staged Multiplier Rules
+                    {t.documents.stagedRules}
                   </span>
 
                   <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
@@ -352,11 +352,14 @@ export default function DocumentProcessingPage() {
                     className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all disabled:opacity-40 flex items-center gap-2"
                   >
                     {verifying ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <div className="flex items-center gap-1.5">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>{t.documents.verifying}</span>
+                      </div>
                     ) : (
                       <>
                         <ShieldCheck className="w-4 h-4" />
-                        <span>Verify & Activate</span>
+                        <span>{t.documents.verifyButton}</span>
                       </>
                     )}
                   </button>

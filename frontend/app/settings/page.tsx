@@ -33,7 +33,7 @@ export default function SettingsPage() {
   };
 
   const handleDeleteAccount = () => {
-    if (confirm("Are you sure you want to delete your account? All stored card profiles and transaction logs will be scrubbed.")) {
+    if (confirm(t.settings.deleteAccountConfirm)) {
       clearSession();
       router.push("/register");
     }
@@ -46,17 +46,17 @@ export default function SettingsPage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-4xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-            Settings & Security
+            {t.settings.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Cryptographic protections, optimization parameters, and data sovereignty
+            {t.settings.subtitle}
           </p>
         </div>
 
         {savedSettings && (
           <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Optimization preferences saved.</span>
+            <span>{t.settings.preferencesSavedMsg}</span>
           </div>
         )}
 
@@ -65,15 +65,15 @@ export default function SettingsPage() {
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-400" />
             <h3 className="text-sm font-bold text-white tracking-wide">
-              Security Architecture & Tenant Isolation
+              {t.settings.securityArchitectureTitle}
             </h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-semibold text-white block">Row-Level Security</span>
-                <span className="text-[10px] text-slate-500">Enforced on database tables</span>
+                <span className="font-semibold text-white block">{t.settings.rlsTitle}</span>
+                <span className="text-[10px] text-slate-500">{t.settings.rlsDesc}</span>
               </div>
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 ACTIVE
@@ -82,8 +82,8 @@ export default function SettingsPage() {
 
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-semibold text-white block">Zero Sensitive Card Storage</span>
-                <span className="text-[10px] text-slate-500">No CVV, No 16-digit PANs</span>
+                <span className="font-semibold text-white block">{t.settings.tokenEncryptionTitle}</span>
+                <span className="text-[10px] text-slate-500">{t.settings.tokenEncryptionDesc}</span>
               </div>
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 COMPLIANT
@@ -117,16 +117,16 @@ export default function SettingsPage() {
           <div className="flex items-center gap-2">
             <Sliders className="w-5 h-5 text-emerald-400" />
             <h3 className="text-sm font-bold text-white tracking-wide">
-              Optimization Preferences
+              {t.settings.optimizationPreferencesTitle}
             </h3>
           </div>
 
           <form onSubmit={handleSavePreferences} className="space-y-3.5 text-xs">
             <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
               <div>
-                <span className="font-semibold text-white block">Prioritize Direct Cashback over Points</span>
+                <span className="font-semibold text-white block">{t.settings.prioritizeCashbackLabel}</span>
                 <span className="text-[10px] text-slate-500">
-                  Weight liquid statement credits higher than air miles
+                  {t.settings.prioritizeCashbackDesc}
                 </span>
               </div>
               <input
@@ -139,9 +139,9 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
               <div>
-                <span className="font-semibold text-white block">Deduct Annual Fees in Net Yield</span>
+                <span className="font-semibold text-white block">{t.settings.includeFeeNetLabel}</span>
                 <span className="text-[10px] text-slate-500">
-                  Amortize annual fee across transaction calculations
+                  {t.settings.includeFeeNetDesc}
                 </span>
               </div>
               <input
@@ -156,7 +156,7 @@ export default function SettingsPage() {
               type="submit"
               className="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all"
             >
-              Update Preferences
+              {t.settings.savePreferencesButton}
             </button>
           </form>
         </div>
@@ -166,13 +166,13 @@ export default function SettingsPage() {
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-rose-400" />
             <h3 className="text-sm font-bold text-white tracking-wide">
-              Data Sovereignty
+              {t.settings.dataSovereigntyTitle}
             </h3>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
             <div>
-              <span className="text-xs font-semibold text-white block">Export Portfolio Data</span>
+              <span className="text-xs font-semibold text-white block">{t.settings.exportArchiveButton}</span>
               <span className="text-[10px] text-slate-400">
                 Download JSON archive of all registered card rules and logs.
               </span>
@@ -182,13 +182,13 @@ export default function SettingsPage() {
               className="px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Export Archive</span>
+              <span>{t.settings.exportArchiveButton}</span>
             </button>
           </div>
 
           <div className="pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <span className="text-xs font-semibold text-rose-400 block">Delete Account</span>
+              <span className="text-xs font-semibold text-rose-400 block">{t.settings.deleteAccountButton}</span>
               <span className="text-[10px] text-slate-400">
                 Permanently purge all stored credit cards and transactions.
               </span>
@@ -198,7 +198,7 @@ export default function SettingsPage() {
               className="px-4 py-2 rounded-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>Delete Account</span>
+              <span>{t.settings.deleteAccountButton}</span>
             </button>
           </div>
         </div>

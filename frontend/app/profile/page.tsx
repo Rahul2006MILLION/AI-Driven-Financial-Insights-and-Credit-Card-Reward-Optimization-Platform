@@ -75,24 +75,24 @@ export default function ProfilePage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-4xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-            Profile Settings
+            {t.profile.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Personal credentials and language configuration
+            {t.profile.subtitle}
           </p>
         </div>
 
         {savedSuccess && (
           <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Profile successfully updated.</span>
+            <span>{t.profile.savedSuccess}</span>
           </div>
         )}
 
         {loading ? (
           <div className="py-20 text-center">
             <Loader2 className="w-8 h-8 animate-spin text-emerald-400 mx-auto" />
-            <p className="text-xs text-slate-400 mt-2">Loading profile...</p>
+            <p className="text-xs text-slate-400 mt-2">{t.common.loading}</p>
           </div>
         ) : (
           <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
@@ -107,7 +107,7 @@ export default function ProfilePage() {
                   <h3 className="text-lg font-bold text-white">{fullName || "CLIQ User"}</h3>
                   <div className="text-xs text-slate-400">{profile?.email}</div>
                   <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
-                    Active Member
+                    {t.nav.proMember}
                   </span>
                 </div>
               </div>
@@ -115,7 +115,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-400 font-medium mb-1.5">
-                    Display Name
+                    {t.profile.fullNameLabel}
                   </label>
                   <input
                     type="text"
@@ -127,7 +127,7 @@ export default function ProfilePage() {
 
                 <div>
                   <label className="block text-slate-400 font-medium mb-1.5">
-                    Email Address
+                    {t.profile.emailLabel}
                   </label>
                   <input
                     type="email"
@@ -139,7 +139,7 @@ export default function ProfilePage() {
 
                 <div>
                   <label className="block text-slate-400 font-medium mb-1.5">
-                    Display Currency
+                    {t.profile.currencyLabel}
                   </label>
                   <select
                     value={currency}
@@ -154,7 +154,7 @@ export default function ProfilePage() {
 
                 <div>
                   <label className="block text-slate-400 font-medium mb-1.5">
-                    Language / ಭಾಷೆ / भाषा
+                    {t.profile.preferredLanguageLabel}
                   </label>
                   <select
                     value={preferredLang}
@@ -175,11 +175,14 @@ export default function ProfilePage() {
                   className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
                 >
                   {saving ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <div className="flex items-center gap-1.5">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>{t.profile.saving}</span>
+                    </div>
                   ) : (
                     <>
                       <Save className="w-4 h-4" />
-                      <span>Save Changes</span>
+                      <span>{t.profile.saveProfileButton}</span>
                     </>
                   )}
                 </button>

@@ -6,6 +6,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [0.2.0] - 2026-11-01
+
+### Added
+- **Application-Wide Multilingual Localization**:
+  - Comprehensive, natural language translation across English (`en`), Hindi (`hi`), and Kannada (`kn`).
+  - Zero-fallback coverage across all 18 pages and 7 shared UI components.
+  - Central typed dictionary architecture (`frontend/lib/translations.ts`) spanning 20 namespaces with 350+ UI labels, descriptions, and error states.
+  - Reactive `LanguageProvider` with persistent hydration from `localStorage` (`cliq_preferred_language`).
+- **Dynamic Content & Form Localization**:
+  - Localized 3-step credit card onboarding wizard (`CardSelectionFlow.tsx`), variant selectors, and customization inputs.
+  - Localized Purchase Intelligence workbench (`/optimization`) with payment channel selectors (Online / In-Store), recommendation hero cards, and step-by-step calculation tables.
+  - Localized Financial Health auditor (`/financial-health`), recurring subscription trackers, and annual fee justification audit tables.
+  - Localized Spending Analytics (`/analytics`), KPI metrics, monthly velocity charts, and spend allocation widgets.
+  - Localized transaction history tables (`/transactions`), status badges, and record spend modal.
+  - Localized admin offer review desk (`/admin/offers`), circular dropzones, and source registry health monitors.
+- **AI Assistant & Privacy Gateway Language Support**:
+  - Multilingual AI assistant greeting and contextual suggestion chips tailored per language (Devanagari for Hindi, Kannada script for Kannada).
+  - Grounded local fallback engine delivering verified portfolio answers in the user's selected language when external AI is disabled.
+  - Prompt sanitizer in `PrivacyGateway` enforcing strict script and language boundaries while keeping PII/PCI redactors active.
+- **Backend Handshake**:
+  - Added optional `language` parameter (`en`, `hi`, `kn`) to `RecommendRequest` schema (`backend/app/schemas/optimization.py`), seamlessly defaulting to the user's stored profile preference.
+  - Recommendation engine formats localized explanation summaries directly in the target language.
+
+### Changed
+- Preserved proper nouns, financial brands, card variant names (*HDFC Bank, ICICI Bank, SBI Card, Regalia Gold, Millennia, Infinia*), merchant names (*Swiggy, Amazon, Zomato, Blinkit*), and monetary symbols (`₹`, `%`) across all languages without phonetic corruption.
+- Decoupled type declarations and dictionaries into `translations.ts` for native TypeScript testing compatibility.
+
+### Fixed
+- Fixed language switching bug where changing the language only translated the dashboard navigation while the rest of the application remained in English.
+- Resolved SWC build compilation issues in `financial-health`, `offers`, and `optimization` pages.
+- Enforced `language: Optional[str] = None` default in backend `RecommendRequest` to prevent overriding saved user language profile preferences.
+
+### Testing
+- **Frontend Test Suite (19 passing)**:
+  - Added `localization.test.ts` verifying 100% dictionary completeness, zero missing keys across English, Hindi, and Kannada, proper noun preservation, script integrity, and storage persistence.
+  - Passing authentication lifecycle and card stack animation test suites.
+- **Production Build**:
+  - Clean Next.js 14 production build (`npm run build`) with 21/21 static routes prerendered.
+- **Backend Test Suite (100 passing)**:
+  - All 100 backend pytest integration and unit tests passing.
+
 ## [0.1.0] - 2026-11-01
 
 ### Added

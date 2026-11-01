@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { api, CreditCard } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n";
 import {
   BANK_ISSUERS,
   BankIssuer,
@@ -43,6 +44,8 @@ export function CardSelectionFlow({
   onCancel,
   isModal = false,
 }: CardSelectionFlowProps) {
+  const { t } = useLanguage();
+
   // Selection states
   const [selectedBankId, setSelectedBankId] = useState<string>("hdfc");
   const [selectedCardId, setSelectedCardId] = useState<string>("hdfc-regalia-gold");
@@ -242,20 +245,20 @@ export function CardSelectionFlow({
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cliq-cyan/10 border border-cliq-cyan/30 text-cliq-cyan text-[11px] font-bold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Interactive Onboarding</span>
+            <span>CLIQ PRO</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-            Select Your Card to Build Your Digital Wallet
+            {t.cardSelection?.title || "Select & Customize Credit Card"}
           </h2>
           <p className="text-xs sm:text-sm text-cliq-textSecondary max-w-2xl">
-            Choose from 10 verified Indian credit card catalogues with real fee schedules and reward multipliers, or enter a custom card.
+            {t.cardSelection?.subtitle || "Choose from 10 verified Indian credit card catalogues with real fee schedules and reward multipliers, or enter a custom card."}
           </p>
         </div>
 
         <div className="shrink-0 flex items-center gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Zero PAN / CVV Storage</span>
+            <span>{t.cardSelection?.zeroStorageBadge || "Zero PAN / CVV Storage"}</span>
           </div>
           {onCancel && (
             <button
@@ -274,9 +277,9 @@ export function CardSelectionFlow({
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
             <Building2 className="w-4 h-4" />
-            <span>1. Select Card Issuer</span>
+            <span>{t.cardSelection?.step1Title || "1. Select Card Issuer"}</span>
           </h3>
-          <span className="text-xs text-cliq-textSecondary">10 Issuers Available</span>
+          <span className="text-xs text-cliq-textSecondary">{t.cardSelection?.issuersCount || "10 Issuers Available"}</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
@@ -304,7 +307,7 @@ export function CardSelectionFlow({
                     {issuer.name}
                   </div>
                   <div className="text-[9px] text-cliq-textSecondary">
-                    {issuer.cards.length} {issuer.cards.length === 1 ? "card" : "cards"}
+                    {issuer.cards.length} {t.cards?.cardsCountLabel || "cards"}
                   </div>
                 </div>
               </button>
@@ -318,10 +321,10 @@ export function CardSelectionFlow({
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
             <Layers className="w-4 h-4" />
-            <span>2. Select Card Variant</span>
+            <span>{t.cardSelection?.step2Title || "2. Select Card Variant"}</span>
           </h3>
           <span className="text-xs text-cliq-textSecondary">
-            Pre-configured with official rewards & benefits
+            {t.cardSelection?.verifiedCardsCount || "Verified Cards"}
           </span>
         </div>
 
@@ -413,7 +416,7 @@ export function CardSelectionFlow({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1 sm:col-span-2">
                     <label className="text-xs font-semibold text-cliq-textSecondary flex items-center justify-between">
-                      <span>Cardholder Name *</span>
+                      <span>{t.cardSelection?.cardholderNameLabel || "Cardholder Name"} *</span>
                       <span className="text-[10px] text-cliq-cyan">Appears on card</span>
                     </label>
                     <input
@@ -427,7 +430,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Card Name *</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cards?.title || "Card Name"} *</label>
                     <input
                       type="text"
                       required
@@ -438,7 +441,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Issuing Bank *</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.step1Title || "Issuing Bank"} *</label>
                     <input
                       type="text"
                       required
@@ -449,7 +452,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Payment Network *</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.networkLabel || "Payment Network"} *</label>
                     <select
                       value={network}
                       onChange={(e) => setNetwork(e.target.value as any)}
@@ -464,7 +467,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Variant / Tier</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.step2Title || "Variant / Tier"}</label>
                     <input
                       type="text"
                       value={cardVariant}
@@ -474,7 +477,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Nickname (Optional)</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.nicknameLabel || "Nickname (Optional)"}</label>
                     <input
                       type="text"
                       value={nickname}
@@ -486,7 +489,7 @@ export function CardSelectionFlow({
 
                   <div className="space-y-1">
                     <label className="text-xs font-semibold text-cliq-textSecondary flex items-center justify-between">
-                      <span>Last 4 Digits (Optional)</span>
+                      <span>{t.cardSelection?.lastFourLabel || "Last 4 Digits (Optional)"}</span>
                       <span className="text-[10px] text-emerald-400">Safe masked</span>
                     </label>
                     <input
@@ -505,7 +508,7 @@ export function CardSelectionFlow({
               <div className="p-5 rounded-2xl bg-cliq-surface border border-cliq-border space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Joining Fee (₹)</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.joiningFeeLabel || "Joining Fee (₹)"}</label>
                     <input
                       type="number"
                       min="0"
@@ -516,7 +519,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Annual Fee (₹)</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.annualFeeLabel || "Annual Fee (₹)"}</label>
                     <input
                       type="number"
                       min="0"
@@ -527,7 +530,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Waiver Spend (₹)</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.waiverSpendLabel || "Waiver Spend (₹)"}</label>
                     <input
                       type="number"
                       min="0"
@@ -538,7 +541,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1 sm:col-span-3">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">Waiver Condition</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.waiverDetailsLabel || "Waiver Condition"}</label>
                     <input
                       type="text"
                       value={waiverDetails}
@@ -559,12 +562,12 @@ export function CardSelectionFlow({
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Adding to Wallet...</span>
+                      <span>{t.cardSelection?.registering || "Adding to Wallet..."}</span>
                     </>
                   ) : (
                     <>
                       <CardIcon className="w-4 h-4" />
-                      <span>Add Card to My Collection</span>
+                      <span>{t.cardSelection?.submitAddCard || "Add Card to My Collection"}</span>
                     </>
                   )}
                 </button>

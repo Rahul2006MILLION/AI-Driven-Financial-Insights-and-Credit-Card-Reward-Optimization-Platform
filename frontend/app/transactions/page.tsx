@@ -77,12 +77,12 @@ export default function TransactionsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete transaction record?")) return;
+    if (!confirm(t.transactions.deletePrompt)) return;
     try {
       await apiFetch(`/transactions/${id}`, { method: "DELETE" });
       await fetchData();
     } catch (err) {
-      alert("Failed to delete: " + err);
+      alert(t.transactions.deleteFailed + ": " + err);
     }
   };
 
@@ -94,10 +94,10 @@ export default function TransactionsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-              Transactions
+              {t.transactions.title}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
-              Historical purchases and reward allocation efficiency
+              {t.transactions.subtitle}
             </p>
           </div>
 
@@ -106,7 +106,7 @@ export default function TransactionsPage() {
             className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Record Spend</span>
+            <span>{t.transactions.addNewTransaction}</span>
           </button>
         </div>
 
@@ -114,12 +114,12 @@ export default function TransactionsPage() {
         {showAddModal && (
           <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
             <div className="p-6 sm:p-7 rounded-3xl bg-[#06100C]/95 border border-white/10 shadow-2xl max-w-md w-full space-y-4">
-              <h3 className="text-base font-bold text-white">Record Transaction</h3>
+              <h3 className="text-base font-bold text-white">{t.transactions.addModalTitle}</h3>
 
               <form onSubmit={handleAddTransaction} className="space-y-3.5 text-xs">
                 <div>
                   <label className="block text-slate-400 mb-1 font-medium">
-                    Merchant Name *
+                    {t.transactions.merchantLabel} *
                   </label>
                   <input
                     type="text"
@@ -133,7 +133,7 @@ export default function TransactionsPage() {
 
                 <div>
                   <label className="block text-slate-400 mb-1 font-medium">
-                    Amount (₹) *
+                    {t.transactions.amountLabel} *
                   </label>
                   <input
                     type="number"
@@ -147,34 +147,34 @@ export default function TransactionsPage() {
 
                 <div>
                   <label className="block text-slate-400 mb-1 font-medium">
-                    Category
+                    {t.transactions.categoryLabel}
                   </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                   >
-                    <option value="dining">Dining & Delivery</option>
-                    <option value="shopping">Online Shopping</option>
-                    <option value="grocery">Groceries</option>
-                    <option value="utility">Utility & Bills</option>
-                    <option value="travel">Travel & Flights</option>
-                    <option value="fuel">Fuel (Petrol Pump)</option>
-                    <option value="entertainment">Entertainment</option>
-                    <option value="other">General Spends</option>
+                    <option value="dining">{t.categories.dining}</option>
+                    <option value="shopping">{t.categories.shopping}</option>
+                    <option value="grocery">{t.categories.grocery}</option>
+                    <option value="utility">{t.categories.utility}</option>
+                    <option value="travel">{t.categories.travel}</option>
+                    <option value="fuel">{t.categories.fuel}</option>
+                    <option value="entertainment">{t.categories.entertainment}</option>
+                    <option value="other">{t.categories.other}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-slate-400 mb-1 font-medium">
-                    Card Used
+                    {t.transactions.cardLabel}
                   </label>
                   <select
                     value={cardId}
                     onChange={(e) => setCardId(e.target.value)}
                     className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                   >
-                    <option value="">Auto-Detect Optimal Card</option>
+                    <option value="">{t.cards.allBanks}</option>
                     {cards.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.card_name} ({c.bank_name})
@@ -192,7 +192,7 @@ export default function TransactionsPage() {
                     className="rounded bg-white/[0.05] border-white/20 text-emerald-500 focus:ring-0"
                   />
                   <label htmlFor="rec_check" className="text-slate-400 cursor-pointer text-xs">
-                    Recurring monthly subscription (e.g. Netflix, gym)
+                    {t.transactions.recurringLabel}
                   </label>
                 </div>
 
@@ -202,14 +202,21 @@ export default function TransactionsPage() {
                     onClick={() => setShowAddModal(false)}
                     className="px-4 py-2 rounded-full bg-white/[0.05] text-slate-300 hover:text-white"
                   >
-                    Cancel
+                    {t.cards.cancel}
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
                     className="px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold shadow-[0_0_20px_rgba(16,185,129,0.35)]"
                   >
-                    {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save"}
+                    {submitting ? (
+                      <div className="flex items-center gap-1.5">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>{t.transactions.recording}</span>
+                      </div>
+                    ) : (
+                      t.transactions.recordTransactionButton
+                    )}
                   </button>
                 </div>
               </form>
@@ -223,20 +230,20 @@ export default function TransactionsPage() {
             <table className="w-full text-xs text-left">
               <thead className="bg-white/[0.02] text-slate-400 uppercase text-[10px] tracking-wider border-b border-white/[0.06]">
                 <tr>
-                  <th className="py-3.5 px-5 font-semibold">Merchant / Date</th>
-                  <th className="py-3.5 px-5 font-semibold">Category</th>
-                  <th className="py-3.5 px-5 font-semibold text-right">Amount</th>
-                  <th className="py-3.5 px-5 font-semibold text-right">Reward Earned</th>
-                  <th className="py-3.5 px-5 font-semibold text-right">Optimal Potential</th>
-                  <th className="py-3.5 px-5 font-semibold text-center">Status</th>
-                  <th className="py-3.5 px-5 text-center">Action</th>
+                  <th className="py-3.5 px-5 font-semibold">{t.transactions.tableMerchant}</th>
+                  <th className="py-3.5 px-5 font-semibold">{t.transactions.tableCategory}</th>
+                  <th className="py-3.5 px-5 font-semibold text-right">{t.transactions.tableAmount}</th>
+                  <th className="py-3.5 px-5 font-semibold text-right">{t.transactions.tableReward}</th>
+                  <th className="py-3.5 px-5 font-semibold text-right">{t.optimizer.intelligenceTitle}</th>
+                  <th className="py-3.5 px-5 font-semibold text-center">{t.optimizer.breakdown}</th>
+                  <th className="py-3.5 px-5 text-center">{t.transactions.tableActions}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">
                 {transactions.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-12 text-center text-slate-500">
-                      No transaction records recorded yet.
+                      {t.transactions.noTransactionsFound}
                     </td>
                   </tr>
                 ) : (
@@ -280,12 +287,12 @@ export default function TransactionsPage() {
                           {isOptimal ? (
                             <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
                               <CheckCircle2 className="w-3 h-3" />
-                              <span>Optimal</span>
+                              <span>{t.dashboard.optimalRecommendation}</span>
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">
                               <TrendingDown className="w-3 h-3" />
-                              <span>-₹{leakage.toFixed(2)} Leakage</span>
+                              <span>-₹{leakage.toFixed(2)} {t.analytics.leakage}</span>
                             </span>
                           )}
                         </td>

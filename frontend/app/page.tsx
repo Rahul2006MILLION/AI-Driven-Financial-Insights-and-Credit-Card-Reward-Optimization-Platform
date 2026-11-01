@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 import {
   Sparkles,
   ArrowRight,
@@ -16,6 +17,7 @@ import { DigitalCreditCard } from "@/components/DigitalCreditCard";
 import { BANK_ISSUERS } from "@/lib/cardCatalogue";
 
 export default function LandingPage() {
+  const { t } = useLanguage();
   // Use a premier verified card (e.g. HDFC Regalia Gold or Infinia) for the hero floating visual
   const heroCard = BANK_ISSUERS[0]?.cards[0] || {
     id: "hdfc-infinia",
@@ -55,7 +57,7 @@ export default function LandingPage() {
           className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-xl text-emerald-400 text-xs font-semibold mb-8 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
         >
           <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-          <span className="tracking-wide">Liquid Glass Fintech Platform</span>
+          <span className="tracking-wide">{t.landing?.badge || "Liquid Glass Fintech Platform"}</span>
         </motion.div>
 
         {/* Hero Headline */}
@@ -65,9 +67,9 @@ export default function LandingPage() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-white max-w-4xl leading-[1.08]"
         >
-          Money, Made <br />
+          {t.landing?.heroTitlePrefix || "Money, Made "} <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500 glow-emerald">
-            Intelligent.
+            {t.landing?.heroTitleAccent || "Intelligent."}
           </span>
         </motion.h1>
 
@@ -78,7 +80,7 @@ export default function LandingPage() {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="mt-6 text-lg sm:text-xl text-slate-400 max-w-xl font-normal leading-relaxed"
         >
-          Your cards. Your rewards. Your financial clarity.
+          {t.landing?.heroSubtitle || "Your cards. Your rewards. Your financial clarity."}
         </motion.p>
 
         {/* Primary and Secondary CTA */}
@@ -92,14 +94,14 @@ export default function LandingPage() {
             href="/register"
             className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(16,185,129,0.6)] transition-all flex items-center justify-center gap-2 group"
           >
-            <span>Explore CLIQ</span>
+            <span>{t.landing?.exploreCta || "Explore CLIQ"}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/login"
             className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white font-medium text-sm backdrop-blur-xl transition-all"
           >
-            Sign In
+            {t.landing?.signInCta || t.nav?.login || "Sign In"}
           </Link>
         </motion.div>
 
@@ -138,9 +140,9 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
               <Zap className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-semibold text-white">Purchase Optimizer</h3>
+            <h3 className="text-sm font-semibold text-white">{t.landing?.featureOptimizerTitle || "Purchase Optimizer"}</h3>
             <p className="text-xs text-slate-400 mt-1">
-              Exact calculations for merchant rewards and fee waivers.
+              {t.landing?.featureOptimizerDesc || "Exact calculations for merchant rewards and fee waivers."}
             </p>
           </div>
 
@@ -148,9 +150,9 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
               <Layers className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-semibold text-white">Fan Wallet</h3>
+            <h3 className="text-sm font-semibold text-white">{t.landing?.featureWalletTitle || "Fan Wallet"}</h3>
             <p className="text-xs text-slate-400 mt-1">
-              Interactive 3D collection with real issuer card specs.
+              {t.landing?.featureWalletDesc || "Interactive 3D collection with real issuer card specs."}
             </p>
           </div>
 
@@ -158,9 +160,9 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
               <Lock className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-semibold text-white">Privacy Gateway</h3>
+            <h3 className="text-sm font-semibold text-white">{t.landing?.featurePrivacyTitle || "Privacy Gateway"}</h3>
             <p className="text-xs text-slate-400 mt-1">
-              Local processing by default. Zero unauthorized egress.
+              {t.landing?.featurePrivacyDesc || "Local processing by default. Zero unauthorized egress."}
             </p>
           </div>
         </motion.div>
@@ -171,14 +173,14 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-slate-400">
             <span className="font-bold text-white tracking-wider glow-emerald">CLIQ</span>
-            <span>• Money, Made Intelligent.</span>
+            <span>• {t.landing?.footerBrand || "Money, Made Intelligent."}</span>
           </div>
           <div className="flex items-center gap-4 text-slate-500">
-            <span>256-Bit RLS Protection</span>
+            <span>{t.landing?.footerRls || "256-Bit RLS Protection"}</span>
             <span>•</span>
-            <span>Zero PAN Storage</span>
+            <span>{t.landing?.footerPan || "Zero PAN Storage"}</span>
             <span>•</span>
-            <span>India First</span>
+            <span>{t.landing?.footerIndia || "India First"}</span>
           </div>
         </div>
       </footer>

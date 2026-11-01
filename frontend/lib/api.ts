@@ -488,6 +488,7 @@ export const api = {
     category_id: string;
     merchant_name?: string;
     payment_channel?: string;
+    language?: string;
   }) => apiFetch<RecommendResponse>("/optimization/recommend", { method: "POST", body: JSON.stringify(data) }),
 
   compareCards: (data: { card_ids: string[]; simulation_spend?: number }) =>

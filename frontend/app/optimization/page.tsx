@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 export default function RewardOptimizationPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const [amount, setAmount] = useState<number>(2000);
   const [category, setCategory] = useState<string>("food_delivery");
@@ -44,10 +44,11 @@ export default function RewardOptimizationPage() {
         category_id: category,
         merchant_name: merchant,
         payment_channel: paymentChannel,
+        language,
       });
       setResult(res);
     } catch (err: any) {
-      setError(err.message || "Optimization calculation failed.");
+      setError(err.message || t.optimizer.calculating);
     } finally {
       setLoading(false);
     }
@@ -66,10 +67,10 @@ export default function RewardOptimizationPage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-            Purchase Intelligence
+            {t.optimizer.intelligenceTitle}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Real-time reward maximization and instant coupon detection
+            {t.optimizer.intelligenceSubtitle}
           </p>
         </div>
 
@@ -84,7 +85,7 @@ export default function RewardOptimizationPage() {
           <form onSubmit={handleOptimize} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
-                Spend Amount (₹)
+                {t.optimizer.amountLabel}
               </label>
               <input
                 type="number"
@@ -98,29 +99,29 @@ export default function RewardOptimizationPage() {
 
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
-                Category
+                {t.optimizer.categoryLabel}
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
               >
-                <option value="food_delivery">Food Delivery (Swiggy, Zomato)</option>
-                <option value="dining">Dining & Restaurants</option>
-                <option value="shopping">Shopping (Amazon, Flipkart)</option>
-                <option value="grocery">Groceries (Blinkit, DMart)</option>
-                <option value="travel">Travel & Flights</option>
-                <option value="entertainment">Movies & Entertainment</option>
-                <option value="utility">Utility & Bills</option>
-                <option value="fuel">Fuel & Petrol Pumps</option>
-                <option value="international">International Spends</option>
-                <option value="other">General Spends</option>
+                <option value="food_delivery">{t.categories.food_delivery}</option>
+                <option value="dining">{t.categories.dining}</option>
+                <option value="shopping">{t.categories.shopping}</option>
+                <option value="grocery">{t.categories.grocery}</option>
+                <option value="travel">{t.categories.travel}</option>
+                <option value="entertainment">{t.categories.entertainment}</option>
+                <option value="utility">{t.categories.utility}</option>
+                <option value="fuel">{t.categories.fuel}</option>
+                <option value="international">{t.categories.international}</option>
+                <option value="other">{t.categories.other}</option>
               </select>
             </div>
 
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
-                Merchant / Store
+                {t.optimizer.merchantLabel}
               </label>
               <input
                 type="text"
@@ -133,7 +134,7 @@ export default function RewardOptimizationPage() {
 
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
-                Channel
+                {t.optimizer.channelLabel}
               </label>
               <div className="grid grid-cols-2 gap-1.5 bg-white/[0.03] p-1 rounded-2xl border border-white/10">
                 <button
@@ -146,7 +147,7 @@ export default function RewardOptimizationPage() {
                   }`}
                 >
                   <Globe className="w-3.5 h-3.5" />
-                  <span>Online</span>
+                  <span>{t.optimizer.onlineChannel}</span>
                 </button>
                 <button
                   type="button"
@@ -158,7 +159,7 @@ export default function RewardOptimizationPage() {
                   }`}
                 >
                   <Store className="w-3.5 h-3.5" />
-                  <span>In-Store</span>
+                  <span>{t.optimizer.offlineChannel}</span>
                 </button>
               </div>
             </div>
@@ -174,7 +175,7 @@ export default function RewardOptimizationPage() {
                 ) : (
                   <>
                     <Zap className="w-4 h-4" />
-                    <span>Calculate Optimal Benefits</span>
+                    <span>{t.optimizer.calculate}</span>
                   </>
                 )}
               </button>
@@ -193,7 +194,7 @@ export default function RewardOptimizationPage() {
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-xs font-semibold border border-emerald-500/30 mb-2.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Top Recommendation</span>
+                    <span>{t.optimizer.topRecommendation}</span>
                   </div>
 
                   <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -206,12 +207,12 @@ export default function RewardOptimizationPage() {
                 </div>
 
                 <div className="sm:text-right">
-                  <span className="text-xs text-slate-400 block font-medium">Total Net Benefit</span>
+                  <span className="text-xs text-slate-400 block font-medium">{t.optimizer.netBenefit}</span>
                   <div className="text-3xl sm:text-4xl font-black text-emerald-400 glow-emerald tracking-tight">
                     ₹{Number(result.recommended_card.net_financial_benefit).toFixed(2)}
                   </div>
                   <span className="text-xs font-semibold text-emerald-300">
-                    {result.recommended_card.effective_rate_percentage}% Effective Yield
+                    {result.recommended_card.effective_rate_percentage}% {t.optimizer.yieldLabel}
                   </span>
                 </div>
               </div>
@@ -221,7 +222,7 @@ export default function RewardOptimizationPage() {
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                   <div>
                     <span className="text-[10px] text-slate-500 uppercase font-semibold block">
-                      Upfront Instant Discount
+                      {t.optimizer.instantDiscount}
                     </span>
                     <span className="text-lg font-black text-emerald-400">
                       ₹{Number(result.recommended_card.instant_discount_monetary).toFixed(2)}
@@ -233,7 +234,7 @@ export default function RewardOptimizationPage() {
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                   <div>
                     <span className="text-[10px] text-slate-500 uppercase font-semibold block">
-                      Card Rewards & Cashback
+                      {t.optimizer.postRewardCashback}
                     </span>
                     <span className="text-lg font-black text-white">
                       ₹{Number(result.recommended_card.post_reward_monetary).toFixed(2)}
@@ -249,7 +250,7 @@ export default function RewardOptimizationPage() {
                   <div>
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 uppercase">
-                        Matched Coupon
+                        {t.optimizer.matchedCoupons}
                       </span>
                       <span className="text-xs font-bold text-white">
                         {result.recommended_card.applicable_offers[0].offer_title}
@@ -293,7 +294,7 @@ export default function RewardOptimizationPage() {
               {/* Calculation Steps */}
               <div className="mt-6 pt-6 border-t border-white/[0.07]">
                 <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">
-                  Calculation Breakdown
+                  {t.optimizer.calculationStepsTitle}
                 </h4>
 
                 <div className="space-y-2">
@@ -325,14 +326,14 @@ export default function RewardOptimizationPage() {
               {/* Source Verification Link */}
               {result.recommended_card.source_references && result.recommended_card.source_references.length > 0 && (
                 <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-slate-500">
-                  <span>Source Verification:</span>
+                  <span>Official Verification:</span>
                   <a
                     href={result.recommended_card.source_references[0]}
                     target="_blank"
                     rel="noreferrer"
                     className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium"
                   >
-                    <span>Official Schedule of Charges</span>
+                    <span>Schedule of Charges</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
@@ -343,7 +344,7 @@ export default function RewardOptimizationPage() {
             {result.alternatives && result.alternatives.length > 0 && (
               <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-4">
                 <h3 className="text-sm font-bold text-white tracking-wide">
-                  Alternative Cards in Portfolio
+                  {t.optimizer.alternatives}
                 </h3>
 
                 <div className="divide-y divide-white/[0.06]">
@@ -359,10 +360,10 @@ export default function RewardOptimizationPage() {
                         <div>
                           <div className="font-bold text-white">{alt.card_name}</div>
                           <div className="text-[11px] text-slate-400">
-                            {alt.bank_name} • {alt.effective_rate_percentage}% Yield
+                            {alt.bank_name} • {alt.effective_rate_percentage}% {t.optimizer.yieldLabel}
                             {Number(alt.instant_discount_monetary) > 0 && (
                               <span className="text-emerald-400 ml-1 font-medium">
-                                (includes ₹{Number(alt.instant_discount_monetary)} instant discount)
+                                ({t.optimizer.instantDiscount}: ₹{Number(alt.instant_discount_monetary)})
                               </span>
                             )}
                           </div>
@@ -375,7 +376,7 @@ export default function RewardOptimizationPage() {
                           {delta > 0 && (
                             <div className="text-[11px] text-rose-400 flex items-center gap-0.5 justify-end">
                               <TrendingDown className="w-3 h-3" />
-                              <span>-₹{delta.toFixed(2)} Delta</span>
+                              <span>-₹{delta.toFixed(2)} {t.optimizer.delta}</span>
                             </div>
                           )}
                         </div>

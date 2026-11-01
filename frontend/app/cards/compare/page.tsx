@@ -72,10 +72,10 @@ export default function CompareCardsPage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-            Card Comparison
+            {t.compare?.title || "Card Comparison"}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Side-by-side multiplier matrix and annual fee breakeven analysis
+            {t.compare?.subtitle || "Side-by-side multiplier matrix and annual fee breakeven analysis"}
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export default function CompareCardsPage() {
         <div className="p-5 sm:p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-white uppercase tracking-wider">
-              Select 2 to 5 Cards ({selectedIds.length} Selected)
+              {t.compare?.selectionPrompt || "Select 2 to 5 Cards"} ({selectedIds.length} {t.cards?.verifiedCountLabel ? "Selected" : "Selected"})
             </span>
             <button
               onClick={handleRunComparison}
@@ -91,7 +91,7 @@ export default function CompareCardsPage() {
               className="px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all flex items-center gap-1.5 disabled:opacity-40"
             >
               {comparing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <GitCompare className="w-3.5 h-3.5" />}
-              <span>Compare</span>
+              <span>{comparing ? (t.compare?.comparing || "Comparing...") : (t.compare?.runComparison || "Compare")}</span>
             </button>
           </div>
 
