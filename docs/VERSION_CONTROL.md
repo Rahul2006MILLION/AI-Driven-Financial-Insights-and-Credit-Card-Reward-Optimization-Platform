@@ -8,9 +8,9 @@ This document outlines the professional Git version-control, branching strategy,
 
 | Property | Value |
 | :--- | :--- |
-| **Current Active Version** | `v0.2.0` |
+| **Current Active Version** | `v0.3.0` |
 | **Published Release Commit** | *To be finalized upon commit creation* |
-| **Release Tag** | `v0.2.0` (Annotated: `CLIQ v0.2.0 - Complete multilingual localization`) |
+| **Release Tag** | `v0.3.0` (Annotated: `CLIQ v0.3.0 - Transaction Intelligence Phase 1`) |
 | **Production Branch** | `main` |
 | **Integration / Development Branch** | `first` |
 | **Remote Repository** | `https://github.com/Rahul2006MILLION/AI-Driven-Financial-Insights-and-Credit-Card-Reward-Optimization-Platform.git` |
@@ -36,7 +36,8 @@ $$\text{Format: } \mathbf{MAJOR.MINOR.PATCH}$$
 | :--- | :--- | :--- |
 | **`v0.1.0`** | **Foundation and Authentication** (FastAPI backend, Next.js Liquid Glass UI, session lifecycle, token persistence, IDOR enforcement, basic card models, 100 backend / 13 frontend tests). | **RELEASED & VERIFIED** |
 | **`v0.2.0`** | **Multilingual Localization & Digital Card Wallet** (Application-wide localization in EN, HI, KN across all 18 pages and 7 components; typed dictionary architecture; reactive `LanguageProvider` with `localStorage` persistence; localized Privacy Gateway and assistant; 100 backend / 19 frontend tests). | **RELEASED & VERIFIED** |
-| **`v0.3.0`** | **Offer Intelligence** (Hybrid offer ingestion, HTML/PDF circular parsing, staged human-in-the-loop review, source health monitoring, deduplication). | *In Development* |
+| **`v0.3.0`** | **Transaction Intelligence Phase 1** (CSV statement ingestion for HDFC, ICICI, SBI, Axis, Amex, and Generic formats; multi-tier duplicate prevention; merchant normalization; automatic categorization; reward engine yield calculation; multilingual reconciliation preview; 113 backend / 22 frontend tests). | **RELEASED & VERIFIED** |
+| **`v0.4.0`** | **Offer Intelligence** (Hybrid offer ingestion, HTML/PDF circular parsing, staged human-in-the-loop review, source health monitoring, deduplication). | *In Development* |
 | **`v0.4.0`** | **Purchase Intelligence** (Real-time merchant normalization, Decimal reward calculation engine, monthly reward cap tracking, card recommendation API). | *In Verification* |
 | **`v0.5.0`** | **AI Assistant & Privacy Gateway** (Zero-trust Privacy Gateway, PII/PCI redactor, user consent enforcement, Google Gemini 2.5 Flash integration, local fallback). | *In Verification* |
 | **`v1.0.0`** | **Official Hackathon Release** (End-to-end integration, full documentation, production deployment configuration, comprehensive audit sign-off). | *Target Milestone* |

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -7,6 +7,7 @@ from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 import json
 import re
+import uuid
 
 from app.core.database import get_db
 from app.models.entities import Profile, Transaction, CreditCard, AuditLog
@@ -14,10 +15,18 @@ from app.schemas.transaction import (
     TransactionCreate,
     TransactionResponse,
     TransactionFeedbackUpdate,
-    TransactionFeedbackSummaryResponse
+    TransactionFeedbackSummaryResponse,
+    TransactionImportPreviewRow,
+    TransactionImportPreviewResponse,
+    TransactionImportCommitRequest,
+    TransactionImportCommitResponse,
+    TransactionImportCommitRow
 )
 from app.security.dependencies import get_current_user
 from app.services.reward_optimization.engine import RewardOptimizationEngine
+from app.services.reward_optimization.merchant_normalizer import MerchantNormalizer
+from app.services.statement_parser.csv_parser import CSVStatementParser
+from app.services.statement_parser.deduplication import DeduplicationEngine
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
@@ -84,6 +93,11 @@ def parse_transaction_response(txn: Transaction) -> TransactionResponse:
         reward_earned_monetary=txn.reward_earned_monetary,
         potential_optimal_reward=txn.potential_optimal_reward,
         optimal_card_id=txn.optimal_card_id,
+        raw_description=txn.raw_description,
+        reference_number=txn.reference_number,
+        deduplication_hash=txn.deduplication_hash,
+        import_batch_id=txn.import_batch_id,
+        category_confidence=txn.category_confidence,
         actual_reward_earned=actual,
         predicted_reward=predicted,
         reward_variance=variance,
@@ -181,12 +195,413 @@ async def get_transaction_feedback_summary(
         discrepancy_reasons_breakdown=discrepancy_reasons
     )
 
+# --- CSV Statement Ingestion Endpoints ---
+
+@router.post("/import/preview", response_model=TransactionImportPreviewResponse)
+async def preview_csv_import(
+    file: UploadFile = File(...),
+    card_id: Optional[str] = Form(None),
+    bank_format: Optional[str] = Form("AUTO"),
+    current_user: Profile = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Parses an uploaded credit card statement CSV, performs merchant normalization,
+    evaluates duplicate status against existing transactions, and computes rewards.
+    Returns preview rows with validation errors and ambiguous flags for user reconciliation.
+    """
+    # 1. Validate file extension
+    if not file.filename.lower().endswith(".csv"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only CSV files (.csv) are supported for statement import."
+        )
+
+    # 2. Read and validate size (5 MB limit)
+    contents = await file.read()
+    if len(contents) > 5 * 1024 * 1024:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="CSV file exceeds maximum allowed size of 5MB."
+        )
+    if not contents or not contents.strip():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The uploaded CSV file is empty."
+        )
+
+    # 3. Decode safely
+    try:
+        content_str = contents.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        try:
+            content_str = contents.decode("latin-1")
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Unable to decode CSV file. Please ensure it is saved in UTF-8 or standard CSV format."
+            )
+
+    # 4. Parse CSV
+    detected_format, parsed_rows = CSVStatementParser.parse_csv_content(content_str, forced_format=bank_format)
+
+    # 5. Fetch user active cards with rules & benefits
+    stmt_cards = (
+        select(CreditCard)
+        .where(CreditCard.user_id == current_user.id, CreditCard.is_active == True)
+        .options(
+            selectinload(CreditCard.reward_rules),
+            selectinload(CreditCard.benefits)
+        )
+    )
+    user_cards = (await db.execute(stmt_cards)).scalars().all()
+
+    target_card = None
+    if card_id:
+        target_card = next((c for c in user_cards if c.id == card_id), None)
+        if not target_card:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Target credit card not found or unauthorized access."
+            )
+
+    # 6. Fetch existing transactions to evaluate duplicates
+    stmt_tx = select(Transaction).where(Transaction.user_id == current_user.id)
+    existing_txns = (await db.execute(stmt_tx)).scalars().all()
+
+    preview_rows: List[TransactionImportPreviewRow] = []
+    valid_count = 0
+    duplicate_count = 0
+    ambiguous_count = 0
+    invalid_count = 0
+    excluded_count = 0
+    total_spend = Decimal("0.00")
+    total_predicted_rewards = Decimal("0.00")
+
+    for r in parsed_rows:
+        temp_id = uuid.uuid4().hex
+
+        if r.is_credit:
+            excluded_count += 1
+            preview_rows.append(TransactionImportPreviewRow(
+                temp_id=temp_id,
+                row_index=r.row_index,
+                transaction_date=r.parsed_date or datetime.utcnow(),
+                raw_description=r.raw_description,
+                merchant_name=r.raw_description or "Credit / Payment",
+                amount=r.parsed_amount or Decimal("0.00"),
+                currency=r.currency,
+                reference_number=r.reference_number,
+                category_id="other",
+                category_confidence=Decimal("0.00"),
+                requires_category_review=False,
+                duplicate_status="EXCLUDED",
+                duplicate_reason="Statement payment/credit row; excluded from spend tracking.",
+                deduplication_hash="",
+                predicted_reward=Decimal("0.00"),
+                potential_optimal_reward=Decimal("0.00"),
+                optimal_card_id=None,
+                selected_for_import=False,
+                is_valid=False,
+                error_message="Payment/Credit row excluded"
+            ))
+            continue
+
+        if not r.is_valid:
+            invalid_count += 1
+            preview_rows.append(TransactionImportPreviewRow(
+                temp_id=temp_id,
+                row_index=r.row_index,
+                transaction_date=r.parsed_date or datetime.utcnow(),
+                raw_description=r.raw_description,
+                merchant_name=r.raw_description or "Unknown",
+                amount=r.parsed_amount or Decimal("0.00"),
+                currency=r.currency,
+                reference_number=r.reference_number,
+                category_id="other",
+                category_confidence=Decimal("0.00"),
+                requires_category_review=True,
+                duplicate_status="INVALID",
+                duplicate_reason=None,
+                deduplication_hash="",
+                predicted_reward=Decimal("0.00"),
+                potential_optimal_reward=Decimal("0.00"),
+                optimal_card_id=None,
+                selected_for_import=False,
+                is_valid=False,
+                error_message=r.error_message
+            ))
+            continue
+
+        # Evaluate duplicate state
+        dup_status, dup_reason, dedup_hash = DeduplicationEngine.evaluate_row_duplicates(
+            user_id=current_user.id,
+            row=r,
+            card_id=card_id,
+            existing_txns=existing_txns
+        )
+
+        if dup_status == "EXACT_DUPLICATE":
+            duplicate_count += 1
+            selected = False
+        elif dup_status == "AMBIGUOUS_DUPLICATE":
+            ambiguous_count += 1
+            selected = True
+            valid_count += 1
+        else:
+            valid_count += 1
+            selected = True
+
+        # Reward evaluation
+        pred_reward = Decimal("0.00")
+        if target_card:
+            eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
+                card=target_card,
+                amount=r.parsed_amount,
+                category_id=r.category_id,
+                merchant_name=r.canonical_merchant
+            )
+            pred_reward = eval_res.expected_reward_monetary
+
+        best_opt = RewardOptimizationEngine.optimize_transaction(
+            cards=user_cards,
+            amount=r.parsed_amount,
+            category_id=r.category_id,
+            merchant_name=r.canonical_merchant
+        )
+        opt_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
+        opt_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
+
+        if not target_card:
+            pred_reward = opt_reward
+
+        if selected and dup_status != "EXACT_DUPLICATE":
+            total_spend += r.parsed_amount
+            total_predicted_rewards += pred_reward
+
+        preview_rows.append(TransactionImportPreviewRow(
+            temp_id=temp_id,
+            row_index=r.row_index,
+            transaction_date=r.parsed_date,
+            raw_description=r.raw_description,
+            merchant_name=r.canonical_merchant,
+            amount=r.parsed_amount,
+            currency=r.currency,
+            reference_number=r.reference_number,
+            category_id=r.category_id,
+            category_confidence=r.category_confidence,
+            requires_category_review=r.requires_category_review,
+            duplicate_status=dup_status,
+            duplicate_reason=dup_reason,
+            deduplication_hash=dedup_hash,
+            predicted_reward=pred_reward,
+            potential_optimal_reward=opt_reward,
+            optimal_card_id=opt_card_id,
+            selected_for_import=selected,
+            is_valid=True,
+            error_message=None
+        ))
+
+    return TransactionImportPreviewResponse(
+        filename=file.filename,
+        detected_format=detected_format,
+        total_rows_parsed=len(parsed_rows),
+        valid_rows_count=valid_count,
+        duplicate_rows_count=duplicate_count,
+        ambiguous_rows_count=ambiguous_count,
+        invalid_rows_count=invalid_count,
+        excluded_rows_count=excluded_count,
+        total_spend_amount=total_spend,
+        total_predicted_rewards=total_predicted_rewards,
+        rows=preview_rows
+    )
+
+@router.post("/import/commit", response_model=TransactionImportCommitResponse, status_code=status.HTTP_201_CREATED)
+async def commit_csv_import(
+    req: TransactionImportCommitRequest,
+    current_user: Profile = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Atomically commits confirmed statement transactions into the portfolio.
+    Enforces deduplication, merchant normalization, and deterministic reward calculations.
+    """
+    if not req.rows:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No rows provided for transaction import."
+        )
+
+    # 1. Verify card if specified
+    user_cards_stmt = (
+        select(CreditCard)
+        .where(CreditCard.user_id == current_user.id, CreditCard.is_active == True)
+        .options(
+            selectinload(CreditCard.reward_rules),
+            selectinload(CreditCard.benefits)
+        )
+    )
+    user_cards = (await db.execute(user_cards_stmt)).scalars().all()
+
+    target_card = None
+    if req.card_id:
+        target_card = next((c for c in user_cards if c.id == req.card_id), None)
+        if not target_card:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Target credit card not found or unauthorized access."
+            )
+
+    # 2. Existing transactions for duplicate check
+    existing_stmt = select(Transaction).where(Transaction.user_id == current_user.id)
+    existing_txns = (await db.execute(existing_stmt)).scalars().all()
+    existing_hashes = {t.deduplication_hash for t in existing_txns if t.deduplication_hash}
+    existing_refs = {t.reference_number.strip().lower() for t in existing_txns if t.reference_number}
+
+    import_batch_id = uuid.uuid4().hex
+    imported_txns: List[Transaction] = []
+    skipped_duplicates_count = 0
+    total_spend = Decimal("0.00")
+    total_rewards = Decimal("0.00")
+
+    seen_batch_hashes = set()
+    seen_batch_refs = set()
+
+    for row in req.rows:
+        clean_ref = row.reference_number.strip().lower() if row.reference_number else None
+
+        dedup_hash = row.deduplication_hash or DeduplicationEngine.compute_deduplication_hash(
+            user_id=current_user.id,
+            txn_date=row.transaction_date,
+            amount=row.amount,
+            normalized_merchant=row.merchant_name,
+            card_id=req.card_id
+        )
+
+        if req.skip_duplicates:
+            is_dup = False
+            if clean_ref and (clean_ref in existing_refs or clean_ref in seen_batch_refs):
+                is_dup = True
+            elif dedup_hash in existing_hashes or dedup_hash in seen_batch_hashes:
+                is_dup = True
+
+            if is_dup:
+                skipped_duplicates_count += 1
+                continue
+
+        if clean_ref:
+            seen_batch_refs.add(clean_ref)
+        seen_batch_hashes.add(dedup_hash)
+
+        # Rewards evaluation
+        predicted_reward = Decimal("0.00")
+        if target_card:
+            eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
+                card=target_card,
+                amount=row.amount,
+                category_id=row.category_id,
+                merchant_name=row.merchant_name
+            )
+            predicted_reward = eval_res.expected_reward_monetary
+
+        best_opt = RewardOptimizationEngine.optimize_transaction(
+            cards=user_cards,
+            amount=row.amount,
+            category_id=row.category_id,
+            merchant_name=row.merchant_name
+        )
+        optimal_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
+        optimal_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
+
+        chosen_card_id = req.card_id if req.card_id else optimal_card_id
+        if not req.card_id:
+            predicted_reward = optimal_reward
+
+        final_notes = serialize_feedback_notes(
+            user_notes=row.notes or f"Imported statement line: {row.raw_description}",
+            status="PENDING",
+            actual=None,
+            predicted=predicted_reward,
+            discrepancy=None
+        )
+
+        txn = Transaction(
+            user_id=current_user.id,
+            card_id=chosen_card_id,
+            category_id=row.category_id.strip().lower(),
+            merchant_name=row.merchant_name.strip(),
+            raw_description=row.raw_description.strip(),
+            amount=row.amount,
+            currency=row.currency or "INR",
+            transaction_date=row.transaction_date,
+            is_recurring=False,
+            reward_earned_monetary=predicted_reward,
+            potential_optimal_reward=optimal_reward,
+            optimal_card_id=optimal_card_id,
+            reference_number=row.reference_number,
+            deduplication_hash=dedup_hash,
+            import_batch_id=import_batch_id,
+            category_confidence=row.category_confidence,
+            notes=final_notes
+        )
+        db.add(txn)
+        imported_txns.append(txn)
+        total_spend += row.amount
+        total_rewards += predicted_reward
+
+    audit = AuditLog(
+        user_id=current_user.id,
+        action="TRANSACTIONS_CSV_IMPORTED",
+        status="SUCCESS",
+        details_json=json.dumps({
+            "batch_id": import_batch_id,
+            "imported_count": len(imported_txns),
+            "skipped_duplicates": skipped_duplicates_count,
+            "total_spend": str(total_spend),
+            "card_id": req.card_id
+        })
+    )
+    db.add(audit)
+
+    await db.commit()
+
+    for t in imported_txns:
+        await db.refresh(t)
+
+    return TransactionImportCommitResponse(
+        import_batch_id=import_batch_id,
+        imported_count=len(imported_txns),
+        skipped_duplicates_count=skipped_duplicates_count,
+        total_spend_imported=total_spend,
+        total_rewards_predicted=total_rewards,
+        imported_transactions=[parse_transaction_response(t) for t in imported_txns]
+    )
+
+# --- Standard Transaction CRUD Endpoints ---
+
 @router.post("", response_model=TransactionResponse, status_code=status.HTTP_201_CREATED)
 async def create_transaction(
     req: TransactionCreate,
     current_user: Profile = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+    # Normalize merchant & auto-categorize if needed
+    norm_res = MerchantNormalizer.resolve_merchant(req.merchant_name)
+    canonical_merchant = norm_res.canonical_name if norm_res.canonical_name else req.merchant_name.strip()
+
+    category = req.category_id
+    cat_conf = Decimal("1.00") if req.category_id else None
+    if not category:
+        if norm_res.is_confident_match and norm_res.category_hint:
+            category = norm_res.category_hint
+            cat_conf = Decimal(str(round(norm_res.confidence, 2)))
+        elif norm_res.category_hint:
+            category = norm_res.category_hint
+            cat_conf = Decimal(str(round(norm_res.confidence, 2)))
+        else:
+            category = "other"
+            cat_conf = Decimal("0.30")
+
     # Fetch all user active cards with rules for optimization
     stmt = (
         select(CreditCard)
@@ -210,8 +625,8 @@ async def create_transaction(
         eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
             card=card,
             amount=req.amount,
-            category_id=req.category_id,
-            merchant_name=req.merchant_name
+            category_id=category,
+            merchant_name=canonical_merchant
         )
         predicted_reward = eval_res.expected_reward_monetary
 
@@ -219,8 +634,8 @@ async def create_transaction(
     best_opt = RewardOptimizationEngine.optimize_transaction(
         cards=user_cards,
         amount=req.amount,
-        category_id=req.category_id,
-        merchant_name=req.merchant_name
+        category_id=category,
+        merchant_name=canonical_merchant
     )
 
     optimal_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
@@ -247,18 +662,31 @@ async def create_transaction(
         discrepancy=req.discrepancy_reason
     )
 
+    txn_date = req.transaction_date or datetime.utcnow()
+    dedup_hash = DeduplicationEngine.compute_deduplication_hash(
+        user_id=current_user.id,
+        txn_date=txn_date,
+        amount=req.amount,
+        normalized_merchant=canonical_merchant,
+        card_id=chosen_card_id
+    )
+
     txn = Transaction(
         user_id=current_user.id,
         card_id=chosen_card_id,
-        category_id=req.category_id.strip().lower(),
-        merchant_name=req.merchant_name.strip(),
+        category_id=category.strip().lower(),
+        merchant_name=canonical_merchant,
+        raw_description=req.raw_description or req.merchant_name.strip(),
         amount=req.amount,
         currency=req.currency,
-        transaction_date=req.transaction_date or datetime.utcnow(),
+        transaction_date=txn_date,
         is_recurring=req.is_recurring,
         reward_earned_monetary=reward_earned,
         potential_optimal_reward=optimal_reward,
         optimal_card_id=optimal_card_id,
+        reference_number=req.reference_number,
+        deduplication_hash=dedup_hash,
+        category_confidence=cat_conf,
         notes=final_notes
     )
     db.add(txn)

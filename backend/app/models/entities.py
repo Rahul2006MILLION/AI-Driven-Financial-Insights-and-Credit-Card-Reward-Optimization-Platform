@@ -262,6 +262,11 @@ class Transaction(Base):
     potential_optimal_reward: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
     optimal_card_id: Mapped[Optional[str]] = mapped_column(String(36), nullable=True)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    raw_description: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    reference_number: Mapped[Optional[str]] = mapped_column(String(128), nullable=True, index=True)
+    deduplication_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
+    import_batch_id: Mapped[Optional[str]] = mapped_column(String(36), nullable=True, index=True)
+    category_confidence: Mapped[Optional[Decimal]] = mapped_column(Numeric(4, 2), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     user: Mapped["Profile"] = relationship("Profile", back_populates="transactions")

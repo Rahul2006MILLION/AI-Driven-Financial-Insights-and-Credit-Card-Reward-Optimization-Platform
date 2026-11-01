@@ -283,6 +283,31 @@ export interface Translations {
     recordFirstPrompt: string;
     deletePrompt: string;
     deleteFailed: string;
+    importCsvButton: string;
+    importModalTitle: string;
+    selectCsvFile: string;
+    selectCardOptional: string;
+    dropCsvPrompt: string;
+    parsingStatement: string;
+    statementPreviewTitle: string;
+    detectedBankFormat: string;
+    validRowsCount: string;
+    duplicateRowsCount: string;
+    ambiguousRowsCount: string;
+    invalidRowsCount: string;
+    confirmAndImport: string;
+    importing: string;
+    importSuccessMessage: string;
+    statusNew: string;
+    statusExactDuplicate: string;
+    statusAmbiguous: string;
+    statusInvalid: string;
+    statusExcluded: string;
+    categoryReviewNeeded: string;
+    skipDuplicates: string;
+    originalDescription: string;
+    allRowsReady: string;
+    backToFileSelect: string;
   };
 
   analytics: {
@@ -463,6 +488,7 @@ export interface Translations {
     entertainment: string;
     utility: string;
     fuel: string;
+    health: string;
     international: string;
     other: string;
   };
@@ -778,6 +804,31 @@ export const translations: Record<Language, Translations> = {
       recordFirstPrompt: "Record your first transaction to unlock spending analytics.",
       deletePrompt: "Are you sure you want to delete this transaction record?",
       deleteFailed: "Failed to delete transaction",
+      importCsvButton: "Import Statement (CSV)",
+      importModalTitle: "Import Credit Card Statement",
+      selectCsvFile: "Select CSV File",
+      selectCardOptional: "Assign to Credit Card (Optional)",
+      dropCsvPrompt: "Click or drag & drop bank CSV statement here",
+      parsingStatement: "Analyzing statement and mapping columns...",
+      statementPreviewTitle: "Statement Reconciliation Preview",
+      detectedBankFormat: "Detected Bank Format",
+      validRowsCount: "Ready to Import",
+      duplicateRowsCount: "Duplicates (Skipped)",
+      ambiguousRowsCount: "Ambiguous (Review)",
+      invalidRowsCount: "Invalid Rows",
+      confirmAndImport: "Confirm & Import",
+      importing: "Importing Transactions...",
+      importSuccessMessage: "Statement transactions successfully imported into your portfolio.",
+      statusNew: "New Purchase",
+      statusExactDuplicate: "Duplicate Found",
+      statusAmbiguous: "Verify Purchase",
+      statusInvalid: "Invalid Data",
+      statusExcluded: "Payment / Credit",
+      categoryReviewNeeded: "Low confidence category. Click to review.",
+      skipDuplicates: "Skip existing duplicate transactions",
+      originalDescription: "Original Statement Description",
+      allRowsReady: "All transactions verified and ready for import.",
+      backToFileSelect: "Upload Another File",
     },
 
     analytics: {
@@ -963,6 +1014,7 @@ export const translations: Record<Language, Translations> = {
       entertainment: "Entertainment & Movies",
       utility: "Utility & Bills",
       fuel: "Fuel & Petrol Pumps",
+      health: "Healthcare & Pharmacy",
       international: "International Spends",
       other: "General Spends",
     },
@@ -1277,6 +1329,31 @@ export const translations: Record<Language, Translations> = {
       recordFirstPrompt: "खर्च विश्लेषण देखने के लिए अपना पहला लेन-देन दर्ज करें।",
       deletePrompt: "क्या आप इस लेन-देन रिकॉर्ड को हटाना चाहते हैं?",
       deleteFailed: "लेन-देन हटाने में विफलता",
+      importCsvButton: "स्टेटमेंट आयात करें (CSV)",
+      importModalTitle: "क्रेडिट कार्ड स्टेटमेंट आयात करें",
+      selectCsvFile: "CSV फ़ाइल चुनें",
+      selectCardOptional: "क्रेडिट कार्ड से जोड़ें (वैकल्पिक)",
+      dropCsvPrompt: "बैंक CSV स्टेटमेंट फ़ाइल यहाँ चुनें या खींचें",
+      parsingStatement: "स्टेटमेंट का विश्लेषण और कॉलम मैपिंग हो रही है...",
+      statementPreviewTitle: "स्टेटमेंट मिलान और पूर्वावलोकन",
+      detectedBankFormat: "पहचाना गया बैंक प्रारूप",
+      validRowsCount: "आयात के लिए तैयार",
+      duplicateRowsCount: "डुप्लिकेट (छोड़े गए)",
+      ambiguousRowsCount: "समीक्षा आवश्यक",
+      invalidRowsCount: "अमान्य पंक्तियाँ",
+      confirmAndImport: "पुष्टि करें और आयात करें",
+      importing: "लेन-देन आयात हो रहे हैं...",
+      importSuccessMessage: "स्टेटमेंट के लेन-देन सफलतापूर्वक आपके पोर्टफोलियो में आयात किए गए।",
+      statusNew: "नई खरीदारी",
+      statusExactDuplicate: "डुप्लिकेट मिला",
+      statusAmbiguous: "खरीदारी सत्यापित करें",
+      statusInvalid: "अमान्य डेटा",
+      statusExcluded: "भुगतान / क्रेडिट",
+      categoryReviewNeeded: "श्रेणी की पुष्टि करें। बदलने के लिए क्लिक करें।",
+      skipDuplicates: "मौजूदा डुप्लिकेट लेन-देन छोड़ें",
+      originalDescription: "मूल स्टेटमेंट विवरण",
+      allRowsReady: "सभी लेन-देन सत्यापित और आयात के लिए तैयार हैं।",
+      backToFileSelect: "दूसरी फ़ाइल अपलोड करें",
     },
 
     analytics: {
@@ -1462,6 +1539,7 @@ export const translations: Record<Language, Translations> = {
       entertainment: "मनोरंजन और सिनेमा",
       utility: "बिजली-पानी बिल और उपयोगिताएं",
       fuel: "पेट्रोल और फ्यूल",
+      health: "स्वास्थ्य और फ़ार्मेसी",
       international: "अंतर्राष्ट्रीय खर्च",
       other: "सामान्य खर्च",
     },
@@ -1776,6 +1854,31 @@ export const translations: Record<Language, Translations> = {
       recordFirstPrompt: "ವೆಚ್ಚ ವಿಶ್ಲೇಷಣೆ ಪಡೆಯಲು ನಿಮ್ಮ ಮೊದಲ ವಹಿವಾಟನ್ನು ದಾಖಲಿಸಿ.",
       deletePrompt: "ಈ ವಹಿವಾಟು ದಾಖಲೆಯನ್ನು ಅಳಿಸಲು ನೀವು ಬಯಸುವಿರಾ?",
       deleteFailed: "ವಹಿವಾಟು ಅಳಿಸಲು ವಿಫಲವಾಗಿದೆ",
+      importCsvButton: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಆಮದು ಮಾಡಿ (CSV)",
+      importModalTitle: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಆಮದು ಮಾಡಿ",
+      selectCsvFile: "CSV ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ",
+      selectCardOptional: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗೆ ನಿಯೋಜಿಸಿ (ಐಚ್ಛಿಕ)",
+      dropCsvPrompt: "ಬ್ಯಾಂಕ್ CSV ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಫೈಲ್ ಇಲ್ಲಿ ಆಯ್ಕೆಮಾಡಿ",
+      parsingStatement: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ ಮತ್ತು ಕಾಲಮ್ ಹೊಂದಿಸಲಾಗುತ್ತಿದೆ...",
+      statementPreviewTitle: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಮುನ್ನೋಟ ಮತ್ತು ಹೊಂದಾಣಿಕೆ",
+      detectedBankFormat: "ಗುರುತಿಸಲಾದ ಬ್ಯಾಂಕ್ ಫಾರ್ಮ್ಯಾಟ್",
+      validRowsCount: "ಆಮದಿಗೆ ಸಿದ್ಧವಾಗಿದೆ",
+      duplicateRowsCount: "ನಕಲು (ಬಿಟ್ಟುಬಿಡಲಾಗಿದೆ)",
+      ambiguousRowsCount: "ಪರಿಶೀಲನೆ ಅಗತ್ಯವಿದೆ",
+      invalidRowsCount: "ಅಮಾನ್ಯ ಸಾಲುಗಳು",
+      confirmAndImport: "ಖಚಿತಪಡಿಸಿ ಮತ್ತು ಆಮದು ಮಾಡಿ",
+      importing: "ವಹಿವಾಟುಗಳನ್ನು ಆಮದು ಮಾಡಲಾಗುತ್ತಿದೆ...",
+      importSuccessMessage: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ವಹಿವಾಟುಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಆಮದು ಮಾಡಲಾಗಿದೆ.",
+      statusNew: "ಹೊಸ ಖರೀದಿ",
+      statusExactDuplicate: "ನಕಲು ಪತ್ತೆಯಾಗಿದೆ",
+      statusAmbiguous: "ಖರೀದಿ ಪರಿಶೀಲಿಸಿ",
+      statusInvalid: "ಅಮಾನ್ಯ ಮಾಹಿತಿ",
+      statusExcluded: "ಪಾವತಿ / ಕ್ರೆಡಿಟ್",
+      categoryReviewNeeded: "ವರ್ಗವನ್ನು ದೃಢೀಕರಿಸಿ. ಬದಲಾಯಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ.",
+      skipDuplicates: "ಈಗಿರುವ ನಕಲಿ ವಹಿವಾಟುಗಳನ್ನು ಬಿಟ್ಟುಬಿಡಿ",
+      originalDescription: "ಮೂಲ ಸ್ಟೇಟ್‌ಮೆಂಟ್ ವಿವರಣೆ",
+      allRowsReady: "ಎಲ್ಲಾ ವಹಿವಾಟುಗಳು ಪರಿಶೀಲಿಸಲ್ಪಟ್ಟಿವೆ ಮತ್ತು ಆಮದಿಗೆ ಸಿದ್ಧವಾಗಿವೆ.",
+      backToFileSelect: "ಮತ್ತೊಂದು ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
     },
 
     analytics: {
@@ -1961,6 +2064,7 @@ export const translations: Record<Language, Translations> = {
       entertainment: "ಮನರಂಜನೆ ಮತ್ತು ಸಿನೆಮಾ",
       utility: "ಬಿಲ್ ಮತ್ತು ಉಪಯುಕ್ತತೆಗಳು",
       fuel: "ಇಂಧನ ಮತ್ತು ಪೆಟ್ರೋಲ್",
+      health: "ಆರೋಗ್ಯ ಮತ್ತು ಔಷಧಾಲಯ",
       international: "ಅಂತಾರಾಷ್ಟ್ರೀಯ ವೆಚ್ಚಗಳು",
       other: "ಸಾಮಾನ್ಯ ಖರ್ಚುಗಳು",
     },

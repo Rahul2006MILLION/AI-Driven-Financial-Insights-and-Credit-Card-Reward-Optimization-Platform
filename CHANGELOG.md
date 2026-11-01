@@ -6,6 +6,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [0.3.0] - 2026-11-01
+
+### Added
+- **Transaction Intelligence Phase 1 — CSV Statement Ingestion Pipeline**:
+  - Multi-bank statement CSV upload and preview endpoint (`POST /api/v1/transactions/import/preview`) supporting preamble header scanning, multi-delimiter sniffing (`,`, `;`, `\t`), and encoding tolerance (UTF-8, UTF-8-BOM, Latin-1).
+  - Atomic statement commit endpoint (`POST /api/v1/transactions/import/commit`) with batch tracking (`import_batch_id`), row-level deduplication, and transactional rollback protection.
+- **Verified Indian Bank Statement Formats**:
+  - **HDFC Bank**: Supports `Date,Transaction Description,Amount,Cr/Dr` and `Date,Transaction Details,Ref No,Amount,Dr / Cr` layouts; debits tracked as expenses, bill payments and autopay excluded.
+  - **ICICI Bank**: Supports `Date,Transaction Details,Ref No,Amount(INR),Cr/Dr` and multi-column `Debit`/`Credit` statements with `DD-MMM-YYYY` and `DD/MM/YYYY` date parsing.
+  - **SBI Card**: Supports `Date,Transaction Details,Ref Number,Amount,Debit/Credit` layouts with `D`/`C` indicators and uppercase month abbreviations.
+  - **Axis Bank**: Supports `Tran Date,Transaction Details,Reference Number,Amount,Debit/Credit` formats with `DR`/`CR` flags.
+  - **American Express (Amex)**: Supports `Date,Description,Amount,Reference Number` with positive debits, negative payment exclusions, and ISO/international dates.
+  - **Generic / CLIQ Standard CSV**: Custom CSV layout supporting `Date,Merchant,Amount,Category,Reference Number` with optional category overrides.
+- **Multi-Tier Duplicate Prevention**:
+  - Primary check using external bank transaction reference numbers (RRN / Ref ID) to prevent double imports.
+  - Ambiguous duplicate detection: When statements lack stable bank IDs, records sharing identical merchant, amount, and date are marked as `AMBIGUOUS_DUPLICATE` with contextual warnings, allowing users to verify repeat purchases instead of silently dropping valid transactions.
+  - Secondary fallback using deterministic SHA-256 fingerprinting `hash(user_id:date:amount:merchant:card)`.
+- **Merchant Normalization & Indian Commerce Registry Expansion**:
+  - Integrated `MerchantNormalizer` into the ingestion and manual transaction creation pipelines.
+  - Added fuel stations (`HPCL`, `BPCL`, `IOCL`, `Shell`), retail giants (`DMart`, `Starbucks`, `McDonald's`, `KFC`, `Tata Neu`), and utilities (`Airtel`, `Jio`, `Netflix`, `Spotify`) to the canonical alias registry.
+  - Strips Indian city location noise tokens (`bangalore`, `mumbai`, `delhi`, `gurgaon`, etc.) from statement lines while preserving the unedited raw text in `raw_description` for auditability.
+- **Automatic Categorization & Uncertainty Review**:
+  - Deterministically maps normalized merchants to CLIQ's standard spending categories (`dining`, `shopping`, `fuel`, `grocery`, `travel`, `utility`, `entertainment`, `health`).
+  - Low-confidence or unclassified merchants default to `"other"`, flagged with `requires_category_review = True`, prompting user review in the preview table.
+- **Reward Optimization Engine Integration**:
+  - Deterministically evaluates card rules and cashbacks via `RewardOptimizationEngine.evaluate_card_for_transaction` and calculates portfolio-wide optimal yield.
+  - Associates transactions with verified user credit cards or flags them as unassigned without fabricating card links or bank-credited points.
+- **Frontend Liquid Glass Import Experience**:
+  - "Import Statement (CSV)" workflow on the Transactions page: File selection, dropzone (5MB limit), reconciliation preview table with status badges (`NEW`, `VERIFY PURCHASE`, `DUPLICATE FOUND`, `PAYMENT EXCLUDED`, `INVALID`), and import summary screen.
+  - Full application-wide localization across English (`en`), Hindi (`hi`), and Kannada (`kn`) with 25+ new translation keys.
+- **Database Schema Upgrades & Programmatic Migration**:
+  - Added `raw_description`, `reference_number`, `deduplication_hash`, `import_batch_id`, and `category_confidence` to `Transaction` entity.
+  - Programmatic SQLite migration in `init_db()` dynamically applies missing columns via `PRAGMA table_info(transactions)` without dropping data.
+
+### Testing & Verification
+- **Backend Test Suite (113 passing)**:
+  - 8 new unit tests in `tests/unit/test_csv_statement_parser.py` verifying all 5 bank formats, corrupt rows, payment exclusion, and duplicate classification.
+  - 5 new integration tests in `tests/integration/test_transaction_import_flow.py` validating preview, commit, duplicate re-import idempotency, ambiguous candidate decisioning, and tenant isolation.
+- **Frontend Test Suite (22 passing)**:
+  - Added `__tests__/transaction_import.test.ts` testing dictionary completeness across EN/HI/KN, status classification mapping, and commit payload formatting.
+- **Production Build**:
+  - Next.js 14 production build (`npm run build`) passing with all 21 static routes prerendered.
+
+### Known Limitations
+- PDF statement parsing (requiring password handling, OCR, and table extraction) is deferred to a subsequent milestone.
+- Custom drag-and-drop column mapping UI for irregular CSV layouts will be implemented in Phase 2.
+
+---
+
 ## [0.2.0] - 2026-11-01
 
 ### Added

@@ -149,6 +149,20 @@ async def init_db():
                 await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_document_id VARCHAR(36)"))
             if "freshness_state" not in off_cols:
                 await conn.execute(text("ALTER TABLE card_offers ADD COLUMN freshness_state VARCHAR(32) DEFAULT 'FRESH'"))
+
+            # Transactions migrations
+            res_t = await conn.execute(text("PRAGMA table_info(transactions)"))
+            txn_cols = [row[1] for row in res_t.fetchall()]
+            if "raw_description" not in txn_cols:
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN raw_description VARCHAR(500)"))
+            if "reference_number" not in txn_cols:
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN reference_number VARCHAR(128)"))
+            if "deduplication_hash" not in txn_cols:
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN deduplication_hash VARCHAR(64)"))
+            if "import_batch_id" not in txn_cols:
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN import_batch_id VARCHAR(36)"))
+            if "category_confidence" not in txn_cols:
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN category_confidence NUMERIC(4, 2)"))
         except Exception:
             pass
 

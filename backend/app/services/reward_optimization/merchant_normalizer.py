@@ -19,7 +19,7 @@ class MerchantMatchResult:
 
     @property
     def is_confident_match(self) -> bool:
-        return self.is_known_merchant and not self.is_ambiguous and self.confidence >= 0.85
+        return self.is_known_merchant and not self.is_ambiguous and self.confidence >= 0.80
 
 class MerchantNormalizer:
     """
@@ -183,6 +183,104 @@ class MerchantNormalizer:
             "aliases": [
                 "irctc", "indian railway catering and tourism", "irctc app", "irctc rail"
             ]
+        },
+        "hpcl": {
+            "canonical_name": "HPCL",
+            "category_hint": "fuel",
+            "aliases": [
+                "hpcl", "hindustan petroleum", "hp auto care", "hp petrol", "hp gas", "hpcl retail"
+            ]
+        },
+        "bpcl": {
+            "canonical_name": "BPCL",
+            "category_hint": "fuel",
+            "aliases": [
+                "bpcl", "bharat petroleum", "bharat gas", "bpcl petrol", "bpcl retail", "speed petrol"
+            ]
+        },
+        "iocl": {
+            "canonical_name": "Indian Oil",
+            "category_hint": "fuel",
+            "aliases": [
+                "iocl", "indian oil", "indianoil", "indian oil corp", "indane", "ioc petrol"
+            ]
+        },
+        "shell": {
+            "canonical_name": "Shell",
+            "category_hint": "fuel",
+            "aliases": [
+                "shell", "shell petrol", "shell india", "shell lubricants"
+            ]
+        },
+        "dmart": {
+            "canonical_name": "DMart",
+            "category_hint": "grocery",
+            "aliases": [
+                "dmart", "d mart", "avenue supermarts", "dmart ready"
+            ]
+        },
+        "starbucks": {
+            "canonical_name": "Starbucks",
+            "category_hint": "dining",
+            "aliases": [
+                "starbucks", "tata starbucks", "starbucks coffee"
+            ]
+        },
+        "mcdonalds": {
+            "canonical_name": "McDonald's",
+            "category_hint": "dining",
+            "aliases": [
+                "mcdonalds", "mcdonald", "hardcastle restaurants", "connaught plaza"
+            ]
+        },
+        "kfc": {
+            "canonical_name": "KFC",
+            "category_hint": "dining",
+            "aliases": [
+                "kfc", "yum restaurants", "kfc india", "devyani international"
+            ]
+        },
+        "tataneu": {
+            "canonical_name": "Tata Neu",
+            "category_hint": "shopping",
+            "aliases": [
+                "tata neu", "tataneu", "tata digital"
+            ]
+        },
+        "netmeds": {
+            "canonical_name": "Netmeds",
+            "category_hint": "health",
+            "aliases": [
+                "netmeds", "netmeds marketplace"
+            ]
+        },
+        "airtel": {
+            "canonical_name": "Airtel",
+            "category_hint": "utility",
+            "aliases": [
+                "airtel", "bharti airtel", "airtel payments", "airtel bill", "airtel broadband"
+            ]
+        },
+        "jio": {
+            "canonical_name": "Jio",
+            "category_hint": "utility",
+            "aliases": [
+                "jio", "reliance jio", "jio infocomm", "jio fiber", "jio prepaid", "jio postpaid"
+            ]
+        },
+        "netflix": {
+            "canonical_name": "Netflix",
+            "category_hint": "entertainment",
+            "aliases": [
+                "netflix", "netflix entertainment", "netflix india"
+            ]
+        },
+        "spotify": {
+            "canonical_name": "Spotify",
+            "category_hint": "entertainment",
+            "aliases": [
+                "spotify", "spotify india", "spotify ab"
+            ]
         }
     }
 
@@ -190,7 +288,9 @@ class MerchantNormalizer:
     LEGAL_NOISE_TOKENS = {
         "pvt", "ltd", "private", "limited", "india", "retail", "services",
         "technologies", "tech", "in", "inc", "corp", "llp", "store",
-        "online", "pay", "pos", "gateway", "checkout"
+        "online", "pay", "pos", "gateway", "checkout", "order", "ind",
+        "bangalore", "mumbai", "delhi", "gurgaon", "noida", "hyderabad",
+        "chennai", "kolkata", "pune", "ahmedabad", "jaipur"
     }
 
     # Ambiguous generic single words that should NEVER trigger merchant-specific offers alone
@@ -270,8 +370,12 @@ class MerchantNormalizer:
                 # e.g., "Swiggy Instamart Koramangala" contains alias "swiggy instamart"
                 pattern = r"\b" + re.escape(clean_alias) + r"\b"
                 if re.search(pattern, cleaned):
-                    # Score based on token ratio
-                    score = min(0.95, 0.75 + (len(clean_alias) / len(cleaned)) * 0.20)
+                    # If other words are known legal/city noise tokens, award high confidence
+                    remaining_tokens = cleaned_tokens - alias_tokens
+                    if remaining_tokens and remaining_tokens.issubset(cls.LEGAL_NOISE_TOKENS):
+                        score = 0.92
+                    else:
+                        score = min(0.95, 0.75 + (len(clean_alias) / len(cleaned)) * 0.20)
                     matches.append((c_id, alias, score))
                     continue
 
