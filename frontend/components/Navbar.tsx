@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLanguage, Language } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
@@ -17,6 +18,7 @@ import {
   ChevronDown,
   Settings,
   LayoutDashboard,
+  GraduationCap,
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
@@ -60,20 +62,18 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-50 bg-[#050D0A]/70 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 flex items-center justify-center p-0.5 shadow-[0_0_20px_rgba(16,185,129,0.35)] group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-[#050D0A] rounded-[10px] flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-extrabold text-xl tracking-tight text-white glow-emerald">
-              CLIQ
-            </span>
-            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
-              PRO
-            </span>
-          </div>
+        <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-2.5 group">
+          <Image
+            src="/cliq-logo.png"
+            alt="CLIQ"
+            width={1024}
+            height={381}
+            priority
+            className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+          />
+          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 shrink-0">
+            PRO
+          </span>
         </Link>
 
         {/* Desktop Controls */}
@@ -128,6 +128,13 @@ export const Navbar: React.FC = () => {
               >
                 <Sparkles className="w-3 h-3 text-emerald-400" />
                 {t.nav.assistant}
+              </Link>
+              <Link
+                href="/learn"
+                className="text-xs font-medium text-teal-300 hover:text-teal-200 transition-colors flex items-center gap-1 bg-teal-500/10 border border-teal-500/20 px-2.5 py-1 rounded-full"
+              >
+                <GraduationCap className="w-3.5 h-3.5 text-teal-400" />
+                {t.nav.learn}
               </Link>
 
               <div className="h-4 w-px bg-white/10" />
@@ -311,11 +318,25 @@ export const Navbar: React.FC = () => {
                 {t.nav.health}
               </Link>
               <Link
+                href="/budget"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
+              >
+                {t.nav.budget}
+              </Link>
+              <Link
                 href="/assistant"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
               >
                 {t.nav.assistant}
+              </Link>
+              <Link
+                href="/learn"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm text-teal-400 hover:text-teal-300 font-medium transition-colors"
+              >
+                {t.nav.learn}
               </Link>
               <Link
                 href="/documents"

@@ -8,13 +8,14 @@ from collections import defaultdict
 from datetime import datetime
 
 from app.core.database import get_db
-from app.models.entities import Profile, Transaction, CreditCard
+from app.models.entities import Profile, Transaction, CreditCard, Income, UserBudget
 from app.schemas.analytics import (
     SpendingAnalyticsResponse,
     RewardAnalyticsResponse,
     FinancialHealthResponse,
     CategorySpend,
     MonthlySpend,
+    PaymentMethodSpend,
 )
 from app.security.dependencies import get_current_user
 from app.services.financial_health.health_engine import FinancialHealthEngine
@@ -38,6 +39,8 @@ async def get_spending_analytics(
     cat_counts: Dict[str, int] = defaultdict(int)
     monthly_data: Dict[str, Dict[str, Decimal]] = defaultdict(lambda: {"spend": Decimal("0.00"), "rewards": Decimal("0.00"), "count": 0})
     merchant_spend: Dict[str, Decimal] = defaultdict(Decimal)
+    method_spend: Dict[str, Decimal] = defaultdict(Decimal)
+    method_counts: Dict[str, int] = defaultdict(int)
 
     for t in txns:
         amt = Decimal(str(t.amount))
@@ -46,6 +49,10 @@ async def get_spending_analytics(
         cat_spend[t.category_id] += amt
         cat_counts[t.category_id] += 1
         merchant_spend[t.merchant_name] += amt
+
+        pm = getattr(t, "payment_method", None) or ("CREDIT_CARD" if t.card_id else "OTHER")
+        method_spend[pm] += amt
+        method_counts[pm] += 1
 
         month_key = t.transaction_date.strftime("%Y-%m")
         monthly_data[month_key]["spend"] += amt
@@ -63,6 +70,17 @@ async def get_spending_analytics(
             transaction_count=cat_counts[cat_id]
         ))
     category_breakdown.sort(key=lambda x: x.total_amount, reverse=True)
+
+    payment_method_breakdown: List[PaymentMethodSpend] = []
+    for pm, amt in method_spend.items():
+        pct = ((amt / total_spending) * Decimal("100.00")).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP) if total_spending > 0 else Decimal("0.0")
+        payment_method_breakdown.append(PaymentMethodSpend(
+            payment_method=pm,
+            total_amount=amt,
+            percentage_of_total=pct,
+            transaction_count=method_counts[pm]
+        ))
+    payment_method_breakdown.sort(key=lambda x: x.total_amount, reverse=True)
 
     monthly_trend: List[MonthlySpend] = []
     for m_key in sorted(monthly_data.keys()):
@@ -83,7 +101,8 @@ async def get_spending_analytics(
         total_transactions=len(txns),
         category_breakdown=category_breakdown,
         monthly_trend=monthly_trend,
-        top_merchants=top_merchants
+        top_merchants=top_merchants,
+        payment_method_breakdown=payment_method_breakdown
     )
 
 @router.get("/rewards", response_model=RewardAnalyticsResponse)
@@ -150,5 +169,17 @@ async def get_financial_health(
     )
     cards = (await db.execute(stmt_cards)).scalars().all()
 
-    health_report = FinancialHealthEngine.analyze_health(transactions=txns, cards=cards)
+    stmt_budget = select(UserBudget).where(UserBudget.user_id == current_user.id)
+    budget = (await db.execute(stmt_budget)).scalar_one_or_none()
+
+    stmt_incomes = select(Income).where(Income.user_id == current_user.id)
+    incomes = (await db.execute(stmt_incomes)).scalars().all()
+
+    health_report = FinancialHealthEngine.analyze_health(
+        transactions=txns,
+        cards=cards,
+        budget=budget,
+        incomes=incomes,
+        financial_pathway=getattr(current_user, "financial_pathway", "CREDIT_CARD")
+    )
     return health_report

@@ -12,6 +12,8 @@ import {
   CreditCard,
   TrendingUp,
   Loader2,
+  PieChart,
+  BellRing,
 } from "lucide-react";
 
 export default function FinancialHealthPage() {
@@ -65,7 +67,7 @@ export default function FinancialHealthPage() {
                 <div className="relative my-4 flex items-center justify-center">
                   <div className="w-28 h-28 rounded-full border-4 border-emerald-500/20 flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.25)]">
                     <span className="text-4xl font-black text-white glow-emerald">
-                      {health?.health_score || 90}
+                      {health?.data_sufficiency === "INSUFFICIENT_DATA" ? "—" : (health?.health_score ?? "—")}
                     </span>
                   </div>
                 </div>
@@ -105,6 +107,22 @@ export default function FinancialHealthPage() {
                       </span>
                     </div>
                   </div>
+
+                  {/* Spending Trend Pill */}
+                  {health?.spending_trend_pct !== undefined && (
+                    <div className="mt-4 flex items-center gap-2 text-xs">
+                      <span className="text-slate-400">30-Day Spending Trend:</span>
+                      <span
+                        className={`font-bold px-2.5 py-0.5 rounded-full ${
+                          Number(health.spending_trend_pct) > 0
+                            ? "bg-amber-500/10 text-amber-300 border border-amber-500/20"
+                            : "bg-emerald-500/10 text-emerald-300 border border-emerald-500/20"
+                        }`}
+                      >
+                        {Number(health.spending_trend_pct) > 0 ? `+${health.spending_trend_pct}%` : `${health.spending_trend_pct}%`} vs prior 30 days
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="text-[11px] text-slate-500 pt-4 border-t border-white/[0.06]">
@@ -131,6 +149,30 @@ export default function FinancialHealthPage() {
                     >
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                       <span className="text-slate-300 leading-relaxed font-medium">{rec}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Educational Non-Judgmental Awareness Alerts */}
+            {health?.educational_alerts?.length > 0 && (
+              <div className="p-6 sm:p-7 rounded-3xl bg-teal-500/5 border border-teal-500/20 backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-3">
+                <div className="flex items-center gap-2">
+                  <BellRing className="w-4 h-4 text-teal-400" />
+                  <h3 className="text-sm font-bold text-white tracking-wide">
+                    Financial Health & Literacy Observations
+                  </h3>
+                </div>
+
+                <div className="space-y-2">
+                  {health.educational_alerts.map((alert: string, idx: number) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] flex items-start gap-3 text-xs"
+                    >
+                      <Sparkles className="w-4 h-4 text-teal-400 mt-0.5 shrink-0" />
+                      <span className="text-slate-200 leading-relaxed font-medium">{alert}</span>
                     </div>
                   ))}
                 </div>

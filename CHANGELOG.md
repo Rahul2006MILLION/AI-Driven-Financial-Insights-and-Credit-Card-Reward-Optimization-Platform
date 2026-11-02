@@ -6,6 +6,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [0.4.0] - 2026-11-02
+
+### Added
+- **No-Credit-Card Mode & Universal Financial Inclusion (Phase 3)**:
+  - Dual-pathway onboarding architecture distinguishing Credit Card users from No-Credit-Card users via `financial_pathway` (`CREDIT_CARD` vs `NO_CREDIT_CARD`).
+  - Income Management subsystem (`/api/v1/incomes`) supporting regular and irregular incomes, multi-cycle normalizations (`MONTHLY`, `BI_WEEKLY`, `WEEKLY`, `IRREGULAR`, `ONE_TIME`), and IDOR-isolated tenant controls.
+  - Cash-Flow Resilience Analytics (`/api/v1/incomes/summary`) computing 90-day rolling monthly median income across calendar-month buckets.
+  - CLIQ Budget Command Center (`/budget`): Real-time cash flow monitoring, 50/30/20 envelope budgeting, and non-card expense tracking.
+  - CLIQ Learn Educational Suite (`/learn`): 9 financial literacy modules, interactive knowledge checks, and 5 deterministic calculators (Minimum Due Trap, APR Compounding, Utilization, 50/30/20, Break-Even).
+- **Database & Migration Standardization**:
+  - Versioned Alembic migration `c1f3a2b4e5d6_add_no_card_mode_incomes_and_pathway.py` introducing PostgreSQL `financialpathway` enum, `profiles.financial_pathway`, and `incomes` table with indexed `received_date`.
+- **Phase 3.2 Financial Logic Remediation**:
+  - **DEF-01:** Non-card transactions (`CASH`, `UPI`, `BANK_TRANSFER`, `DEBIT_CARD`, `OTHER`) strictly reject `card_id` with 400 Bad Request, set `reward_earned_monetary = 0.00`, and isolate card reward metrics.
+  - **DEF-02:** Primary dashboard pathway detection reads authenticated user's `financial_pathway` rather than inferring from `cards.length === 0`.
+  - **DEF-03:** 90-day rolling monthly median groups actual receipts by calendar month `(year, month)` before computing the median, preventing zero-month distortion.
+  - **DEF-04:** Historical one-time incomes older than 90 days and future-dated entries are excluded from ongoing monthly cash flow.
+  - **DEF-05:** Replaced synthetic 75/100 financial health scores on empty profiles with explicit `health_score = 0` and `data_sufficiency = "INSUFFICIENT_DATA"` with actionable onboarding tips.
+  - **DEF-06:** Non-card payment methods supported in CSV statement previews and commits.
+  - **DEF-07:** Alembic migration validated against running PostgreSQL database (`alembic check` clean).
+  - **DEF-08:** Complete `incomes` localization namespace in `frontend/lib/translations.ts` across English, Hindi, and Kannada, plus loading skeleton in `/budget`.
+  - **DEF-09:** PostgreSQL foreign key constraint gap resolved in security test suite (`test_ai_data_egress_audit.py`).
+
+### Testing & Verification
+- **Backend Tests:** 15 passed across `test_no_card_mode.py` and `test_financial_inclusion.py`; 8/8 passed in security test suite `test_ai_data_egress_audit.py`.
+- **Frontend Tests:** 42 passed across 7 test suites (`npm test`).
+- **Production Build:** Next.js compiled all 23 static routes with zero errors.
+
+---
+
 ## [0.3.0] - 2026-11-01
 
 ### Added

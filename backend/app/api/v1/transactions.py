@@ -90,6 +90,7 @@ def parse_transaction_response(txn: Transaction) -> TransactionResponse:
         currency=txn.currency,
         transaction_date=txn.transaction_date,
         is_recurring=txn.is_recurring,
+        payment_method=getattr(txn, "payment_method", "CREDIT_CARD" if txn.card_id else "UPI"),
         reward_earned_monetary=txn.reward_earned_monetary,
         potential_optimal_reward=txn.potential_optimal_reward,
         optimal_card_id=txn.optimal_card_id,
@@ -352,28 +353,49 @@ async def preview_csv_import(
             valid_count += 1
             selected = True
 
+        # DEF-06: Resolve payment method for preview row
+        raw_desc_lower = r.raw_description.lower()
+        if target_card:
+            row_payment_method = "CREDIT_CARD"
+        elif "upi" in raw_desc_lower or "@" in raw_desc_lower:
+            row_payment_method = "UPI"
+        elif any(k in raw_desc_lower for k in ["neft", "rtgs", "imps", "transfer", "bank"]):
+            row_payment_method = "BANK_TRANSFER"
+        elif any(k in raw_desc_lower for k in ["pos", "atm", "debit"]):
+            row_payment_method = "DEBIT_CARD"
+        elif current_user.financial_pathway == "NO_CREDIT_CARD":
+            row_payment_method = "BANK_TRANSFER"
+        elif user_cards:
+            row_payment_method = "CREDIT_CARD"
+        else:
+            row_payment_method = "OTHER"
+
         # Reward evaluation
         pred_reward = Decimal("0.00")
-        if target_card:
-            eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
-                card=target_card,
+        opt_reward = Decimal("0.00")
+        opt_card_id = None
+
+        if row_payment_method == "CREDIT_CARD":
+            if target_card:
+                eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
+                    card=target_card,
+                    amount=r.parsed_amount,
+                    category_id=r.category_id,
+                    merchant_name=r.canonical_merchant
+                )
+                pred_reward = eval_res.expected_reward_monetary
+
+            best_opt = RewardOptimizationEngine.optimize_transaction(
+                cards=user_cards,
                 amount=r.parsed_amount,
                 category_id=r.category_id,
                 merchant_name=r.canonical_merchant
             )
-            pred_reward = eval_res.expected_reward_monetary
+            opt_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
+            opt_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
 
-        best_opt = RewardOptimizationEngine.optimize_transaction(
-            cards=user_cards,
-            amount=r.parsed_amount,
-            category_id=r.category_id,
-            merchant_name=r.canonical_merchant
-        )
-        opt_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
-        opt_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
-
-        if not target_card:
-            pred_reward = opt_reward
+            if not target_card:
+                pred_reward = opt_reward
 
         if selected and dup_status != "EXACT_DUPLICATE":
             total_spend += r.parsed_amount
@@ -394,6 +416,7 @@ async def preview_csv_import(
             duplicate_status=dup_status,
             duplicate_reason=dup_reason,
             deduplication_hash=dedup_hash,
+            payment_method=row_payment_method,
             predicted_reward=pred_reward,
             potential_optimal_reward=opt_reward,
             optimal_card_id=opt_card_id,
@@ -493,29 +516,61 @@ async def commit_csv_import(
             seen_batch_refs.add(clean_ref)
         seen_batch_hashes.add(dedup_hash)
 
-        # Rewards evaluation
+        # DEF-06: Resolve payment method accurately for each imported row
+        raw_desc_lower = row.raw_description.lower()
+        if row.payment_method:
+            row_payment_method = row.payment_method.strip().upper()
+        elif req.payment_method:
+            row_payment_method = req.payment_method.strip().upper()
+        elif req.card_id:
+            row_payment_method = "CREDIT_CARD"
+        elif "upi" in raw_desc_lower or "@" in raw_desc_lower:
+            row_payment_method = "UPI"
+        elif any(k in raw_desc_lower for k in ["neft", "rtgs", "imps", "transfer", "bank"]):
+            row_payment_method = "BANK_TRANSFER"
+        elif any(k in raw_desc_lower for k in ["pos", "atm", "debit"]):
+            row_payment_method = "DEBIT_CARD"
+        elif current_user.financial_pathway == "NO_CREDIT_CARD":
+            row_payment_method = "BANK_TRANSFER"
+        elif user_cards:
+            row_payment_method = "CREDIT_CARD"
+        else:
+            row_payment_method = "OTHER"
+
+        # Rewards evaluation & Card binding: ONLY for eligible CREDIT_CARD transactions
         predicted_reward = Decimal("0.00")
-        if target_card:
-            eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
-                card=target_card,
+        optimal_reward = Decimal("0.00")
+        optimal_card_id = None
+        chosen_card_id = None
+
+        if row_payment_method == "CREDIT_CARD":
+            if target_card:
+                eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
+                    card=target_card,
+                    amount=row.amount,
+                    category_id=row.category_id,
+                    merchant_name=row.merchant_name
+                )
+                predicted_reward = eval_res.expected_reward_monetary
+
+            best_opt = RewardOptimizationEngine.optimize_transaction(
+                cards=user_cards,
                 amount=row.amount,
                 category_id=row.category_id,
                 merchant_name=row.merchant_name
             )
-            predicted_reward = eval_res.expected_reward_monetary
+            optimal_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
+            optimal_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
 
-        best_opt = RewardOptimizationEngine.optimize_transaction(
-            cards=user_cards,
-            amount=row.amount,
-            category_id=row.category_id,
-            merchant_name=row.merchant_name
-        )
-        optimal_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
-        optimal_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
-
-        chosen_card_id = req.card_id if req.card_id else optimal_card_id
-        if not req.card_id:
-            predicted_reward = optimal_reward
+            chosen_card_id = req.card_id if req.card_id else optimal_card_id
+            if not req.card_id:
+                predicted_reward = optimal_reward
+        else:
+            # Non-card imports: never bind a credit card or fabricate rewards
+            chosen_card_id = None
+            predicted_reward = Decimal("0.00")
+            optimal_reward = Decimal("0.00")
+            optimal_card_id = None
 
         final_notes = serialize_feedback_notes(
             user_notes=row.notes or f"Imported statement line: {row.raw_description}",
@@ -528,6 +583,7 @@ async def commit_csv_import(
         txn = Transaction(
             user_id=current_user.id,
             card_id=chosen_card_id,
+            payment_method=row_payment_method,
             category_id=row.category_id.strip().lower(),
             merchant_name=row.merchant_name.strip(),
             raw_description=row.raw_description.strip(),
@@ -613,38 +669,72 @@ async def create_transaction(
     )
     user_cards = (await db.execute(stmt)).scalars().all()
 
-    # Calculate predicted reward on the selected card (if provided)
+    # --- DEF-01: Payment Method and Card Association Consistency ---
+    # Validate payment_method and card_id consistency
+    non_card_methods = {"CASH", "UPI", "BANK_TRANSFER", "DEBIT_CARD", "OTHER"}
+    
+    # Resolve initial payment method
+    if req.payment_method:
+        resolved_payment_method = req.payment_method.strip().upper()
+    elif req.card_id:
+        resolved_payment_method = "CREDIT_CARD"
+    elif current_user.financial_pathway == "NO_CREDIT_CARD":
+        resolved_payment_method = "UPI"
+    elif user_cards:
+        resolved_payment_method = "CREDIT_CARD"
+    else:
+        resolved_payment_method = "UPI"
+
+    # Strict consistency enforcement: non-card methods cannot be associated with a credit card
+    if resolved_payment_method in non_card_methods and req.card_id is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"card_id cannot be specified for {resolved_payment_method} transactions. Non-card expenses must not be bound to a credit card."
+        )
+
+    # Calculate predicted and optimal rewards
     predicted_reward = Decimal("0.00")
-    if req.card_id:
-        card = next((c for c in user_cards if c.id == req.card_id), None)
-        if not card:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Credit card not found or unauthorized access."
-            )
-        eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
-            card=card,
+    optimal_reward = Decimal("0.00")
+    optimal_card_id = None
+    chosen_card_id = None
+
+    if resolved_payment_method == "CREDIT_CARD":
+        # Calculate optimal reward possible across all user cards
+        best_opt = RewardOptimizationEngine.optimize_transaction(
+            cards=user_cards,
             amount=req.amount,
             category_id=category,
             merchant_name=canonical_merchant
         )
-        predicted_reward = eval_res.expected_reward_monetary
+        optimal_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
+        optimal_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
 
-    # Calculate optimal reward possible across all user cards
-    best_opt = RewardOptimizationEngine.optimize_transaction(
-        cards=user_cards,
-        amount=req.amount,
-        category_id=category,
-        merchant_name=canonical_merchant
-    )
-
-    optimal_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
-    optimal_card_id = best_opt.recommended_card.card_id if best_opt.recommended_card else None
-
-    # If user did not specify a card, default to the optimal one
-    chosen_card_id = req.card_id if req.card_id else optimal_card_id
-    if not req.card_id:
-        predicted_reward = optimal_reward
+        if req.card_id:
+            card = next((c for c in user_cards if c.id == req.card_id), None)
+            if not card:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Credit card not found or unauthorized access."
+                )
+            eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
+                card=card,
+                amount=req.amount,
+                category_id=category,
+                merchant_name=canonical_merchant
+            )
+            predicted_reward = eval_res.expected_reward_monetary
+            chosen_card_id = req.card_id
+        else:
+            # If user did not specify a card, fallback to optimal if user has active cards
+            chosen_card_id = optimal_card_id if user_cards else None
+            predicted_reward = optimal_reward if user_cards else Decimal("0.00")
+    else:
+        # DEF-01: Non-card transactions (CASH, UPI, BANK_TRANSFER, DEBIT_CARD, OTHER)
+        # MUST NEVER receive credit-card binding or rewards
+        chosen_card_id = None
+        predicted_reward = Decimal("0.00")
+        optimal_reward = Decimal("0.00")
+        optimal_card_id = None
 
     # Handle Actual vs Predicted Reward
     if req.actual_reward_earned is not None:
@@ -687,6 +777,7 @@ async def create_transaction(
         reference_number=req.reference_number,
         deduplication_hash=dedup_hash,
         category_confidence=cat_conf,
+        payment_method=resolved_payment_method,
         notes=final_notes
     )
     db.add(txn)

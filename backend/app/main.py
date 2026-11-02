@@ -22,7 +22,8 @@ from app.models.entities import (
     OfferAuditLog,
     OfferSource,
     SourceFailureLog,
-    AdminOfferDocument
+    AdminOfferDocument,
+    Income
 )
 from app.security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware
 
@@ -36,6 +37,8 @@ from app.api.v1.analytics import router as analytics_router
 from app.api.v1.assistant import router as assistant_router
 from app.api.v1.offers import router as offers_router, admin_router as offers_admin_router
 from app.api.v1.privacy import router as privacy_router
+from app.api.v1.education import router as education_router
+from app.api.v1.incomes import router as incomes_router
 from app.services.offers.offer_service import OfferService
 from app.services.offers.source_registry import SourceRegistryService
 from app.security.password import get_password_hash
@@ -59,112 +62,123 @@ async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
         # SQLite lightweight schema migrations for existing local db
-        try:
-            res = await conn.execute(text("PRAGMA table_info(credit_cards)"))
-            existing_cols = [row[1] for row in res.fetchall()]
-            if "card_variant" not in existing_cols:
-                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN card_variant VARCHAR(64)"))
-            if "cardholder_name" not in existing_cols:
-                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN cardholder_name VARCHAR(128)"))
-            if "nickname" not in existing_cols:
-                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN nickname VARCHAR(128)"))
-            if "joining_fee" not in existing_cols:
-                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN joining_fee NUMERIC(10, 2) DEFAULT 0.00"))
-            if "renewal_date" not in existing_cols:
-                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN renewal_date DATETIME"))
-            if "fee_waiver_condition_details" not in existing_cols:
-                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN fee_waiver_condition_details VARCHAR(255)"))
-            if "terms_source_url" not in existing_cols:
-                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN terms_source_url VARCHAR(512)"))
+        if conn.dialect.name == "sqlite":
+            try:
+                res = await conn.execute(text("PRAGMA table_info(credit_cards)"))
+                existing_cols = [row[1] for row in res.fetchall()]
+                if "card_variant" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN card_variant VARCHAR(64)"))
+                if "cardholder_name" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN cardholder_name VARCHAR(128)"))
+                if "nickname" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN nickname VARCHAR(128)"))
+                if "joining_fee" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN joining_fee NUMERIC(10, 2) DEFAULT 0.00"))
+                if "renewal_date" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN renewal_date DATETIME"))
+                if "fee_waiver_condition_details" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN fee_waiver_condition_details VARCHAR(255)"))
+                if "terms_source_url" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN terms_source_url VARCHAR(512)"))
 
-            res_b = await conn.execute(text("PRAGMA table_info(card_benefits)"))
-            ben_cols = [row[1] for row in res_b.fetchall()]
-            if "applicable_category" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN applicable_category VARCHAR(64) DEFAULT 'all'"))
-            if "reward_percentage_or_points" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN reward_percentage_or_points NUMERIC(6, 2)"))
-            if "reward_basis" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN reward_basis VARCHAR(32) DEFAULT 'COMPLIMENTARY'"))
-            if "max_reward" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN max_reward NUMERIC(10, 2)"))
-            if "min_transaction_amount" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN min_transaction_amount NUMERIC(10, 2) DEFAULT 0.00"))
-            if "cap_amount" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN cap_amount NUMERIC(10, 2)"))
-            if "cap_period" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN cap_period VARCHAR(32) DEFAULT 'NONE'"))
-            if "eligibility_restrictions" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN eligibility_restrictions VARCHAR(255)"))
-            if "valid_from" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN valid_from DATETIME"))
-            if "valid_to" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN valid_to DATETIME"))
-            if "terms_and_conditions" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN terms_and_conditions TEXT"))
-            if "source_reference" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN source_reference VARCHAR(512)"))
-            if "last_verified_date" not in ben_cols:
-                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN last_verified_date DATETIME"))
+                res_b = await conn.execute(text("PRAGMA table_info(card_benefits)"))
+                ben_cols = [row[1] for row in res_b.fetchall()]
+                if "applicable_category" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN applicable_category VARCHAR(64) DEFAULT 'all'"))
+                if "reward_percentage_or_points" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN reward_percentage_or_points NUMERIC(6, 2)"))
+                if "reward_basis" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN reward_basis VARCHAR(32) DEFAULT 'COMPLIMENTARY'"))
+                if "max_reward" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN max_reward NUMERIC(10, 2)"))
+                if "min_transaction_amount" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN min_transaction_amount NUMERIC(10, 2) DEFAULT 0.00"))
+                if "cap_amount" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN cap_amount NUMERIC(10, 2)"))
+                if "cap_period" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN cap_period VARCHAR(32) DEFAULT 'NONE'"))
+                if "eligibility_restrictions" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN eligibility_restrictions VARCHAR(255)"))
+                if "valid_from" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN valid_from DATETIME"))
+                if "valid_to" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN valid_to DATETIME"))
+                if "terms_and_conditions" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN terms_and_conditions TEXT"))
+                if "source_reference" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN source_reference VARCHAR(512)"))
+                if "last_verified_date" not in ben_cols:
+                    await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN last_verified_date DATETIME"))
 
-            # Profiles migrations
-            res_p = await conn.execute(text("PRAGMA table_info(profiles)"))
-            prof_cols = [row[1] for row in res_p.fetchall()]
-            if "role" not in prof_cols:
-                await conn.execute(text("ALTER TABLE profiles ADD COLUMN role VARCHAR(32) DEFAULT 'USER'"))
-            if "is_admin" not in prof_cols:
-                await conn.execute(text("ALTER TABLE profiles ADD COLUMN is_admin BOOLEAN DEFAULT 0"))
+                # Profiles migrations
+                res_p = await conn.execute(text("PRAGMA table_info(profiles)"))
+                prof_cols = [row[1] for row in res_p.fetchall()]
+                if "role" not in prof_cols:
+                    await conn.execute(text("ALTER TABLE profiles ADD COLUMN role VARCHAR(32) DEFAULT 'USER'"))
+                if "is_admin" not in prof_cols:
+                    await conn.execute(text("ALTER TABLE profiles ADD COLUMN is_admin BOOLEAN DEFAULT 0"))
+                if "financial_pathway" not in prof_cols:
+                    await conn.execute(text("ALTER TABLE profiles ADD COLUMN financial_pathway VARCHAR(32) DEFAULT 'CREDIT_CARD'"))
 
-            # CardOffers migrations
-            res_o = await conn.execute(text("PRAGMA table_info(card_offers)"))
-            off_cols = [row[1] for row in res_o.fetchall()]
-            if "source_name" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_name VARCHAR(128)"))
-            if "source_evidence" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_evidence TEXT"))
-            if "extraction_confidence" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN extraction_confidence NUMERIC(4, 2) DEFAULT 0.85"))
-            if "content_hash" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN content_hash VARCHAR(64)"))
-            if "version" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN version INTEGER DEFAULT 1"))
-            if "previous_version_json" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN previous_version_json TEXT"))
-            if "rejection_reason" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN rejection_reason VARCHAR(255)"))
-            if "reviewed_by_id" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_by_id VARCHAR(36)"))
-            if "reviewed_by_name" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_by_name VARCHAR(128)"))
-            if "reviewed_at" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_at DATETIME"))
-            if "change_history_json" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN change_history_json TEXT DEFAULT '[]'"))
-            if "updated_at" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN updated_at DATETIME"))
-            if "source_id" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_id VARCHAR(36)"))
-            if "ingestion_channel" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN ingestion_channel VARCHAR(32) DEFAULT 'MANUAL_ENTRY'"))
-            if "source_document_id" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_document_id VARCHAR(36)"))
-            if "freshness_state" not in off_cols:
-                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN freshness_state VARCHAR(32) DEFAULT 'FRESH'"))
+                # CardOffers migrations
+                res_o = await conn.execute(text("PRAGMA table_info(card_offers)"))
+                off_cols = [row[1] for row in res_o.fetchall()]
+                if "source_name" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_name VARCHAR(128)"))
+                if "source_evidence" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_evidence TEXT"))
+                if "extraction_confidence" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN extraction_confidence NUMERIC(4, 2) DEFAULT 0.85"))
+                if "content_hash" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN content_hash VARCHAR(64)"))
+                if "version" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN version INTEGER DEFAULT 1"))
+                if "previous_version_json" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN previous_version_json TEXT"))
+                if "rejection_reason" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN rejection_reason VARCHAR(255)"))
+                if "reviewed_by_id" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_by_id VARCHAR(36)"))
+                if "reviewed_by_name" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_by_name VARCHAR(128)"))
+                if "reviewed_at" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN reviewed_at DATETIME"))
+                if "change_history_json" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN change_history_json TEXT DEFAULT '[]'"))
+                if "updated_at" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN updated_at DATETIME"))
+                if "source_id" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_id VARCHAR(36)"))
+                if "ingestion_channel" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN ingestion_channel VARCHAR(32) DEFAULT 'MANUAL_ENTRY'"))
+                if "source_document_id" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN source_document_id VARCHAR(36)"))
+                if "freshness_state" not in off_cols:
+                    await conn.execute(text("ALTER TABLE card_offers ADD COLUMN freshness_state VARCHAR(32) DEFAULT 'FRESH'"))
 
-            # Transactions migrations
-            res_t = await conn.execute(text("PRAGMA table_info(transactions)"))
-            txn_cols = [row[1] for row in res_t.fetchall()]
-            if "raw_description" not in txn_cols:
-                await conn.execute(text("ALTER TABLE transactions ADD COLUMN raw_description VARCHAR(500)"))
-            if "reference_number" not in txn_cols:
-                await conn.execute(text("ALTER TABLE transactions ADD COLUMN reference_number VARCHAR(128)"))
-            if "deduplication_hash" not in txn_cols:
-                await conn.execute(text("ALTER TABLE transactions ADD COLUMN deduplication_hash VARCHAR(64)"))
-            if "import_batch_id" not in txn_cols:
-                await conn.execute(text("ALTER TABLE transactions ADD COLUMN import_batch_id VARCHAR(36)"))
-            if "category_confidence" not in txn_cols:
-                await conn.execute(text("ALTER TABLE transactions ADD COLUMN category_confidence NUMERIC(4, 2)"))
-        except Exception:
-            pass
+                # Transactions migrations
+                res_t = await conn.execute(text("PRAGMA table_info(transactions)"))
+                txn_cols = [row[1] for row in res_t.fetchall()]
+                if "raw_description" not in txn_cols:
+                    await conn.execute(text("ALTER TABLE transactions ADD COLUMN raw_description VARCHAR(500)"))
+                if "reference_number" not in txn_cols:
+                    await conn.execute(text("ALTER TABLE transactions ADD COLUMN reference_number VARCHAR(128)"))
+                if "deduplication_hash" not in txn_cols:
+                    await conn.execute(text("ALTER TABLE transactions ADD COLUMN deduplication_hash VARCHAR(64)"))
+                if "import_batch_id" not in txn_cols:
+                    await conn.execute(text("ALTER TABLE transactions ADD COLUMN import_batch_id VARCHAR(36)"))
+                if "category_confidence" not in txn_cols:
+                    await conn.execute(text("ALTER TABLE transactions ADD COLUMN category_confidence NUMERIC(4, 2)"))
+                if "payment_method" not in txn_cols:
+                    await conn.execute(text("ALTER TABLE transactions ADD COLUMN payment_method VARCHAR(32) DEFAULT 'CREDIT_CARD'"))
+            except Exception:
+                pass
+        elif conn.dialect.name == "postgresql":
+            try:
+                await conn.execute(text("ALTER TABLE profiles ADD COLUMN IF NOT EXISTS financial_pathway VARCHAR(32) DEFAULT 'CREDIT_CARD'"))
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN IF NOT EXISTS payment_method VARCHAR(32) DEFAULT 'CREDIT_CARD'"))
+            except Exception:
+                pass
 
     async with AsyncSessionLocal() as session:
         # Seed default admin if not existing
@@ -262,3 +276,5 @@ app.include_router(assistant_router, prefix="/api/v1")
 app.include_router(offers_router, prefix="/api/v1")
 app.include_router(offers_admin_router, prefix="/api/v1")
 app.include_router(privacy_router, prefix="/api/v1")
+app.include_router(education_router, prefix="/api/v1")
+app.include_router(incomes_router, prefix="/api/v1")

@@ -12,6 +12,9 @@ from app.models.entities import (
     AuditLog,
     CardOffer,
     OfferAuditLog,
+    UserBudget,
+    UserLearningProgress,
+    Income,
 )
 
 __all__ = [
@@ -28,4 +31,7 @@ __all__ = [
     "RewardAnalysis",
     "UserPreference",
     "AuditLog",
+    "UserBudget",
+    "UserLearningProgress",
+    "Income",
 ]

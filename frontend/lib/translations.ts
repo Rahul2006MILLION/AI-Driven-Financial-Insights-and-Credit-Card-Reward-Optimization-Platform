@@ -25,6 +25,8 @@ export interface Translations {
     adminDesk: string;
     proMember: string;
     administrator: string;
+    learn: string;
+    budget: string;
   };
 
   sidebar: {
@@ -518,6 +520,150 @@ export interface Translations {
     provisioningPortfolio: string;
     samplePortfolioInitialized: string;
   };
+
+  learn: {
+    title: string;
+    subtitle: string;
+    badge: string;
+    tabCurriculum: string;
+    tabCalculators: string;
+    tabProgress: string;
+    categoriesTitle: string;
+    allCategories: string;
+    readingTime: string;
+    startLesson: string;
+    completedBadge: string;
+    readLesson: string;
+    keyTakeawaysTitle: string;
+    knowledgeCheckTitle: string;
+    submitQuiz: string;
+    quizPassed: string;
+    quizTryAgain: string;
+    nextLesson: string;
+    prevLesson: string;
+    backToLessons: string;
+    // Calculators
+    calcInterestTitle: string;
+    calcInterestDesc: string;
+    calcMinDueTitle: string;
+    calcMinDueDesc: string;
+    calcBudgetTitle: string;
+    calcBudgetDesc: string;
+    calcUtilizationTitle: string;
+    calcUtilizationDesc: string;
+    calcBreakEvenTitle: string;
+    calcBreakEvenDesc: string;
+    // Calculator Form Labels
+    balanceLabel: string;
+    aprLabel: string;
+    monthlyPaymentLabel: string;
+    newChargesLabel: string;
+    calculateButton: string;
+    calculating: string;
+    totalInterestPaid: string;
+    totalAmountPaid: string;
+    monthsToPayoff: string;
+    perpetualDebtWarning: string;
+    amortizationSample: string;
+    minPaymentNotice: string;
+    scenarioInFull: string;
+    scenarioMinOnly: string;
+    scenarioFixed: string;
+    monthlyIncomeLabel: string;
+    allocatedTotal: string;
+    needsLabel: string;
+    wantsLabel: string;
+    savingsLabel: string;
+    totalLimitLabel: string;
+    currentBalanceLabel: string;
+    utilizationRateLabel: string;
+    utilizationStatusIdeal: string;
+    utilizationStatusHigh: string;
+    targetBalance30: string;
+    annualFeeLabel: string;
+    monthlySpendLabel: string;
+    rewardRateLabel: string;
+    milestoneBenefitsLabel: string;
+    breakEvenMonthlySpend: string;
+    netBenefitLabel: string;
+    disclaimerPrefix: string;
+    // Progress & Onboarding
+    overallProgressTitle: string;
+    masteredTopics: string;
+    averageScore: string;
+    categoryProgress: string;
+    pathTitle: string;
+    pathDesc: string;
+    pathNewToFinance: string;
+    pathNewToFinanceDesc: string;
+    pathUnderstandCredit: string;
+    pathUnderstandCreditDesc: string;
+    pathOptimizeExisting: string;
+    pathOptimizeExistingDesc: string;
+    switchPath: string;
+    pathUpdatedSuccess: string;
+  };
+
+  incomes: {
+    title: string;
+    subtitle: string;
+    addIncome: string;
+    totalMonthlyInflow: string;
+    activeStreams: string;
+    rollingMedian: string;
+    recordedOutflow: string;
+    transactionsCount: string;
+    nonCardAndCard: string;
+    netCashFlow: string;
+    surplusRetained: string;
+    deficitAlert: string;
+    monthlyNet: string;
+    savingsRate: string;
+    healthyRate: string;
+    targetRate: string;
+    rule503020: string;
+    spendingDiscipline: string;
+    targetMonthlyLimit: string;
+    spent: string;
+    updateLimit: string;
+    savingLimit: string;
+    budgetUpdatedSuccess: string;
+    activeIncomeStreams: string;
+    sourcesRegistered: string;
+    noIncomeAdded: string;
+    noIncomeDesc: string;
+    addFirstIncome: string;
+    irregularVariable: string;
+    perCycle: string;
+    oneTimeEntry: string;
+    deleteConfirm: string;
+    recordNewIncome: string;
+    sourceName: string;
+    sourcePlaceholder: string;
+    amount: string;
+    cadenceFrequency: string;
+    monthly: string;
+    biWeekly: string;
+    weekly: string;
+    irregular: string;
+    oneTime: string;
+    variableStream: string;
+    notesOptional: string;
+    notesPlaceholder: string;
+    cancel: string;
+    saveIncome: string;
+    saving: string;
+    recordQuickExpense: string;
+    quickExpenseDesc: string;
+    expenseLoggedSuccess: string;
+    merchantDesc: string;
+    merchantPlaceholder: string;
+    method: string;
+    category: string;
+    recordExpense: string;
+    paymentMethodBreakdown: string;
+    loadingData: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -546,6 +692,8 @@ export const translations: Record<Language, Translations> = {
       adminDesk: "Offer Review Desk",
       proMember: "PRO Member",
       administrator: "Administrator",
+      learn: "CLIQ Learn",
+      budget: "Income & Budget",
     },
 
     sidebar: {
@@ -1044,6 +1192,150 @@ export const translations: Record<Language, Translations> = {
       provisioningPortfolio: "Provisioning Portfolio...",
       samplePortfolioInitialized: "Sample portfolio initialized",
     },
+
+    learn: {
+      title: "Financial Inclusion & CLIQ Learn",
+      subtitle: "Empowering financial confidence, debt-free living, and informed money decisions for everyone.",
+      badge: "Financial Inclusion Suite",
+      tabCurriculum: "Curriculum & Lessons",
+      tabCalculators: "Interactive Calculators",
+      tabProgress: "My Learning Progress",
+      categoriesTitle: "Learning Categories",
+      allCategories: "All Categories",
+      readingTime: "min read",
+      startLesson: "Start Lesson",
+      completedBadge: "Completed",
+      readLesson: "Read Lesson",
+      keyTakeawaysTitle: "Key Takeaways",
+      knowledgeCheckTitle: "Knowledge Check",
+      submitQuiz: "Submit Answers",
+      quizPassed: "Great job! You passed the knowledge check.",
+      quizTryAgain: "Some answers were incorrect. Review the lesson and try again.",
+      nextLesson: "Next Lesson",
+      prevLesson: "Previous Lesson",
+      backToLessons: "Back to All Lessons",
+      // Calculators
+      calcInterestTitle: "Credit Card Interest Calculator",
+      calcInterestDesc: "Calculate how APR and monthly finance charges compound on outstanding balances.",
+      calcMinDueTitle: "Minimum Payment Trap Calculator",
+      calcMinDueDesc: "See how paying only the 5% minimum due keeps you trapped in debt for years.",
+      calcBudgetTitle: "50-30-20 Monthly Budget Planner",
+      calcBudgetDesc: "Organize your income into Needs (50%), Wants (30%), and Savings (20%).",
+      calcUtilizationTitle: "Credit Utilization Health Calculator",
+      calcUtilizationDesc: "Check your utilization percentage and understand why the 30% rule protects your score.",
+      calcBreakEvenTitle: "Card Fee Break-Even Evaluator",
+      calcBreakEvenDesc: "Determine the monthly spend required to justify an annual credit card fee.",
+      // Calculator Form Labels
+      balanceLabel: "Outstanding Balance (₹)",
+      aprLabel: "Annual Percentage Rate (APR %)",
+      monthlyPaymentLabel: "Planned Monthly Payment (₹)",
+      newChargesLabel: "New Purchases per Month (₹)",
+      calculateButton: "Calculate",
+      calculating: "Calculating...",
+      totalInterestPaid: "Total Interest Paid",
+      totalAmountPaid: "Total Amount Paid",
+      monthsToPayoff: "Months to Pay Off",
+      perpetualDebtWarning: "Perpetual Debt Alert: Your planned payment is less than monthly finance charges!",
+      amortizationSample: "Payment Amortization Sample (First 12 Months)",
+      minPaymentNotice: "Comparison of Payment Strategies",
+      scenarioInFull: "Paying Full Balance",
+      scenarioMinOnly: "Paying Minimum Due (5%)",
+      scenarioFixed: "Paying Fixed Accelerated Amount",
+      monthlyIncomeLabel: "Monthly In-Hand Income (₹)",
+      allocatedTotal: "Total Allocated",
+      needsLabel: "Essential Needs (50%)",
+      wantsLabel: "Discretionary Wants (30%)",
+      savingsLabel: "Savings & Investments (20%)",
+      totalLimitLabel: "Total Credit Limit (₹)",
+      currentBalanceLabel: "Current Total Balance (₹)",
+      utilizationRateLabel: "Credit Utilization Rate",
+      utilizationStatusIdeal: "Ideal Utilization (<30%)",
+      utilizationStatusHigh: "High Utilization (>50%)",
+      targetBalance30: "Target Balance for 30% Ideal",
+      annualFeeLabel: "Card Annual Fee (₹)",
+      monthlySpendLabel: "Expected Monthly Spend (₹)",
+      rewardRateLabel: "Effective Reward Rate (%)",
+      milestoneBenefitsLabel: "Annual Milestone Benefits Value (₹)",
+      breakEvenMonthlySpend: "Monthly Spend Needed to Break Even",
+      netBenefitLabel: "Net Annual Benefit",
+      disclaimerPrefix: "Disclaimer: Calculations are illustrative and educational.",
+      // Progress & Onboarding
+      overallProgressTitle: "Overall Curriculum Mastery",
+      masteredTopics: "Topics Completed",
+      averageScore: "Average Quiz Score",
+      categoryProgress: "Progress by Category",
+      pathTitle: "Your Financial Learning Journey",
+      pathDesc: "CLIQ tailors your experience based on your current financial background and goals.",
+      pathNewToFinance: "New to Financial Management",
+      pathNewToFinanceDesc: "Start with budgeting, emergency funds, savings habits, and fraud safety.",
+      pathUnderstandCredit: "Want to Understand Credit Cards",
+      pathUnderstandCreditDesc: "Learn billing cycles, grace periods, interest avoidance, and credit scores before getting a card.",
+      pathOptimizeExisting: "Optimize Existing Products",
+      pathOptimizeExistingDesc: "Maximize cashback, monitor reward caps, audit annual fees, and prevent leakage.",
+      switchPath: "Change Learning Path",
+      pathUpdatedSuccess: "Financial learning path updated successfully!",
+    },
+
+    incomes: {
+      title: "Income & Budget Command",
+      subtitle: "Cash flow tracking, regular & irregular earnings, and disciplined 50/30/20 budgeting",
+      addIncome: "Add Income Stream",
+      totalMonthlyInflow: "Total Monthly Inflow",
+      activeStreams: "Active Stream(s)",
+      rollingMedian: "90d Median",
+      recordedOutflow: "Recorded Outflow",
+      transactionsCount: "Transactions",
+      nonCardAndCard: "Non-card & card",
+      netCashFlow: "Net Cash Flow",
+      surplusRetained: "Surplus retained",
+      deficitAlert: "Deficit alert",
+      monthlyNet: "Monthly net",
+      savingsRate: "Savings Rate",
+      healthyRate: "Healthy (>20%)",
+      targetRate: "Target: 20%+",
+      rule503020: "50/30/20 rule",
+      spendingDiscipline: "Monthly Spending Discipline & Budget",
+      targetMonthlyLimit: "Target Monthly Limit",
+      spent: "Spent",
+      updateLimit: "Update",
+      savingLimit: "Saving...",
+      budgetUpdatedSuccess: "Budget target updated successfully.",
+      activeIncomeStreams: "Active Income Streams",
+      sourcesRegistered: "source(s) registered",
+      noIncomeAdded: "No Income Streams Added Yet",
+      noIncomeDesc: "Add your salary, freelance gigs, business earnings, or stipends to enable cash flow resilience calculations.",
+      addFirstIncome: "Add First Income",
+      irregularVariable: "Irregular / Variable",
+      perCycle: "Per cycle",
+      oneTimeEntry: "One-time entry",
+      deleteConfirm: "Are you sure you want to remove this income stream?",
+      recordNewIncome: "Record New Income Stream",
+      sourceName: "Source Name",
+      sourcePlaceholder: "e.g. Primary Job, Consulting, Rental",
+      amount: "Amount (₹)",
+      cadenceFrequency: "Cadence / Frequency",
+      monthly: "Monthly",
+      biWeekly: "Bi-Weekly",
+      weekly: "Weekly",
+      irregular: "Irregular",
+      oneTime: "One-Time",
+      variableStream: "Variable / Irregular Stream (Freelance)",
+      notesOptional: "Notes (Optional)",
+      notesPlaceholder: "e.g. Q4 contract renewal",
+      cancel: "Cancel",
+      saveIncome: "Save Income",
+      saving: "Saving...",
+      recordQuickExpense: "Record Quick Expense (Non-Card)",
+      quickExpenseDesc: "Log cash, UPI, or debit payments to update your budget and net cash flow in real time.",
+      expenseLoggedSuccess: "Expense logged successfully.",
+      merchantDesc: "Merchant / Description",
+      merchantPlaceholder: "e.g. Local Kirana, Metro, Chai",
+      method: "Method",
+      category: "Category",
+      recordExpense: "Record Expense",
+      paymentMethodBreakdown: "Payment Method Breakdown",
+      loadingData: "Loading cash flow and budget telemetry...",
+    },
   },
 
   hi: {
@@ -1071,6 +1363,8 @@ export const translations: Record<Language, Translations> = {
       adminDesk: "ऑफ़र समीक्षा डेस्क",
       proMember: "प्रो सदस्य",
       administrator: "प्रशासक",
+      learn: "सीखें (CLIQ Learn)",
+      budget: "आय और बजट",
     },
 
     sidebar: {
@@ -1569,6 +1863,150 @@ export const translations: Record<Language, Translations> = {
       provisioningPortfolio: "पोर्टफोलियो तैयार हो रहा है...",
       samplePortfolioInitialized: "सैंपल पोर्टफोलियो लोड हो गया",
     },
+
+    learn: {
+      title: "वित्तीय समावेशन और सीखें (CLIQ Learn)",
+      subtitle: "कर्ज-मुक्त जीवन, वित्तीय आत्मविश्वास और सभी के लिए आसान वित्तीय निर्णय।",
+      badge: "वित्तीय समावेशन मंच",
+      tabCurriculum: "पाठ्यक्रम और अध्याय",
+      tabCalculators: "इंटरैक्टिव कैलकुलेटर",
+      tabProgress: "मेरी सीखने की प्रगति",
+      categoriesTitle: "सीखने की श्रेणियां",
+      allCategories: "सभी श्रेणियां",
+      readingTime: "मिनट पठन",
+      startLesson: "पाठ शुरू करें",
+      completedBadge: "पूर्ण",
+      readLesson: "पाठ पढ़ें",
+      keyTakeawaysTitle: "मुख्य सीख",
+      knowledgeCheckTitle: "ज्ञान की जांच (प्रश्नोत्तरी)",
+      submitQuiz: "उत्तर जमा करें",
+      quizPassed: "शानदार! आपने प्रश्नोत्तरी सफलतापूर्वक उत्तीर्ण कर ली।",
+      quizTryAgain: "कुछ उत्तर गलत थे। पाठ को दोबारा पढ़ें और पुनः प्रयास करें।",
+      nextLesson: "अगला पाठ",
+      prevLesson: "पिछला पाठ",
+      backToLessons: "सभी पाठों पर वापस जाएं",
+      // Calculators
+      calcInterestTitle: "क्रेडिट कार्ड ब्याज कैलकुलेटर",
+      calcInterestDesc: "जानें कि बकाए पर वार्षिक ब्याज दर (APR) और शुल्क कैसे चक्रवृद्धि रूप से बढ़ते हैं।",
+      calcMinDueTitle: "न्यूनतम भुगतान का जाल कैलकुलेटर",
+      calcMinDueDesc: "देखें कि सिर्फ 5% न्यूनतम देय चुकाने से आप कैसे वर्षों तक कर्ज में फंसे रह सकते हैं।",
+      calcBudgetTitle: "50-30-20 मासिक बजट नियोजक",
+      calcBudgetDesc: "अपनी आय को अनिवार्य जरूरतें (50%), इच्छाएं (30%) और बचत (20%) में व्यवस्थित करें।",
+      calcUtilizationTitle: "क्रेडिट उपयोग स्वास्थ्य कैलकुलेटर",
+      calcUtilizationDesc: "अपना उपयोग प्रतिशत जांचें और जानें कि 30% का नियम आपके CIBIL स्कोर की रक्षा कैसे करता है।",
+      calcBreakEvenTitle: "कार्ड वार्षिक शुल्क ब्रेक-ईवन मूल्यांकन",
+      calcBreakEvenDesc: "पता लगाएं कि वार्षिक कार्ड शुल्क की भरपाई के लिए आपको प्रति माह कितना खर्च करना होगा।",
+      // Calculator Form Labels
+      balanceLabel: "बकाया राशि (₹)",
+      aprLabel: "वार्षिक ब्याज दर (APR %)",
+      monthlyPaymentLabel: "नियोजित मासिक भुगतान (₹)",
+      newChargesLabel: "प्रति माह नए खर्च (₹)",
+      calculateButton: "गणना करें",
+      calculating: "गणना हो रही है...",
+      totalInterestPaid: "कुल चुकाया गया ब्याज",
+      totalAmountPaid: "कुल चुकाई गई राशि",
+      monthsToPayoff: "कर्ज चुकाने में लगे महीने",
+      perpetualDebtWarning: "सतत कर्ज चेतावनी: आपका मासिक भुगतान ब्याज से भी कम है, यह कर्ज कभी खत्म नहीं होगा!",
+      amortizationSample: "भुगतान अनुसूची का नमूना (पहले 12 महीने)",
+      minPaymentNotice: "भुगतान रणनीतियों की तुलना",
+      scenarioInFull: "पूरी राशि का एक बार में भुगतान",
+      scenarioMinOnly: "केवल न्यूनतम देय (5%) का भुगतान",
+      scenarioFixed: "एक निश्चित त्वरित राशि का भुगतान",
+      monthlyIncomeLabel: "मासिक शुद्ध आय (₹)",
+      allocatedTotal: "कुल आवंटित राशि",
+      needsLabel: "अनिवार्य जरूरतें (50%)",
+      wantsLabel: "जीवनशैली व इच्छाएं (30%)",
+      savingsLabel: "बचत व निवेश (20%)",
+      totalLimitLabel: "कुल क्रेडिट सीमा (₹)",
+      currentBalanceLabel: "वर्तमान कुल बकाया (₹)",
+      utilizationRateLabel: "क्रेडिट उपयोग दर",
+      utilizationStatusIdeal: "आदर्श उपयोग (<30%)",
+      utilizationStatusHigh: "अधिक उपयोग (>50%)",
+      targetBalance30: "30% आदर्श के लिए लक्ष्य बकाया",
+      annualFeeLabel: "कार्ड वार्षिक शुल्क (₹)",
+      monthlySpendLabel: "अपेक्षित मासिक खर्च (₹)",
+      rewardRateLabel: "प्रभावी रिवॉर्ड दर (%)",
+      milestoneBenefitsLabel: "वार्षिक माइलस्टोन लाभ मूल्य (₹)",
+      breakEvenMonthlySpend: "शुल्क भरपाई के लिए न्यूनतम मासिक खर्च",
+      netBenefitLabel: "शुद्ध वार्षिक लाभ",
+      disclaimerPrefix: "अस्वीकरण: ये गणनाएं केवल शैक्षणिक और निर्देशात्मक उद्देश्यों के लिए हैं।",
+      // Progress & Onboarding
+      overallProgressTitle: "समग्र शिक्षण प्रगति",
+      masteredTopics: "पूर्ण किए गए अध्याय",
+      averageScore: "औसत प्रश्नोत्तरी स्कोर",
+      categoryProgress: "श्रेणी अनुसार प्रगति",
+      pathTitle: "आपकी वित्तीय शिक्षण यात्रा",
+      pathDesc: "CLIQ आपकी वर्तमान वित्तीय स्थिति और लक्ष्यों के आधार पर अनुभव को अनुकूलित करता है।",
+      pathNewToFinance: "वित्तीय प्रबंधन में नए हैं",
+      pathNewToFinanceDesc: "बजट निर्माण, आपातकालीन निधि, बचत की आदतें और ऑनलाइन सुरक्षा से शुरुआत करें।",
+      pathUnderstandCredit: "क्रेडिट कार्ड को समझना चाहते हैं",
+      pathUnderstandCreditDesc: "कार्ड लेने से पहले बिलिंग चक्र, ग्रेस पीरियड, ब्याज से बचाव और CIBIL स्कोर समझें।",
+      pathOptimizeExisting: "मौजूदा वित्तीय उत्पादों को बेहतर बनाएं",
+      pathOptimizeExistingDesc: "कैशबैक को अधिकतम करें, रिवॉर्ड सीमा पर नजर रखें, वार्षिक शुल्क का ऑडिट करें और नुकसान रोकें।",
+      switchPath: "सीखने का मार्ग बदलें",
+      pathUpdatedSuccess: "वित्तीय शिक्षण मार्ग सफलतापूर्वक अपडेट किया गया!",
+    },
+
+    incomes: {
+      title: "आय और बजट नियंत्रण",
+      subtitle: "नकदी प्रवाह ट्रैकिंग, नियमित और अनियमित आय, और अनुशासित 50/30/20 बजट",
+      addIncome: "आय स्रोत जोड़ें",
+      totalMonthlyInflow: "कुल मासिक आमद",
+      activeStreams: "सक्रिय स्रोत",
+      rollingMedian: "90-दिवसीय माध्यिका",
+      recordedOutflow: "दर्ज किया गया खर्च",
+      transactionsCount: "लेन-देन",
+      nonCardAndCard: "गैर-कार्ड और कार्ड",
+      netCashFlow: "शुद्ध नकदी प्रवाह",
+      surplusRetained: "बचत अधिशेष",
+      deficitAlert: "घाटा चेतावनी",
+      monthlyNet: "मासिक शुद्ध",
+      savingsRate: "बचत दर",
+      healthyRate: "स्वस्थ (>20%)",
+      targetRate: "लक्ष्य: 20%+",
+      rule503020: "50/30/20 नियम",
+      spendingDiscipline: "मासिक खर्च अनुशासन और बजट",
+      targetMonthlyLimit: "लक्षित मासिक सीमा",
+      spent: "खर्च",
+      updateLimit: "अपडेट करें",
+      savingLimit: "सहेज रहा है...",
+      budgetUpdatedSuccess: "बजट लक्ष्य सफलतापूर्वक अपडेट किया गया।",
+      activeIncomeStreams: "सक्रिय आय स्रोत",
+      sourcesRegistered: "स्रोत पंजीकृत",
+      noIncomeAdded: "अभी तक कोई आय स्रोत नहीं जोड़ा गया",
+      noIncomeDesc: "नकदी प्रवाह लचीलेपन की गणना सक्षम करने के लिए अपना वेतन, फ्रीलांस कार्य या व्यावसायिक आय जोड़ें।",
+      addFirstIncome: "पहली आय जोड़ें",
+      irregularVariable: "अनियमित / परिवर्तनीय",
+      perCycle: "प्रति चक्र",
+      oneTimeEntry: "एकमुश्त प्रविष्टि",
+      deleteConfirm: "क्या आप वाकई इस आय स्रोत को हटाना चाहते हैं?",
+      recordNewIncome: "नया आय स्रोत दर्ज करें",
+      sourceName: "स्रोत का नाम",
+      sourcePlaceholder: "उदा. मुख्य नौकरी, परामर्श, किराया",
+      amount: "राशि (₹)",
+      cadenceFrequency: "आवृत्ति / चक्र",
+      monthly: "मासिक",
+      biWeekly: "पाक्षिक",
+      weekly: "साप्ताहिक",
+      irregular: "अनियमित",
+      oneTime: "एकमुश्त",
+      variableStream: "परिवर्तनीय / अनियमित स्रोत (फ्रीलांस)",
+      notesOptional: "टिप्पणियाँ (वैकल्पिक)",
+      notesPlaceholder: "उदा. चौथी तिमाही अनुबंध नवीनीकरण",
+      cancel: "रद्द करें",
+      saveIncome: "आय सहेजें",
+      saving: "सहेज रहा है...",
+      recordQuickExpense: "त्वरित खर्च दर्ज करें (गैर-कार्ड)",
+      quickExpenseDesc: "अपने बजट और शुद्ध नकदी प्रवाह को अपडेट करने के लिए नकद, यूपीआई या डेबिट खर्च दर्ज करें।",
+      expenseLoggedSuccess: "खर्च सफलतापूर्वक दर्ज किया गया।",
+      merchantDesc: "व्यापारी / विवरण",
+      merchantPlaceholder: "उदा. स्थानीय किराना, मेट्रो, चाय",
+      method: "भुगतान विधि",
+      category: "श्रेणी",
+      recordExpense: "खर्च दर्ज करें",
+      paymentMethodBreakdown: "भुगतान विधि विवरण",
+      loadingData: "नकदी प्रवाह और बजट डेटा लोड हो रहा है...",
+    },
   },
 
   kn: {
@@ -1596,6 +2034,8 @@ export const translations: Record<Language, Translations> = {
       adminDesk: "ಆಫರ್ ಪರಿಶೀಲನಾ ಡೆಸ್ಕ್",
       proMember: "ಪ್ರೊ ಸದಸ್ಯ",
       administrator: "ನಿರ್ವಾಹಕ",
+      learn: "ಕಲಿಯಿರಿ (CLIQ Learn)",
+      budget: "ಆದಾಯ ಮತ್ತು ಬಜೆಟ್",
     },
 
     sidebar: {
@@ -2093,6 +2533,150 @@ export const translations: Record<Language, Translations> = {
       samplePortfolio: "ಮಾದರಿ ಪೋರ್ಟ್‌ಫೋಲಿಯೊ",
       provisioningPortfolio: "ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ಸಿದ್ಧವಾಗುತ್ತಿದೆ...",
       samplePortfolioInitialized: "ಮಾದರಿ ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ಲೋಡ್ ಆಗಿದೆ",
+    },
+
+    learn: {
+      title: "ಹಣಕಾಸು ಒಳಗೊಳ್ಳುವಿಕೆ ಮತ್ತು CLIQ ಕಲಿಯಿರಿ",
+      subtitle: "ಪ್ರತಿಯೊಬ್ಬರಿಗೂ ಸಾಲ-ಮುಕ್ತ ಜೀವನ, ಆರ್ಥಿಕ ಆತ್ಮವಿಶ್ವಾಸ ಮತ್ತು ತಿಳುವಳಿಕೆಯ ಹಣಕಾಸು ನಿರ್ಧಾರಗಳು.",
+      badge: "ಹಣಕಾಸು ಒಳಗೊಳ್ಳುವಿಕೆ ವೇದಿಕೆ",
+      tabCurriculum: "ಪಠ್ಯಕ್ರಮ ಮತ್ತು ಪಾಠಗಳು",
+      tabCalculators: "ಸಂವಾದಾತ್ಮಕ ಕ್ಯಾಲ್ಕುಲೇಟರ್‌ಗಳು",
+      tabProgress: "ನನ್ನ ಕಲಿಕೆಯ ಪ್ರಗತಿ",
+      categoriesTitle: "ಕಲಿಕೆಯ ವಿಭಾಗಗಳು",
+      allCategories: "ಎಲ್ಲಾ ವಿಭಾಗಗಳು",
+      readingTime: "ನಿಮಿಷ ಓದು",
+      startLesson: "ಪಾಠ ಪ್ರಾರಂಭಿಸಿ",
+      completedBadge: "ಪೂರ್ಣಗೊಂಡಿದೆ",
+      readLesson: "ಪಾಠ ಓದಿ",
+      keyTakeawaysTitle: "ಮುಖ್ಯ ಕಲಿಕೆಗಳು",
+      knowledgeCheckTitle: "ಜ್ಞಾನ ಪರೀಕ್ಷೆ (ರಸಪ್ರಶ್ನೆ)",
+      submitQuiz: "ಉತ್ತರಗಳನ್ನು ಸಲ್ಲಿಸಿ",
+      quizPassed: "ಅಭಿನಂದನೆಗಳು! ನೀವು ರಸಪ್ರಶ್ನೆಯಲ್ಲಿ ಯಶಸ್ವಿಯಾಗಿದ್ದೀರಿ.",
+      quizTryAgain: "ಕೆಲವು ಉತ್ತರಗಳು ತಪ್ಪಾಗಿವೆ. ಪಾಠವನ್ನು ಮತ್ತೊಮ್ಮೆ ಓದಿ ಪ್ರಯತ್ನಿಸಿ.",
+      nextLesson: "ಮುಂದಿನ ಪಾಠ",
+      prevLesson: "ಹಿಂದಿನ ಪಾಠ",
+      backToLessons: "ಎಲ್ಲಾ ಪಾಠಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
+      // Calculators
+      calcInterestTitle: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಬಡ್ಡಿ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+      calcInterestDesc: "ಬಾಕಿ ಮೊತ್ತದ ಮೇಲೆ ವಾರ್ಷಿಕ ಬಡ್ಡಿದರ (APR) ಮತ್ತು ಮಾಸಿಕ ಶುಲ್ಕಗಳು ಹೇಗೆ ಬೆಳೆಯುತ್ತವೆ ಎಂಬುದನ್ನು ಲೆಕ್ಕಹಾಕಿ.",
+      calcMinDueTitle: "ಕನಿಷ್ಠ ಪಾವತಿ ಅಪಾಯದ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+      calcMinDueDesc: "ಕೇವಲ 5% ಕನಿಷ್ಠ ಮೊತ್ತ ಪಾವತಿಸುವುದರಿಂದ ಹೇಗೆ ವರ್ಷಗಟ್ಟಲೆ ಸಾಲದಲ್ಲಿ ಸಿಲುಕಿಕೊಳ್ಳುತ್ತೀರಿ ಎಂದು ತಿಳಿಯಿರಿ.",
+      calcBudgetTitle: "50-30-20 ಮಾಸಿಕ ಬಜೆಟ್ ಯೋಜಕ",
+      calcBudgetDesc: "ನಿಮ್ಮ ಆದಾಯವನ್ನು ಅಗತ್ಯಗಳು (50%), ಇಷ್ಟಗಳು (30%) ಮತ್ತು ಉಳಿತಾಯ (20%) ಎಂದು ವಿಂಗಡಿಸಿ.",
+      calcUtilizationTitle: "ಕ್ರೆಡಿಟ್ ಮಿತಿ ಬಳಕೆ ಆರೋಗ್ಯ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+      calcUtilizationDesc: "ನಿಮ್ಮ ಬಳಕೆಯ ಶೇಕಡಾವಾರು ಪರಿಶೀಲಿಸಿ ಮತ್ತು 30% ನಿಯಮವು CIBIL ಸ್ಕೋರ್ ಅನ್ನು ಹೇಗೆ ರಕ್ಷಿಸುತ್ತದೆ ಎಂಬುದನ್ನು ತಿಳಿಯಿರಿ.",
+      calcBreakEvenTitle: "ಕಾರ್ಡ್ ವಾರ್ಷಿಕ ಶುಲ್ಕ ಬ್ರೇಕ್-ಈವನ್ ಮೌಲ್ಯಮಾಪನ",
+      calcBreakEvenDesc: "ವಾರ್ಷಿಕ ಕಾರ್ಡ್ ಶುಲ್ಕವನ್ನು ಸಮರ್ಥಿಸಲು ತಿಂಗಳಿಗೆ ಎಷ್ಟು ಖರ್ಚು ಮಾಡಬೇಕೆಂದು ಲೆಕ್ಕಹಾಕಿ.",
+      // Calculator Form Labels
+      balanceLabel: "ಬಾಕಿ ಮೊತ್ತ (₹)",
+      aprLabel: "ವಾರ್ಷಿಕ ಬಡ್ಡಿದರ (APR %)",
+      monthlyPaymentLabel: "ಯೋಜಿತ ಮಾಸಿಕ ಪಾವತಿ (₹)",
+      newChargesLabel: "ತಿಂಗಳ ಹೊಸ ಖರೀದಿಗಳು (₹)",
+      calculateButton: "ಲೆಕ್ಕಹಾಕಿ",
+      calculating: "ಲೆಕ್ಕಾಚಾರ ನಡೆಯುತ್ತಿದೆ...",
+      totalInterestPaid: "ಒಟ್ಟು ಪಾವತಿಸಿದ ಬಡ್ಡಿ",
+      totalAmountPaid: "ಒಟ್ಟು ಪಾವತಿಸಿದ ಮೊತ್ತ",
+      monthsToPayoff: "ಸಾಲ ತೀರಿಸಲು ಬೇಕಾದ ತಿಂಗಳುಗಳು",
+      perpetualDebtWarning: "ಶಾಶ್ವತ ಸಾಲದ ಎಚ್ಚರಿಕೆ: ನಿಮ್ಮ ಪಾವತಿ ಮಾಸಿಕ ಬಡ್ಡಿಗಿಂತ ಕಡಿಮೆಯಿದೆ, ಈ ಸಾಲ ಎಂದಿಗೂ ತೀರುವುದಿಲ್ಲ!",
+      amortizationSample: "ಪಾವತಿ ವೇಳಾಪಟ್ಟಿ ಮಾದರಿ (ಮೊದಲ 12 ತಿಂಗಳುಗಳು)",
+      minPaymentNotice: "ಪಾವತಿ ವಿಧಾನಗಳ ಹೋಲಿಕೆ",
+      scenarioInFull: "ಸಂಪೂರ್ಣ ಮೊತ್ತವನ್ನು ಒಮ್ಮೆಲೇ ಪಾವತಿಸುವುದು",
+      scenarioMinOnly: "ಕೇವಲ ಕನಿಷ್ಠ ಮೊತ್ತ (5%) ಪಾವತಿಸುವುದು",
+      scenarioFixed: "ಸ್ಥಿರ ತ್ವರಿತ ಮೊತ್ತವನ್ನು ಪಾವತಿಸುವುದು",
+      monthlyIncomeLabel: "ಮಾಸಿಕ ನಿವ್ವಳ ಆದಾಯ (₹)",
+      allocatedTotal: "ಒಟ್ಟು ಹಂಚಿಕೆಯಾದ ಮೊತ್ತ",
+      needsLabel: "ಅಗತ್ಯ ವೆಚ್ಚಗಳು (50%)",
+      wantsLabel: "ಜೀವನಶೈಲಿ ವೆಚ್ಚಗಳು (30%)",
+      savingsLabel: "ಉಳಿತಾಯ ಮತ್ತು ಹೂಡಿಕೆ (20%)",
+      totalLimitLabel: "ಒಟ್ಟು ಕ್ರೆಡಿಟ್ ಮಿತಿ (₹)",
+      currentBalanceLabel: "ಪ್ರಸ್ತುತ ಒಟ್ಟು ಬಾಕಿ (₹)",
+      utilizationRateLabel: "ಕ್ರೆಡಿಟ್ ಮಿತಿ ಬಳಕೆಯ ದರ",
+      utilizationStatusIdeal: "ಉತ್ತಮ ಬಳಕೆ (<30%)",
+      utilizationStatusHigh: "ಅಧಿಕ ಬಳಕೆ (>50%)",
+      targetBalance30: "30% ಗುರಿಗಾಗಿ ಗರಿಷ್ಠ ಬಾಕಿ",
+      annualFeeLabel: "ಕಾರ್ಡ್ ವಾರ್ಷಿಕ ಶುಲ್ಕ (₹)",
+      monthlySpendLabel: "ಅಂದಾಜು ಮಾಸಿಕ ಖರ್ಚು (₹)",
+      rewardRateLabel: "ಪರಿಣಾಮಕಾರಿ ರಿವಾರ್ಡ್ ದರ (%)",
+      milestoneBenefitsLabel: "ವಾರ್ಷಿಕ ಮೈಲಿಗಲ್ಲು ಪ್ರಯೋಜನಗಳ ಮೌಲ್ಯ (₹)",
+      breakEvenMonthlySpend: "ಶುಲ್ಕ ಸಮರ್ಥನೆಗೆ ಬೇಕಾದ ಮಾಸಿಕ ಖರ್ಚು",
+      netBenefitLabel: "ವಾರ್ಷಿಕ ನಿವ್ವಳ ಲಾಭ",
+      disclaimerPrefix: "ಹಕ್ಕುತ್ಯಾಗ: ಈ ಲೆಕ್ಕಾಚಾರಗಳು ಕೇವಲ ಶೈಕ್ಷಣಿಕ ಮತ್ತು ತಿಳುವಳಿಕೆಯ ಉದ್ದೇಶಕ್ಕಾಗಿ ಮಾತ್ರ.",
+      // Progress & Onboarding
+      overallProgressTitle: "ಒಟ್ಟಾರೆ ಕಲಿಕೆಯ ಪ್ರಗತಿ",
+      masteredTopics: "ಪೂರ್ಣಗೊಂಡ ಪಾಠಗಳು",
+      averageScore: "ಸರಾಸರಿ ರಸಪ್ರಶ್ನೆ ಅಂಕ",
+      categoryProgress: "ವಿಭಾಗವಾರು ಪ್ರಗತಿ",
+      pathTitle: "ನಿಮ್ಮ ಹಣಕಾಸು ಕಲಿಕೆಯ ಪ್ರಯಾಣ",
+      pathDesc: "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಹಣಕಾಸು ಸ್ಥಿತಿ ಮತ್ತು ಗುರಿಗಳಿಗೆ ಅನುಗುಣವಾಗಿ CLIQ ನಿಮ್ಮ ಅನುಭವವನ್ನು ರೂಪಿಸುತ್ತದೆ.",
+      pathNewToFinance: "ಹಣಕಾಸು ನಿರ್ವಹಣೆಗೆ ಹೊಸಬರು",
+      pathNewToFinanceDesc: "ಬಜೆಟ್ ತಯಾರಿ, ತುರ್ತು ನಿಧಿ, ಉಳಿತಾಯ ಅಭ್ಯಾಸಗಳು ಮತ್ತು ವಂಚನೆ ತಡೆಗಟ್ಟುವಿಕೆಯಿಂದ ಪ್ರಾರಂಭಿಸಿ.",
+      pathUnderstandCredit: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಬಯಸುವವರು",
+      pathUnderstandCreditDesc: "ಕಾರ್ಡ್ ಪಡೆಯುವ ಮುನ್ನ ಬಿಲ್ಲಿಂಗ್ ಚಕ್ರ, ರಿಯಾಯಿತಿ ಅವಧಿ, ಬಡ್ಡಿ ನಿಯಂತ್ರಣ ಮತ್ತು ಸಿಬಿಲ್ ಸ್ಕೋರ್ ತಿಳಿಯಿರಿ.",
+      pathOptimizeExisting: "ಪ್ರಸ್ತುತ ಉತ್ಪನ್ನಗಳನ್ನು ಅತ್ಯುತ್ತಮವಾಗಿಸಲು",
+      pathOptimizeExistingDesc: "ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಹೆಚ್ಚಿಸಿಕೊಳ್ಳಿ, ರಿವಾರ್ಡ್ ಮಿತಿಗಳನ್ನು ಗಮನಿಸಿ ಮತ್ತು ವಾರ್ಷಿಕ ಶುಲ್ಕಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+      switchPath: "ಕಲಿಕೆಯ ಮಾರ್ಗ ಬದಲಾಯಿಸಿ",
+      pathUpdatedSuccess: "ಹಣಕಾಸು ಕಲಿಕೆಯ ಮಾರ್ಗ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ!",
+    },
+
+    incomes: {
+      title: "ಆದಾಯ ಮತ್ತು ಬಜೆಟ್ ನಿಯಂತ್ರಣ",
+      subtitle: "ಹಣದ ಹರಿವು ಟ್ರ್ಯಾಕಿಂಗ್, ನಿಯಮಿತ ಮತ್ತು ಅನಿಯಮಿತ ಗಳಿಕೆಗಳು ಮತ್ತು ಶಿಸ್ತಿನ 50/30/20 ಬಜೆಟ್",
+      addIncome: "ಆದಾಯದ ಮೂಲ ಸೇರಿಸಿ",
+      totalMonthlyInflow: "ಒಟ್ಟು ಮಾಸಿಕ ಒಳಹರಿವು",
+      activeStreams: "ಸಕ್ರಿಯ ಮೂಲಗಳು",
+      rollingMedian: "90-ದಿನಗಳ ಸರಾಸರಿ",
+      recordedOutflow: "ದಾಖಲಾದ ಖರ್ಚು",
+      transactionsCount: "ವಹಿವಾಟುಗಳು",
+      nonCardAndCard: "ಕಾರ್ಡ್ ರಹಿತ ಮತ್ತು ಕಾರ್ಡ್",
+      netCashFlow: "ನಿವ್ವಳ ನಗದು ಹರಿವು",
+      surplusRetained: "ಉಳಿತಾಯ ಹೆಚ್ಚುವರಿ",
+      deficitAlert: "ಕೊರತೆ ಎಚ್ಚರಿಕೆ",
+      monthlyNet: "ಮಾಸಿಕ ನಿವ್ವಳ",
+      savingsRate: "ಉಳಿತಾಯ ದರ",
+      healthyRate: "ಆರೋಗ್ಯಕರ (>20%)",
+      targetRate: "ಗುರಿ: 20%+",
+      rule503020: "50/30/20 ನಿಯಮ",
+      spendingDiscipline: "ಮಾಸಿಕ ಖರ್ಚು ಶಿಸ್ತು ಮತ್ತು ಬಜೆಟ್",
+      targetMonthlyLimit: "ಗುರಿ ಮಾಸಿಕ ಮಿತಿ",
+      spent: "ಖರ್ಚು",
+      updateLimit: "ನವೀಕರಿಸಿ",
+      savingLimit: "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+      budgetUpdatedSuccess: "ಬಜೆಟ್ ಗುರಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ.",
+      activeIncomeStreams: "ಸಕ್ರಿಯ ಆದಾಯ ಮೂಲಗಳು",
+      sourcesRegistered: "ಮೂಲಗಳು ನೋಂದಾಯಿಸಲಾಗಿದೆ",
+      noIncomeAdded: "ಇನ್ನೂ ಯಾವುದೇ ಆದಾಯ ಮೂಲಗಳನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ",
+      noIncomeDesc: "ನಗದು ಹರಿವಿನ ವಿಶ್ಲೇಷಣೆಗಾಗಿ ನಿಮ್ಮ ಸಂಬಳ, ಫ್ರೀಲ್ಯಾನ್ಸ್ ಗಳಿಕೆ ಅಥವಾ ವ್ಯವಹಾರದ ಆದಾಯವನ್ನು ಸೇರಿಸಿ.",
+      addFirstIncome: "ಮೊದಲ ಆದಾಯ ಸೇರಿಸಿ",
+      irregularVariable: "ಅನಿಯಮಿತ / ಬದಲಾಗುವ",
+      perCycle: "ಪ್ರತಿ ಸೈಕಲ್",
+      oneTimeEntry: "ಒಂದು ಬಾರಿಯ ನಮೂದು",
+      deleteConfirm: "ನೀವು ಖಚಿತವಾಗಿ ಈ ಆದಾಯದ ಮೂಲವನ್ನು ತೆಗೆದುಹಾಕಲು ಬಯಸುವಿರಾ?",
+      recordNewIncome: "ಹೊಸ ಆದಾಯ ಮೂಲ ದಾಖಲಿಸಿ",
+      sourceName: "ಮೂಲದ ಹೆಸರು",
+      sourcePlaceholder: "ಉದಾ. ಪ್ರಾಥಮಿಕ ಕೆಲಸ, ಸಲಹಾ, ಬಾಡಿಗೆ",
+      amount: "ಮೊತ್ತ (₹)",
+      cadenceFrequency: "ಆವರ್ತನ",
+      monthly: "ಮಾಸಿಕ",
+      biWeekly: "ದ್ವೈವಾರ್ಷಿಕ/ಪಾಕ್ಷಿಕ",
+      weekly: "ವಾರಕ್ಕೊಮ್ಮೆ",
+      irregular: "ಅನಿಯಮಿತ",
+      oneTime: "ಒಂದು ಬಾರಿ",
+      variableStream: "ಬದಲಾಗುವ / ಅನಿಯಮಿತ ಸ್ಟ್ರೀಮ್ (ಫ್ರೀಲ್ಯಾನ್ಸ್)",
+      notesOptional: "ಟಿಪ್ಪಣಿಗಳು (ಐಚ್ಛಿಕ)",
+      notesPlaceholder: "ಉದಾ. Q4 ಒಪ್ಪಂದ ನವೀಕರಣ",
+      cancel: "ರದ್ದುಮಾಡಿ",
+      saveIncome: "ಆದಾಯ ಉಳಿಸಿ",
+      saving: "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+      recordQuickExpense: "ತ್ವರಿತ ಖರ್ಚು ದಾಖಲಿಸಿ (ಕಾರ್ಡ್ ರಹಿತ)",
+      quickExpenseDesc: "ನಿಮ್ಮ ಬಜೆಟ್ ಮತ್ತು ನಗದು ಹರಿವನ್ನು ನವೀಕರಿಸಲು ನಗದು, UPI ಅಥವಾ ಡೆಬಿಟ್ ಖರ್ಚುಗಳನ್ನು ನಮೂದಿಸಿ.",
+      expenseLoggedSuccess: "ಖರ್ಚನ್ನು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಿಸಲಾಗಿದೆ.",
+      merchantDesc: "ವ್ಯಾಪಾರಿ / ವಿವರಣೆ",
+      merchantPlaceholder: "ಉದಾ. ಸ್ಥಳೀಯ ಕಿರಾಣಿ, ಮೆಟ್ರೋ, ಚಹಾ",
+      method: "ಪಾವತಿ ವಿಧಾನ",
+      category: "ವರ್ಗ",
+      recordExpense: "ಖರ್ಚು ದಾಖಲಿಸಿ",
+      paymentMethodBreakdown: "ಪಾವತಿ ವಿಧಾನ ವಿವರಣೆ",
+      loadingData: "ನಗದು ಹರಿವು ಮತ್ತು ಬಜೆಟ್ ಡೇಟಾ ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
     },
   },
 };

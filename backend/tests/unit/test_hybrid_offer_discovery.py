@@ -98,8 +98,15 @@ async def test_admin_approval_and_rejection_workflow():
         queue = queue_resp.json()
         assert len(queue) > 0
 
-        # Find or create a PENDING_REVIEW offer
-        pending_offer = next((o for o in queue if o["verification_status"] == "PENDING_REVIEW"), None)
+        # Find or create a PENDING_REVIEW offer that has source_evidence and extraction_confidence
+        # (discovery-pipeline offers may have source_evidence=None; only use seeded/created ones)
+        pending_offer = next(
+            (o for o in queue
+             if o["verification_status"] == "PENDING_REVIEW"
+             and o.get("source_evidence")
+             and float(o.get("extraction_confidence") or 0) > 0.80),
+            None
+        )
         if not pending_offer:
             create_resp = await client.post("/api/v1/offers", headers=admin_headers, json={
                 "merchant_name": "Flipkart",

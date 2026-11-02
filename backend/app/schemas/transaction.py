@@ -11,6 +11,7 @@ class TransactionCreate(BaseModel):
     currency: str = Field("INR", max_length=10)
     transaction_date: Optional[datetime] = None
     is_recurring: bool = False
+    payment_method: Optional[str] = Field("CREDIT_CARD", pattern="^(CREDIT_CARD|DEBIT_CARD|UPI|CASH|BANK_TRANSFER|OTHER)$")
     raw_description: Optional[str] = Field(None, max_length=500)
     reference_number: Optional[str] = Field(None, max_length=128)
     actual_reward_earned: Optional[Decimal] = Field(None, ge=Decimal("0.00"), description="Actual statement reward if verified by user")
@@ -34,6 +35,7 @@ class TransactionResponse(BaseModel):
     currency: str
     transaction_date: datetime
     is_recurring: bool
+    payment_method: Optional[str] = "CREDIT_CARD"
     reward_earned_monetary: Decimal
     potential_optimal_reward: Decimal
     optimal_card_id: Optional[str] = None
@@ -82,6 +84,7 @@ class TransactionImportPreviewRow(BaseModel):
     duplicate_status: str  # "NEW", "EXACT_DUPLICATE", "AMBIGUOUS_DUPLICATE", "INVALID", "EXCLUDED"
     duplicate_reason: Optional[str] = None
     deduplication_hash: str
+    payment_method: Optional[str] = "CREDIT_CARD"
     predicted_reward: Decimal
     potential_optimal_reward: Decimal
     optimal_card_id: Optional[str] = None
@@ -110,12 +113,14 @@ class TransactionImportCommitRow(BaseModel):
     currency: str = "INR"
     reference_number: Optional[str] = None
     category_id: str
+    payment_method: Optional[str] = None
     category_confidence: Optional[Decimal] = None
     deduplication_hash: Optional[str] = None
     notes: Optional[str] = None
 
 class TransactionImportCommitRequest(BaseModel):
     card_id: Optional[str] = None
+    payment_method: Optional[str] = None
     rows: List[TransactionImportCommitRow]
     skip_duplicates: bool = True
 

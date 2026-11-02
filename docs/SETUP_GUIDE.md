@@ -5,8 +5,8 @@ Follow these instructions to set up, run, and test CLIQ locally.
 ---
 
 ## Prerequisites
-- **Node.js**: v18.18+ or v20+ (tested on Node v22)
-- **Python**: 3.11, 3.12, or 3.14 (tested with uv / python3)
+- **Node.js**: v18.18+ or v20+ (tested on Node v20/v22)
+- **Python**: 3.11 or 3.12 (tested with virtualenv / python3)
 - **Git**
 
 ---
@@ -31,11 +31,20 @@ Follow these instructions to set up, run, and test CLIQ locally.
 
 4. **Configure environment variables:**
    ```bash
-   cp ../.env.example .env
+   cp .env.example .env
    ```
-   *Note: By default, `DATABASE_URL=sqlite+aiosqlite:///./data/cliq.db` allows immediate execution without external database setups. To use Supabase, provide your `postgresql+asyncpg://` connection string.*
+   *To connect to central Supabase PostgreSQL, set `DATABASE_URL` in `backend/.env`:*
+   ```env
+   DATABASE_URL=postgresql://postgres.[project-ref]:[db-password]@aws-0-[region].pooler.supabase.com:5432/postgres
+   ```
+   *The backend engine automatically translates `postgresql://` to `postgresql+asyncpg://` with SSL pre-ping enabled.*
 
-5. **Run the backend development server:**
+5. **Run database migrations with Alembic:**
+   ```bash
+   alembic upgrade head
+   ```
+
+6. **Run the backend development server:**
    ```bash
    uvicorn app.main:app --reload --port 8000
    ```
@@ -75,15 +84,22 @@ Follow these instructions to set up, run, and test CLIQ locally.
 - **Run all backend tests:**
   ```bash
   cd backend
-  pytest -v
+  PYTHONPATH=. .venv/bin/pytest -v
   ```
 
 - **Run security-specific tests:**
   ```bash
-  pytest tests/security/ -v
+  cd backend
+  PYTHONPATH=. .venv/bin/pytest tests/security/ -v
   ```
 
-- **Run frontend tests & type checks:**
+- **Run frontend unit & integration tests:**
+  ```bash
+  cd frontend
+  npm test
+  ```
+
+- **Run frontend production build verification:**
   ```bash
   cd frontend
   npm run build

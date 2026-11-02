@@ -393,20 +393,26 @@ export default function AssistantPage() {
         <div className="py-2 flex items-center gap-2 overflow-x-auto scrollbar-none">
           {(language === "hi"
             ? [
+                "न्यूनतम देय (Minimum Due) क्यों नहीं चुकाना चाहिए?",
+                "बिलिंग चक्र और ग्रेस पीरियड कैसे काम करते हैं?",
+                "50-30-20 बजट नियम क्या है?",
                 "भोजन के लिए कौन सा कार्ड सबसे अच्छा है?",
                 "लाउंज विज़िट सीमाएं दिखाएं",
-                "रेगलिया पर वार्षिक शुल्क कैसे माफ करें?",
               ]
             : language === "kn"
             ? [
+                "ಕನಿಷ್ಠ ಬಾಕಿ (Minimum Due) ಪಾವತಿಯ ಅಪಾಯಗಳೇನು?",
+                "ಬಿಲ್ಲಿಂಗ್ ಸೈಕಲ್ ಮತ್ತು ರಿಯಾಯಿತಿ ಅವಧಿ ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ?",
+                "50-30-20 ಬಜೆಟ್ ಸೂತ್ರ ಎಂದರೇನು?",
                 "ಡೈನಿಂಗ್‌ಗಾಗಿ ಯಾವ ಕಾರ್ಡ್ ಅತ್ಯುತ್ತಮವಾಗಿದೆ?",
                 "ಲೌಂಜ್ ಪ್ರವೇಶ ಮಿತಿಗಳನ್ನು ತೋರಿಸಿ",
-                "ರೆಗಾಲಿಯಾ ವಾರ್ಷಿಕ ಶುಲ್ಕವನ್ನು ಮನ್ನಾ ಮಾಡುವುದು ಹೇಗೆ?",
               ]
             : [
+                "Why should I avoid paying only the minimum due?",
+                "How does the billing cycle and grace period work?",
+                "Explain the 50-30-20 budget framework",
                 "Which card is best for dining?",
                 "Show lounge visit limits",
-                "How do I waive the annual fee on Regalia?",
               ]
           ).map((prompt, idx) => (
             <button

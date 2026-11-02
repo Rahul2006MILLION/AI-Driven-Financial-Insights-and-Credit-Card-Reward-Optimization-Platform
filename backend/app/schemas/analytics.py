@@ -15,12 +15,19 @@ class MonthlySpend(BaseModel):
     rewards_earned: Decimal
     transaction_count: int
 
+class PaymentMethodSpend(BaseModel):
+    payment_method: str
+    total_amount: Decimal
+    percentage_of_total: Decimal
+    transaction_count: int
+
 class SpendingAnalyticsResponse(BaseModel):
     total_spending: Decimal
     total_transactions: int
     category_breakdown: List[CategorySpend]
     monthly_trend: List[MonthlySpend]
     top_merchants: List[Dict[str, Any]] = []
+    payment_method_breakdown: List[PaymentMethodSpend] = []
 
 class RewardAnalyticsResponse(BaseModel):
     total_rewards_earned: Decimal
@@ -46,3 +53,9 @@ class FinancialHealthResponse(BaseModel):
     actionable_recommendations: List[str]
     forecast_30d_spending: Decimal
     forecast_30d_potential_rewards: Decimal
+    spending_trend_pct: Optional[Decimal] = Decimal("0.0")
+    educational_alerts: List[str] = []
+    budget_status_summary: Optional[Dict[str, Any]] = None
+    calculation_breakdown: Optional[Dict[str, Any]] = None
+    data_sufficiency: Optional[str] = "COMPLETE"
+    omitted_indicators: List[str] = []

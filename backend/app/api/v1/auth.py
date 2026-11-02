@@ -36,7 +36,8 @@ async def register(req: RegisterRequest, db: AsyncSession = Depends(get_db)):
         hashed_password=hashed,
         full_name=req.full_name,
         preferred_language=req.preferred_language,
-        currency=req.currency
+        currency=req.currency,
+        financial_pathway=req.financial_pathway or "CREDIT_CARD"
     )
     db.add(user)
     await db.flush()
@@ -46,7 +47,8 @@ async def register(req: RegisterRequest, db: AsyncSession = Depends(get_db)):
         user_id=user.id,
         prioritize_cashback=True,
         prioritize_miles=False,
-        include_annual_fee_in_net=False
+        include_annual_fee_in_net=False,
+        financial_path="NEW_TO_FINANCE" if (req.financial_pathway == "NO_CREDIT_CARD") else "OPTIMIZE_EXISTING"
     )
     db.add(pref)
 
@@ -71,7 +73,8 @@ async def register(req: RegisterRequest, db: AsyncSession = Depends(get_db)):
         full_name=user.full_name,
         preferred_language=user.preferred_language,
         role=user.role,
-        is_admin=user.is_admin
+        is_admin=user.is_admin,
+        financial_pathway=getattr(user, "financial_pathway", "CREDIT_CARD")
     )
 
 @router.post("/auth/login", response_model=TokenResponse)
@@ -111,7 +114,8 @@ async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
         full_name=user.full_name,
         preferred_language=user.preferred_language,
         role=user.role,
-        is_admin=user.is_admin
+        is_admin=user.is_admin,
+        financial_pathway=getattr(user, "financial_pathway", "CREDIT_CARD")
     )
 
 @router.get("/auth/me", response_model=ProfileResponse)
@@ -131,6 +135,8 @@ async def update_profile(
         current_user.preferred_language = req.preferred_language
     if req.currency is not None:
         current_user.currency = req.currency
+    if req.financial_pathway is not None:
+        current_user.financial_pathway = req.financial_pathway
 
     current_user.updated_at = datetime.utcnow()
     db.add(current_user)

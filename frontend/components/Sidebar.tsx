@@ -19,6 +19,8 @@ import {
   User,
   Settings,
   ShieldCheck,
+  GraduationCap,
+  Wallet,
 } from "lucide-react";
 
 export const Sidebar: React.FC = () => {
@@ -33,9 +35,11 @@ export const Sidebar: React.FC = () => {
     { href: "/cards/compare", label: t.nav.compare, icon: GitCompare },
     { href: "/optimization", label: t.nav.optimizer, icon: Zap, highlight: true },
     { href: "/transactions", label: t.nav.transactions, icon: Receipt },
+    { href: "/budget", label: t.nav.budget, icon: Wallet, highlight: true },
     { href: "/analytics", label: t.nav.analytics, icon: BarChart3 },
     { href: "/financial-health", label: t.nav.health, icon: Activity },
     { href: "/assistant", label: t.nav.assistant, icon: Bot, highlight: true },
+    { href: "/learn", label: t.nav.learn, icon: GraduationCap, highlight: true },
     { href: "/documents", label: t.nav.documents, icon: FileUp },
     { href: "/profile", label: t.nav.profile, icon: User },
     { href: "/settings", label: t.nav.settings, icon: Settings },

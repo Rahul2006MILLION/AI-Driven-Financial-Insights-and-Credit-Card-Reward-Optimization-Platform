@@ -22,6 +22,7 @@ class Profile(Base):
     currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
     role: Mapped[str] = mapped_column(String(32), default="USER", nullable=False)  # USER, ADMIN
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    financial_pathway: Mapped[str] = mapped_column(String(32), default="CREDIT_CARD", nullable=False)  # CREDIT_CARD, NO_CREDIT_CARD
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -29,10 +30,12 @@ class Profile(Base):
     # Relationships
     credit_cards: Mapped[List["CreditCard"]] = relationship("CreditCard", back_populates="user", cascade="all, delete-orphan")
     transactions: Mapped[List["Transaction"]] = relationship("Transaction", back_populates="user", cascade="all, delete-orphan")
+    incomes: Mapped[List["Income"]] = relationship("Income", back_populates="user", cascade="all, delete-orphan")
     documents: Mapped[List["UploadedDocument"]] = relationship("UploadedDocument", back_populates="user", cascade="all, delete-orphan")
     preferences: Mapped[Optional["UserPreference"]] = relationship("UserPreference", back_populates="user", uselist=False, cascade="all, delete-orphan")
     ai_consent: Mapped[Optional["UserAiConsent"]] = relationship("UserAiConsent", back_populates="user", uselist=False, cascade="all, delete-orphan")
     audit_logs: Mapped[List["AuditLog"]] = relationship("AuditLog", back_populates="user", cascade="all, delete-orphan")
+    ai_audit_logs: Mapped[List["AiRequestAuditLog"]] = relationship("AiRequestAuditLog", cascade="all, delete-orphan")
 
 class CreditCard(Base):
     __tablename__ = "credit_cards"
@@ -267,10 +270,29 @@ class Transaction(Base):
     deduplication_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
     import_batch_id: Mapped[Optional[str]] = mapped_column(String(36), nullable=True, index=True)
     category_confidence: Mapped[Optional[Decimal]] = mapped_column(Numeric(4, 2), nullable=True)
+    payment_method: Mapped[str] = mapped_column(String(32), default="CREDIT_CARD", nullable=False)  # CREDIT_CARD, DEBIT_CARD, UPI, CASH, BANK_TRANSFER, OTHER
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     user: Mapped["Profile"] = relationship("Profile", back_populates="transactions")
     card: Mapped[Optional["CreditCard"]] = relationship("CreditCard", back_populates="transactions")
+
+class Income(Base):
+    __tablename__ = "incomes"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False, index=True)
+    source_name: Mapped[str] = mapped_column(String(128), nullable=False)  # e.g. Primary Salary, Freelancing, Tutoring, Rental
+    amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
+    frequency: Mapped[str] = mapped_column(String(32), default="MONTHLY", nullable=False)  # MONTHLY, BI_WEEKLY, WEEKLY, IRREGULAR, ONE_TIME
+    is_irregular: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    received_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    expected_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    user: Mapped["Profile"] = relationship("Profile", back_populates="incomes")
 
 class UploadedDocument(Base):
     __tablename__ = "uploaded_documents"
@@ -332,6 +354,8 @@ class UserPreference(Base):
     prioritize_miles: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     include_annual_fee_in_net: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     monthly_spend_target: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 2), nullable=True)
+    financial_path: Mapped[str] = mapped_column(String(64), default="NEW_TO_FINANCE", nullable=False)
+    budget_alert_threshold: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=Decimal("80.00"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
@@ -388,4 +412,36 @@ class AiRequestAuditLog(Base):
     status: Mapped[str] = mapped_column(String(32), default="SUCCESS", nullable=False)  # SUCCESS, LOCAL_FALLBACK, REJECTED, ERROR
     rejection_reason: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+
+class UserBudget(Base):
+    __tablename__ = "user_budgets"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("profiles.id", ondelete="CASCADE"), unique=True, nullable=False, index=True)
+    monthly_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 2), nullable=True)
+    total_budget: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    category_budgets_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)  # JSON map: category_id -> float
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    user: Mapped["Profile"] = relationship("Profile")
+
+
+class UserLearningProgress(Base):
+    __tablename__ = "user_learning_progress"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False, index=True)
+    topic_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    category_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    is_completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    quiz_score: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    user: Mapped["Profile"] = relationship("Profile")
+
 

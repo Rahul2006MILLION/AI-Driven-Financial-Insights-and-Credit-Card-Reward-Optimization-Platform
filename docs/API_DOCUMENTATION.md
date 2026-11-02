@@ -1,387 +1,434 @@
 # CLIQ REST API Documentation
 
-All API endpoints are versioned under `/api/v1`. Standard response envelopes and HTTP status codes are enforced across all operations.
+> **Base URL:** `/api/v1`  
+> **Protocol:** HTTPS / JSON  
+> **Authentication:** Bearer JWT Token (`Authorization: Bearer <access_token>`)  
+> **Global Status Endpoint:** `GET /health`  
+> **Total Active Endpoints:** 68 Route-Method Operations across 11 Functional Domains
 
 ---
 
-## 1. Authentication & Profile Endpoints
+## 1. Global & System Endpoints
 
-### `GET /api/v1/profile`
-Retrieve authenticated user profile and language preferences.
-- **Headers:** `Authorization: Bearer <token>`
-- **Response `200 OK`:**
-  ```json
+### `GET /health`
+Liveness and readiness probe for containerized environments and load balancers.
+- **Auth Required:** No
+- **Response (200 OK):**
+```json
+{
+  "status": "HEALTHY",
+  "service": "CLIQ Intelligence Platform",
+  "version": "1.0.0",
+  "environment": "production",
+  "database": "CONNECTED",
+  "timestamp": "2026-11-02T08:30:00Z"
+}
+```
+
+### `GET /api/v1/categories`
+Retrieves standardized spending categories with multilingual translations and icon tokens.
+- **Auth Required:** No
+- **Response (200 OK):**
+```json
+[
   {
-    "id": "usr_94b29c1e-...",
+    "id": "dining",
+    "display_name_en": "Dining & Restaurants",
+    "display_name_hi": "डाइनिंग और रेस्टोरेंट",
+    "display_name_kn": "ಊಟ ಮತ್ತು ರೆಸ್ಟೋರೆಂಟ್‌ಗಳು",
+    "icon_name": "Utensils"
+  }
+]
+```
+
+---
+
+## 2. Authentication & Profile Endpoints (`/api/v1/auth`, `/api/v1/profile`)
+
+### `POST /api/v1/auth/register`
+Registers a new user and automatically initializes default user preferences.
+- **Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "SecurePassword123!",
+  "full_name": "Rahul Sharma",
+  "preferred_language": "en",
+  "currency": "INR"
+}
+```
+- **Response (200 OK):**
+```json
+{
+  "access_token": "eyJhbGciOi...",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "user": {
+    "id": "usr_uuid",
     "email": "user@example.com",
-    "full_name": "Aarav Sharma",
+    "full_name": "Rahul Sharma",
     "preferred_language": "en",
     "currency": "INR",
-    "is_active": true
+    "role": "USER",
+    "is_admin": false
   }
-  ```
+}
+```
+
+### `POST /api/v1/auth/login`
+Authenticates user credentials and issues a JWT Bearer token.
+- **Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "SecurePassword123!"
+}
+```
+- **Response (200 OK):** Same as register response.
+
+### `GET /api/v1/auth/me` or `GET /api/v1/profile`
+Fetches the authenticated user's profile details.
+- **Auth Required:** Bearer Token
+- **Response (200 OK):** User profile object.
 
 ### `PUT /api/v1/profile`
-Update user language preferences and display name.
-- **Headers:** `Authorization: Bearer <token>`
+Updates language preferences, display name, or currency.
+- **Auth Required:** Bearer Token
 - **Request Body:**
-  ```json
-  {
-    "full_name": "Aarav Sharma",
-    "preferred_language": "hi",
-    "currency": "INR"
-  }
-  ```
+```json
+{
+  "full_name": "Rahul Sharma",
+  "preferred_language": "hi",
+  "currency": "INR"
+}
+```
 
 ---
 
-## 2. Credit Card Endpoints
+## 3. Credit Card Portfolio Endpoints (`/api/v1/cards`)
 
 ### `GET /api/v1/cards`
-List all credit cards belonging to authenticated user with optional search & filtering.
-- **Headers:** `Authorization: Bearer <token>`
-- **Query Parameters:**
-  - `query` (optional string): Search term matching bank name, card name, or variant.
-  - `bank` (optional string): Filter by bank name (e.g., `HDFC Bank`).
-  - `network` (optional string): Filter by network (`VISA`, `MASTERCARD`, `RUPAY`, `AMEX`).
-  - `is_active` (optional bool): Filter by active status (defaults to true).
-- **Response `200 OK`:**
-  ```json
-  [
-    {
-      "id": "crd_8f11a4...",
-      "card_name": "HDFC Millennia",
-      "bank_name": "HDFC Bank",
-      "network": "VISA",
-      "card_variant": "Millennia Cashback",
-      "last_four_digits": "4892",
-      "joining_fee": 1000.0,
-      "annual_fee": 1000.0,
-      "fee_waiver_spend_threshold": 100000.0,
-      "fee_waiver_condition_details": "Waived on spends of ₹1,00,000 in a calendar year",
-      "terms_source_url": "https://www.hdfcbank.com/personal/pay/cards/credit-cards/millennia-cards",
-      "rules_count": 4,
-      "benefits_count": 2
-    }
-  ]
-  ```
+Lists all active credit cards belonging to the authenticated user.
+- **Auth Required:** Bearer Token
+- **Response (200 OK):** Array of card objects with associated reward rules and benefits.
 
 ### `POST /api/v1/cards`
-Register a new credit card with reward rules, variant, fees, waiver conditions, and structured benefits.
-- **Headers:** `Authorization: Bearer <token>`
+Adds a new credit card to the user's digital wallet.
+- **Auth Required:** Bearer Token
 - **Request Body:**
-  ```json
-  {
-    "card_name": "Axis Bank Ace",
-    "bank_name": "Axis Bank",
-    "network": "VISA",
-    "card_variant": "Ace Contactless",
-    "last_four_digits": "1044",
-    "joining_fee": 499.0,
-    "annual_fee": 499.0,
-    "fee_waiver_spend_threshold": 200000.0,
-    "fee_waiver_condition_details": "Annual fee reversed on spending ₹2,00,000 in the previous year",
-    "terms_source_url": "https://www.axisbank.com/retail/cards/credit-card/ace-credit-card",
-    "rules": [
-      {
-        "category_id": "utility",
-        "reward_type": "CASHBACK",
-        "reward_rate_percentage": 5.0,
-        "monthly_cap_amount": 500.0
-      },
-      {
-        "category_id": "all",
-        "reward_type": "CASHBACK",
-        "reward_rate_percentage": 2.0
-      }
-    ],
-    "benefits": [
-      {
-        "benefit_type": "PERMANENT_BENEFIT",
-        "applicable_category": "utility",
-        "title": "5% Google Pay Bill Pay",
-        "description": "5% cashback on utility bill payments and mobile recharges on Google Pay",
-        "reward_percentage_or_points": 5.0,
-        "reward_basis": "PERCENTAGE",
-        "cap_amount": 500.0,
-        "cap_period": "MONTHLY"
-      }
-    ]
-  }
-  ```
-
-### `PUT /api/v1/cards/{card_id}`
-Update card details, annual fees, waiver terms, and replace or update nested rules and benefits.
+```json
+{
+  "card_name": "HDFC Regalia Gold",
+  "bank_name": "HDFC Bank",
+  "network": "VISA",
+  "card_type": "CREDIT",
+  "card_variant": "Metal",
+  "last_four_digits": "4321",
+  "annual_fee": 2500.00,
+  "renewal_waiver_spend": 400000.00,
+  "billing_cycle_day": 15
+}
+```
 
 ### `GET /api/v1/cards/{card_id}`
-Retrieve card details, specific rules, and benefits.
+Retrieves deep configuration, rules, and benefits for a single card.
+- **Auth Required:** Bearer Token (Tenant-isolated).
+
+### `PUT /api/v1/cards/{card_id}`
+Modifies credit card attributes (spend caps, nickname, fee waiver thresholds).
+- **Auth Required:** Bearer Token (Tenant-isolated).
 
 ### `DELETE /api/v1/cards/{card_id}`
-Deactivate or remove card from portfolio.
+Deletes or deactivates a card from the portfolio.
+- **Auth Required:** Bearer Token (Tenant-isolated).
 
 ---
 
-## 3. Offers Discovery Endpoints
+## 4. Transaction Management & CSV Import (`/api/v1/transactions`)
 
-### `GET /api/v1/offers`
-List curated and active merchant offers.
-- **Headers:** `Authorization: Bearer <token>`
-- **Query Parameters:**
-  - `category` (optional string): Filter by category (`shopping`, `dining`, `food_delivery`, `travel`, `entertainment`, `grocery`, `utility`, `all`).
-  - `expiring_soon` (optional bool): Return only offers expiring within 7 days.
-  - `user_cards_only` (optional bool): Filter offers applicable specifically to the user's registered cards.
-  - `query` (optional string): Search by merchant name or offer title.
-- **Response `200 OK`:**
-  ```json
-  [
+### `GET /api/v1/transactions`
+Retrieves paginated transactions with optional filters (`start_date`, `end_date`, `category_id`, `card_id`, `is_recurring`).
+- **Auth Required:** Bearer Token
+
+### `POST /api/v1/transactions`
+Manually records a single completed transaction across credit-card or non-card payment rails.
+- **Request Body:**
+```json
+{
+  "card_id": null,
+  "payment_method": "UPI",
+  "category_id": "dining",
+  "merchant_name": "Swiggy",
+  "amount": 750.00,
+  "transaction_date": "2026-11-02T12:00:00Z",
+  "is_recurring": false
+}
+```
+- **Validation & Non-Card Isolation Rules (DEF-01):**
+  - `payment_method`: Allowed values: `"CREDIT_CARD"`, `"CASH"`, `"UPI"`, `"BANK_TRANSFER"`, `"DEBIT_CARD"`, `"OTHER"`. Defaults to `"CREDIT_CARD"`.
+  - For non-card methods (`CASH`, `UPI`, `BANK_TRANSFER`, `DEBIT_CARD`, `OTHER`): `card_id` **must be null**. Passing a non-null `card_id` returns HTTP `400 Bad Request`.
+  - Non-card transactions earn `0.00` rewards and bypass the credit-card optimization engine, preventing non-card spend from diluting card portfolio yield metrics.
+
+### `POST /api/v1/transactions/import/preview`
+Parses an uploaded CSV statement, normalizes merchant narrations, categorizes transactions, and identifies potential duplicates without committing to the database.
+- **Content-Type:** `multipart/form-data`
+- **Response (200 OK):**
+```json
+{
+  "total_rows": 25,
+  "new_transactions": 23,
+  "duplicate_count": 2,
+  "preview": [
     {
-      "id": "off_swiggy_hdfc",
-      "merchant_name": "Swiggy",
-      "offer_title": "₹150 Instant Off on Food Delivery",
-      "discount_type": "PERCENTAGE",
-      "discount_percentage": 15.0,
-      "minimum_transaction_value": 800.0,
-      "maximum_discount": 150.0,
-      "eligible_banks": ["HDFC Bank"],
-      "eligible_card_names": ["HDFC Millennia", "HDFC Regalia"],
-      "valid_from": "2025-01-01T00:00:00Z",
-      "expiry_date": "2026-12-31T23:59:59Z",
-      "applicable_payment_channel": "ONLINE",
-      "promo_code": "HDFCSWIGGY150",
-      "activation_requirement": "Apply coupon at checkout",
-      "verification_status": "VERIFIED",
-      "terms_and_conditions": "Valid once per user per week on food orders above ₹800."
+      "temp_id": "row_1",
+      "date": "2026-10-28",
+      "raw_narration": "RAZORPAY*SWIGGY BLR",
+      "normalized_merchant": "Swiggy",
+      "category_id": "food_delivery",
+      "amount": 420.00,
+      "is_duplicate": false
     }
   ]
-  ```
+}
+```
 
-### `GET /api/v1/offers/{offer_id}`
-Retrieve detailed offer specifications, terms, and source references.
+### `POST /api/v1/transactions/import/commit`
+Commits approved staged transactions into the database.
+- **Request Body:** Array of approved transaction objects.
+- **Response (200 OK):** `{ "imported_count": 23, "status": "SUCCESS" }`
 
-### `POST /api/v1/offers`
-Submit a new card offer. For regular users, status is automatically staged as `PENDING_REVIEW` pending administrator verification.
-
----
-
-## 4. Administrative Offer Verification Endpoints (`/api/v1/admin/offers`)
-
-All administrative offer endpoints are strictly guarded by `require_admin` (`HTTP 403 Forbidden` for non-admin accounts).
-
-### `GET /api/v1/admin/offers/review-queue`
-Retrieve offers across all verification statuses with evidence snippets, extraction confidence, and diff snapshots.
-- **Headers:** `Authorization: Bearer <admin_token>`
-- **Query Parameters:**
-  - `status_filter` (optional string): `PENDING_REVIEW`, `NEEDS_REVERIFICATION`, `VERIFIED`, `REJECTED`, `EXPIRED`, `ALL`.
-  - `query` (optional string): Search term.
-
-### `POST /api/v1/admin/offers/{offer_id}/approve`
-Approve an offer into the `VERIFIED` state.
-- **Request Body:**
-  ```json
-  {
-    "notes": "Verified against official issuer partner portal."
-  }
-  ```
-
-### `POST /api/v1/admin/offers/{offer_id}/reject`
-Reject an offer with a mandatory recorded reason.
-- **Request Body:**
-  ```json
-  {
-    "rejection_reason": "Promotion expired or unverified third party claims.",
-    "notes": "Issuer portal confirmed deal discontinued."
-  }
-  ```
-
-### `PUT /api/v1/admin/offers/{offer_id}`
-Edit extracted offer parameters, correction of caps/variants, and optional immediate promotion to `VERIFIED`.
-
-### `POST /api/v1/admin/offers/{offer_id}/reverification`
-Quarantine an offer into `NEEDS_REVERIFICATION` when material terms change.
-
-### `GET /api/v1/admin/offers/{offer_id}/audit-trail`
-Retrieve the full provenance history, reviewer identities, and state transition logs.
-
-### `POST /api/v1/admin/offers/sync-discovery`
-Trigger the automated India-first multi-source discovery pipeline. Returns ingestion summary counts.
+### `PUT /api/v1/transactions/{transaction_id}/feedback`
+Allows users to correct an automated category classification. Feedback is used to improve local merchant normalization.
 
 ---
 
-## 5. Reward Optimization & Comparison Endpoints
+## 5. Reward Optimization & Simulation (`/api/v1/optimization`)
 
 ### `POST /api/v1/optimization/recommend`
-Evaluate best card for a specific purchase amount, merchant, category, and payment channel. Combines upfront instant discounts with post-transaction rewards to maximize net financial benefit.
+Evaluates the best credit card to use for a pending or planned purchase.
 - **Request Body:**
-  ```json
-  {
-    "amount": 2000.0,
-    "category_id": "dining",
-    "merchant_name": "Swiggy",
-    "payment_channel": "ONLINE"
-  }
-  ```
-- **Response `200 OK`:**
-  ```json
-  {
-    "recommended_card": {
-      "card_id": "crd_8f11a4...",
-      "card_name": "HDFC Millennia",
-      "bank_name": "HDFC Bank",
-      "instant_discount_monetary": 150.0,
-      "post_reward_monetary": 92.5,
-      "net_financial_benefit": 242.5,
-      "expected_reward_monetary": 242.5,
-      "effective_rate_percentage": 12.125,
-      "reward_type": "CASHBACK",
-      "applicable_offers": [
-        {
-          "offer_id": "off_swiggy_hdfc",
-          "merchant_name": "Swiggy",
-          "offer_title": "₹150 Instant Off on Food Delivery",
-          "promo_code": "HDFCSWIGGY150",
-          "instant_discount_amount": 150.0
-        }
-      ]
-    },
-    "calculation_breakdown": {
-      "applied_rule": "5.0% Accelerated Cashback on Dining (Swiggy)",
-      "base_amount": 2000.0,
-      "instant_discount_applied": 150.0,
-      "net_charge_amount": 1850.0,
-      "post_reward_monetary": 92.5,
-      "total_net_benefit": 242.5
-    },
-    "alternatives": [
-      {
-        "card_name": "Axis Bank Ace",
-        "instant_discount_monetary": 0.0,
-        "post_reward_monetary": 40.0,
-        "net_financial_benefit": 40.0,
-        "effective_rate_percentage": 2.0
-      }
-    ],
-    "explanation": "HDFC Millennia delivers maximum net benefit of ₹242.50: ₹150.00 upfront instant discount with coupon HDFCSWIGGY150, plus ₹92.50 in post-transaction cashback (5.0%) on the net charged ₹1,850.00."
-  }
-  ```
+```json
+{
+  "amount": 12500.00,
+  "category_id": "travel",
+  "merchant_name": "MakeMyTrip"
+}
+```
+- **Response (200 OK):**
+```json
+{
+  "winning_card": {
+    "card_id": "crd_1",
+    "card_name": "Axis Atlas",
+    "net_reward_inr": 625.00,
+    "effective_rate_pct": 5.00,
+    "reward_type": "MILES"
+  },
+  "explanation_steps": [
+    {
+      "step_number": 1,
+      "step_name": "Merchant Accelerator",
+      "formula_applied": "amount * (5.00 / 100)",
+      "intermediate_output": 625.00
+    }
+  ],
+  "alternatives": [
+    {
+      "card_name": "HDFC Regalia Gold",
+      "net_reward_inr": 416.66,
+      "effective_rate_pct": 3.33,
+      "rejection_reason": "LOWER_NET_YIELD"
+    }
+  ]
+}
+```
+
+### `POST /api/v1/optimization/simulate`
+Runs multi-bracket "What-If" purchase simulations across hypothetical spend bands (e.g. ₹5,000, ₹15,000, ₹50,000) to project milestone bonuses and fee waivers.
 
 ### `POST /api/v1/optimization/compare`
-Side-by-side comparison of 2 or more credit cards across categories.
+Compares 2 to 4 credit cards side-by-side on reward rates, annual fees, spend waiver targets, and lounge quotas.
 
 ---
 
-## 4. Document Intelligence Endpoints
-
-### `POST /api/v1/documents/upload`
-Upload a credit card policy or statement PDF (multipart/form-data).
-- **File constraints:** Max 10MB, PDF only.
-
-### `GET /api/v1/documents`
-List user uploaded documents and extraction statuses.
-
-### `POST /api/v1/documents/{document_id}/verify`
-Confirm, adjust, and activate staged card rules into production portfolio.
-
----
-
-## 5. Analytics & Financial Health Endpoints
+## 6. Financial Health & Spending Analytics (`/api/v1/analytics`)
 
 ### `GET /api/v1/analytics/spending`
-Categorical and monthly spending metrics.
+Returns aggregated spend distributions by category, monthly velocity, and top merchants.
 
 ### `GET /api/v1/analytics/rewards`
-Total earned rewards vs. missed reward opportunities.
+Returns realized reward yields, missed reward opportunities (when a sub-optimal card was swiped), and year-to-date cashback.
 
 ### `GET /api/v1/analytics/financial-health`
-Recurring subscriptions, annual fee breakeven analysis, and optimization efficiency score.
+Computes the multi-dimensional CLIQ Financial Health Score (0–100), savings rate, credit utilization ratio, and detected recurring subscriptions.
+- **Pathway Adaptive Behavior:**
+  - For `CREDIT_CARD` users: Evaluates reward efficiency, credit utilization ratio, and annual fee break-even.
+  - For `NO_CREDIT_CARD` users: Evaluates cash-flow resilience, 50/30/20 budget adherence, and subscription hygiene while populating `omitted_indicators` with card-dependent metrics.
+- **Data Sufficiency States (DEF-05):**
+  - `"COMPLETE"`: Profile has active income, budget, and transactions. Health score is fully evidenced.
+  - `"PARTIAL"`: Missing either budget or transactions. Evidenced score computed only from verified pillars.
+  - `"INSUFFICIENT_DATA"`: Empty profile with no income, budget, or transactions. Returns `health_score = 0` with explicit missing data alerts rather than fabricated synthetic scores.
 
 ---
 
-## 6. Multilingual AI Assistant Endpoint
+## 7. Income Management & Cash Flow Tracking (`/api/v1/incomes`)
+
+### `GET /api/v1/incomes`
+Lists all registered income streams for the authenticated user.
+- **Auth Required:** Bearer Token
+- **Response (200 OK):** List of income objects (`id`, `source_name`, `amount`, `frequency`, `is_irregular`, `received_date`, `expected_date`, `notes`).
+
+### `POST /api/v1/incomes`
+Records a new regular or irregular income stream.
+- **Request Body:**
+```json
+{
+  "source_name": "Full-time Salary",
+  "amount": 75000.00,
+  "frequency": "MONTHLY",
+  "is_irregular": false,
+  "received_date": "2026-11-01",
+  "notes": "Primary software engineering role"
+}
+```
+
+### `GET /api/v1/incomes/summary`
+Calculates consolidated monthly cash-flow analytics, separating regular and irregular income.
+- **Response (200 OK):**
+```json
+{
+  "total_monthly_income": 85000.00,
+  "regular_income": 75000.00,
+  "irregular_income": 10000.00,
+  "rolling_90d_median_monthly_income": 82000.00,
+  "income_sources_count": 2,
+  "sources": [
+    {
+      "source_name": "Full-time Salary",
+      "amount": 75000.00,
+      "frequency": "MONTHLY",
+      "monthly_equivalent": 75000.00,
+      "percentage_of_total": 88.2
+    }
+  ],
+  "has_income_data": true,
+  "data_sufficiency_explanation": "Calculated across 2 recorded income streams."
+}
+```
+- **Calculation Rules (DEF-03 & DEF-04):**
+  - Grouping: Incomes within the past 90 days are aggregated by calendar month `(year, month)` before computing the median.
+  - Expiry: One-time incomes received `>90 days` ago or future-dated are excluded from ongoing monthly cash-flow totals.
+
+### `GET /api/v1/incomes/{income_id}`
+Retrieves a specific income stream with strict IDOR tenant isolation.
+
+### `PUT /api/v1/incomes/{income_id}`
+Updates an income stream's amount, frequency, regularity, or notes.
+
+### `DELETE /api/v1/incomes/{income_id}`
+Deletes an income stream from the user's cash-flow telemetry.
+
+---
+
+## 8. AI Assistant & Privacy Gateway (`/api/v1/assistant`, `/api/v1/privacy`)
 
 ### `POST /api/v1/assistant/chat`
-Conversational financial guidance grounded in user's cards.
+Dispatches a natural language query through the CLIQ Privacy Gateway to Gemini 2.5 Flash with factual grounding.
 - **Request Body:**
-  ```json
-  {
-    "query": "स्विगी पर कौन सा कार्ड इस्तेमाल करूँ?",
-    "language": "hi"
-  }
-  ```
-- **Response `200 OK`:**
-  ```json
-  {
-    "response": "स्विगी पर आपके एचडीएफसी मिलेनिया कार्ड का उपयोग करें। इस पर आपको 5% कैशबैक (अधिकतम ₹1,000 प्रति माह) मिलेगा, जबकि आपके अन्य कार्ड्स पर केवल 2% मिलेगा।",
-    "language": "hi",
-    "grounded_card_ids": ["crd_8f11a4..."],
-    "citations": ["HDFC Millennia Dining Policy"]
-  }
-  ```
+```json
+{
+  "message": "Which card gave me the most cashback on dining last month?"
+}
+```
+- **Response (200 OK):**
+```json
+{
+  "response": "Last month, your Axis Ace card earned you ₹340 in cashback on dining across 4 transactions, yielding an effective 4.0% return.",
+  "grounded": true,
+  "redacted_tokens_detected": 0
+}
+```
+
+### `GET /api/v1/privacy/consent`
+Retrieves the user's granular AI privacy settings.
+
+### `PUT /api/v1/privacy/consent`
+Updates user AI consent toggles (`external_ai_enabled`, `allow_card_context`, `allow_spending_context`).
+
+### `GET /api/v1/privacy/audit-logs`
+Returns the user's immutable AI egress audit trail with timestamps, task classifications, and non-PII token counts.
 
 ---
 
-## 7. Offer Discovery & Intelligence Infrastructure Endpoints
+## 9. CLIQ Learn: Financial Inclusion & Calculators (`/api/v1/education`)
+
+### `GET /api/v1/education/budget`
+Retrieves the user's category-wise 50/30/20 spending budget and monthly income target.
+
+### `PUT /api/v1/education/budget`
+Updates or creates the user's monthly budget envelope (`monthly_income`, `total_budget`, `category_budgets`).
+
+### `GET /api/v1/education/modules`
+Returns all 9 financial literacy curriculum modules with lesson counts and completion statuses.
+
+### `GET /api/v1/education/modules/{topic_id}`
+Returns the full text, examples, and interactive quiz for a specific topic (e.g., `apr-interest-compounding`).
+
+### `POST /api/v1/education/progress/{topic_id}`
+Submits quiz answers and records lesson completion.
+
+### `POST /api/v1/education/calculators/minimum-due`
+Calculates the true cost and timeline of paying only the Minimum Amount Due.
+- **Request Body:**
+```json
+{
+  "card_balance": 50000.00,
+  "monthly_interest_rate_pct": 3.5,
+  "minimum_due_percentage": 5.0,
+  "fixed_minimum_floor": 500.00
+}
+```
+- **Response (200 OK):**
+```json
+{
+  "total_months_to_payoff": 84,
+  "total_interest_paid": 47250.00,
+  "total_amount_paid": 97250.00,
+  "monthly_schedule_preview": []
+}
+```
+
+### `POST /api/v1/education/calculators/utilization`
+Calculates current credit utilization ratio and shows simulated impact of paying down specific balances on credit scoring tiers.
+
+### `POST /api/v1/education/calculators/break-even`
+Calculates required annual spend on a premium card to offset its annual membership fee.
+
+---
+
+## 10. Offers & Deal Discovery (`/api/v1/offers`)
 
 ### `GET /api/v1/offers`
-Retrieve verified offers matching filters or applicable to the authenticated user's card portfolio.
-- **Query Parameters:** `category`, `merchant`, `only_user_cards` (bool), `expiring_soon` (bool), `query`.
+Lists verified promotional card offers and merchant discounts, filterable by bank, merchant, or category.
 
-### `GET /api/v1/offers/sources`
-List all registered bank and merchant offer sources with integration statuses and health metrics.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-- **Response `200 OK`:** Array of `OfferSourceResponse` objects (`source_key`, `connector_status`, `source_health`, `supported_ingestion_methods`, etc.).
+### `POST /api/v1/offers`
+Submits a user-discovered promotional offer for community verification.
 
-### `POST /api/v1/offers/sources/{source_id}/probe`
-Execute live HTTP and compliance probe for an upstream source (status, latency, WAF, robots.txt).
-- **Headers:** `Authorization: Bearer <token>` (Admin)
+---
 
-### `POST /api/v1/offers/sources/probe-all`
-Trigger parallel live probes across all 8 registered sources.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-
-### `GET /api/v1/offers/failures`
-Audit log of upstream connection errors, WAF bot mitigations, and backoff retry delays.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-- **Query Parameters:** `source_id` (optional), `limit` (default: 50).
-
-### `POST /api/v1/offers/upload-circular`
-Upload official bank or merchant PDF circular (multipart/form-data).
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-- **Form Data:** `file` (.pdf, max 10MB), `source_id` (optional).
-- **Security:** Scanned raster image PDFs are rejected; OCR is explicitly unsupported to prevent financial hallucination.
-
-### `POST /api/v1/offers/manual`
-Register an offer manually with mandatory primary source URL and verbatim evidence snippet.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-- **Request Body:** `ManualOfferCreateRequest`
-
-### `POST /api/v1/offers/partner-feed`
-Ingest structured B2B JSON feed from authorized partners.
-- **Headers:** `Authorization: Bearer <token>` (Admin / Partner)
-- **Request Body:** `PartnerFeedIngestRequest`
-
-### `GET /api/v1/offers/documents`
-List uploaded official circular documents with SHA-256 fingerprints and extraction counts.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
+## 11. Admin Offer Desk & Scraper Telemetry (`/api/v1/admin/offers`)
 
 ### `GET /api/v1/admin/offers/review-queue`
-Review queue for newly discovered and quarantined offers.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-- **Query Parameters:** `status_filter` (`PENDING_REVIEW`, `NEEDS_REVERIFICATION`, `VERIFIED`, `REJECTED`, `ALL`), `query`.
+Admin endpoint listing staged scraped or uploaded promotional circulars awaiting verification.
 
 ### `POST /api/v1/admin/offers/{offer_id}/approve`
-Promote a staged offer to `VERIFIED` state for recommendation engine eligibility.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
+Approves a staged promotional deal, transitioning its status to `APPROVED` and publishing it to active user recommendations.
 
 ### `POST /api/v1/admin/offers/{offer_id}/reject`
-Reject an offer with mandatory audit rationale.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-- **Request Body:** `{"rejection_reason": "string", "notes": "string"}`
+Rejects a staged offer with mandatory rejection reason logging.
 
-### `PUT /api/v1/admin/offers/{offer_id}`
-Edit extracted offer terms, minimum spend, discount caps, or eligible card variants.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
+### `GET /api/v1/admin/offers/sources`
+Lists all monitored bank and merchant sources, health status, and scraper failure rates.
 
-### `POST /api/v1/admin/offers/{offer_id}/reverification`
-Manually quarantine an active offer into `NEEDS_REVERIFICATION`.
-- **Headers:** `Authorization: Bearer <token>` (Admin)
-
+### `POST /api/v1/admin/offers/sources/{source_id}/probe`
+Performs an on-demand HTTP liveness and bot-protection probe on an external offer source.

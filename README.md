@@ -1,113 +1,123 @@
-# CLIQ — Money Made Simple. In Your Language.
+# CLIQ — Personal Financial Intelligence Platform
 
-> **Smarter decisions, Brighter futures. For everyone.**
+> **"Understand Your Money. Make Better Financial Decisions."**  
+> *AI-Powered Financial Intelligence, Credit Card Reward Optimization & Financial Inclusion Suite.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-teal.svg)](LICENSE)
-[![Frontend: Next.js](https://img.shields.io/badge/Frontend-Next.js%2014-black.svg)](https://nextjs.org/)
+[![Frontend: Next.js 14](https://img.shields.io/badge/Frontend-Next.js%2014-black.svg)](https://nextjs.org/)
 [![Backend: FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
 [![Database: Supabase](https://img.shields.io/badge/Database-Supabase%20PostgreSQL-3ECF8E.svg)](https://supabase.com/)
+[![AI: Gemini 2.5 Flash](https://img.shields.io/badge/AI-Google%20Gemini%202.5-4285F4.svg)](https://deepmind.google/technologies/gemini/)
 
 ---
 
-## 🌟 Introduction
+## 🌟 Executive Overview
 
-**CLIQ** is a modern, AI-powered financial intelligence and credit-card reward optimization platform. Inspired by the cinematic visual aesthetic of *Neon Mountain Journey*, CLIQ combines high-contrast dark visual design (#020B12 background with glowing cyan and emerald accents) with a strict deterministic reward calculation engine and native multilingual support (English, Hindi, and Kannada).
+**CLIQ** is a privacy-first personal financial intelligence platform tailored for the modern Indian financial ecosystem. CLIQ helps users demystify credit card reward programs, avoid predatory revolving interest traps, track spending velocity, discover promotional bank discounts, and build sustainable financial literacy in their native language.
 
-### Why CLIQ?
-- **Deterministic Accuracy:** Financial calculations, reward caps, and exclusions are executed in pure Python with arbitrary-precision `Decimal` math. The LLM never calculates or guesses financial figures.
-- **Multilingual Intelligence:** Access financial advice, card comparisons, and transaction optimizations in English, Hindi (`हिन्दी`), or Kannada (`ಕನ್ನಡ`).
-- **Document Intelligence with Human Verification:** Upload PDF card policy documents or statements. Extracted rules are staged for user review before activation.
-- **Complete Card Intelligence:** Compare cards side by side, track reward caps, identify subscription leakage, and discover optimal cards for every single purchase.
-
----
-
-## 🎨 Visual Design
-
-The user interface follows the **Neon Mountain Journey** design palette:
-- **Background:** `#020B12` (Cinematic deep midnight)
-- **Secondary Background:** `#071923`
-- **Surface / Cards:** `#0B202A`
-- **Primary Cyan:** `#00E5E5`
-- **Turquoise:** `#00F5C8`
-- **Emerald Green:** `#00D69B`
-- **Primary Text:** `#FFFFFF`
-- **Secondary Text:** `#A9BBC5`
-- **Borders:** Subtle dark cyan `#133240`
+### Core Architecture Highlights
+- **Deterministic Mathematical Core:** Financial optimization, compound interest schedules, and credit utilization calculations are executed in pure Python using arbitrary-precision `Decimal` math. Generative models never calculate numbers.
+- **Centralized Privacy Gateway:** 9-rule regex PII scrubbing pipeline that sanitizes Aadhaar, PAN, card numbers, phone numbers, email addresses, and UPI IDs before any external AI communication.
+- **CLIQ Learn & Inclusion Suite:** Complete financial education curriculum across 9 modules and 5 interactive simulation calculators (Minimum Due Trap, Debt Payoff, Utilization, Compound Interest, Break-Even).
+- **Interactive Liquid Glass UI:** High-contrast aesthetic (`#040707` canvas, `#00F5FF` cyan, `#A78BFA` purple) featuring Framer Motion spring physics and a 3D diagonal card stack.
+- **Multilingual Support:** First-class support for Indian vernacular languages (English, Hindi, Kannada, Tamil, Telugu, Marathi, Bengali, Gujarati) with zero-loss fallback.
 
 ---
 
-## 🚀 15 Connected Screens
+## 🚀 19 Connected Screens
 
-1. **Landing Page** — Cinematic hero, feature matrix, and value proposition.
-2. **Sign-up & Login** — Secure authentication and session initiation.
-3. **User Onboarding** — Currency, language, and initial portfolio setup.
-4. **Main Dashboard** — High-level financial KPIs, portfolio summary, and quick optimizer.
-5. **My Credit Cards** — Portfolio management, active multiplier rules, and benefit tags.
-6. **Add Credit Card** — Add card with customizable reward categories, merchant perks, and caps.
-7. **Credit Card Comparison** — Side-by-side comparative analysis of card benefits and fees.
-8. **Reward Optimization** — Instant transaction calculator and best card recommender.
-9. **Transaction Analysis** — Deep dive into past transactions and reward realization.
-10. **Spending Analytics** — Visual charts for category breakdowns and monthly spend velocity.
-11. **Financial Health Insights** — Subscription audits, fee vs. reward breakeven, and savings potential.
-12. **AI Financial Assistant** — Multilingual conversational agent grounded in user's cards.
-13. **Document Upload & Processing** — PDF statement processing and human-in-the-loop rule verification.
-14. **User Profile** — Profile preferences, language switching (English, Hindi, Kannada).
-15. **Settings & Security** — Session details, audit logs, and data privacy controls.
+| Path | Screen Name | Description & Capabilities |
+| :--- | :--- | :--- |
+| `/` | **Landing Page** | Interactive hero, value proposition, trust pillars, and live calculators. |
+| `/login` | **Authentication** | Secure JWT Bearer login with automated session restoration. |
+| `/register` | **Registration** | New account creation with default portfolio preference initialization. |
+| `/onboarding` | **Onboarding Wizard** | Step-by-step currency, language, and initial credit card portfolio setup. |
+| `/dashboard` | **Main Dashboard** | Executive summary: Financial health score, active cards, recent spends, and quick optimizer. |
+| `/cards` | **Digital Wallet** | Interactive 3D credit card stack, spend caps, and cardholder benefit tags. |
+| `/cards/[id]` | **Card Detail View** | Deep configuration: reward rules, exclusion policies, and annual fee waiver targets. |
+| `/transactions` | **Transactions Explorer** | Searchable transaction ledger with category filters, merchant tags, and recurring markers. |
+| `/transactions/import` | **CSV Statement Import** | Two-phase statement parser with merchant normalization and deduplication commit. |
+| `/spending` | **Spending Analytics** | Visual category allocations, spend velocity trends, and merchant concentration. |
+| `/health` | **Financial Health** | Multi-pillar health scoring, debt burden analysis, and 25–35 day subscription detection. |
+| `/optimization` | **Reward Optimizer** | Instant best-card recommendation engine matching transactions to highest net yield. |
+| `/simulate` | **What-If Simulator** | Multi-bracket purchase scenario modeling testing spend caps and milestone bonuses. |
+| `/compare` | **Card Comparison** | Head-to-head comparison matrix for up to 4 credit cards simultaneously. |
+| `/offers` | **Offers & Deals** | Live curated and scraped promotional merchant discounts and bank cashbacks. |
+| `/offers/review` | **Offer Review** | User contribution and community verification view for promotional deals. |
+| `/admin/offers` | **Admin Verification Desk** | Administrative queue for human-in-the-loop validation of scraped bank circulars. |
+| `/assistant` | **AI Financial Assistant** | Multilingual natural language assistant backed by Gemini 2.5 Flash and Privacy Gateway. |
+| `/learn` | **CLIQ Learn** | 9-module financial literacy academy with 27 lessons, quizzes, and 5 calculators. |
+| `/budget` | **Income & Budget Command** | Cash flow tracking, regular & irregular earnings, and disciplined 50/30/20 budgeting. |
 
 ---
 
 ## 🏗️ Technology Stack
 
-- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS, Recharts, Lucide Icons, Framer Motion.
-- **Backend:** Python, FastAPI, Pydantic v2, SQLAlchemy 2.0 (Async), PyMuPDF.
-- **Database:** Supabase PostgreSQL / Async SQLite for development & testing.
-- **AI / LLM:** Google Gemini / Configurable Provider with grounded fallback engine.
+- **Frontend:** Next.js 14.2+ (App Router), React 18, TypeScript 5, Tailwind CSS, Framer Motion, Recharts, Lucide Icons.
+- **Backend:** FastAPI (Python 3.12), Pydantic v2, SQLAlchemy 2.0 Async, Slowapi Rate Limiter.
+- **Database:** Supabase PostgreSQL (`postgresql+asyncpg://` with connection recycling and SSL require) + SQLite test isolation.
+- **AI & Document Intelligence:** Google GenAI SDK (`gemini-2.5-flash`), `pypdf` document extraction, Centralized Privacy Gateway.
+- **Testing:** Pytest (72 backend unit/integration tests), Jest & React Testing Library (36 frontend tests).
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start & Local Setup
 
-### 1. Run the Backend
+### 1. Prerequisites
+- Python 3.11+
+- Node.js 18+ & npm
+- PostgreSQL (or Supabase project)
+
+### 2. Backend Setup
 ```bash
 cd backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+
+# Configure environment
 cp ../.env.example .env
+
+# Run FastAPI server
 uvicorn app.main:app --reload --port 8000
 ```
+Backend API will be live at `http://localhost:8000` (Swagger docs at `http://localhost:8000/docs`).
 
-### 2. Run the Frontend
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Visit [http://localhost:3000](http://localhost:3000) in your browser.
+Client application will be accessible at `http://localhost:3000`.
 
----
-
-## 🧪 Testing
-
-Run backend unit and security tests:
+### 4. Running Verification Test Suites
 ```bash
+# Run backend tests
 cd backend
-pytest -v
+PYTHONPATH=. .venv/bin/pytest -v
+
+# Run frontend tests
+cd frontend
+npm test
 ```
 
 ---
 
-## 📚 Complete Documentation
+## 📚 Technical Documentation Suite
 
-Extensive documentation is maintained in the `/docs` directory:
-- [System Architecture](docs/SYSTEM_ARCHITECTURE.md)
-- [Database Schema](docs/DATABASE_SCHEMA.md)
-- [Reward Optimization Engine](docs/REWARD_OPTIMIZATION.md)
-- [Security Architecture](docs/SECURITY.md)
-- [Threat Model](docs/THREAT_MODEL.md)
-- [AI Architecture](docs/AI_ARCHITECTURE.md)
-- [REST API Reference](docs/API_DOCUMENTATION.md)
-- [Data Flow](docs/DATA_FLOW.md)
-- [Setup Guide](docs/SETUP_GUIDE.md)
-- [Testing Guide](docs/TESTING.md)
-- [Deployment Guide](docs/DEPLOYMENT.md)
+Complete architectural, security, and algorithmic specifications are maintained in the `/docs` directory:
+
+| Document | Primary Focus & Domain |
+| :--- | :--- |
+| **[Project Specification](docs/PROJECT_SPECIFICATION.md)** | Product identity, problem statement, user personas, and functional requirements. |
+| **[System Architecture](docs/SYSTEM_ARCHITECTURE.md)** | Multi-tier architectural design, Next.js 14 App Router, FastAPI, and dataflow diagrams. |
+| **[AI & ML Architecture](docs/AI_ML_ARCHITECTURE.md)** | Deterministic vs probabilistic boundary, Gemini 2.5 Flash, merchant normalization, and roadmap models. |
+| **[Explainability (XAI)](docs/EXPLAINABILITY.md)** | Mathematical provenance, `CalculationStep` traces, rejection reason taxonomy, and 6 core questions. |
+| **[Database Design](docs/DATABASE_DESIGN.md)** | Complete 20-entity relational schema, Supabase PostgreSQL configuration, ER diagrams, and Alembic migrations. |
+| **[REST API Reference](docs/API_DOCUMENTATION.md)** | Exhaustive reference for all 68 route-method operations across 11 functional domains. |
+| **[Security & Privacy](docs/SECURITY_AND_PRIVACY.md)** | STRIDE threat model, Centralized Privacy Gateway (9 PII rules), zero-trust tenant isolation, and RBAC. |
+| **[Datasets & Evaluation](docs/DATASETS_AND_EVALUATION.md)** | Seed catalogs (merchants, categories, curriculum), ground truth benchmarks, and test harness. |
+| **[Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md)** | Milestone history (v0.1.0 to v0.3.0), implemented capabilities matrix, and Sprints 1–6 future roadmap. |
+| **[Setup Guide](docs/SETUP_GUIDE.md)** | Detailed developer onboarding and local environment configuration guide. |
+| **[Deployment Guide](docs/DEPLOYMENT.md)** | Production containerization and cloud hosting procedures. |

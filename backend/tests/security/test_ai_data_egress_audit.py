@@ -418,6 +418,7 @@ async def test_cross_user_data_isolation():
             role="user"
         )
         session.add(user_b)
+        await session.flush()  # Persist parent Profile rows to avoid FK violation in PostgreSQL
 
         # User B Card
         card_b = CreditCard(
