@@ -5,9 +5,11 @@ import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
 import { GitCompare, Loader2, Sparkles, Check } from "lucide-react";
+import { ToastContainer, useToast } from "@/components/Toast";
 
 export default function CompareCardsPage() {
   const { t } = useLanguage();
+  const { toasts, addToast, removeToast } = useToast();
   const [cards, setCards] = useState<any[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,8 +54,8 @@ export default function CompareCardsPage() {
         body: JSON.stringify({ card_ids: selectedIds }),
       });
       setComparisonResult(res);
-    } catch (err) {
-      alert("Comparison failed: " + err);
+    } catch (err: any) {
+      addToast("Comparison failed: " + (err.message || err), "error");
     } finally {
       setComparing(false);
     }
@@ -233,6 +235,7 @@ export default function CompareCardsPage() {
           </div>
         )}
       </main>
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 }

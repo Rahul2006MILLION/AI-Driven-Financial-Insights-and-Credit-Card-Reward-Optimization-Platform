@@ -5,6 +5,8 @@ import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
 import NumericInput from "@/components/NumericInput";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { ToastContainer, useToast } from "@/components/Toast";
 import {
   Receipt,
   Plus,
@@ -27,8 +29,10 @@ import {
 
 export default function TransactionsPage() {
   const { t } = useLanguage();
+  const { toasts, addToast, removeToast } = useToast();
   const [transactions, setTransactions] = useState<any[]>([]);
   const [cards, setCards] = useState<any[]>([]);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -81,7 +85,7 @@ export default function TransactionsPage() {
     e.preventDefault();
     const numAmount = typeof amount === "number" ? amount : parseFloat(amount);
     if (!amount || isNaN(numAmount) || numAmount <= 0) {
-      alert("Please enter a valid transaction amount greater than 0.");
+      addToast("Please enter a valid transaction amount greater than 0.", "warning");
       return;
     }
 
@@ -101,20 +105,26 @@ export default function TransactionsPage() {
       setMerchant("");
       setAmount("");
       await fetchData();
-    } catch (err) {
-      alert("Failed to create transaction: " + err);
+    } catch (err: any) {
+      addToast("Failed to create transaction: " + (err.message || err), "error");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm(t.transactions.deletePrompt)) return;
+  const handleDelete = (id: string) => {
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTargetId) return;
     try {
-      await apiFetch(`/transactions/${id}`, { method: "DELETE" });
+      await apiFetch(`/transactions/${deleteTargetId}`, { method: "DELETE" });
       await fetchData();
-    } catch (err) {
-      alert(t.transactions.deleteFailed + ": " + err);
+    } catch (err: any) {
+      addToast(t.transactions.deleteFailed + ": " + (err.message || err), "error");
+    } finally {
+      setDeleteTargetId(null);
     }
   };
 
@@ -178,7 +188,7 @@ export default function TransactionsPage() {
   const handleCommitImport = async () => {
     const selectedRows = previewRows.filter((r) => r.selected_for_import && r.is_valid && r.duplicate_status !== "EXCLUDED");
     if (selectedRows.length === 0) {
-      alert("No rows selected for import.");
+      addToast("No rows selected for import.", "warning");
       return;
     }
 
@@ -209,7 +219,7 @@ export default function TransactionsPage() {
       setImportStage("SUMMARY");
       await fetchData();
     } catch (err: any) {
-      alert("Failed to commit imported transactions: " + err.message);
+      addToast("Failed to commit imported transactions: " + err.message, "error");
     } finally {
       setCommitting(false);
     }
@@ -855,6 +865,20 @@ export default function TransactionsPage() {
           </div>
         </div>
       </main>
+
+      {deleteTargetId && (
+        <ConfirmDialog
+          title={t.transactions.deletePrompt || "Delete Transaction"}
+          message="This transaction will be permanently removed. This action cannot be undone."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          variant="danger"
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteTargetId(null)}
+        />
+      )}
+
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 }

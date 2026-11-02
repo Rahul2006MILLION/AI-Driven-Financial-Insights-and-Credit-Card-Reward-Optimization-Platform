@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { api, CreditCard } from "@/lib/api";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { ToastContainer, useToast } from "@/components/Toast";
 import { CardFanCollection } from "@/components/CardFanCollection";
 import { CardDetailsPanel } from "@/components/CardDetailsPanel";
 import { CardSelectionFlow } from "@/components/CardSelectionFlow";
@@ -37,6 +39,8 @@ import {
 
 export default function MyCreditCardsPage() {
   const { t } = useLanguage();
+  const { toasts, addToast, removeToast } = useToast();
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [cards, setCards] = useState<CreditCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -100,16 +104,19 @@ export default function MyCreditCardsPage() {
     fetchCards();
   }, [searchQuery, selectedNetwork, selectedBank]);
 
-  const handleDeleteCard = async (cardId: string) => {
-    if (!confirm("Are you sure you want to deactivate this credit card? Historical transaction links will be preserved.")) {
-      return;
-    }
-    setDeletingId(cardId);
+  const handleDeleteCard = (cardId: string) => {
+    setDeleteTargetId(cardId);
+  };
+
+  const confirmDeleteCard = async () => {
+    if (!deleteTargetId) return;
+    setDeletingId(deleteTargetId);
+    setDeleteTargetId(null);
     try {
-      await api.deleteCard(cardId);
+      await api.deleteCard(deleteTargetId);
       await fetchCards();
-    } catch (err) {
-      alert("Failed to delete card: " + err);
+    } catch (err: any) {
+      addToast("Failed to delete card: " + (err.message || err), "error");
     } finally {
       setDeletingId(null);
     }
@@ -137,7 +144,7 @@ export default function MyCreditCardsPage() {
     if (!editingCard) return;
 
     if (editForm.last_four_digits && !/^[0-9]{4}$/.test(editForm.last_four_digits.trim())) {
-      alert("Last 4 digits must contain exactly 4 numeric digits.");
+      addToast("Last 4 digits must contain exactly 4 numeric digits.", "warning");
       return;
     }
 
@@ -163,7 +170,7 @@ export default function MyCreditCardsPage() {
       setEditingCard(null);
       await fetchCards();
     } catch (err: any) {
-      alert("Failed to update card: " + err.message);
+      addToast("Failed to update card: " + err.message, "error");
     } finally {
       setSavingEdit(false);
     }
@@ -626,6 +633,20 @@ export default function MyCreditCardsPage() {
           </div>
         )}
       </main>
+
+      {deleteTargetId && (
+        <ConfirmDialog
+          title="Deactivate Card"
+          message="Are you sure you want to deactivate this credit card? Historical transaction links will be preserved."
+          confirmLabel="Deactivate"
+          cancelLabel="Cancel"
+          variant="warning"
+          onConfirm={confirmDeleteCard}
+          onCancel={() => setDeleteTargetId(null)}
+        />
+      )}
+
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 }

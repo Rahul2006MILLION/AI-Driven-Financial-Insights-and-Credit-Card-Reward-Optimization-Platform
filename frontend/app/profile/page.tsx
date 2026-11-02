@@ -6,10 +6,12 @@ import { useLanguage, Language } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { apiFetch, getStoredSession, storeSession } from "@/lib/api";
 import { User, CheckCircle2, Loader2, Save } from "lucide-react";
+import { ToastContainer, useToast } from "@/components/Toast";
 
 export default function ProfilePage() {
   const { t, language, setLanguage } = useLanguage();
   const { updateUser } = useAuth();
+  const { toasts, addToast, removeToast } = useToast();
   const [profile, setProfile] = useState<any>(null);
   const [fullName, setFullName] = useState("");
   const [currency, setCurrency] = useState("INR");
@@ -61,8 +63,8 @@ export default function ProfilePage() {
       });
 
       setSavedSuccess(true);
-    } catch (err) {
-      alert("Failed to save profile: " + err);
+    } catch (err: any) {
+      addToast("Failed to save profile: " + (err.message || err), "error");
     } finally {
       setSaving(false);
     }
@@ -191,6 +193,7 @@ export default function ProfilePage() {
           </div>
         )}
       </main>
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 }

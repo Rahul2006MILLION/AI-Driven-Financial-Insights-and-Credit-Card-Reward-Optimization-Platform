@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 import {
   LayoutDashboard,
   CreditCard,
@@ -26,6 +27,7 @@ import {
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const { t } = useLanguage();
+  const { session } = useAuth();
 
   const navItems = [
     { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
@@ -69,23 +71,27 @@ export const Sidebar: React.FC = () => {
         );
       })}
 
-      <div className="pt-4 mt-3 border-t border-white/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-        <span>{t.sidebar?.administration || "Administration"}</span>
-        <span className="px-1.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px]">
-          {t.sidebar?.staffBadge || "STAFF"}
-        </span>
-      </div>
-      <Link
-        href="/admin/offers"
-        className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
-          pathname === "/admin/offers"
-            ? "bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.15)]"
-            : "text-amber-400/80 hover:text-amber-300 hover:bg-white/[0.04]"
-        }`}
-      >
-        <ShieldCheck className="w-4 h-4 text-amber-400" />
-        <span>{t.sidebar?.offerReviewDesk || t.nav?.adminDesk || "Offer Review Desk"}</span>
-      </Link>
+      {session?.isAdmin && (
+        <>
+          <div className="pt-4 mt-3 border-t border-white/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
+            <span>{t.sidebar?.administration || "Administration"}</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px]">
+              {t.sidebar?.staffBadge || "STAFF"}
+            </span>
+          </div>
+          <Link
+            href="/admin/offers"
+            className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${
+              pathname === "/admin/offers"
+                ? "bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.15)]"
+                : "text-amber-400/80 hover:text-amber-300 hover:bg-white/[0.04]"
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            <span>{t.sidebar?.offerReviewDesk || t.nav?.adminDesk || "Offer Review Desk"}</span>
+          </Link>
+        </>
+      )}
     </aside>
   );
 };

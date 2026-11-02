@@ -23,7 +23,8 @@ from app.models.entities import (
     OfferSource,
     SourceFailureLog,
     AdminOfferDocument,
-    Income
+    Income,
+    PasswordResetToken
 )
 from app.security.middleware import SecurityHeadersMiddleware, RateLimitMiddleware
 

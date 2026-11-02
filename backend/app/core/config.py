@@ -38,6 +38,20 @@ class Settings(BaseSettings):
     
     # Token Expiration
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+
+    # Frontend URL (used in password reset links)
+    FRONTEND_URL: str = "http://localhost:3000"
+
+    # Email / SMTP (for password reset)
+    SMTP_HOST: Optional[str] = None
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: Optional[str] = None
+    SMTP_PASSWORD: Optional[str] = None
+    SMTP_FROM_EMAIL: str = "noreply@cliq.ai"
+    SMTP_FROM_NAME: str = "CLIQ"
+    SMTP_TLS: bool = True
+    PASSWORD_RESET_EXPIRE_MINUTES: int = 60  # 1 hour
+    PASSWORD_RESET_RATE_LIMIT_PER_HOUR: int = 3  # max 3 requests per email per hour
     
     @property
     def cors_origins(self) -> List[str]:

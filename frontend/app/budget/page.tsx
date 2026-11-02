@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
 import NumericInput from "@/components/NumericInput";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import {
   Wallet,
   Coins,
@@ -82,6 +83,27 @@ export default function BudgetPage() {
   const [savingBudget, setSavingBudget] = useState(false);
   const [budgetSavedToast, setBudgetSavedToast] = useState(false);
 
+  // Category budget state — user-configurable
+  const CATEGORIES = [
+    { id: "grocery", label: "Groceries" },
+    { id: "dining", label: "Dining & Food" },
+    { id: "utility", label: "Bills & Utilities" },
+    { id: "shopping", label: "Shopping" },
+    { id: "travel", label: "Transport & Travel" },
+    { id: "health", label: "Healthcare" },
+    { id: "other", label: "General Expense" },
+  ];
+  const [categoryAllocations, setCategoryAllocations] = useState<Record<string, number>>({
+    grocery: 35,
+    dining: 15,
+    utility: 20,
+    shopping: 15,
+    travel: 0,
+    health: 0,
+    other: 15,
+  });
+  const [showCategoryEdit, setShowCategoryEdit] = useState(false);
+
   const loadData = async () => {
     try {
       const [incList, incSum, bgtData, spdData]: any = await Promise.all([
@@ -96,6 +118,17 @@ export default function BudgetPage() {
       if (bgtData) {
         setBudget(bgtData);
         setEditBudgetLimit(bgtData.total_budget || 35000);
+        // Load saved category allocations as percentages
+        if (bgtData.category_budgets && bgtData.total_budget > 0) {
+          const total = bgtData.total_budget;
+          const loaded: Record<string, number> = {};
+          for (const [cat, amt] of Object.entries(bgtData.category_budgets)) {
+            loaded[cat] = Math.round((Number(amt) / Number(total)) * 100);
+          }
+          if (Object.keys(loaded).length > 0) {
+            setCategoryAllocations((prev) => ({ ...prev, ...loaded }));
+          }
+        }
       }
       setSpending(spdData);
     } catch (err) {
@@ -138,13 +171,21 @@ export default function BudgetPage() {
     }
   };
 
-  const handleDeleteIncome = async (id: string) => {
-    if (!confirm(t.incomes.deleteConfirm)) return;
+  const [deleteIncomeId, setDeleteIncomeId] = useState<string | null>(null);
+
+  const handleDeleteIncome = (id: string) => {
+    setDeleteIncomeId(id);
+  };
+
+  const confirmDeleteIncome = async () => {
+    if (!deleteIncomeId) return;
     try {
-      await apiFetch(`/incomes/${id}`, { method: "DELETE" });
+      await apiFetch(`/incomes/${deleteIncomeId}`, { method: "DELETE" });
       await loadData();
     } catch (err) {
       console.error("Failed to delete income:", err);
+    } finally {
+      setDeleteIncomeId(null);
     }
   };
 
@@ -155,18 +196,19 @@ export default function BudgetPage() {
     setSavingBudget(true);
     try {
       const totalInc = summary?.total_monthly_income || numBudget / 0.7;
+      // Convert percentage allocations to absolute amounts
+      const computedCategories: Record<string, number> = {};
+      for (const [cat, pct] of Object.entries(categoryAllocations)) {
+        if (pct > 0) {
+          computedCategories[cat] = Math.round(numBudget * (pct / 100));
+        }
+      }
       await apiFetch("/education/budget", {
         method: "PUT",
         body: JSON.stringify({
           monthly_income: totalInc,
           total_budget: numBudget,
-          category_budgets: {
-            grocery: Math.round(numBudget * 0.35),
-            dining: Math.round(numBudget * 0.15),
-            utility: Math.round(numBudget * 0.20),
-            shopping: Math.round(numBudget * 0.15),
-            other: Math.round(numBudget * 0.15),
-          },
+          category_budgets: computedCategories,
         }),
       });
       setBudgetSavedToast(true);
@@ -385,6 +427,51 @@ export default function BudgetPage() {
                 <span>50% (Needs)</span>
                 <span>80% (Threshold Warning)</span>
                 <span>₹{budgetLimit.toLocaleString("en-IN")}</span>
+              </div>
+
+              {/* Category Allocation Editor */}
+              <div className="pt-3 border-t border-white/[0.06]">
+                <button
+                  onClick={() => setShowCategoryEdit(!showCategoryEdit)}
+                  className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+                >
+                  {showCategoryEdit ? "▲ Hide category allocations" : "▼ Edit category allocations"}
+                </button>
+                {showCategoryEdit && (
+                  <div className="mt-3 space-y-2">
+                    <p className="text-[11px] text-slate-400">
+                      Set the % of your budget for each category. Total shown below.
+                    </p>
+                    {CATEGORIES.map((cat) => (
+                      <div key={cat.id} className="flex items-center gap-3">
+                        <span className="text-xs text-slate-300 w-32 shrink-0">{cat.label}</span>
+                        <input
+                          type="range"
+                          min={0}
+                          max={100}
+                          value={categoryAllocations[cat.id] ?? 0}
+                          onChange={(e) =>
+                            setCategoryAllocations((prev) => ({
+                              ...prev,
+                              [cat.id]: Number(e.target.value),
+                            }))
+                          }
+                          className="flex-1 accent-emerald-500"
+                        />
+                        <span className="text-xs text-white w-10 text-right font-semibold">
+                          {categoryAllocations[cat.id] ?? 0}%
+                        </span>
+                        <span className="text-[11px] text-slate-500 w-20 text-right">
+                          ₹{Math.round(Number(editBudgetLimit || 0) * ((categoryAllocations[cat.id] ?? 0) / 100)).toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                    ))}
+                    <div className={`text-xs font-semibold mt-1 ${Object.values(categoryAllocations).reduce((s, v) => s + v, 0) > 100 ? "text-rose-400" : "text-slate-400"}`}>
+                      Total: {Object.values(categoryAllocations).reduce((s, v) => s + v, 0)}%
+                      {Object.values(categoryAllocations).reduce((s, v) => s + v, 0) > 100 && " — exceeds 100%"}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -709,6 +796,18 @@ export default function BudgetPage() {
           </>
         )}
       </main>
+
+      {deleteIncomeId && (
+        <ConfirmDialog
+          title="Delete Income Source"
+          message={t.incomes.deleteConfirm}
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          variant="danger"
+          onConfirm={confirmDeleteIncome}
+          onCancel={() => setDeleteIncomeId(null)}
+        />
+      )}
     </div>
   );
 }

@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
-import { clearSession } from "@/lib/api";
+import { apiFetch, clearSession, API_BASE_URL } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import { useRouter } from "next/navigation";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { ToastContainer, useToast } from "@/components/Toast";
 import {
   ShieldCheck,
   Download,
@@ -12,30 +15,126 @@ import {
   Sliders,
   CheckCircle2,
   AlertTriangle,
+  Loader2,
+  Lock,
 } from "lucide-react";
+
+interface Preferences {
+  prioritize_cashback: boolean;
+  prioritize_miles: boolean;
+  include_annual_fee_in_net: boolean;
+  monthly_spend_target: number | null;
+  budget_alert_threshold: number;
+}
 
 export default function SettingsPage() {
   const { t } = useLanguage();
   const router = useRouter();
+  const { session, logout } = useAuth();
+  const { toasts, addToast, removeToast } = useToast();
 
+  const [prefsLoading, setPrefsLoading] = useState(true);
+  const [prefsSaving, setPrefsSaving] = useState(false);
   const [prioritizeCashback, setPrioritizeCashback] = useState(true);
   const [includeFeeNet, setIncludeFeeNet] = useState(false);
-  const [savedSettings, setSavedSettings] = useState(false);
+  const [budgetAlertThreshold, setBudgetAlertThreshold] = useState(80);
 
-  const handleSavePreferences = (e: React.FormEvent) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  const [exporting, setExporting] = useState(false);
+
+  // Load preferences on mount
+  useEffect(() => {
+    apiFetch<Preferences>("/profile/preferences")
+      .then((prefs) => {
+        setPrioritizeCashback(prefs.prioritize_cashback);
+        setIncludeFeeNet(prefs.include_annual_fee_in_net);
+        setBudgetAlertThreshold(Number(prefs.budget_alert_threshold));
+      })
+      .catch(() => {
+        // Use defaults if endpoint fails
+      })
+      .finally(() => setPrefsLoading(false));
+  }, []);
+
+  const handleSavePreferences = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSavedSettings(true);
-    setTimeout(() => setSavedSettings(false), 3000);
+    setPrefsSaving(true);
+    try {
+      await apiFetch("/profile/preferences", {
+        method: "PUT",
+        body: JSON.stringify({
+          prioritize_cashback: prioritizeCashback,
+          include_annual_fee_in_net: includeFeeNet,
+          budget_alert_threshold: budgetAlertThreshold,
+        }),
+      });
+      addToast(t.settings.preferencesSavedMsg, "success");
+    } catch (err: any) {
+      addToast(err.message || "Failed to save preferences.", "error");
+    } finally {
+      setPrefsSaving(false);
+    }
   };
 
-  const handleExportData = () => {
-    alert("Exporting verified portfolio records to encrypted JSON archive...");
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const session = apiFetch as any;
+      // Direct fetch to get blob
+      const { getStoredSession } = await import("@/lib/api");
+      const stored = getStoredSession();
+      const res = await fetch(`${API_BASE_URL}/auth/export`, {
+        headers: stored?.accessToken ? { Authorization: `Bearer ${stored.accessToken}` } : {},
+      });
+      if (!res.ok) throw new Error("Export failed");
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const disp = res.headers.get("content-disposition") || "";
+      const match = disp.match(/filename="([^"]+)"/);
+      a.download = match ? match[1] : "cliq_export.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      addToast("Export downloaded successfully.", "success");
+    } catch (err: any) {
+      addToast(err.message || "Export failed.", "error");
+    } finally {
+      setExporting(false);
+    }
   };
 
-  const handleDeleteAccount = () => {
-    if (confirm(t.settings.deleteAccountConfirm)) {
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText !== "DELETE MY ACCOUNT") {
+      addToast("Please type DELETE MY ACCOUNT exactly to confirm.", "warning");
+      return;
+    }
+    if (!deletePassword) {
+      addToast("Please enter your password.", "warning");
+      return;
+    }
+    setDeleting(true);
+    try {
+      await apiFetch("/auth/account", {
+        method: "DELETE",
+        body: JSON.stringify({
+          password: deletePassword,
+          confirmation: deleteConfirmText,
+        }),
+      });
       clearSession();
       router.push("/register");
+    } catch (err: any) {
+      addToast(err.message || "Account deletion failed.", "error");
+      setDeleting(false);
+      setShowDeleteDialog(false);
     }
   };
 
@@ -53,14 +152,7 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        {savedSettings && (
-          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4" />
-            <span>{t.settings.preferencesSavedMsg}</span>
-          </div>
-        )}
-
-        {/* Security & RLS Status */}
+        {/* Security Status */}
         <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-4">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-400" />
@@ -75,44 +167,33 @@ export default function SettingsPage() {
                 <span className="font-semibold text-white block">{t.settings.rlsTitle}</span>
                 <span className="text-[10px] text-slate-500">{t.settings.rlsDesc}</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                ACTIVE
-              </span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">ACTIVE</span>
             </div>
-
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
                 <span className="font-semibold text-white block">{t.settings.tokenEncryptionTitle}</span>
                 <span className="text-[10px] text-slate-500">{t.settings.tokenEncryptionDesc}</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                COMPLIANT
-              </span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">COMPLIANT</span>
             </div>
-
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
                 <span className="font-semibold text-white block">JWT Cryptographic Validation</span>
                 <span className="text-[10px] text-slate-500">Bearer Token Auth</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                HS256 VERIFIED
-              </span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">HS256 VERIFIED</span>
             </div>
-
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
                 <span className="font-semibold text-white block">Rate Limiting & Headers</span>
-                <span className="text-[10px] text-slate-500">CSP, HSTS, 120 req/min</span>
+                <span className="text-[10px] text-slate-500">CSP, HSTS, 600 req/min</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                ENFORCED
-              </span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">ENFORCED</span>
             </div>
           </div>
         </div>
 
-        {/* Engine Optimization Preferences */}
+        {/* Optimization Preferences */}
         <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-4">
           <div className="flex items-center gap-2">
             <Sliders className="w-5 h-5 text-emerald-400" />
@@ -121,44 +202,64 @@ export default function SettingsPage() {
             </h3>
           </div>
 
-          <form onSubmit={handleSavePreferences} className="space-y-3.5 text-xs">
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-              <div>
-                <span className="font-semibold text-white block">{t.settings.prioritizeCashbackLabel}</span>
-                <span className="text-[10px] text-slate-500">
-                  {t.settings.prioritizeCashbackDesc}
-                </span>
-              </div>
-              <input
-                type="checkbox"
-                checked={prioritizeCashback}
-                onChange={(e) => setPrioritizeCashback(e.target.checked)}
-                className="w-4 h-4 rounded text-emerald-500 focus:ring-0"
-              />
+          {prefsLoading ? (
+            <div className="flex items-center gap-2 text-xs text-slate-400">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Loading preferences…
             </div>
-
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-              <div>
-                <span className="font-semibold text-white block">{t.settings.includeFeeNetLabel}</span>
-                <span className="text-[10px] text-slate-500">
-                  {t.settings.includeFeeNetDesc}
-                </span>
+          ) : (
+            <form onSubmit={handleSavePreferences} className="space-y-3.5 text-xs">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                <div>
+                  <span className="font-semibold text-white block">{t.settings.prioritizeCashbackLabel}</span>
+                  <span className="text-[10px] text-slate-500">{t.settings.prioritizeCashbackDesc}</span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={prioritizeCashback}
+                  onChange={(e) => setPrioritizeCashback(e.target.checked)}
+                  className="w-4 h-4 rounded text-emerald-500 focus:ring-0"
+                />
               </div>
-              <input
-                type="checkbox"
-                checked={includeFeeNet}
-                onChange={(e) => setIncludeFeeNet(e.target.checked)}
-                className="w-4 h-4 rounded text-emerald-500 focus:ring-0"
-              />
-            </div>
 
-            <button
-              type="submit"
-              className="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all"
-            >
-              {t.settings.savePreferencesButton}
-            </button>
-          </form>
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                <div>
+                  <span className="font-semibold text-white block">{t.settings.includeFeeNetLabel}</span>
+                  <span className="text-[10px] text-slate-500">{t.settings.includeFeeNetDesc}</span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={includeFeeNet}
+                  onChange={(e) => setIncludeFeeNet(e.target.checked)}
+                  className="w-4 h-4 rounded text-emerald-500 focus:ring-0"
+                />
+              </div>
+
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                <div>
+                  <span className="font-semibold text-white block">Budget Alert Threshold</span>
+                  <span className="text-[10px] text-slate-500">Alert when spending reaches this % of budget</span>
+                </div>
+                <input
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={budgetAlertThreshold}
+                  onChange={(e) => setBudgetAlertThreshold(Number(e.target.value))}
+                  className="w-16 px-2 py-1 rounded-xl bg-white/[0.05] border border-white/10 text-white text-xs text-center focus:border-emerald-500 focus:outline-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={prefsSaving}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all disabled:opacity-60"
+              >
+                {prefsSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                {t.settings.savePreferencesButton}
+              </button>
+            </form>
+          )}
         </div>
 
         {/* Privacy & Account Management */}
@@ -174,14 +275,15 @@ export default function SettingsPage() {
             <div>
               <span className="text-xs font-semibold text-white block">{t.settings.exportArchiveButton}</span>
               <span className="text-[10px] text-slate-400">
-                Download JSON archive of all registered card rules and logs.
+                Download a JSON archive of all your profile, cards, transactions, income, and budget data.
               </span>
             </div>
             <button
               onClick={handleExportData}
-              className="px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors"
+              disabled={exporting}
+              className="px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors disabled:opacity-60"
             >
-              <Download className="w-3.5 h-3.5" />
+              {exporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
               <span>{t.settings.exportArchiveButton}</span>
             </button>
           </div>
@@ -190,11 +292,11 @@ export default function SettingsPage() {
             <div>
               <span className="text-xs font-semibold text-rose-400 block">{t.settings.deleteAccountButton}</span>
               <span className="text-[10px] text-slate-400">
-                Permanently purge all stored credit cards and transactions.
+                Permanently delete your account and all associated data. This action cannot be undone.
               </span>
             </div>
             <button
-              onClick={handleDeleteAccount}
+              onClick={() => setShowDeleteDialog(true)}
               className="px-4 py-2 rounded-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -202,7 +304,63 @@ export default function SettingsPage() {
             </button>
           </div>
         </div>
+
+        {/* Password Reset Link */}
+        <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-4">
+          <div>
+            <span className="text-xs font-semibold text-white block">Change Password</span>
+            <span className="text-[10px] text-slate-500">Reset your password via email verification</span>
+          </div>
+          <a
+            href="/forgot-password"
+            className="px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>Reset Password</span>
+          </a>
+        </div>
       </main>
+
+      {/* Delete Account Dialog */}
+      {showDeleteDialog && (
+        <ConfirmDialog
+          title="Delete Account"
+          message="This will permanently delete your account, all cards, transactions, budgets, and income records. Audit logs are retained for compliance. This cannot be undone."
+          confirmLabel={deleting ? "Deleting…" : "Delete My Account"}
+          cancelLabel="Cancel"
+          variant="danger"
+          onConfirm={handleDeleteAccount}
+          onCancel={() => { setShowDeleteDialog(false); setDeletePassword(""); setDeleteConfirmText(""); }}
+        >
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Your password</label>
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                placeholder="Enter your current password"
+                className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs focus:border-rose-500 focus:outline-none"
+                autoFocus
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Type <span className="text-rose-400 font-mono">DELETE MY ACCOUNT</span> to confirm
+              </label>
+              <input
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="DELETE MY ACCOUNT"
+                className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs font-mono focus:border-rose-500 focus:outline-none"
+              />
+            </div>
+          </div>
+        </ConfirmDialog>
+      )}
+
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 }

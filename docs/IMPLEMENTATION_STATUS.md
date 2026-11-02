@@ -1,6 +1,6 @@
 # CLIQ Implementation Status
 
-**Last updated:** Phase 3.3 Final Stabilization
+**Last updated:** Phase 4A Product Gap Closure
 **Source of truth:** Actual source code. This document is updated after each completed phase.
 
 ---
@@ -16,6 +16,7 @@
 | Phase 3.1 | Verification & Hardening | COMPLETE | DEF-06..09 fixed, 40/40 security tests passing |
 | Phase 3.2 | Remediation | COMPLETE | All 9 defects verified fixed, 42 frontend tests passing |
 | Phase 3.3 | Final Stabilization | COMPLETE | DEF-10 fixed, 12 doc discrepancies corrected, tsconfig fixed, 169/170 tests passing |
+| Phase 4A | Product Gap Closure | COMPLETE | Persistent preferences, data export, server-side account deletion, password reset, admin nav guard, configurable category budgets, Toast+ConfirmDialog UX |
 | Phase 4 | Financial Scam Shield | NOT STARTED | Deceptive merchant detection, urgent lure identification, subscription traps |
 | Phase 5 | Auth Hardening | NOT STARTED | Refresh tokens, 2FA, device management |
 | Phase 6 | Financial Emergency & Resilience | NOT STARTED | Emergency runway, resilience profile |
