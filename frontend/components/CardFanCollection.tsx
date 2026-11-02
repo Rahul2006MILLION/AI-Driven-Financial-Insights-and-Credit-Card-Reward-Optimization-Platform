@@ -354,7 +354,7 @@ export function CardFanCollection({
               onClick={() => onSelectCard(c)}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
                 isCurrent
-                  ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.25)]"
+                  ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-400 shadow-[0_0_15px_rgba(76,192,63,0.25)]"
                   : "bg-white/[0.03] border-white/10 hover:border-emerald-500/30 text-slate-400 hover:text-white"
               }`}
             >

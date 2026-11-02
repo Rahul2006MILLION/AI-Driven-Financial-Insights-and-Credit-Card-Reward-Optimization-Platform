@@ -101,7 +101,7 @@ export default function SavingsGoalsPage() {
   const savingsCapacity = monthlyInflow * 0.20; // 20% rule suggestion
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] bg-[#040707]">
+    <div className="flex min-h-[calc(100vh-4rem)] bg-[#0E1013]">
       <Sidebar />
       <main className="flex-1 p-6 lg:p-8 space-y-6 max-w-4xl">
 

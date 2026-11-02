@@ -18,7 +18,7 @@ export interface ConfirmDialogProps {
 const confirmStyles = {
   danger: "bg-rose-500 hover:bg-rose-400 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]",
   warning: "bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.4)]",
-  default: "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.4)]",
+  default: "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-[0_0_20px_rgba(76,192,63,0.4)]",
 };
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({

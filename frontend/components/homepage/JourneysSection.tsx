@@ -27,9 +27,9 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
 /* ── Budget bars visual for no-card journey ─────────────────── */
 function BudgetVisual() {
   const items = [
-    { label: "Income", value: "₹42,000", pct: 100, color: "bg-[#00F8D8]" },
-    { label: "Expenses", value: "₹28,340", pct: 67, color: "bg-emerald-400" },
-    { label: "Savings", value: "₹13,660", pct: 33, color: "bg-[#00C8AE]" },
+    { label: "Income", value: "₹42,000", pct: 100, color: "bg-[#12301A]" },
+    { label: "Expenses", value: "₹28,340", pct: 67, color: "bg-[#12301A]/60" },
+    { label: "Savings", value: "₹13,660", pct: 33, color: "bg-lime-500" },
   ];
 
   const goals = [
@@ -38,16 +38,16 @@ function BudgetVisual() {
   ];
 
   return (
-    <div className="rounded-2xl bg-[#070F0C]/80 border border-lime-400/15 p-5 space-y-4">
-      <div className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Monthly Overview</div>
+    <div className="rounded-3xl bg-[#F4F6EE] text-[#12301A] p-5 space-y-4 shadow-[0_20px_40px_-20px_rgba(18,48,26,0.5)]">
+      <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase">Monthly Overview</div>
       <div className="space-y-3">
         {items.map((item) => (
           <div key={item.label} className="space-y-1.5">
             <div className="flex justify-between items-center">
-              <span className="text-xs text-slate-400">{item.label}</span>
-              <span className="text-xs font-semibold text-white">{item.value}</span>
+              <span className="text-xs text-[#12301A]/60">{item.label}</span>
+              <span className="text-xs font-bold tabular">{item.value}</span>
             </div>
-            <div className="h-1.5 bg-white/[0.04] rounded-full overflow-hidden">
+            <div className="h-2 bg-[#12301A]/[0.07] rounded-full overflow-hidden">
               <motion.div
                 className={`h-full rounded-full ${item.color}`}
                 initial={{ width: 0 }}
@@ -59,25 +59,25 @@ function BudgetVisual() {
           </div>
         ))}
       </div>
-      <div className="pt-2 border-t border-white/[0.06] space-y-2">
-        <div className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Savings Goals</div>
+      <div className="pt-3 border-t border-[#12301A]/10 space-y-2">
+        <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase">Savings Goals</div>
         {goals.map((g) => (
           <div key={g.label} className="flex items-center justify-between">
             <div>
-              <div className="text-xs text-white font-medium">{g.label}</div>
-              <div className="text-[10px] text-slate-500">{g.target}</div>
+              <div className="text-xs font-semibold">{g.label}</div>
+              <div className="text-[10px] text-[#12301A]/50 tabular">{g.target}</div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-20 h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
+              <div className="w-20 h-2 bg-[#12301A]/[0.07] rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full rounded-full bg-[#00F8D8]"
+                  className="h-full rounded-full bg-[#12301A]"
                   initial={{ width: 0 }}
                   whileInView={{ width: `${g.done}%` }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.9, ease }}
                 />
               </div>
-              <span className="text-[10px] font-bold w-8 text-right" style={{ color: "#00C8AE" }}>{g.done}%</span>
+              <span className="text-[10px] font-bold w-8 text-right tabular">{g.done}%</span>
             </div>
           </div>
         ))}
@@ -90,7 +90,7 @@ function BudgetVisual() {
 function JourneyCard({
   accent, label, headline, description, features, visual, delay,
 }: {
-  accent: "emerald" | "turquoise";
+  accent: "charcoal" | "lime";
   label: string;
   headline: string;
   description: string;
@@ -98,43 +98,33 @@ function JourneyCard({
   visual: React.ReactNode;
   delay: number;
 }) {
-  const borderColor = accent === "emerald"
-    ? "border-emerald-500/25 hover:border-emerald-500/50"
-    : "border-[#00F8D8]/22 hover:border-[#00F8D8]/45";
-  const glowColor = accent === "emerald" ? "bg-emerald-500/8" : "bg-[#00F8D8]/5";
-  const badgeCls  = accent === "emerald"
-    ? "bg-emerald-400/10 border-emerald-400/25 text-emerald-400"
-    : "bg-[#00F8D8]/10 border-[#00F8D8]/28 text-[#00C8AE]";
-  const checkCls  = accent === "emerald" ? "text-emerald-400" : "text-[#00C8AE]";
+  const isLime = accent === "lime";
+  const shell   = isLime ? "bg-lime-400 text-[#12301A]" : "bg-[#1C1F25] text-white border border-white/[0.06]";
+  const badge   = isLime ? "bg-[#12301A] text-lime-300" : "bg-lime-400 text-[#12301A]";
+  const body    = isLime ? "text-[#12301A]/70" : "text-slate-400";
+  const iconDot = isLime ? "bg-[#12301A] text-lime-300" : "bg-white/[0.06] text-lime-400";
+  const feat    = isLime ? "text-[#12301A]/85" : "text-slate-300";
 
   return (
-    <FadeUp delay={delay}>
-      <div className={`relative h-full rounded-3xl bg-[#070F0C]/70 border ${borderColor} backdrop-blur-xl overflow-hidden transition-all duration-500 group`}>
-        {/* Glow on hover */}
-        <div className={`absolute inset-0 ${glowColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-        <div className="relative p-7 flex flex-col h-full">
-          {/* Badge */}
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-bold tracking-widest uppercase w-fit mb-5 ${badgeCls}`}>
+    <FadeUp delay={delay} className="h-full">
+      <div className={`relative h-full rounded-[2rem] ${shell} overflow-hidden transition-transform duration-500 hover:-translate-y-1`}>
+        <div className="relative p-7 sm:p-9 flex flex-col h-full">
+          <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase w-fit mb-6 ${badge}`}>
             {label}
           </span>
 
-          {/* Headline */}
-          <h3 className="text-2xl font-black text-white leading-tight mb-3">{headline}</h3>
-          <p className="text-sm text-slate-400 leading-relaxed mb-6">{description}</p>
+          <h3 className="font-display text-[1.9rem] font-extrabold uppercase leading-[1] tracking-[-0.025em] mb-3">{headline}</h3>
+          <p className={`text-sm leading-relaxed mb-7 max-w-md ${body}`}>{description}</p>
 
-          {/* Visual */}
-          <div className="mb-6">{visual}</div>
+          <div className="mb-7">{visual}</div>
 
-          {/* Features */}
-          <div className="mt-auto space-y-2.5">
+          <div className="mt-auto space-y-3">
             {features.map((f) => (
               <div key={f.text} className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center shrink-0`}>
-                  <f.icon className={`w-3 h-3 ${checkCls}`} />
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${iconDot}`}>
+                  <f.icon className="w-3.5 h-3.5" />
                 </div>
-                <span className="text-sm text-slate-300">{f.text}</span>
+                <span className={`text-sm font-medium ${feat}`}>{f.text}</span>
               </div>
             ))}
           </div>
@@ -163,23 +153,19 @@ export function JourneysSection() {
   ];
 
   return (
-    <section className="relative py-28 overflow-hidden">
-      {/* Section background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050D09]/60 to-transparent pointer-events-none" />
-
+    <section className="relative py-24 sm:py-28 overflow-hidden">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <FadeUp className="text-center mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.1] text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-5">
+        <FadeUp className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-slate-300 text-[11px] font-bold tracking-wide mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-lime-400" />
             Two paths. One platform.
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-            Financial intelligence <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 via-emerald-400 to-teal-400">
-              built for everyone.
-            </span>
+          <h2 className="font-display text-[clamp(2rem,4.6vw,3.6rem)] font-extrabold uppercase text-white leading-[1] tracking-[-0.03em]">
+            Financial intelligence<br />
+            <span className="text-lime-400">built for everyone.</span>
           </h2>
-          <p className="mt-5 text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="mt-5 text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
             CLIQ adapts to your financial reality — whether you hold premium cards or are just starting your journey.
           </p>
         </FadeUp>
@@ -187,7 +173,7 @@ export function JourneysSection() {
         {/* Two cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <JourneyCard
-            accent="emerald"
+            accent="charcoal"
             label="Credit card path"
             headline="Maximize every rupee of rewards."
             description="Track your full card wallet, discover real-time offers, and let CLIQ's AI optimize which card to use for every purchase."
@@ -203,7 +189,7 @@ export function JourneysSection() {
                       cardholderName="VIKRAM MALHOTRA"
                       lastFourDigits="8824"
                       network={heroCard.defaultNetwork || "VISA"}
-                      glowShadow={true}
+                      glowShadow={false}
                     />
                   </div>
                 </div>
@@ -212,7 +198,7 @@ export function JourneysSection() {
             delay={0}
           />
           <JourneyCard
-            accent="turquoise"
+            accent="lime"
             label="No card required"
             headline="Build wealth from your first paycheck."
             description="Track income, plan budgets, grow your emergency fund, and learn financial skills — all without needing a credit card."

@@ -74,14 +74,14 @@ export default function EmergencyFundPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[calc(100vh-4rem)] bg-[#040707] items-center justify-center">
+      <div className="flex min-h-[calc(100vh-4rem)] bg-[#0E1013] items-center justify-center">
         <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] bg-[#040707]">
+    <div className="flex min-h-[calc(100vh-4rem)] bg-[#0E1013]">
       <Sidebar />
       <main className="flex-1 p-6 lg:p-8 space-y-6 max-w-3xl">
 

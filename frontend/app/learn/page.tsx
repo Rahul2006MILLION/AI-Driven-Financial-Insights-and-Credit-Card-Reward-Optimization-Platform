@@ -416,7 +416,7 @@ export default function LearnPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#040707] text-slate-100 p-4 md:p-8 relative selection:bg-emerald-500/30 selection:text-emerald-200">
+    <div className="min-h-screen bg-[#0E1013] text-slate-100 p-4 md:p-8 relative selection:bg-emerald-500/30 selection:text-emerald-200">
       {/* Background ambient lighting */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[140px]" />
@@ -440,7 +440,7 @@ export default function LearnPage() {
           </div>
 
           {/* Quick Learning Path Indicator */}
-          <div className="flex items-center gap-3 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-3 backdrop-blur-xl">
+          <div className="flex items-center gap-3 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-3 backdrop-blur-xl">
             <Compass className="w-5 h-5 text-emerald-400 shrink-0" />
             <div className="text-xs">
               <span className="text-slate-400 block font-medium">{t.learn.pathTitle}:</span>
@@ -502,7 +502,7 @@ export default function LearnPage() {
                   onClick={() => setSelectedCategory("all")}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all shrink-0 border ${
                     selectedCategory === "all"
-                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
+                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_12px_rgba(76,192,63,0.2)]"
                       : "bg-white/[0.03] text-slate-400 border-white/[0.08] hover:bg-white/[0.06] hover:text-white"
                   }`}
                 >
@@ -514,7 +514,7 @@ export default function LearnPage() {
                     onClick={() => setSelectedCategory(c.id)}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all shrink-0 border ${
                       selectedCategory === c.id
-                        ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
+                        ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_12px_rgba(76,192,63,0.2)]"
                         : "bg-white/[0.03] text-slate-400 border-white/[0.08] hover:bg-white/[0.06] hover:text-white"
                     }`}
                   >
@@ -531,7 +531,7 @@ export default function LearnPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search lessons & topics..."
-                  className="w-full bg-[#06100C]/80 border border-white/[0.1] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-[#17191E]/80 border border-white/[0.1] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
             </div>
@@ -543,7 +543,7 @@ export default function LearnPage() {
                 <p className="text-sm">Loading lessons...</p>
               </div>
             ) : filteredLessons.length === 0 ? (
-              <div className="text-center py-16 bg-[#06100C]/40 border border-white/[0.06] rounded-2xl text-slate-400 space-y-2">
+              <div className="text-center py-16 bg-[#17191E]/40 border border-white/[0.06] rounded-2xl text-slate-400 space-y-2">
                 <HelpCircle className="w-8 h-8 mx-auto text-slate-500" />
                 <p className="text-base font-semibold text-slate-300">No lessons match your search</p>
                 <p className="text-xs text-slate-500">Try adjusting your filters or search keywords.</p>
@@ -555,7 +555,7 @@ export default function LearnPage() {
                     <div
                       key={lesson.id}
                       onClick={() => openLesson(lesson.id)}
-                      className="group relative bg-[#06100C]/70 hover:bg-[#071610]/90 border border-white/[0.08] hover:border-emerald-500/40 rounded-2xl p-5 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between cursor-pointer shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_32px_rgba(16,185,129,0.15)] hover:-translate-y-1"
+                      className="group relative bg-[#17191E]/70 hover:bg-[#071610]/90 border border-white/[0.08] hover:border-emerald-500/40 rounded-2xl p-5 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between cursor-pointer shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_32px_rgba(76,192,63,0.15)] hover:-translate-y-1"
                     >
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -657,7 +657,7 @@ export default function LearnPage() {
             {/* Subtab 1: Interest Calculator */}
             {calcSubTab === "interest" && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-5 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-5 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   <div>
                     <h3 className="text-lg font-bold text-white">{t.learn.calcInterestTitle}</h3>
                     <p className="text-xs text-slate-400 mt-1">{t.learn.calcInterestDesc}</p>
@@ -670,7 +670,7 @@ export default function LearnPage() {
                         type="number"
                         value={interestBal}
                         onChange={(e) => setInterestBal(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50"
                       />
                     </div>
                     <div>
@@ -679,7 +679,7 @@ export default function LearnPage() {
                         type="number"
                         value={interestApr}
                         onChange={(e) => setInterestApr(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50"
                       />
                     </div>
                     <div>
@@ -688,20 +688,20 @@ export default function LearnPage() {
                         type="number"
                         value={interestPmt}
                         onChange={(e) => setInterestPmt(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50"
                       />
                     </div>
                     <button
                       onClick={runInterestCalc}
                       disabled={calculatingInterest}
-                      className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingInterest ? t.learn.calculating : t.learn.calculateButton}
                     </button>
                   </div>
                 </div>
 
-                <div className="lg:col-span-7 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-7 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   {interestResult ? (
                     <div className="space-y-5">
                       <div className="grid grid-cols-3 gap-3">
@@ -773,7 +773,7 @@ export default function LearnPage() {
             {/* Subtab 2: Minimum Due Trap Calculator */}
             {calcSubTab === "min_due" && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-5 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-5 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   <div>
                     <h3 className="text-lg font-bold text-white">{t.learn.calcMinDueTitle}</h3>
                     <p className="text-xs text-slate-400 mt-1">{t.learn.calcMinDueDesc}</p>
@@ -785,7 +785,7 @@ export default function LearnPage() {
                         type="number"
                         value={minDueBal}
                         onChange={(e) => setMinDueBal(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <div>
@@ -794,7 +794,7 @@ export default function LearnPage() {
                         type="number"
                         value={minDueApr}
                         onChange={(e) => setMinDueApr(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <div>
@@ -803,20 +803,20 @@ export default function LearnPage() {
                         type="number"
                         value={minDueFixed}
                         onChange={(e) => setMinDueFixed(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <button
                       onClick={runMinDueCalc}
                       disabled={calculatingMinDue}
-                      className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingMinDue ? t.learn.calculating : t.learn.calculateButton}
                     </button>
                   </div>
                 </div>
 
-                <div className="lg:col-span-7 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-7 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   {minDueResult ? (
                     <div className="space-y-4">
                       <div className="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-200">
@@ -867,7 +867,7 @@ export default function LearnPage() {
             {/* Subtab 3: 50-30-20 Budget Planner */}
             {calcSubTab === "budget" && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-5 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-5 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   <div>
                     <h3 className="text-lg font-bold text-white">{t.learn.calcBudgetTitle}</h3>
                     <p className="text-xs text-slate-400 mt-1">{t.learn.calcBudgetDesc}</p>
@@ -879,7 +879,7 @@ export default function LearnPage() {
                         type="number"
                         value={budgetIncome}
                         onChange={(e) => setBudgetIncome(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
@@ -889,7 +889,7 @@ export default function LearnPage() {
                           type="number"
                           value={budgetGrocery}
                           onChange={(e) => setBudgetGrocery(e.target.value)}
-                          className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
+                          className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
                         />
                       </div>
                       <div>
@@ -898,7 +898,7 @@ export default function LearnPage() {
                           type="number"
                           value={budgetUtility}
                           onChange={(e) => setBudgetUtility(e.target.value)}
-                          className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
+                          className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
                         />
                       </div>
                       <div>
@@ -907,7 +907,7 @@ export default function LearnPage() {
                           type="number"
                           value={budgetDining}
                           onChange={(e) => setBudgetDining(e.target.value)}
-                          className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
+                          className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
                         />
                       </div>
                       <div>
@@ -916,7 +916,7 @@ export default function LearnPage() {
                           type="number"
                           value={budgetShopping}
                           onChange={(e) => setBudgetShopping(e.target.value)}
-                          className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
+                          className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
                         />
                       </div>
                       <div>
@@ -925,7 +925,7 @@ export default function LearnPage() {
                           type="number"
                           value={budgetFuel}
                           onChange={(e) => setBudgetFuel(e.target.value)}
-                          className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
+                          className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
                         />
                       </div>
                       <div>
@@ -934,21 +934,21 @@ export default function LearnPage() {
                           type="number"
                           value={budgetSavings}
                           onChange={(e) => setBudgetSavings(e.target.value)}
-                          className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
+                          className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-2.5 py-1.5 text-white"
                         />
                       </div>
                     </div>
                     <button
                       onClick={runBudgetCalc}
                       disabled={calculatingBudget}
-                      className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingBudget ? t.learn.calculating : t.learn.calculateButton}
                     </button>
                   </div>
                 </div>
 
-                <div className="lg:col-span-7 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-7 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   {budgetResult ? (
                     <div className="space-y-4">
                       <div className="grid grid-cols-3 gap-3">
@@ -992,7 +992,7 @@ export default function LearnPage() {
             {/* Subtab 4: Credit Utilization Health */}
             {calcSubTab === "utilization" && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-5 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-5 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   <div>
                     <h3 className="text-lg font-bold text-white">{t.learn.calcUtilizationTitle}</h3>
                     <p className="text-xs text-slate-400 mt-1">{t.learn.calcUtilizationDesc}</p>
@@ -1004,7 +1004,7 @@ export default function LearnPage() {
                         type="number"
                         value={utilLimit}
                         onChange={(e) => setUtilLimit(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <div>
@@ -1013,20 +1013,20 @@ export default function LearnPage() {
                         type="number"
                         value={utilBalance}
                         onChange={(e) => setUtilBalance(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <button
                       onClick={runUtilCalc}
                       disabled={calculatingUtil}
-                      className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingUtil ? t.learn.calculating : t.learn.calculateButton}
                     </button>
                   </div>
                 </div>
 
-                <div className="lg:col-span-7 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-7 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   {utilResult ? (
                     <div className="space-y-4">
                       <div className="flex items-center justify-between p-4 bg-white/[0.03] border border-white/[0.08] rounded-xl">
@@ -1073,7 +1073,7 @@ export default function LearnPage() {
             {/* Subtab 5: Break-Even Calculator */}
             {calcSubTab === "breakeven" && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-5 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-5 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   <div>
                     <h3 className="text-lg font-bold text-white">{t.learn.calcBreakEvenTitle}</h3>
                     <p className="text-xs text-slate-400 mt-1">{t.learn.calcBreakEvenDesc}</p>
@@ -1085,7 +1085,7 @@ export default function LearnPage() {
                         type="number"
                         value={beFee}
                         onChange={(e) => setBeFee(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <div>
@@ -1094,7 +1094,7 @@ export default function LearnPage() {
                         type="number"
                         value={beMonthlySpend}
                         onChange={(e) => setBeMonthlySpend(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <div>
@@ -1103,7 +1103,7 @@ export default function LearnPage() {
                         type="number"
                         value={beRewardRate}
                         onChange={(e) => setBeRewardRate(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <div>
@@ -1112,20 +1112,20 @@ export default function LearnPage() {
                         type="number"
                         value={beWaiver}
                         onChange={(e) => setBeWaiver(e.target.value)}
-                        className="w-full bg-[#030606] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
+                        className="w-full bg-[#0B0D10] border border-white/[0.1] rounded-xl px-3 py-2 text-sm text-white focus:outline-none"
                       />
                     </div>
                     <button
                       onClick={runBeCalc}
                       disabled={calculatingBe}
-                      className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingBe ? t.learn.calculating : t.learn.calculateButton}
                     </button>
                   </div>
                 </div>
 
-                <div className="lg:col-span-7 bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+                <div className="lg:col-span-7 bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
                   {beResult ? (
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-3">
@@ -1166,7 +1166,7 @@ export default function LearnPage() {
           <div className="space-y-8">
             {/* Overall Progress Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              <div className="bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-5 backdrop-blur-2xl">
+              <div className="bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-5 backdrop-blur-2xl">
                 <span className="text-xs font-medium text-slate-400 block">{t.learn.overallProgressTitle}</span>
                 <span className="text-3xl font-extrabold text-white mt-1 block">
                   {overallProgress ? `${overallProgress.completion_percentage}%` : "0%"}
@@ -1179,7 +1179,7 @@ export default function LearnPage() {
                 </div>
               </div>
 
-              <div className="bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-5 backdrop-blur-2xl">
+              <div className="bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-5 backdrop-blur-2xl">
                 <span className="text-xs font-medium text-slate-400 block">{t.learn.masteredTopics}</span>
                 <span className="text-3xl font-extrabold text-white mt-1 block">
                   {overallProgress ? `${overallProgress.completed_topics} / ${overallProgress.total_topics}` : "0 / 12"}
@@ -1187,7 +1187,7 @@ export default function LearnPage() {
                 <p className="text-xs text-slate-500 mt-2">Interactive topics mastered across 5 disciplines</p>
               </div>
 
-              <div className="bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-5 backdrop-blur-2xl">
+              <div className="bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-5 backdrop-blur-2xl">
                 <span className="text-xs font-medium text-slate-400 block">{t.learn.averageScore}</span>
                 <span className="text-3xl font-extrabold text-emerald-400 mt-1 block">
                   {overallProgress?.average_quiz_score ? `${overallProgress.average_quiz_score}%` : "100%"}
@@ -1197,7 +1197,7 @@ export default function LearnPage() {
             </div>
 
             {/* Path Selection Interface */}
-            <div className="bg-[#06100C]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
+            <div className="bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-6 backdrop-blur-2xl space-y-4">
               <div>
                 <h3 className="text-lg font-bold text-white">{t.learn.pathTitle}</h3>
                 <p className="text-xs text-slate-400 mt-1">{t.learn.pathDesc}</p>
@@ -1215,7 +1215,7 @@ export default function LearnPage() {
                   onClick={() => handleUpdatePath("NEW_TO_FINANCE")}
                   className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                     userPath === "NEW_TO_FINANCE"
-                      ? "bg-emerald-500/15 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                      ? "bg-emerald-500/15 border-emerald-500/50 shadow-[0_0_20px_rgba(76,192,63,0.2)]"
                       : "bg-white/[0.02] border-white/[0.08] hover:bg-white/[0.05]"
                   }`}
                 >
@@ -1238,7 +1238,7 @@ export default function LearnPage() {
                   onClick={() => handleUpdatePath("UNDERSTAND_CREDIT")}
                   className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                     userPath === "UNDERSTAND_CREDIT"
-                      ? "bg-emerald-500/15 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                      ? "bg-emerald-500/15 border-emerald-500/50 shadow-[0_0_20px_rgba(76,192,63,0.2)]"
                       : "bg-white/[0.02] border-white/[0.08] hover:bg-white/[0.05]"
                   }`}
                 >
@@ -1261,7 +1261,7 @@ export default function LearnPage() {
                   onClick={() => handleUpdatePath("OPTIMIZE_EXISTING")}
                   className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                     userPath === "OPTIMIZE_EXISTING"
-                      ? "bg-emerald-500/15 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                      ? "bg-emerald-500/15 border-emerald-500/50 shadow-[0_0_20px_rgba(76,192,63,0.2)]"
                       : "bg-white/[0.02] border-white/[0.08] hover:bg-white/[0.05]"
                   }`}
                 >
@@ -1287,7 +1287,7 @@ export default function LearnPage() {
       {/* LESSON READER MODAL */}
       {activeLesson && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4">
-          <div className="bg-[#050D0A] border border-white/[0.12] rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 space-y-6 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#17191E] border border-white/[0.12] rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 space-y-6 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative animate-in fade-in zoom-in-95 duration-200">
             {/* Close Button */}
             <button
               onClick={() => setActiveLesson(null)}
@@ -1415,7 +1415,7 @@ export default function LearnPage() {
                     disabled={
                       submittingQuiz || Object.keys(selectedAnswers).length < activeLesson.quiz.length
                     }
-                    className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-950 font-bold text-xs transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                    className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-950 font-bold text-xs transition-all shadow-[0_0_20px_rgba(76,192,63,0.3)]"
                   >
                     {submittingQuiz ? "Submitting..." : t.learn.submitQuiz}
                   </button>
@@ -1424,7 +1424,7 @@ export default function LearnPage() {
                     <span className="text-xs text-emerald-400 font-semibold">{t.learn.quizPassed}</span>
                     <button
                       onClick={() => setActiveLesson(null)}
-                      className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs"
+                      className="px-5 py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs"
                     >
                       {t.learn.backToLessons}
                     </button>

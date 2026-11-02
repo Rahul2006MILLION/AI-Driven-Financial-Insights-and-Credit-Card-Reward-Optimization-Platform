@@ -71,14 +71,14 @@ export default function SubscriptionsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[calc(100vh-4rem)] bg-[#040707] items-center justify-center">
+      <div className="flex min-h-[calc(100vh-4rem)] bg-[#0E1013] items-center justify-center">
         <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] bg-[#040707]">
+    <div className="flex min-h-[calc(100vh-4rem)] bg-[#0E1013]">
       <Sidebar />
       <main className="flex-1 p-6 lg:p-8 space-y-6 max-w-3xl">
 
@@ -86,7 +86,7 @@ export default function SubscriptionsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <Repeat className="w-6 h-6 text-[#00C8AE]" />
+              <Repeat className="w-6 h-6 text-[#ADDC25]" />
               Subscriptions &amp; Bills
             </h1>
             <p className="text-sm text-slate-400 mt-1">
@@ -112,7 +112,7 @@ export default function SubscriptionsPage() {
             {[
               { label: "Recurring Entries", value: String(allRecurring.length), color: "text-white" },
               { label: "Monthly Commitment",  value: fmt(totalMonthly),           color: "text-rose-300" },
-              { label: "Categories",           value: String(sortedCategories.length), color: "text-[#00C8AE]" },
+              { label: "Categories",           value: String(sortedCategories.length), color: "text-[#ADDC25]" },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl bg-white/[0.03] border border-white/[0.08] p-4">
                 <div className={`text-xl font-black ${s.color}`}>{s.value}</div>
@@ -162,8 +162,8 @@ export default function SubscriptionsPage() {
                     {group.map((t) => (
                       <div key={t.id} className="flex items-center justify-between rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/10 px-4 py-3 transition-all">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-[#00C8AE]/10 border border-[#00C8AE]/20 flex items-center justify-center">
-                            <Repeat className="w-3.5 h-3.5 text-[#00C8AE]" />
+                          <div className="w-8 h-8 rounded-lg bg-[#ADDC25]/10 border border-[#ADDC25]/20 flex items-center justify-center">
+                            <Repeat className="w-3.5 h-3.5 text-[#ADDC25]" />
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-white">{t.merchant_name}</div>

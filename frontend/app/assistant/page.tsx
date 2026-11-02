@@ -161,22 +161,22 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full flex flex-col h-[calc(100vh-4rem)]">
         {/* Floating Glass Header */}
         <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 shadow-[0_0_15px_rgba(16,185,129,0.35)]">
-              <div className="w-full h-full bg-[#050D0A] rounded-[10px] flex items-center justify-center">
-                <Bot className="w-4 h-4 text-emerald-400" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-lime-400 to-emerald-500 p-0.5 shadow-neonLime">
+              <div className="w-full h-full bg-[#17191E] rounded-[10px] flex items-center justify-center">
+                <Bot className="w-4 h-4 text-lime-400" />
               </div>
             </div>
             <div>
               <h1 className="text-base font-extrabold text-white flex items-center gap-2">
                 <span>{t.assistant.title}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-semibold flex items-center gap-1">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-lime-400/10 text-lime-400 border border-lime-400/25 font-semibold flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3" />
                   {t.assistant.localProtectedStatus}
                 </span>
@@ -191,7 +191,7 @@ export default function AssistantPage() {
               onClick={() => setShowPrivacyPanel(!showPrivacyPanel)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 text-xs text-slate-300 transition-colors"
             >
-              <Sliders className="w-3.5 h-3.5 text-emerald-400" />
+              <Sliders className="w-3.5 h-3.5 text-lime-400" />
               <span className="font-medium">Governance</span>
               {showPrivacyPanel ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
@@ -203,7 +203,7 @@ export default function AssistantPage() {
                   key={l}
                   onClick={() => setLanguage(l)}
                   className={`px-2 py-0.5 rounded-full font-bold text-[10px] transition-colors ${
-                    language === l ? "bg-emerald-500 text-[#040707]" : "text-slate-400"
+                    language === l ? "bg-lime-400 text-[#0E1013]" : "text-slate-400"
                   }`}
                 >
                   {l.toUpperCase()}
@@ -307,15 +307,15 @@ export default function AssistantPage() {
               className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}
             >
               {m.role === "assistant" && (
-                <div className="w-7 h-7 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <div className="w-7 h-7 rounded-full bg-lime-400/10 border border-lime-400/20 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-3.5 h-3.5 text-lime-400" />
                 </div>
               )}
 
               <div
                 className={`max-w-[80%] rounded-3xl p-4 text-xs leading-relaxed ${
                   m.role === "user"
-                    ? "bg-emerald-500/15 border border-emerald-500/30 text-white rounded-br-none shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                    ? "bg-lime-400/10 border border-lime-400/25 text-white rounded-br-none shadow-[0_0_20px_rgba(196,242,63,0.1)]"
                     : "bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl text-white rounded-bl-none shadow-[0_12px_36px_0_rgba(0,0,0,0.5)]"
                 }`}
               >
@@ -369,7 +369,7 @@ export default function AssistantPage() {
               </div>
 
               {m.role === "user" && (
-                <div className="w-7 h-7 rounded-full bg-emerald-500 text-[#040707] flex items-center justify-center shrink-0 font-bold">
+                <div className="w-7 h-7 rounded-full bg-lime-400 text-[#0E1013] flex items-center justify-center shrink-0 font-bold">
                   <User className="w-3.5 h-3.5" />
                 </div>
               )}
@@ -378,8 +378,8 @@ export default function AssistantPage() {
 
           {loading && (
             <div className="flex gap-3 justify-start">
-              <div className="w-7 h-7 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                <Loader2 className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
+              <div className="w-7 h-7 rounded-full bg-lime-400/10 border border-lime-400/20 flex items-center justify-center">
+                <Loader2 className="w-3.5 h-3.5 text-lime-400 animate-spin" />
               </div>
               <div className="p-3.5 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl text-xs text-slate-400 flex items-center gap-2">
                 <span>Analyzing portfolio rules...</span>
@@ -432,7 +432,7 @@ export default function AssistantPage() {
               e.preventDefault();
               handleSend();
             }}
-            className="flex items-center gap-2 p-1.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] focus-within:border-emerald-500/50 transition-all"
+            className="flex items-center gap-2 p-1.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] focus-within:border-lime-400/50 transition-all"
           >
             <input
               type="text"
@@ -445,7 +445,7 @@ export default function AssistantPage() {
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="p-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] disabled:opacity-40 shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all"
+              className="p-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] disabled:opacity-40 shadow-neonLime transition-all"
             >
               <Send className="w-3.5 h-3.5" />
             </button>

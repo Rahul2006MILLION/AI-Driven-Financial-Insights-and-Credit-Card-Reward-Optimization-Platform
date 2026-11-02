@@ -252,7 +252,7 @@ export default function AddCreditCardPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row min-h-screen bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row min-h-screen bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
@@ -266,7 +266,7 @@ export default function AddCreditCardPage() {
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Wallet</span>
             </Link>
-            <h1 className="text-3xl font-black text-white tracking-tight glow-emerald">
+            <h1 className="text-3xl font-black text-white tracking-tight">
               Add Credit Card
             </h1>
             <p className="text-xs text-slate-400">
@@ -302,7 +302,7 @@ export default function AddCreditCardPage() {
                   onClick={() => handleSelectBank(issuer)}
                   className={`p-3.5 rounded-2xl border text-left transition-all relative flex flex-col justify-between h-24 backdrop-blur-xl ${
                     isSelected
-                      ? `bg-emerald-500/15 border-emerald-500/60 shadow-[0_0_20px_rgba(16,185,129,0.2)] ring-1 ring-emerald-500/50`
+                      ? `bg-emerald-500/15 border-emerald-500/60 shadow-[0_0_20px_rgba(76,192,63,0.2)] ring-1 ring-emerald-500/50`
                       : `bg-white/[0.02] border-white/[0.07] hover:border-emerald-500/30 hover:bg-white/[0.04]`
                   }`}
                 >

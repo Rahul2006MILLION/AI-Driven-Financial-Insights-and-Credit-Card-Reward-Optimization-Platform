@@ -237,13 +237,13 @@ export default function TransactionsPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            <h1 className="text-3xl font-black tracking-tight text-white">
               {t.transactions.title}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -259,7 +259,7 @@ export default function TransactionsPage() {
                 setImportStage("SELECT");
                 setImportError(null);
               }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-lime-400 hover:text-lime-300 border border-lime-400/30 font-semibold text-xs transition-all"
             >
               <FileUp className="w-3.5 h-3.5" />
               <span>{t.transactions.importCsvButton}</span>
@@ -268,7 +268,7 @@ export default function TransactionsPage() {
             {/* Manual Add Button */}
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{t.transactions.addNewTransaction}</span>
@@ -279,7 +279,7 @@ export default function TransactionsPage() {
         {/* --- CSV Import Workflow Modal --- */}
         {showImportModal && (
           <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-            <div className="p-6 sm:p-7 rounded-3xl bg-[#06100C]/95 border border-white/10 shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col space-y-4 overflow-hidden">
+            <div className="p-6 sm:p-7 rounded-3xl bg-[#17191E]/95 border border-white/10 shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col space-y-4 overflow-hidden">
               <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
                 <div className="flex items-center gap-2">
                   <FileSpreadsheet className="w-5 h-5 text-emerald-400" />
@@ -313,7 +313,7 @@ export default function TransactionsPage() {
                       <select
                         value={importCardId}
                         onChange={(e) => setImportCardId(e.target.value)}
-                        className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                       >
                         <option value="">{t.cards.allBanks} (Auto / Unassigned)</option>
                         {cards.map((c) => (
@@ -331,7 +331,7 @@ export default function TransactionsPage() {
                       <select
                         value={bankFormat}
                         onChange={(e) => setBankFormat(e.target.value)}
-                        className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                       >
                         <option value="AUTO">Auto-Detect Statement Layout (Default)</option>
                         <option value="HDFC">HDFC Bank Credit Card Statement</option>
@@ -385,7 +385,7 @@ export default function TransactionsPage() {
                     <button
                       type="submit"
                       disabled={!selectedFile || parsing}
-                      className="flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-[#040707] text-xs font-bold shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+                      className="flex items-center gap-2 px-5 py-2 rounded-full bg-lime-400 hover:bg-lime-300 disabled:opacity-50 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
                     >
                       {parsing ? (
                         <>
@@ -480,7 +480,7 @@ export default function TransactionsPage() {
                                 <select
                                   value={row.category_id}
                                   onChange={(e) => handleRowCategoryChange(row.temp_id, e.target.value)}
-                                  className={`bg-[#06100C] border ${row.requires_category_review ? 'border-amber-500/50 text-amber-300' : 'border-white/10 text-slate-300'} rounded-xl px-2 py-1 text-[11px] focus:outline-none focus:border-emerald-500`}
+                                  className={`bg-[#17191E] border ${row.requires_category_review ? 'border-amber-500/50 text-amber-300' : 'border-white/10 text-slate-300'} rounded-xl px-2 py-1 text-[11px] focus:outline-none focus:border-emerald-500`}
                                 >
                                   <option value="dining">{t.categories.dining}</option>
                                   <option value="food_delivery">{t.categories.food_delivery}</option>
@@ -572,7 +572,7 @@ export default function TransactionsPage() {
                         type="button"
                         onClick={handleCommitImport}
                         disabled={committing || previewRows.filter((r) => r.selected_for_import && r.is_valid).length === 0}
-                        className="flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-[#040707] text-xs font-bold shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+                        className="flex items-center gap-2 px-5 py-2 rounded-full bg-lime-400 hover:bg-lime-300 disabled:opacity-50 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
                       >
                         {committing ? (
                           <>
@@ -596,12 +596,12 @@ export default function TransactionsPage() {
               {/* Stage 3: Summary */}
               {importStage === "SUMMARY" && importSummary && (
                 <div className="py-6 flex flex-col items-center justify-center text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                  <div className="w-16 h-16 rounded-full bg-lime-400/20 border-2 border-lime-400 flex items-center justify-center text-lime-400 shadow-neonLime">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
 
                   <div>
-                    <h4 className="text-lg font-black text-white glow-emerald">
+                    <h4 className="text-lg font-black text-white">
                       Statement Successfully Imported
                     </h4>
                     <p className="text-xs text-slate-400 mt-1 max-w-md">
@@ -612,7 +612,7 @@ export default function TransactionsPage() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-lg text-xs py-2">
                     <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
                       <span className="text-[10px] text-slate-500 font-medium block">Imported</span>
-                      <span className="text-base font-black text-emerald-400">{importSummary.imported_count}</span>
+                      <span className="text-base font-black text-lime-400">{importSummary.imported_count}</span>
                     </div>
                     <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
                       <span className="text-[10px] text-slate-500 font-medium block">Duplicates Skipped</span>
@@ -624,7 +624,7 @@ export default function TransactionsPage() {
                     </div>
                     <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
                       <span className="text-[10px] text-slate-500 font-medium block">Rewards Yield</span>
-                      <span className="text-base font-black text-emerald-400">₹{Number(importSummary.total_rewards_predicted).toFixed(2)}</span>
+                      <span className="text-base font-black text-lime-400">₹{Number(importSummary.total_rewards_predicted).toFixed(2)}</span>
                     </div>
                   </div>
 
@@ -632,7 +632,7 @@ export default function TransactionsPage() {
                     <button
                       type="button"
                       onClick={resetImportFlow}
-                      className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] text-xs font-bold shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+                      className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
                     >
                       Done & View Transactions
                     </button>
@@ -646,7 +646,7 @@ export default function TransactionsPage() {
         {/* Modal for manual adding transaction */}
         {showAddModal && (
           <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-            <div className="p-6 sm:p-7 rounded-3xl bg-[#06100C]/95 border border-white/10 shadow-2xl max-w-md w-full space-y-4">
+            <div className="p-6 sm:p-7 rounded-3xl bg-[#17191E]/95 border border-white/10 shadow-2xl max-w-md w-full space-y-4">
               <h3 className="text-base font-bold text-white">{t.transactions.addModalTitle}</h3>
 
               <form onSubmit={handleAddTransaction} className="space-y-3.5 text-xs">
@@ -685,7 +685,7 @@ export default function TransactionsPage() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value="dining">{t.categories.dining}</option>
                     <option value="food_delivery">{t.categories.food_delivery}</option>
@@ -707,7 +707,7 @@ export default function TransactionsPage() {
                   <select
                     value={cardId}
                     onChange={(e) => setCardId(e.target.value)}
-                    className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value="">{t.cards.allBanks}</option>
                     {cards.map((c) => (
@@ -742,7 +742,7 @@ export default function TransactionsPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold shadow-[0_0_20px_rgba(16,185,129,0.35)]"
+                    className="px-5 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold shadow-neonLime"
                   >
                     {submitting ? (
                       <div className="flex items-center gap-1.5">
@@ -827,7 +827,7 @@ export default function TransactionsPage() {
                           ₹{Number(tx.amount).toFixed(2)}
                         </td>
 
-                        <td className="py-3.5 px-5 text-right font-bold text-emerald-400">
+                        <td className="py-3.5 px-5 text-right font-bold text-lime-400">
                           ₹{Number(tx.reward_earned_monetary).toFixed(2)}
                         </td>
 
@@ -837,7 +837,7 @@ export default function TransactionsPage() {
 
                         <td className="py-3.5 px-5 text-center">
                           {isOptimal ? (
-                            <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+                            <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-lime-400/10 text-lime-400 border border-lime-400/20 font-semibold">
                               <CheckCircle2 className="w-3 h-3" />
                               <span>{t.dashboard.optimalRecommendation}</span>
                             </span>

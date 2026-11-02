@@ -148,7 +148,7 @@ export default function DashboardPage() {
 
   if (isNoCard) {
     return (
-      <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+      <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
         <Sidebar />
         <NoCreditCardDashboard userName={userProfile?.full_name || session?.fullName} />
       </div>
@@ -156,14 +156,14 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         {/* Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            <h1 className="text-3xl font-black tracking-tight text-white">
               {t.dashboard?.commandCenter || "Command Center"}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -175,7 +175,7 @@ export default function DashboardPage() {
             <DemoBootstrap onSeeded={loadDashboardData} />
             <Link
               href="/cards/new"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{t.dashboard?.addCardCta || t.nav?.addCard || "Add Card"}</span>
@@ -185,7 +185,7 @@ export default function DashboardPage() {
 
         {/* Adaptive Mode Spotlight */}
         {userProfile?.financial_pathway === "NO_CREDIT_CARD" && !loading && (
-          <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-teal-500/10 via-[#050D0A] to-emerald-500/10 border border-teal-500/30 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.6)] flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-teal-500/10 via-[#17191E] to-emerald-500/10 border border-teal-500/30 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.6)] flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
                 <GraduationCap className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export default function DashboardPage() {
 
         {/* Credit Card User Onboarding Spotlight (When 0 cards registered) */}
         {userProfile?.financial_pathway !== "NO_CREDIT_CARD" && cards.length === 0 && !loading && (
-          <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-[#050D0A] to-teal-500/10 border border-emerald-500/30 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.6)] flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-[#17191E] to-teal-500/10 border border-emerald-500/30 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.6)] flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
                 <CreditCard className="w-3.5 h-3.5" />
@@ -235,7 +235,7 @@ export default function DashboardPage() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
               <Link
                 href="/cards/new"
-                className="px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all"
+                className="px-6 py-3 rounded-2xl bg-lime-400 hover:bg-lime-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-neonLime transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Your First Card</span>
@@ -376,20 +376,20 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Rewards Earned */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            {/* Rewards Earned — filled accent tile */}
+            <div className="p-5 rounded-2xl bg-lime-400 text-[#12301A] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">
+                <span className="text-xs font-semibold text-[#12301A]/70">
                   {t.dashboard?.rewardsRealized || "Rewards Realized"}
                 </span>
-                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-full bg-[#12301A] text-lime-300 flex items-center justify-center">
                   <TrendingUp className="w-3.5 h-3.5" />
                 </div>
               </div>
-              <div className="text-3xl font-black text-emerald-400 glow-emerald mt-3 tracking-tight">
+              <div className="font-display text-3xl font-extrabold mt-3 tracking-tight tabular">
                 ₹{rewardStats ? Number(rewardStats.total_rewards_earned).toFixed(2) : "0.00"}
               </div>
-              <div className="text-[11px] text-slate-400 mt-2">
+              <div className="text-[11px] text-[#12301A]/70 font-medium mt-2">
                 {t.dashboard?.potentialReward || "Potential"}: ₹{rewardStats ? Number(rewardStats.total_optimal_possible).toFixed(2) : "0.00"}
               </div>
             </div>
@@ -505,7 +505,7 @@ export default function DashboardPage() {
                     <select
                       value={quickMethod}
                       onChange={(e) => setQuickMethod(e.target.value)}
-                      className="w-full bg-[#06100C] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                     >
                       <option value="UPI">UPI</option>
                       <option value="CASH">Cash</option>
@@ -522,7 +522,7 @@ export default function DashboardPage() {
                     <select
                       value={quickCategory}
                       onChange={(e) => setQuickCategory(e.target.value)}
-                      className="w-full bg-[#06100C] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                     >
                       <option value="grocery">{t.categories?.grocery || "Groceries"}</option>
                       <option value="dining">{t.categories?.dining || "Dining & Food"}</option>
@@ -543,7 +543,7 @@ export default function DashboardPage() {
                     <button
                       type="submit"
                       disabled={quickLogging}
-                      className="px-6 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center gap-1.5"
+                      className="px-6 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-1.5"
                     >
                       {quickLogging ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                       <span>Log Expense</span>
@@ -589,7 +589,7 @@ export default function DashboardPage() {
                     <select
                       value={optCategory}
                       onChange={(e) => setOptCategory(e.target.value)}
-                      className="w-full bg-[#06100C] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                     >
                       <option value="dining">{t.categories?.dining || "Dining & Delivery"}</option>
                       <option value="shopping">{t.categories?.shopping || "Shopping"}</option>
@@ -618,7 +618,7 @@ export default function DashboardPage() {
                     <button
                       type="submit"
                       disabled={optLoading || cards.length === 0}
-                      className="w-full py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="w-full py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       {optLoading ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -634,7 +634,7 @@ export default function DashboardPage() {
 
                 {/* Quick Result Preview */}
                 {optResult && optResult.recommended_card && (
-                  <div className="mt-4 p-4 rounded-2xl bg-white/[0.03] border border-emerald-500/30 space-y-2">
+                  <div className="mt-4 p-4 rounded-2xl bg-lime-400/5 border border-lime-400/25 space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
@@ -642,14 +642,14 @@ export default function DashboardPage() {
                         </span>
                         <div className="text-base font-extrabold text-white flex items-center gap-2">
                           <span>{optResult.recommended_card.card_name}</span>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-lime-400/20 text-lime-400 font-bold">
                             {optResult.recommended_card.effective_rate_percentage}% {t.dashboard?.yield || "Yield"}
                           </span>
                         </div>
                       </div>
                       <div className="text-right">
                         <span className="text-[10px] text-slate-400">{t.dashboard?.expectedValue || "Expected Value"}</span>
-                        <div className="text-xl font-extrabold text-emerald-400 glow-emerald">
+                        <div className="text-xl font-extrabold text-lime-400">
                           ₹{Number(optResult.recommended_card.expected_reward_monetary).toFixed(2)}
                         </div>
                       </div>
@@ -657,7 +657,7 @@ export default function DashboardPage() {
                     <div className="pt-2 flex justify-end">
                       <Link
                         href="/optimization"
-                        className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
+                        className="text-xs text-lime-400 hover:text-lime-300 flex items-center gap-1 font-semibold"
                       >
                         <span>{t.dashboard?.inspectAlternatives || "Inspect Alternatives"}</span>
                         <ArrowRight className="w-3 h-3" />
@@ -700,7 +700,7 @@ export default function DashboardPage() {
 
             <Link
               href="/assistant"
-              className="mt-5 w-full py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-emerald-400 font-semibold text-xs text-center block transition-all"
+              className="mt-5 w-full py-2.5 rounded-full bg-lime-400/10 hover:bg-lime-400/15 border border-lime-400/25 text-lime-400 font-semibold text-xs text-center block transition-all"
             >
               {t.dashboard?.askAssistant || "Ask Assistant"}
             </Link>
@@ -732,7 +732,7 @@ export default function DashboardPage() {
                     </p>
                     <Link
                       href="/budget"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-teal-500 text-[#040707] font-bold text-xs"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-teal-500 text-[#0E1013] font-bold text-xs"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add First Income</span>
@@ -787,7 +787,7 @@ export default function DashboardPage() {
                     </p>
                     <Link
                       href="/cards/new"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#040707] font-bold text-xs"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-lime-400 text-[#0E1013] font-bold text-xs shadow-neonLime"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>{t.dashboard?.addYourFirstCard || "Add First Card"}</span>
@@ -813,7 +813,7 @@ export default function DashboardPage() {
                         </div>
 
                         <div className="text-right">
-                          <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+                          <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-lime-400/10 text-lime-400 border border-lime-400/20 font-semibold">
                             {c.reward_rules?.length || 1} {t.cards?.rules || "Multipliers"}
                           </span>
                         </div>
@@ -869,7 +869,7 @@ export default function DashboardPage() {
                       <div className="text-xs font-bold text-white">
                         ₹{Number(tx.amount).toFixed(2)}
                       </div>
-                      <div className="text-[11px] text-emerald-400 font-semibold">
+                      <div className="text-[11px] text-lime-400 font-semibold">
                         +₹{Number(tx.reward_earned_monetary).toFixed(2)}
                       </div>
                     </div>

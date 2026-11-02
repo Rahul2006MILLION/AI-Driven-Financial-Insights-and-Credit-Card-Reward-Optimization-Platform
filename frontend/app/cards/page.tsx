@@ -249,7 +249,7 @@ export default function MyCreditCardsPage() {
                     onClick={() => setViewMode("fan")}
                     className={`flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold transition-all ${
                       viewMode === "fan"
-                        ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                        ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -261,7 +261,7 @@ export default function MyCreditCardsPage() {
                     onClick={() => setViewMode("grid")}
                     className={`flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold transition-all ${
                       viewMode === "grid"
-                        ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                        ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -274,7 +274,7 @@ export default function MyCreditCardsPage() {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(true)}
-                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#0E1013] font-semibold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
                 >
                   <PlusCircle className="w-3.5 h-3.5" />
                   <span>{t.cards?.addNew || "Add Card"}</span>
@@ -299,7 +299,7 @@ export default function MyCreditCardsPage() {
                 <select
                   value={selectedBank}
                   onChange={(e) => setSelectedBank(e.target.value)}
-                  className="px-3 py-1.5 rounded-xl bg-[#06100C] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
+                  className="px-3 py-1.5 rounded-xl bg-[#17191E] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
                 >
                   <option value="ALL">{t.cards?.allBanks || "All Banks"} ({uniqueBanks.length})</option>
                   {uniqueBanks.map((b) => (

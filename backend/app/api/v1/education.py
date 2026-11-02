@@ -449,6 +449,11 @@ async def update_financial_path(
     else:
         pref.financial_path = data.financial_path
 
+    if getattr(data, "financial_pathway", None):
+        user.financial_pathway = data.financial_pathway
+        user.updated_at = datetime.utcnow()
+        db.add(user)
+
     await db.commit()
     return FinancialPathResponse(financial_path=data.financial_path, onboarding_completed=True)
 

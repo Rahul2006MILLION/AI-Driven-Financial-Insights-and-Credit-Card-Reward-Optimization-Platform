@@ -128,12 +128,12 @@ export default function DocumentProcessingPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+          <h1 className="text-3xl font-black tracking-tight text-white">
             {t.documents.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -162,7 +162,7 @@ export default function DocumentProcessingPage() {
             Max 10MB • Extracts reward tiers, caps, annual fees, and exclusions into staging
           </p>
 
-          <label className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] cursor-pointer transition-all">
+          <label className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime cursor-pointer transition-all">
             {uploading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -277,7 +277,7 @@ export default function DocumentProcessingPage() {
                     <select
                       value={network}
                       onChange={(e) => setNetwork(e.target.value)}
-                      className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                     >
                       <option value="VISA">VISA</option>
                       <option value="MASTERCARD">Mastercard</option>
@@ -356,7 +356,7 @@ export default function DocumentProcessingPage() {
                   <button
                     onClick={handleVerify}
                     disabled={verifying || selectedDoc.extracted_data?.is_verified}
-                    className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all disabled:opacity-40 flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all disabled:opacity-40 flex items-center gap-2"
                   >
                     {verifying ? (
                       <div className="flex items-center gap-1.5">

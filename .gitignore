@@ -43,6 +43,7 @@ backend/data/*.sqlite3
 .env.development.local
 .env.test.local
 .env.production.local
+.claude/
 backend/.env
 frontend/.env.local
 

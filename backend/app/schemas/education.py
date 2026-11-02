@@ -180,6 +180,7 @@ class CardBreakEvenResponse(BaseModel):
 # User Path & Budget Preferences
 class FinancialPathUpdateRequest(BaseModel):
     financial_path: str = Field(..., pattern="^(NEW_TO_FINANCE|UNDERSTAND_CREDIT|OPTIMIZE_EXISTING|NO_CREDIT_CARD|CREDIT_CARD_USER)$")
+    financial_pathway: Optional[str] = Field(None, pattern="^(CREDIT_CARD|NO_CREDIT_CARD)$")
 
 class FinancialPathResponse(BaseModel):
     financial_path: str

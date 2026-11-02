@@ -11,7 +11,7 @@ import { ClosingSection }  from "@/components/homepage/ClosingSection";
 
 export default function LandingPage() {
   return (
-    <div className="relative bg-[#040707] overflow-x-hidden">
+    <div className="relative bg-[#0E1013] overflow-x-hidden">
       <HeroSection />
       <JourneysSection />
       <UniverseSection />

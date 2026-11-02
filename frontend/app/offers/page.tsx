@@ -69,14 +69,14 @@ export default function OffersDiscoveryPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            <h1 className="text-3xl font-black tracking-tight text-white">
               {t.offers?.title || "Offers & Promotions"}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -94,7 +94,7 @@ export default function OffersDiscoveryPage() {
             </Link>
             <Link
               href="/optimization"
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t.offers?.optimizeSpendCta || "Optimize Spend"}</span>
@@ -150,7 +150,7 @@ export default function OffersDiscoveryPage() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                     active
-                      ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                      ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
                       : "bg-white/[0.03] text-slate-400 hover:text-white border border-white/[0.06]"
                   }`}
                 >
@@ -179,7 +179,7 @@ export default function OffersDiscoveryPage() {
             {onlyUserCards && (
               <button
                 onClick={() => setOnlyUserCards(false)}
-                className="px-4 py-2 rounded-full bg-emerald-500 text-[#040707] font-bold text-xs"
+                className="px-4 py-2 rounded-full bg-emerald-500 text-[#0E1013] font-bold text-xs"
               >
                 Show All Offers
               </button>
@@ -213,7 +213,7 @@ export default function OffersDiscoveryPage() {
                     {/* Top Badges */}
                     <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black px-3 py-1 rounded-full bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                        <span className="text-xs font-black px-3 py-1 rounded-full bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.3)]">
                           {discountDisplay}
                         </span>
                         <span

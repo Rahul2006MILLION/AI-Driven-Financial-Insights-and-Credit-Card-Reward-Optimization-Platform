@@ -188,6 +188,7 @@ async def get_profile(current_user: Profile = Depends(get_current_user)):
     return current_user
 
 
+@router.put("/auth/profile", response_model=ProfileResponse)
 @router.put("/profile", response_model=ProfileResponse)
 async def update_profile(
     req: ProfileUpdate,

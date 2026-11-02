@@ -658,7 +658,7 @@ export default function AdminOfferReviewPage() {
                 {t.sidebar.administration}
               </span>
             </div>
-            <h1 className="text-3xl font-black text-white tracking-tight glow-emerald">
+            <h1 className="text-3xl font-black text-white tracking-tight">
               {t.adminOffers.title}
             </h1>
             <p className="text-xs text-slate-400 mt-1 max-w-xl">
@@ -670,7 +670,7 @@ export default function AdminOfferReviewPage() {
             <button
               onClick={handleSyncDiscovery}
               disabled={syncing}
-              className="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
+              className="px-5 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} />
               {syncing ? t.adminOffers.syncing : t.adminOffers.syncButton}
@@ -692,7 +692,7 @@ export default function AdminOfferReviewPage() {
           onClick={() => setActiveTab("review")}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "review"
-              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
               : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
@@ -704,7 +704,7 @@ export default function AdminOfferReviewPage() {
           onClick={() => setActiveTab("sources")}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "sources"
-              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
               : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
@@ -716,7 +716,7 @@ export default function AdminOfferReviewPage() {
           onClick={() => setActiveTab("upload_circular")}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "upload_circular"
-              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
               : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
@@ -728,7 +728,7 @@ export default function AdminOfferReviewPage() {
           onClick={() => setActiveTab("manual_entry")}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "manual_entry"
-              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
               : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >
@@ -740,7 +740,7 @@ export default function AdminOfferReviewPage() {
           onClick={() => setActiveTab("failures")}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap ${
             activeTab === "failures"
-              ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+              ? "bg-emerald-500 text-[#0E1013] shadow-[0_0_15px_rgba(76,192,63,0.35)]"
               : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-white"
           }`}
         >

@@ -64,18 +64,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 min-h-[calc(100vh-4rem)] bg-[#040707] relative overflow-hidden">
-      {/* Ambient Emerald Glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none" />
+    <div className="flex-1 flex items-center justify-center p-4 min-h-[calc(100vh-4rem)] bg-[#0E1013] relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-lime-400/8 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-emerald-500/6 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-md w-full p-8 sm:p-9 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)]">
         <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 mb-3 shadow-[0_0_20px_rgba(16,185,129,0.35)]">
-            <div className="w-full h-full bg-[#050D0A] rounded-[14px] flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-emerald-400" />
+          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-500 p-0.5 mb-3 shadow-neonLime">
+            <div className="w-full h-full bg-[#17191E] rounded-[14px] flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-lime-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-black text-white glow-emerald">{t.auth.signInTitle}</h2>
+          <h2 className="text-2xl font-black text-white">{t.auth.signInTitle}</h2>
           <p className="text-xs text-slate-400 mt-1">{t.auth.signInSubtitle}</p>
         </div>
 
@@ -130,7 +131,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-40"
+            className="w-full py-3 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-sm shadow-neonLime transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-40"
           >
             {loading ? (
               <div className="flex items-center gap-1.5">
@@ -150,14 +151,14 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={fillDemoAccount}
-            className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+            className="text-xs text-lime-400 hover:text-lime-300 font-semibold transition-colors"
           >
             {t.auth.quickDemoCredentials}
           </button>
 
           <p className="text-xs text-slate-400">
             {t.auth.noAccountPrompt}{" "}
-            <Link href="/register" className="text-emerald-400 font-bold hover:underline">
+            <Link href="/register" className="text-lime-400 font-bold hover:underline">
               {t.auth.createAccountButton}
             </Link>
           </p>

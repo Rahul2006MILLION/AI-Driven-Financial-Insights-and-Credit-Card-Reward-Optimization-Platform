@@ -258,14 +258,14 @@ export default function BudgetPage() {
   const budgetUtilization = budgetLimit > 0 ? Math.min(100, Math.round((monthlyOutflow / budgetLimit) * 100)) : 0;
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+            <h1 className="text-3xl font-black tracking-tight text-white ">
               {t.incomes.title}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -276,7 +276,7 @@ export default function BudgetPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowAddIncome(true)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{t.incomes.addIncome}</span>
@@ -394,7 +394,7 @@ export default function BudgetPage() {
                   <button
                     onClick={handleSaveBudget}
                     disabled={savingBudget}
-                    className="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-[0_0_12px_rgba(16,185,129,0.25)]"
+                    className="px-3 py-1.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all"
                   >
                     {savingBudget ? t.incomes.savingLimit : t.incomes.updateLimit}
                   </button>
@@ -416,7 +416,7 @@ export default function BudgetPage() {
                       ? "bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]"
                       : budgetUtilization > 75
                       ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
-                      : "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]"
+                      : "bg-emerald-500 shadow-[0_0_12px_rgba(76,192,63,0.4)]"
                   }`}
                   style={{ width: `${Math.min(100, budgetUtilization)}%` }}
                 />
@@ -499,7 +499,7 @@ export default function BudgetPage() {
                     </p>
                     <button
                       onClick={() => setShowAddIncome(true)}
-                      className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs"
+                      className="px-4 py-2 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs"
                     >
                       {t.incomes.addFirstIncome}
                     </button>
@@ -563,7 +563,7 @@ export default function BudgetPage() {
 
                 {/* Modal: Add Income */}
                 {showAddIncome && (
-                  <div className="p-6 rounded-3xl bg-gradient-to-br from-[#050D0A] to-[#081512] border border-emerald-500/30 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] space-y-4">
+                  <div className="p-6 rounded-3xl bg-gradient-to-br from-[#17191E] to-[#081512] border border-emerald-500/30 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] space-y-4">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-bold text-white flex items-center gap-2">
                         <Plus className="w-4 h-4 text-emerald-400" />
@@ -616,7 +616,7 @@ export default function BudgetPage() {
                           <select
                             value={frequency}
                             onChange={(e) => setFrequency(e.target.value)}
-                            className="w-full px-3 py-2 rounded-xl bg-[#050D0A] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
+                            className="w-full px-3 py-2 rounded-xl bg-[#17191E] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
                           >
                             <option value="MONTHLY">{t.incomes.monthly}</option>
                             <option value="BI_WEEKLY">{t.incomes.biWeekly}</option>
@@ -664,7 +664,7 @@ export default function BudgetPage() {
                         <button
                           type="submit"
                           disabled={submittingIncome}
-                          className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex items-center gap-1.5"
+                          className="px-5 py-2 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-1.5"
                         >
                           {submittingIncome ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                           <span>{submittingIncome ? t.incomes.saving : t.incomes.saveIncome}</span>
@@ -731,7 +731,7 @@ export default function BudgetPage() {
                         <select
                           value={expenseMethod}
                           onChange={(e) => setExpenseMethod(e.target.value)}
-                          className="w-full px-3 py-2 rounded-xl bg-[#050D0A] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
+                          className="w-full px-3 py-2 rounded-xl bg-[#17191E] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
                         >
                           <option value="UPI">UPI</option>
                           <option value="CASH">Cash</option>
@@ -749,7 +749,7 @@ export default function BudgetPage() {
                       <select
                         value={expenseCategory}
                         onChange={(e) => setExpenseCategory(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-[#050D0A] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
+                        className="w-full px-3 py-2 rounded-xl bg-[#17191E] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
                       >
                         <option value="grocery">Groceries</option>
                         <option value="dining">Dining & Food</option>
@@ -764,7 +764,7 @@ export default function BudgetPage() {
                     <button
                       type="submit"
                       disabled={recordingExpense}
-                      className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-[0_0_15px_rgba(16,185,129,0.25)] transition-all flex items-center justify-center gap-1.5"
+                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_15px_rgba(76,192,63,0.25)] transition-all flex items-center justify-center gap-1.5"
                     >
                       {recordingExpense ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                       <span>{t.incomes.recordExpense}</span>

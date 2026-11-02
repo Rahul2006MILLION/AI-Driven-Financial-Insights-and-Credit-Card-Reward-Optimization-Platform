@@ -4,128 +4,84 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage, Language } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
-import { DemoBootstrap } from "@/components/DemoBootstrap";
+import { apiFetch, storeSession } from "@/lib/api";
 import {
   Globe,
   CreditCard,
   ArrowRight,
   CheckCircle2,
-  PieChart,
-  GraduationCap,
-  Sparkles,
   Compass,
   Wallet,
-  Coins,
+  Loader2,
 } from "lucide-react";
 
 export default function OnboardingPage() {
   const router = useRouter();
   const { language, setLanguage, t } = useLanguage();
-  const { session } = useAuth();
-  const token = session?.accessToken;
+  const { session, updateUser } = useAuth();
   const [step, setStep] = useState(1);
   const [financialPathway, setFinancialPathway] = useState<"CREDIT_CARD" | "NO_CREDIT_CARD">("NO_CREDIT_CARD");
   const [financialPath, setFinancialPath] = useState<string>("NEW_TO_FINANCE");
-  const [incomeAmount, setIncomeAmount] = useState<number>(50000);
-  const [incomeFrequency, setIncomeFrequency] = useState<string>("MONTHLY");
-  const [budgetLimit, setBudgetLimit] = useState<number>(35000);
-  const [savingIncome, setSavingIncome] = useState<boolean>(false);
+  const [savingPath, setSavingPath] = useState<boolean>(false);
 
   const savePathAndNext = async (path: string, pathway: "CREDIT_CARD" | "NO_CREDIT_CARD") => {
     setFinancialPath(path);
     setFinancialPathway(pathway);
-    if (token) {
-      try {
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-        await fetch(`${apiBase}/api/v1/auth/profile`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ financial_pathway: pathway }),
-        });
-        await fetch(`${apiBase}/api/v1/education/path`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ financial_path: path }),
-        });
-      } catch (e) {
-        console.error("Error saving path:", e);
-      }
-    }
-    setStep(3);
-  };
+    setSavingPath(true);
 
-  const handleSaveIncomeAndBudget = async () => {
-    if (!token || !incomeAmount || incomeAmount <= 0) {
-      setStep(4);
-      return;
-    }
-    setSavingIncome(true);
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      await fetch(`${apiBase}/api/v1/incomes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          source_name: incomeFrequency === "IRREGULAR" ? "Freelance / Gig Work" : "Primary Salary",
-          amount: incomeAmount,
-          frequency: incomeFrequency === "IRREGULAR" ? "IRREGULAR" : "MONTHLY",
-          is_irregular: incomeFrequency === "IRREGULAR",
-        }),
-      });
-
-      await fetch(`${apiBase}/api/v1/education/budget`, {
+      // 1. Persist financial_pathway to backend profile
+      await apiFetch("/profile", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          monthly_income: incomeAmount,
-          total_budget: budgetLimit > 0 ? budgetLimit : Math.round(incomeAmount * 0.7),
-          category_budgets: {
-            grocery: Math.round(incomeAmount * 0.25),
-            dining: Math.round(incomeAmount * 0.15),
-            utility: Math.round(incomeAmount * 0.1),
-          },
-        }),
-      });
+        body: JSON.stringify({ financial_pathway: pathway }),
+      }).catch((err) => console.warn("Profile pathway update error:", err));
+
+      // 2. Persist financial_path and pathway to backend education preference
+      await apiFetch("/education/path", {
+        method: "PUT",
+        body: JSON.stringify({ financial_path: path, financial_pathway: pathway }),
+      }).catch((err) => console.warn("Education path update error:", err));
+
+      // 3. Immediately activate and persist pathway in frontend session & localStorage
+      updateUser({ financialPathway: pathway });
+      if (session) {
+        storeSession({ ...session, financialPathway: pathway });
+      }
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cliq_financial_pathway", pathway);
+      }
     } catch (e) {
-      console.error("Failed to save initial income/budget:", e);
+      console.error("Error saving financial pathway:", e);
     } finally {
-      setSavingIncome(false);
-      setStep(4);
+      setSavingPath(false);
+      setStep(3);
     }
   };
 
   const finishOnboarding = () => {
-    if (financialPathway === "NO_CREDIT_CARD") {
-      router.push("/dashboard");
-    } else if (financialPath === "NEW_TO_FINANCE" || financialPath === "UNDERSTAND_CREDIT") {
-      router.push("/learn");
-    } else {
-      router.push("/dashboard");
+    // Guarantee active pathway persistence
+    updateUser({ financialPathway });
+    if (session) {
+      storeSession({ ...session, financialPathway });
     }
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cliq_financial_pathway", financialPathway);
+    }
+
+    // Redirect to the appropriate dashboard
+    router.push("/dashboard");
   };
 
   return (
-    <div className="flex-1 max-w-4xl mx-auto px-4 py-12 flex flex-col justify-center bg-[#040707]">
-      {/* Progress Steps */}
+    <div className="flex-1 max-w-4xl mx-auto px-4 py-12 flex flex-col justify-center bg-[#0E1013]">
+      {/* Progress Steps (3 Steps: Language, Learning Path, Complete) */}
       <div className="flex items-center justify-center gap-3 sm:gap-4 mb-10 overflow-x-auto pb-2">
-        {[1, 2, 3, 4].map((s) => (
+        {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center gap-2 shrink-0">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                 step === s
-                  ? "bg-emerald-500 text-[#040707] shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                  ? "bg-lime-400 text-[#0E1013] shadow-neonLime"
                   : step > s
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                   : "bg-white/[0.04] text-slate-500 border border-white/10"
@@ -142,11 +98,9 @@ export default function OnboardingPage() {
                 ? t.onboarding.stepLangTitle
                 : s === 2
                 ? "Learning Path"
-                : s === 3
-                ? t.onboarding.stepPortfolioTitle
                 : t.onboarding.stepCompleteTitle}
             </span>
-            {s < 4 && <div className="w-8 sm:w-12 h-px bg-white/10" />}
+            {s < 3 && <div className="w-8 sm:w-16 h-px bg-white/10" />}
           </div>
         ))}
       </div>
@@ -159,7 +113,7 @@ export default function OnboardingPage() {
               <div className="inline-flex w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 items-center justify-center text-emerald-400 mb-3">
                 <Globe className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-black text-white glow-emerald">
+              <h2 className="text-2xl font-black text-white">
                 {t.onboarding.selectLanguageHeading}
               </h2>
               <p className="text-xs text-slate-400 mt-1.5">
@@ -179,7 +133,7 @@ export default function OnboardingPage() {
                   onClick={() => setLanguage(item.code as Language)}
                   className={`p-4 rounded-2xl border text-left transition-all ${
                     language === item.code
-                      ? "bg-emerald-500/15 border-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.25)]"
+                      ? "bg-emerald-500/15 border-emerald-500 text-white shadow-[0_0_15px_rgba(76,192,63,0.25)]"
                       : "bg-white/[0.02] border-white/10 text-slate-400 hover:text-white"
                   }`}
                 >
@@ -193,7 +147,7 @@ export default function OnboardingPage() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] flex items-center gap-2"
+                className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime flex items-center gap-2"
               >
                 <span>{t.onboarding.continueButton}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -209,7 +163,7 @@ export default function OnboardingPage() {
               <div className="inline-flex w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/20 items-center justify-center text-teal-400 mb-3">
                 <Compass className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-black text-white glow-emerald">
+              <h2 className="text-2xl font-black text-white">
                 Choose Your Financial Pathway
               </h2>
               <p className="text-xs text-slate-400 mt-1.5">
@@ -226,7 +180,7 @@ export default function OnboardingPage() {
                 }}
                 className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                   financialPathway === "NO_CREDIT_CARD"
-                    ? "bg-emerald-500/15 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.25)] text-white"
+                    ? "bg-emerald-500/15 border-emerald-500 shadow-[0_0_20px_rgba(76,192,63,0.25)] text-white"
                     : "bg-white/[0.02] border-white/10 text-slate-400 hover:bg-white/[0.05]"
                 }`}
               >
@@ -251,7 +205,7 @@ export default function OnboardingPage() {
                 }}
                 className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                   financialPathway === "CREDIT_CARD"
-                    ? "bg-emerald-500/15 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.25)] text-white"
+                    ? "bg-emerald-500/15 border-emerald-500 shadow-[0_0_20px_rgba(76,192,63,0.25)] text-white"
                     : "bg-white/[0.02] border-white/10 text-slate-400 hover:bg-white/[0.05]"
                 }`}
               >
@@ -270,7 +224,7 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* Path Option Details */}
+            {/* Primary Goal Options */}
             <div className="space-y-3 pt-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
                 Primary Goal
@@ -324,173 +278,53 @@ export default function OnboardingPage() {
               </button>
               <button
                 type="button"
+                disabled={savingPath}
                 onClick={() => savePathAndNext(financialPath, financialPathway)}
-                className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] flex items-center gap-2"
+                className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime flex items-center gap-2 disabled:opacity-50 transition-all"
               >
-                <span>{t.onboarding.continueButton}</span>
-                <ArrowRight className="w-4 h-4" />
+                {savingPath ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Activating Pathway...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{t.onboarding.continueButton}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 3: Portfolio Setup OR Cash Flow & Income Setup */}
+        {/* Step 3: Complete & Launch */}
         {step === 3 && (
-          <div className="space-y-6">
-            {financialPathway === "NO_CREDIT_CARD" ? (
-              <div className="space-y-6">
-                <div className="text-center max-w-lg mx-auto">
-                  <div className="inline-flex w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 items-center justify-center text-emerald-400 mb-3">
-                    <Wallet className="w-6 h-6" />
-                  </div>
-                  <h2 className="text-2xl font-black text-white glow-emerald">
-                    Set Up Your Income & Budget
-                  </h2>
-                  <p className="text-xs text-slate-400 mt-1.5">
-                    No credit card required. Tell us your approximate monthly earnings so CLIQ can calculate your cash flow resilience.
-                  </p>
-                </div>
-
-                <div className="max-w-md mx-auto space-y-4 pt-2">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Estimated Monthly Inflow (₹)
-                    </label>
-                    <input
-                      type="number"
-                      value={incomeAmount}
-                      onChange={(e) => setIncomeAmount(Number(e.target.value))}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-emerald-500 focus:outline-none"
-                      placeholder="e.g. 50000"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Income Cadence
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setIncomeFrequency("MONTHLY")}
-                        className={`py-2 px-3 rounded-xl text-xs font-semibold border text-center transition-all ${
-                          incomeFrequency === "MONTHLY"
-                            ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
-                            : "bg-white/[0.02] border-white/10 text-slate-400"
-                        }`}
-                      >
-                        Regular Salary
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIncomeFrequency("IRREGULAR")}
-                        className={`py-2 px-3 rounded-xl text-xs font-semibold border text-center transition-all ${
-                          incomeFrequency === "IRREGULAR"
-                            ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
-                            : "bg-white/[0.02] border-white/10 text-slate-400"
-                        }`}
-                      >
-                        Irregular / Freelance
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Target Monthly Spending Limit (₹)
-                    </label>
-                    <input
-                      type="number"
-                      value={budgetLimit}
-                      onChange={(e) => setBudgetLimit(Number(e.target.value))}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-emerald-500 focus:outline-none"
-                      placeholder="e.g. 35000"
-                    />
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      Recommended: 50-70% of monthly income for needs & wants.
-                    </p>
-                  </div>
-
-                  <div className="pt-2 flex justify-center">
-                    <button
-                      type="button"
-                      onClick={handleSaveIncomeAndBudget}
-                      disabled={savingIncome}
-                      className="w-full py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2"
-                    >
-                      <span>{savingIncome ? "Saving..." : "Save & Continue"}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="text-center max-w-lg mx-auto">
-                  <div className="inline-flex w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 items-center justify-center text-emerald-400 mb-3">
-                    <CreditCard className="w-6 h-6" />
-                  </div>
-                  <h2 className="text-2xl font-black text-white glow-emerald">
-                    {t.onboarding.portfolioHeading}
-                  </h2>
-                  <p className="text-xs text-slate-400 mt-1.5">
-                    {t.onboarding.portfolioSub}
-                  </p>
-                </div>
-
-                <div className="pt-4 flex flex-col items-center gap-4">
-                  <DemoBootstrap onSeeded={() => setStep(4)} />
-                </div>
-              </div>
-            )}
-
-            <div className="pt-6 border-t border-white/[0.06] flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="text-xs text-slate-400 hover:text-white"
-              >
-                &larr; Back
-              </button>
-              <button
-                type="button"
-                onClick={() => setStep(4)}
-                className="px-6 py-2.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] text-white font-semibold text-xs border border-white/10"
-              >
-                Skip / Continue
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: Ready */}
-        {step === 4 && (
           <div className="text-center space-y-6 py-4">
-            <div className="inline-flex w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 items-center justify-center text-emerald-400 mb-2 shadow-[0_0_25px_rgba(16,185,129,0.25)]">
+            <div className="inline-flex w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 items-center justify-center text-emerald-400 mb-2 shadow-[0_0_25px_rgba(76,192,63,0.25)]">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h2 className="text-3xl font-black text-white glow-emerald">
+            <h2 className="text-3xl font-black text-white">
               {t.onboarding.readyHeading}
             </h2>
-            <p className="text-xs text-slate-400 max-w-md mx-auto">
+            <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
               {financialPathway === "NO_CREDIT_CARD"
-                ? "Your financial intelligence workspace is active. Track your cash flow, analyze non-card spending, and follow your budget seamlessly."
-                : financialPath === "NEW_TO_FINANCE" || financialPath === "UNDERSTAND_CREDIT"
-                ? "Your financial learning workspace is ready. Let's begin building financial literacy with CLIQ Learn!"
-                : t.onboarding.readySub}
+                ? "Your Cash & Savings workspace is active. Track your cash flow, analyze non-card spending, and follow your 50/30/20 budget framework seamlessly."
+                : "Your Credit Card Command Center is ready. Connect your cards anytime, optimize rewards, and explore personalized merchant discounts."}
             </p>
 
-            <div className="pt-4">
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={finishOnboarding}
-                className="px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all"
+                className="w-full sm:w-auto px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#0E1013] font-bold text-sm shadow-[0_0_25px_rgba(76,192,63,0.4)] transition-all flex items-center justify-center gap-2"
               >
-                {financialPathway === "NO_CREDIT_CARD"
-                  ? "Go to Financial Command Center"
-                  : financialPath === "NEW_TO_FINANCE" || financialPath === "UNDERSTAND_CREDIT"
-                  ? "Explore CLIQ Learn"
-                  : t.onboarding.finishButton}
+                <span>
+                  {financialPathway === "NO_CREDIT_CARD"
+                    ? "Go to Personal Finance Command Center"
+                    : "Go to Command Center"}
+                </span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ArrowRight, Shield, Globe2, Sparkles } from "lucide-react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -22,7 +22,7 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
 }
 
 /* ── Cinematic counter stats ─────────────────────────────────── */
-function CountStat({ end, label, suffix = "" }: { end: number; label: string; suffix?: string }) {
+function CountStat({ end, label, suffix = "", accent = false }: { end: number; label: string; suffix?: string; accent?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
   const [count, setCount] = React.useState(0);
@@ -40,21 +40,20 @@ function CountStat({ end, label, suffix = "" }: { end: number; label: string; su
   }, [inView, end]);
 
   return (
-    <div ref={ref} className="text-center">
-      <div className="text-4xl sm:text-5xl font-black text-white tabular-nums">
+    <div
+      ref={ref}
+      className={`rounded-[1.75rem] p-5 sm:p-6 ${accent ? "bg-lime-400 text-[#12301A]" : "bg-[#1C1F25] border border-white/[0.06] text-white"}`}
+    >
+      <div className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight tabular-nums">
         {count}{suffix}
       </div>
-      <div className="text-xs text-slate-500 mt-1.5 font-medium">{label}</div>
+      <div className={`text-xs mt-2 font-medium ${accent ? "text-[#12301A]/70" : "text-slate-400"}`}>{label}</div>
     </div>
   );
 }
 
 /* ── CTA section ─────────────────────────────────────────────── */
 export function ClosingSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
-
   const navLinks = [
     { label: "Dashboard",        href: "/dashboard" },
     { label: "Credit Cards",     href: "/cards" },
@@ -68,127 +67,100 @@ export function ClosingSection() {
 
   return (
     <>
-      {/* ── Stats bar ───────────────────────────────────────────── */}
-      <section className="relative py-16 border-t border-b border-white/[0.05]">
-        <div className="absolute inset-0 bg-[#050D09]/70 pointer-events-none" />
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
-            <CountStat end={50}  suffix="+"  label="Indian credit cards supported" />
-            <CountStat end={6}   label="Financial literacy modules" />
-            <CountStat end={9}   label="PII redaction rules" />
-            <CountStat end={100} suffix="%" label="Privacy-first architecture" />
+      {/* ── Stats tiles ─────────────────────────────────────────── */}
+      <section className="relative px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <CountStat end={50}  suffix="+" label="Indian credit cards supported" accent />
+          <CountStat end={6}   label="Financial literacy modules" />
+          <CountStat end={9}   label="PII redaction rules" />
+          <CountStat end={100} suffix="%" label="Privacy-first architecture" />
+        </div>
+      </section>
+
+      {/* ── CTA panel ───────────────────────────────────────────── */}
+      <section className="relative px-3 sm:px-4 py-4">
+        <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#E3F2CF] text-[#12301A] overflow-hidden py-20 sm:py-28">
+          {/* Oversized watermark */}
+          <span
+            aria-hidden
+            className="absolute left-1/2 -translate-x-1/2 bottom-[-0.22em] font-display font-extrabold uppercase text-[clamp(6rem,22vw,18rem)] leading-none tracking-[-0.05em] text-[#12301A]/[0.05] select-none pointer-events-none whitespace-nowrap"
+          >
+            CLIQ
+          </span>
+
+          <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-8 text-center">
+            <FadeUp>
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#12301A] text-lime-300 text-[11px] font-bold tracking-wide mb-7">
+                <Sparkles className="w-3 h-3" />
+                Start your journey
+              </div>
+            </FadeUp>
+
+            <FadeUp delay={0.07}>
+              <h2 className="font-display text-[clamp(2.3rem,6vw,4.8rem)] font-extrabold uppercase leading-[0.96] tracking-[-0.035em] mb-6">
+                <span className="text-[#5E8C12]">Your money</span> deserves<br />
+                better intelligence.
+              </h2>
+            </FadeUp>
+
+            <FadeUp delay={0.13}>
+              <p className="text-base sm:text-lg text-[#12301A]/70 leading-relaxed max-w-xl mx-auto mb-10">
+                Join Indians who manage money smarter, whether they hold premium cards or are just
+                beginning their financial journey.
+              </p>
+            </FadeUp>
+
+            <FadeUp delay={0.18}>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link
+                  href="/register"
+                  className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-[#12301A] hover:bg-[#1B4426] text-lime-300 font-bold text-base transition-colors duration-300"
+                >
+                  Create free account
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-200" />
+                </Link>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-lime-400 hover:bg-lime-300 text-[#12301A] font-bold text-base transition-colors duration-300"
+                >
+                  Sign in to CLIQ
+                </Link>
+              </div>
+            </FadeUp>
+
+            {/* Trust row */}
+            <FadeUp delay={0.24}>
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-xs font-medium text-[#12301A]/70">
+                <span className="flex items-center gap-2"><Shield className="w-3.5 h-3.5" />256-bit encryption</span>
+                <span className="flex items-center gap-2"><Globe2 className="w-3.5 h-3.5" />No card required to start</span>
+                <span className="flex items-center gap-2"><Sparkles className="w-3.5 h-3.5" />English · हिन्दी · ಕನ್ನಡ</span>
+              </div>
+            </FadeUp>
           </div>
         </div>
       </section>
 
-      {/* ── Cinematic CTA ────────────────────────────────────────── */}
-      <section ref={sectionRef} className="relative py-36 overflow-hidden">
-        {/* Parallax background */}
-        <motion.div style={{ y: bgY }} className="absolute inset-[-20%] pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[#00F8D8]/8 rounded-full blur-[150px]" />
-          <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-lime-400/7 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-emerald-500/8 rounded-full blur-[100px]" />
-        </motion.div>
-
-        {/* Subtle radial vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#040707_100%)] pointer-events-none" />
-
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <FadeUp>
-            <div className="flex justify-center mb-10">
-              <div className="relative">
-                <motion.div
-                  className="absolute -inset-8 rounded-full bg-[#00F8D8]/10 blur-2xl"
-                  animate={{ scale: [1, 1.12, 1] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <Image
-                  src="/cliq-logo.png"
-                  alt="CLIQ"
-                  width={1024}
-                  height={381}
-                  className="relative h-12 w-auto object-contain"
-                />
-              </div>
-            </div>
-          </FadeUp>
-
-          <FadeUp delay={0.07}>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-lime-400/10 border border-lime-400/25 text-lime-400 text-[10px] font-bold tracking-widest uppercase mb-7">
-              <Sparkles className="w-3 h-3" />
-              Start your journey
-            </div>
-          </FadeUp>
-
-          <FadeUp delay={0.12}>
-            <h2 className="text-5xl sm:text-6xl lg:text-[5.5rem] font-black text-white leading-[1.04] tracking-tight mb-7">
-              Your money deserves<br />
-              <span className="gradient-text-animated">better intelligence.</span>
-            </h2>
-          </FadeUp>
-
-          <FadeUp delay={0.18}>
-            <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10">
-              Join Indians who manage money smarter — whether they hold premium cards or are just beginning their financial journey.
-            </p>
-          </FadeUp>
-
-          <FadeUp delay={0.23}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/register"
-                className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-lime-400 hover:bg-lime-300 text-[#030806] font-bold text-base shadow-[0_0_40px_rgba(163,230,53,0.4),0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_0_60px_rgba(163,230,53,0.65),0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-300"
-              >
-                Create free account
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-200" />
-              </Link>
-              <Link
-                href="/login"
-                className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white/[0.05] hover:bg-white/[0.09] border border-white/10 text-slate-300 hover:text-white font-medium text-base backdrop-blur-xl transition-all duration-300"
-              >
-                Sign in to CLIQ
-              </Link>
-            </div>
-          </FadeUp>
-
-          {/* Trust row */}
-          <FadeUp delay={0.3}>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-              <span className="flex items-center gap-2 text-xs text-slate-500">
-                <Shield className="w-3.5 h-3.5 text-emerald-400" />256-bit encryption
-              </span>
-              <span className="flex items-center gap-2 text-xs text-slate-500">
-                <Globe2 className="w-3.5 h-3.5 text-lime-400" />No card required to start
-              </span>
-              <span className="flex items-center gap-2 text-xs text-slate-500">
-                <Sparkles className="w-3.5 h-3.5 text-teal-400" />English · हिन्दी · ಕನ್ನಡ
-              </span>
-            </div>
-          </FadeUp>
-        </div>
-      </section>
-
       {/* ── Footer ───────────────────────────────────────────────── */}
-      <footer className="relative border-t border-white/[0.06] bg-[#030606]/90 backdrop-blur-xl py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+      <footer className="relative px-3 sm:px-4 pt-4 pb-3">
+        <div className="rounded-[2rem] sm:rounded-[2.5rem] bg-[#F4F6EE] text-[#12301A] overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 sm:px-10 pt-12 pb-10 grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* Brand */}
             <div>
-              <div className="mb-4">
+              <div className="mb-4 inline-flex rounded-full bg-[#12301A] px-4 py-2">
                 <Image
                   src="/cliq-logo.png"
                   alt="CLIQ"
                   width={1024}
                   height={381}
-                  className="h-8 w-auto object-contain"
+                  className="h-6 w-auto object-contain [filter:hue-rotate(-95deg)_saturate(1.15)]"
                 />
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed max-w-[220px]">
-                Financial intelligence for every Indian — with or without a credit card.
+              <p className="text-xs text-[#12301A]/60 leading-relaxed max-w-[240px]">
+                Financial intelligence for every Indian, with or without a credit card.
               </p>
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {["Privacy-first", "India-built", "Open platform"].map((tag) => (
-                  <span key={tag} className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[10px] text-slate-500">
+                  <span key={tag} className="px-2.5 py-1 rounded-full bg-lime-300/60 text-[10px] font-semibold text-[#12301A]">
                     {tag}
                   </span>
                 ))}
@@ -197,11 +169,11 @@ export function ClosingSection() {
 
             {/* Navigation */}
             <div>
-              <div className="text-[10px] text-slate-500 font-bold tracking-widest uppercase mb-4">Platform</div>
+              <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase mb-4">Platform</div>
               <div className="grid grid-cols-2 gap-x-5 gap-y-2">
                 {navLinks.map((l) => (
                   <Link key={l.href} href={l.href}
-                    className="text-xs text-slate-400 hover:text-white transition-colors duration-200">
+                    className="text-xs font-medium text-[#12301A]/75 hover:text-[#12301A] hover:underline underline-offset-4 transition-colors duration-200">
                     {l.label}
                   </Link>
                 ))}
@@ -210,26 +182,21 @@ export function ClosingSection() {
 
             {/* Security */}
             <div>
-              <div className="text-[10px] text-slate-500 font-bold tracking-widest uppercase mb-4">Security</div>
+              <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase mb-4">Security</div>
               <div className="space-y-2.5">
-                {[
-                  { label: "Zero PAN / CVV storage",   color: "bg-lime-400" },
-                  { label: "Row-Level Security",        color: "bg-emerald-400" },
-                  { label: "9-layer PII redaction",     color: "bg-teal-400" },
-                  { label: "Immutable AI audit log",    color: "bg-lime-400" },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-2 text-xs text-slate-400">
-                    <span className={`w-1.5 h-1.5 rounded-full ${item.color} shrink-0`} />
-                    {item.label}
+                {["Zero PAN / CVV storage", "Row-Level Security", "9-layer PII redaction", "Immutable AI audit log"].map((label) => (
+                  <div key={label} className="flex items-center gap-2 text-xs text-[#12301A]/75">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#5E8C12] shrink-0" />
+                    {label}
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="pt-6 border-t border-white/[0.05] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[11px] text-slate-600">&copy; {new Date().getFullYear()} CLIQ. Built for India.</p>
-            <p className="text-[11px] text-slate-600">
+          <div className="bg-[#12301A] text-lime-100/70 px-6 sm:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-[11px]">&copy; {new Date().getFullYear()} CLIQ. Built for India.</p>
+            <p className="text-[11px] text-center">
               Deterministic financial math · AI for explanation only · Never for calculations.
             </p>
           </div>

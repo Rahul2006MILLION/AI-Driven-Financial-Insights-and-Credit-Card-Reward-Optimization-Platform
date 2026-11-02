@@ -90,7 +90,7 @@ export default function IncomePage() {
     new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Number(n) || 0);
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] bg-[#040707]">
+    <div className="flex min-h-[calc(100vh-4rem)] bg-[#0E1013]">
       <Sidebar />
       <main className="flex-1 p-6 lg:p-8 space-y-6 max-w-5xl">
 
@@ -105,7 +105,7 @@ export default function IncomePage() {
           </div>
           <button
             onClick={() => setShowAdd((v) => !v)}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all shadow-[0_0_20px_rgba(76,192,63,0.3)]"
           >
             <Plus className="w-4 h-4" />
             Add Income
@@ -125,7 +125,7 @@ export default function IncomePage() {
             {[
               { label: "Monthly Inflow",    value: fmt(summary.total_monthly_income), color: "text-emerald-400" },
               { label: "Regular Income",    value: fmt(summary.regular_income),        color: "text-lime-400" },
-              { label: "Irregular Income",  value: fmt(summary.irregular_income),      color: "text-[#00C8AE]" },
+              { label: "Irregular Income",  value: fmt(summary.irregular_income),      color: "text-[#ADDC25]" },
               { label: "Income Sources",    value: summary.income_sources_count,       color: "text-white" },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl bg-white/[0.03] border border-white/[0.08] p-4">
@@ -166,7 +166,7 @@ export default function IncomePage() {
                 <select
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value)}
-                  className="w-full bg-[#050D0A] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-emerald-500 focus:outline-none"
+                  className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-emerald-500 focus:outline-none"
                 >
                   {Object.entries(FREQUENCY_LABELS).map(([k, v]) => (
                     <option key={k} value={k}>{v}</option>

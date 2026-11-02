@@ -17,9 +17,9 @@ export function CLIQMark({
   animated = false,
   variant = "dark",
 }: Pick<CLIQLogoProps, "size" | "animated" | "variant">) {
-  const lime  = "#a3e635";
-  const em    = "#10B981";
-  const track = variant === "dark" ? "rgba(163,230,53,0.12)" : "rgba(16,185,129,0.2)";
+  const lime  = "#C4F23F";
+  const em    = "#4CC03F";
+  const track = variant === "dark" ? "rgba(196,242,63,0.12)" : "rgba(76,192,63,0.2)";
 
   const pulseProps = animated
     ? { animate: { scale: [1, 1.15, 1], opacity: [0.9, 1, 0.9] }, transition: { duration: 2.8, repeat: Infinity, ease: "easeInOut" as const } }
@@ -67,7 +67,7 @@ export function CLIQMark({
         <circle cx="20" cy="20" r="5.5" fill={lime} />
       )}
       {/* Inner ring for depth */}
-      <circle cx="20" cy="20" r="2.5" fill="#040707" opacity="0.35" />
+      <circle cx="20" cy="20" r="2.5" fill="#0E1013" opacity="0.35" />
     </svg>
   );
 }

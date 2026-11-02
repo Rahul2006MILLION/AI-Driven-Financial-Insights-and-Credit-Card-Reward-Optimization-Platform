@@ -75,12 +75,12 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-4xl mx-auto w-full space-y-7">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+          <h1 className="text-3xl font-black tracking-tight text-white">
             {t.profile.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -104,8 +104,8 @@ export default function ProfilePage() {
           <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
             <form onSubmit={handleSave} className="space-y-6 text-xs">
               <div className="flex items-center gap-4 border-b border-white/[0.07] pb-6">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 shadow-[0_0_20px_rgba(16,185,129,0.35)]">
-                  <div className="w-full h-full bg-[#050D0A] rounded-full flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 shadow-[0_0_20px_rgba(76,192,63,0.35)]">
+                  <div className="w-full h-full bg-[#17191E] rounded-full flex items-center justify-center">
                     <User className="w-6 h-6 text-emerald-400" />
                   </div>
                 </div>
@@ -150,7 +150,7 @@ export default function ProfilePage() {
                   <select
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   >
                     <option value="INR">INR (₹) - Indian Rupee</option>
                     <option value="USD">USD ($) - US Dollar</option>
@@ -165,7 +165,7 @@ export default function ProfilePage() {
                   <select
                     value={preferredLang}
                     onChange={(e) => setPreferredLang(e.target.value as Language)}
-                    className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   >
                     <option value="en">English</option>
                     <option value="hi">हिन्दी (Hindi)</option>
@@ -183,7 +183,7 @@ export default function ProfilePage() {
                       onClick={() => setFinancialPathway("CREDIT_CARD")}
                       className={`p-3.5 rounded-2xl border text-left transition-all ${
                         financialPathway === "CREDIT_CARD"
-                          ? "bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                          ? "bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_rgba(76,192,63,0.15)]"
                           : "bg-white/[0.02] border-white/10 hover:border-white/20 text-slate-400"
                       }`}
                     >
@@ -200,7 +200,7 @@ export default function ProfilePage() {
                       onClick={() => setFinancialPathway("NO_CREDIT_CARD")}
                       className={`p-3.5 rounded-2xl border text-left transition-all ${
                         financialPathway === "NO_CREDIT_CARD"
-                          ? "bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                          ? "bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_rgba(76,192,63,0.15)]"
                           : "bg-white/[0.02] border-white/10 hover:border-white/20 text-slate-400"
                       }`}
                     >
@@ -219,7 +219,7 @@ export default function ProfilePage() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
+                  className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-2 disabled:opacity-40"
                 >
                   {saving ? (
                     <div className="flex items-center gap-1.5">

@@ -31,9 +31,9 @@ const NODES = [
 ];
 
 const accentStyles = {
-  lime:    { bg: "bg-lime-400/10",    border: "border-lime-400/20",    icon: "text-lime-400",    glow: "shadow-[0_0_20px_rgba(163,230,53,0.2)]",  line: "#a3e635" },
-  emerald: { bg: "bg-emerald-500/10", border: "border-emerald-500/20", icon: "text-emerald-400", glow: "shadow-[0_0_20px_rgba(16,185,129,0.2)]",   line: "#10B981" },
-  teal:    { bg: "bg-teal-500/10",    border: "border-teal-500/20",    icon: "text-teal-400",    glow: "shadow-[0_0_20px_rgba(20,184,166,0.2)]",   line: "#14B8A6" },
+  lime:    { tile: "bg-lime-400 text-[#12301A]",  dot: "#8AB518" },
+  emerald: { tile: "bg-[#12301A] text-lime-300",  dot: "#12301A" },
+  teal:    { tile: "bg-[#F6E58D] text-[#3A3005]", dot: "#C9A920" },
 };
 
 function NodeCard({ node, index }: { node: typeof NODES[0]; index: number }) {
@@ -46,27 +46,21 @@ function NodeCard({ node, index }: { node: typeof NODES[0]; index: number }) {
         onMouseLeave={() => setHovered(false)}
         animate={{ y: hovered ? -6 : 0 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className={`relative p-5 rounded-2xl bg-[#060E0B]/80 border ${s.border} backdrop-blur-xl cursor-default transition-shadow duration-300 ${hovered ? s.glow : ""}`}
+        className="relative p-5 rounded-3xl bg-white text-[#12301A] cursor-default shadow-[0_1px_2px_rgba(18,48,26,0.06),0_12px_30px_-14px_rgba(18,48,26,0.25)] flex items-center gap-4"
       >
-        {/* Animated border glow on hover */}
-        {hovered && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className={`absolute inset-0 rounded-2xl border ${s.border} pointer-events-none`}
-            style={{ filter: "blur(1px)" }}
-          />
-        )}
-        <div className={`w-10 h-10 rounded-xl ${s.bg} border ${s.border} flex items-center justify-center mb-3`}>
-          <node.icon className={`w-5 h-5 ${s.icon}`} />
+        <div className={`w-12 h-12 rounded-2xl ${s.tile} flex items-center justify-center shrink-0`}>
+          <node.icon className="w-5 h-5" />
         </div>
-        <div className="text-sm font-bold text-white">{node.label}</div>
-        <div className="text-xs text-slate-400 mt-0.5">{node.sub}</div>
+        <div className="min-w-0">
+          <div className="font-display text-base font-bold tracking-tight">{node.label}</div>
+          <div className="text-xs text-[#12301A]/60 mt-0.5">{node.sub}</div>
+        </div>
 
         {/* Connection dot */}
         <motion.div
-          className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
-          style={{ backgroundColor: s.line }}
-          animate={{ scale: hovered ? [1, 1.6, 1] : 1, opacity: hovered ? [0.8, 1, 0.8] : 0.5 }}
+          className="absolute top-1/2 right-4 -translate-y-1/2 w-2 h-2 rounded-full"
+          style={{ backgroundColor: s.dot }}
+          animate={{ scale: hovered ? [1, 1.6, 1] : 1, opacity: hovered ? [0.8, 1, 0.8] : 0.35 }}
           transition={{ duration: 1, repeat: hovered ? Infinity : 0 }}
         />
       </motion.div>
@@ -80,83 +74,72 @@ export function UniverseSection() {
   const bottomNodes = NODES.slice(3, 6);
 
   return (
-    <section className="relative py-28 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[#040C08]/60" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/7 rounded-full blur-[130px]" />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <FadeUp className="text-center mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.1] text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-5">
-            The CLIQ ecosystem
-          </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-            Your complete financial<br />
-            <span className="gradient-text-animated">universe, connected.</span>
-          </h2>
-          <p className="mt-5 text-slate-400 text-lg max-w-xl mx-auto">
-            CLIQ connects every aspect of your financial life — intelligently, privately and in real time.
-          </p>
-        </FadeUp>
-
-        {/* Node network layout */}
-        <div className="relative">
-          {/* Top row of nodes */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            {topNodes.map((node, i) => (
-              <NodeCard key={node.label} node={node} index={i} />
-            ))}
-          </div>
-
-          {/* Central hub */}
-          <FadeUp delay={0.18} className="flex justify-center my-6">
-            <div className="relative">
-              {/* Glow rings */}
-              <div className="absolute inset-0 rounded-full bg-lime-400/15 blur-2xl scale-150 pointer-events-none" />
-              <motion.div
-                className="absolute -inset-4 rounded-full border border-lime-400/12"
-                animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.9, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div
-                className="absolute -inset-8 rounded-full border border-emerald-500/8"
-                animate={{ scale: [1, 1.06, 1], opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              />
-
-              {/* Hub card */}
-              <div className="relative w-44 h-44 rounded-full bg-[#060E0B]/95 border border-[#00F8D8]/25 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(0,248,216,0.12),inset_0_1px_0_rgba(255,255,255,0.08)]">
-                <Image
-                  src="/cliq-logo.png"
-                  alt="CLIQ"
-                  width={1024}
-                  height={381}
-                  className="h-8 w-auto object-contain"
-                />
-                <div className="mt-3 text-[10px] text-slate-400 font-semibold tracking-wider">Powered by</div>
-                <div className="text-xs font-bold tracking-widest uppercase" style={{ color: "#00F8D8" }}>CLIQ AI</div>
-              </div>
+    <section className="relative px-3 sm:px-4 py-4">
+      <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#F4F6EE] text-[#12301A] overflow-hidden py-20 sm:py-24">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <FadeUp className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#12301A] text-lime-300 text-[11px] font-bold tracking-wide mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-lime-400" />
+              The CLIQ ecosystem
             </div>
+            <h2 className="font-display text-[clamp(2rem,4.6vw,3.6rem)] font-extrabold uppercase leading-[1] tracking-[-0.03em]">
+              See your <span className="text-[#5E8C12]">money clearly,</span><br />
+              all in one place.
+            </h2>
+            <p className="mt-5 text-[#12301A]/65 text-base sm:text-lg max-w-xl mx-auto">
+              CLIQ connects every aspect of your financial life — intelligently, privately and in real time.
+            </p>
           </FadeUp>
 
-          {/* Bottom row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-            {bottomNodes.map((node, i) => (
-              <NodeCard key={node.label} node={node} index={i + 3} />
-            ))}
-          </div>
-        </div>
+          {/* Node network layout */}
+          <div className="relative">
+            {/* Top row of nodes */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {topNodes.map((node, i) => (
+                <NodeCard key={node.label} node={node} index={i} />
+              ))}
+            </div>
 
-        {/* Bottom description */}
-        <FadeUp delay={0.35} className="text-center mt-14">
-          <p className="text-slate-400 text-sm max-w-2xl mx-auto leading-relaxed">
-            Every piece of data stays encrypted and consent-gated. CLIQ&rsquo;s AI synthesises signals
-            across all six domains to give you insights that no single tool can provide.
-          </p>
-        </FadeUp>
+            {/* Central hub */}
+            <FadeUp delay={0.18} className="flex justify-center my-10">
+              <div className="relative">
+                <motion.div
+                  className="absolute -inset-5 rounded-full border-2 border-dashed border-[#12301A]/15"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                />
+                {/* Hub */}
+                <div className="relative w-40 h-40 rounded-full bg-[#12301A] flex flex-col items-center justify-center shadow-[0_24px_50px_-20px_rgba(18,48,26,0.7)]">
+                  <Image
+                    src="/cliq-logo.png"
+                    alt="CLIQ"
+                    width={1024}
+                    height={381}
+                    className="h-8 w-auto object-contain [filter:hue-rotate(-95deg)_saturate(1.15)]"
+                  />
+                  <div className="mt-3 text-[10px] text-lime-200/60 font-semibold tracking-wider">Powered by</div>
+                  <div className="text-xs font-bold tracking-widest uppercase text-lime-300">CLIQ AI</div>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Bottom row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {bottomNodes.map((node, i) => (
+                <NodeCard key={node.label} node={node} index={i + 3} />
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom description */}
+          <FadeUp delay={0.35} className="text-center mt-14">
+            <p className="text-[#12301A]/60 text-sm max-w-2xl mx-auto leading-relaxed">
+              Every piece of data stays encrypted and consent-gated. CLIQ&rsquo;s AI synthesises signals
+              across all six domains to give you insights that no single tool can provide.
+            </p>
+          </FadeUp>
+        </div>
       </div>
     </section>
   );

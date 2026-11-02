@@ -297,7 +297,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
 
           <button
             onClick={() => setShowLogModal(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all hover:scale-[1.02]"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all hover:scale-[1.02]"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Log Expense</span>
@@ -326,7 +326,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       {/* ── 4 Top Metric KPI Cards ────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Monthly Inflow */}
-        <div className="rounded-2xl bg-[#060E0B]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Monthly Inflow</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -346,7 +346,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         </div>
 
         {/* Card 2: Monthly Expenses */}
-        <div className="rounded-2xl bg-[#060E0B]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Monthly Expenses</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -366,7 +366,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         </div>
 
         {/* Card 3: Remaining Balance */}
-        <div className="rounded-2xl bg-[#060E0B]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Remaining Balance</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -386,7 +386,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         </div>
 
         {/* Card 4: Savings Rate */}
-        <div className="rounded-2xl bg-[#060E0B]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Savings Rate</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -409,7 +409,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       {/* ── Main Section: 2/3 and 1/3 Split ────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2/3 Col: Budget Utilization & 50/30/20 Breakdown */}
-        <div className="lg:col-span-2 rounded-2xl bg-[#060E0B]/80 border border-white/[0.08] p-6 backdrop-blur-sm flex flex-col justify-between space-y-6">
+        <div className="lg:col-span-2 rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-6 backdrop-blur-sm flex flex-col justify-between space-y-6">
           <div>
             {/* Card Header */}
             <div className="flex items-center justify-between mb-5">
@@ -438,7 +438,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
               </div>
               <div className="h-2 w-full bg-white/[0.05] rounded-full overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)] transition-all duration-700"
+                  className="h-full rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(76,192,63,0.5)] transition-all duration-700"
                   style={{ width: `${Math.min(100, Math.max(budgetUtilPercent, monthlyExpenses > 0 ? 5 : 0))}%` }}
                 />
               </div>
@@ -483,7 +483,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         </div>
 
         {/* Right 1/3 Col: Emergency Fund Buffer */}
-        <div className="rounded-2xl bg-[#060E0B]/80 border border-emerald-500/20 p-6 backdrop-blur-sm flex flex-col justify-between">
+        <div className="rounded-2xl bg-[#17191E]/80 border border-emerald-500/20 p-6 backdrop-blur-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -495,7 +495,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             </p>
 
             {/* Runway Display Box */}
-            <div className="rounded-xl bg-[#040C08] border border-white/[0.06] p-6 text-center mb-6">
+            <div className="rounded-xl bg-[#0B0D10] border border-white/[0.06] p-6 text-center mb-6">
               <div className="text-3xl font-black text-emerald-400 tabular-nums tracking-tight">
                 {calculatedRunwayMonths} Months
               </div>
@@ -508,7 +508,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
           {/* Action CTA Button */}
           <Link
             href="/emergency-fund"
-            className="w-full py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs text-center shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all block"
+            className="w-full py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs text-center shadow-[0_0_20px_rgba(76,192,63,0.25)] hover:shadow-[0_0_25px_rgba(76,192,63,0.4)] transition-all block"
           >
             View Emergency Safety Shield
           </Link>
@@ -517,7 +517,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
 
       {/* ── Recent Expenses List (Non-card cash flow) ──────────────── */}
       {transactions.length > 0 && (
-        <div className="rounded-2xl bg-[#060E0B]/80 border border-white/[0.08] p-6 backdrop-blur-sm">
+        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-6 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Receipt className="w-4 h-4 text-emerald-400" />
@@ -563,7 +563,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       {/* ── Log Expense Modal ─────────────────────────────────────── */}
       {showLogModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-md rounded-2xl bg-[#06100C] border border-white/[0.12] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative">
+          <div className="w-full max-w-md rounded-2xl bg-[#17191E] border border-white/[0.12] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative">
             <button
               onClick={() => setShowLogModal(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white p-1"
@@ -610,7 +610,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
                   <select
                     value={expCategory}
                     onChange={(e) => setExpCategory(e.target.value)}
-                    className="w-full bg-[#050D0A] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-emerald-500 focus:outline-none"
+                    className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-emerald-500 focus:outline-none"
                   >
                     {[
                       "grocery",
@@ -637,7 +637,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
                   <select
                     value={expMethod}
                     onChange={(e) => setExpMethod(e.target.value)}
-                    className="w-full bg-[#050D0A] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-emerald-500 focus:outline-none"
+                    className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-emerald-500 focus:outline-none"
                   >
                     <option value="UPI">UPI / GPay / PhonePe</option>
                     <option value="DEBIT_CARD">Debit Card</option>
@@ -658,7 +658,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
                 <button
                   type="submit"
                   disabled={expSaving}
-                  className="px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-50 transition-all"
+                  className="px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(76,192,63,0.3)] disabled:opacity-50 transition-all"
                 >
                   {expSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                   <span>Save Expense</span>

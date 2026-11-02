@@ -68,7 +68,7 @@ export default function RewardOptimizationPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
@@ -100,7 +100,7 @@ export default function RewardOptimizationPage() {
                 value={amount}
                 onChange={(val) => setAmount(val)}
                 placeholder="e.g. 2000"
-                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white font-bold text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white font-bold text-sm focus:outline-none focus:border-lime-400 transition-colors"
               />
             </div>
 
@@ -111,7 +111,7 @@ export default function RewardOptimizationPage() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-lime-400 transition-colors"
               >
                 <option value="food_delivery">{t.categories.food_delivery}</option>
                 <option value="dining">{t.categories.dining}</option>
@@ -135,7 +135,7 @@ export default function RewardOptimizationPage() {
                 placeholder="e.g. Swiggy, Amazon, Croma"
                 value={merchant}
                 onChange={(e) => setMerchant(e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-lime-400 transition-colors"
               />
             </div>
 
@@ -149,7 +149,7 @@ export default function RewardOptimizationPage() {
                   onClick={() => setPaymentChannel("ONLINE")}
                   className={`py-1.5 text-xs font-semibold rounded-xl flex items-center justify-center gap-1 transition-all ${
                     paymentChannel === "ONLINE"
-                      ? "bg-emerald-500 text-[#040707] font-bold shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                      ? "bg-lime-400 text-[#0E1013] font-bold shadow-neonLime"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -161,7 +161,7 @@ export default function RewardOptimizationPage() {
                   onClick={() => setPaymentChannel("OFFLINE")}
                   className={`py-1.5 text-xs font-semibold rounded-xl flex items-center justify-center gap-1 transition-all ${
                     paymentChannel === "OFFLINE"
-                      ? "bg-emerald-500 text-[#040707] font-bold shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                      ? "bg-lime-400 text-[#0E1013] font-bold shadow-neonLime"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -175,7 +175,7 @@ export default function RewardOptimizationPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_25px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-sm shadow-neonLime transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -194,12 +194,12 @@ export default function RewardOptimizationPage() {
         {result && result.recommended_card && (
           <div className="space-y-6">
             {/* Top Recommended Hero Card */}
-            <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.04] border border-emerald-500/40 backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.04] border border-lime-400/30 backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-lime-400/6 rounded-full blur-[100px] pointer-events-none" />
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-6">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-xs font-semibold border border-emerald-500/30 mb-2.5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-lime-400/15 text-lime-400 text-xs font-semibold border border-lime-400/30 mb-2.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>{t.optimizer.topRecommendation}</span>
                   </div>
@@ -215,10 +215,10 @@ export default function RewardOptimizationPage() {
 
                 <div className="sm:text-right">
                   <span className="text-xs text-slate-400 block font-medium">{t.optimizer.netBenefit}</span>
-                  <div className="text-3xl sm:text-4xl font-black text-emerald-400 glow-emerald tracking-tight">
+                  <div className="text-3xl sm:text-4xl font-black text-lime-400 tracking-tight" style={{textShadow: "0 0 20px rgba(196,242,63,0.5)"}}>
                     ₹{Number(result.recommended_card.net_financial_benefit).toFixed(2)}
                   </div>
-                  <span className="text-xs font-semibold text-emerald-300">
+                  <span className="text-xs font-semibold text-lime-300">
                     {result.recommended_card.effective_rate_percentage}% {t.optimizer.yieldLabel}
                   </span>
                 </div>
@@ -231,7 +231,7 @@ export default function RewardOptimizationPage() {
                     <span className="text-[10px] text-slate-500 uppercase font-semibold block">
                       {t.optimizer.instantDiscount}
                     </span>
-                    <span className="text-lg font-black text-emerald-400">
+                    <span className="text-lg font-black text-lime-400">
                       ₹{Number(result.recommended_card.instant_discount_monetary).toFixed(2)}
                     </span>
                   </div>
@@ -311,7 +311,7 @@ export default function RewardOptimizationPage() {
                       className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-xs"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
+                        <span className="w-5 h-5 rounded-full bg-lime-400/15 text-lime-400 flex items-center justify-center font-bold text-[10px]">
                           {step.step_number}
                         </span>
                         <div>
@@ -321,7 +321,7 @@ export default function RewardOptimizationPage() {
                       </div>
 
                       <div className="text-right">
-                        <span className="font-bold text-emerald-400">
+                        <span className="font-bold text-lime-400">
                           ₹{Number(step.final_monetary_value).toFixed(2)}
                         </span>
                       </div>

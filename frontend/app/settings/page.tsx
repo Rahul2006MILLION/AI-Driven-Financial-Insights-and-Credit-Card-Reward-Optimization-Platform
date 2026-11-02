@@ -139,12 +139,12 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+    <div className="flex-1 flex flex-col lg:flex-row bg-[#0E1013]">
       <Sidebar />
 
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-4xl mx-auto w-full space-y-7">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
+          <h1 className="text-3xl font-black tracking-tight text-white">
             {t.settings.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -253,7 +253,7 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={prefsSaving}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all disabled:opacity-60"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#0E1013] font-semibold text-xs shadow-[0_0_15px_rgba(76,192,63,0.35)] transition-all disabled:opacity-60"
               >
                 {prefsSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 {t.settings.savePreferencesButton}

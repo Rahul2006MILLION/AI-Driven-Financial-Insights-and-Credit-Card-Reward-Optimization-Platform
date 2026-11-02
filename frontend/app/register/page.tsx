@@ -49,6 +49,7 @@ export default function RegisterPage() {
           preferredLanguage: data.preferred_language,
           role: data.role,
           isAdmin: data.is_admin,
+          financialPathway: data.financial_pathway || "NO_CREDIT_CARD",
         });
 
         router.push("/onboarding");
@@ -63,18 +64,19 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 min-h-[calc(100vh-4rem)] bg-[#040707] relative overflow-hidden">
-      {/* Ambient Emerald Glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none" />
+    <div className="flex-1 flex items-center justify-center p-4 min-h-[calc(100vh-4rem)] bg-[#0E1013] relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] bg-lime-400/8 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-emerald-500/6 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-md w-full p-8 sm:p-9 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)]">
         <div className="text-center mb-6">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-0.5 mb-3 shadow-[0_0_20px_rgba(16,185,129,0.35)]">
-            <div className="w-full h-full bg-[#050D0A] rounded-[14px] flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-emerald-400" />
+          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-500 p-0.5 mb-3 shadow-neonLime">
+            <div className="w-full h-full bg-[#17191E] rounded-[14px] flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-lime-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-black text-white glow-emerald">{t.auth.createAccountTitle}</h2>
+          <h2 className="text-2xl font-black text-white">{t.auth.createAccountTitle}</h2>
           <p className="text-xs text-slate-400 mt-1">{t.auth.createAccountSubtitle}</p>
         </div>
 
@@ -144,7 +146,7 @@ export default function RegisterPage() {
             <select
               value={preferredLanguage}
               onChange={(e) => setPrefLanguage(e.target.value as Language)}
-              className="w-full bg-[#06100C] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
+              className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
             >
               <option value="en">English (Default)</option>
               <option value="hi">हिन्दी (Hindi)</option>
@@ -155,7 +157,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#040707] font-bold text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-40"
+            className="w-full py-3 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-sm shadow-neonLime transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-40"
           >
             {loading ? (
               <div className="flex items-center gap-1.5">
@@ -174,7 +176,7 @@ export default function RegisterPage() {
         <div className="mt-6 pt-6 border-t border-white/[0.06] text-center">
           <p className="text-xs text-slate-400">
             {t.auth.haveAccountPrompt}{" "}
-            <Link href="/login" className="text-emerald-400 font-bold hover:underline">
+            <Link href="/login" className="text-lime-400 font-bold hover:underline">
               {t.auth.signInButton}
             </Link>
           </p>

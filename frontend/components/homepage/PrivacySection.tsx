@@ -52,36 +52,28 @@ const STEPS = [
 ];
 
 const accentMap = {
-  lime:    { num: "text-lime-400",    icon: "text-lime-400",    bg: "bg-lime-400/10 border-lime-400/20",   bar: "bg-lime-400" },
-  emerald: { num: "text-emerald-400", icon: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20", bar: "bg-emerald-400" },
-  teal:    { num: "text-teal-400",    icon: "text-teal-400",    bg: "bg-teal-500/10 border-teal-500/20",   bar: "bg-teal-400" },
+  lime:    { tile: "bg-lime-400 text-[#12301A]",  bar: "bg-lime-400" },
+  emerald: { tile: "bg-[#F4F6EE] text-[#12301A]", bar: "bg-[#F4F6EE]" },
+  teal:    { tile: "bg-[#F6E58D] text-[#3A3005]", bar: "bg-[#F6E58D]" },
 };
 
 /* ── Privacy section ──────────────────────────────────────────── */
 export function PrivacySection() {
   return (
-    <section className="relative py-28 overflow-hidden">
-      {/* Background — deliberately lighter feel for contrast */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#040707] via-[#050C08]/90 to-[#040707]" />
-        <div className="absolute top-0 right-1/4 w-[500px] h-[400px] bg-teal-500/5 rounded-full blur-[130px]" />
-        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-emerald-500/7 rounded-full blur-[110px]" />
-      </div>
+    <section className="relative py-24 sm:py-28 overflow-hidden">
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <FadeUp className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-[10px] font-bold tracking-widest uppercase mb-5">
-            <Shield className="w-3 h-3" />
+        <FadeUp className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-slate-300 text-[11px] font-bold tracking-wide mb-6">
+            <Shield className="w-3 h-3 text-lime-400" />
             Privacy by design
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
+          <h2 className="font-display text-[clamp(2rem,4.6vw,3.6rem)] font-extrabold uppercase text-white leading-[1] tracking-[-0.03em]">
             Your data. Your control.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-400 to-lime-400">
-              Always.
-            </span>
+            <span className="text-lime-400">Always.</span>
           </h2>
-          <p className="mt-5 text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="mt-5 text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
             CLIQ was built with privacy as a constraint, not an afterthought. Here is exactly what happens between you and the AI.
           </p>
         </FadeUp>
@@ -92,31 +84,31 @@ export function PrivacySection() {
             const s = accentMap[step.accent as keyof typeof accentMap];
             return (
               <FadeUp key={step.num} delay={0.06 * i}>
-                <div className="relative h-full rounded-2xl bg-[#060E0B]/80 border border-white/[0.07] hover:border-white/[0.15] p-6 transition-colors duration-300 group">
+                <div className="relative h-full rounded-[1.75rem] bg-[#1C1F25] border border-white/[0.06] hover:bg-[#22252C] p-6 transition-colors duration-300 group">
                   {/* Top: number + icon */}
-                  <div className="flex items-center justify-between mb-5">
-                    <span className={`text-4xl font-black ${s.num} opacity-20 select-none leading-none`}>{step.num}</span>
-                    <div className={`w-10 h-10 rounded-xl ${s.bg} border flex items-center justify-center`}>
-                      <step.icon className={`w-5 h-5 ${s.icon}`} />
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="font-display text-xs font-bold px-2.5 py-1 rounded-full bg-white/[0.06] text-slate-300 tabular">{step.num}</span>
+                    <div className={`w-11 h-11 rounded-2xl ${s.tile} flex items-center justify-center`}>
+                      <step.icon className="w-5 h-5" />
                     </div>
                   </div>
 
                   {/* Accent bar */}
                   <motion.div
-                    className={`h-0.5 ${s.bar} rounded-full mb-4 origin-left`}
+                    className={`h-1 w-10 ${s.bar} rounded-full mb-4 origin-left`}
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease }}
                   />
 
-                  <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>
+                  <h3 className="font-display text-lg font-bold text-white mb-2 tracking-[-0.015em]">{step.title}</h3>
                   <p className="text-sm text-slate-400 leading-relaxed">{step.body}</p>
 
                   {/* Arrow connector (not on last) */}
                   {i < STEPS.length - 1 && (
-                    <div className="hidden xl:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-[#060E0B] border border-white/[0.1] items-center justify-center">
-                      <ArrowRight className="w-3 h-3 text-slate-500" />
+                    <div className="hidden xl:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-lime-400 border-4 border-[#0E1013] items-center justify-center">
+                      <ArrowRight className="w-3 h-3 text-[#12301A]" />
                     </div>
                   )}
                 </div>
@@ -127,16 +119,16 @@ export function PrivacySection() {
 
         {/* Bottom trust bar */}
         <FadeUp delay={0.3} className="mt-12">
-          <div className="flex flex-wrap items-center justify-center gap-8 py-5 px-6 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+          <div className="flex flex-wrap items-center justify-center gap-2.5">
             {[
-              { label: "Zero raw PAN or CVV stored", color: "text-lime-400" },
-              { label: "Row-Level Security on all tables", color: "text-emerald-400" },
-              { label: "User-owned data — export or delete anytime", color: "text-teal-400" },
-              { label: "Deterministic math, AI for explanations only", color: "text-lime-400" },
-            ].map((item) => (
-              <span key={item.label} className="flex items-center gap-2 text-xs text-slate-400">
-                <span className={`text-lg leading-none ${item.color}`}>✓</span>
-                {item.label}
+              "Zero raw PAN or CVV stored",
+              "Row-Level Security on all tables",
+              "User-owned data — export or delete anytime",
+              "Deterministic math, AI for explanations only",
+            ].map((label) => (
+              <span key={label} className="flex items-center gap-2 pl-1.5 pr-4 py-1.5 rounded-full bg-[#1C1F25] border border-white/[0.06] text-xs text-slate-300">
+                <span className="w-5 h-5 rounded-full bg-lime-400 text-[#12301A] text-[11px] font-bold flex items-center justify-center">✓</span>
+                {label}
               </span>
             ))}
           </div>
