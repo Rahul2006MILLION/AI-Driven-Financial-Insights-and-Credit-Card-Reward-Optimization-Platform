@@ -1,95 +1,120 @@
 ---
 name: react-development
-description: Apply React 18 and Next.js 14 App Router best practices — hooks, Server vs Client components, state management, performance optimization, error boundaries, and Suspense — when building or reviewing CLIQ frontend code.
+description: Apply React 18 and Next.js 14 App Router best practices — hooks, Server vs Client components, state management, performance optimization, error boundaries, and TypeScript patterns — when building or reviewing CLIQ frontend code.
 ---
 
 # React Development Skill
 
 ## Installed Versions
 - React 18.3.1
-- Next.js 14.2.4 (App Router)
+- Next.js 14.2.4 (App Router, static prerendering)
 - TypeScript 5.4.5
 
 ## Server vs Client Components
 
-All CLIQ pages are `"use client"` (full client-side rendering with Next.js static prerendering). The App Router is used for file-based routing, not for RSC data fetching.
+All CLIQ pages are `"use client"` (full client-side rendering with Next.js static prerendering). RSC data fetching is not used — data comes from FastAPI via `apiFetch`.
 
 ```tsx
-// Every page and interactive component:
 "use client"
 import { useState, useEffect } from "react"
 ```
 
-Layout files (`app/layout.tsx`) are also client components for the provider chain.
+## Standard Page Pattern
+
+```tsx
+"use client"
+import { useAuth } from "@/lib/auth"
+import { useLanguage } from "@/lib/i18n"
+import { apiFetch } from "@/lib/api"
+
+export default function TransactionsPage() {
+  const { user, loading: authLoading } = useAuth()
+  const { t } = useLanguage()
+  const [data, setData] = useState<Transaction[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user) return
+    apiFetch<Transaction[]>("/transactions?limit=50")
+      .then(setData)
+      .finally(() => setLoading(false))
+  }, [user])
+
+  if (authLoading || loading) return <LoadingSpinner />
+
+  return (
+    <div className="p-4 lg:p-6">
+      <h1 className="text-2xl font-semibold text-cliq-textPrimary mb-6">{t.transactions}</h1>
+      {/* ... */}
+    </div>
+  )
+}
+```
 
 ## Hooks Patterns
 
-### Data fetching with loading state
+### Data fetching
 ```tsx
-const [data, setData] = useState<TransactionResponse[]>([])
+const [data, setData] = useState<T | null>(null)
 const [loading, setLoading] = useState(true)
 const [error, setError] = useState<string | null>(null)
 
 useEffect(() => {
-  apiFetch<TransactionResponse[]>("/transactions")
+  apiFetch<T>("/endpoint")
     .then(setData)
     .catch(err => setError(err.message))
     .finally(() => setLoading(false))
 }, [])
 ```
 
-### Derived state — prefer `useMemo` over storing computed values
+### Derived state — use `useMemo`, not state
 ```tsx
 const totalRewards = useMemo(
-  () => transactions.reduce((sum, t) => sum + (t.reward_earned || 0), 0),
+  () => transactions.reduce((sum, t) => sum + (t.reward_earned ?? 0), 0),
   [transactions]
 )
 ```
 
-### Callback memoization
+### Stable callbacks — use `useCallback`
 ```tsx
 const handleDelete = useCallback(async (id: string) => {
   await apiFetch(`/transactions/${id}`, { method: "DELETE" })
   setTransactions(prev => prev.filter(t => t.id !== id))
-}, [])  // empty deps — apiFetch is stable
+}, [])
 ```
 
-## Component Architecture
-
-```
-Page (route)          — data fetching, state orchestration
-  └── SectionCard     — layout, section title
-        └── DataTable — display, sorting, pagination
-              └── Row — individual record
-```
-
-- Pages own state; leaf components are pure/display
-- Props down, callbacks up — no global state library needed at current scale
-- Shared logic → custom hook in `lib/` (not a component)
-
-## Custom Hooks Pattern
+## TypeScript Patterns
 
 ```tsx
-// lib/useTransactions.ts
-export function useTransactions(limit = 20) {
-  const [transactions, setTransactions] = useState<Transaction[]>([])
-  const [loading, setLoading] = useState(true)
+// Response types match backend Pydantic schemas
+interface Transaction {
+  id: string                          // UUID
+  amount: number                      // Decimal → JSON number
+  merchant_name: string
+  payment_method: "CREDIT_CARD" | "UPI" | "CASH" | "DEBIT_CARD" | "BANK_TRANSFER" | "OTHER"
+  reward_earned: number | null
+  created_at: string                  // ISO 8601
+}
 
-  useEffect(() => {
-    apiFetch<Transaction[]>(`/transactions?limit=${limit}`)
-      .then(setTransactions)
-      .finally(() => setLoading(false))
-  }, [limit])
-
-  return { transactions, loading, refresh: () => { /* re-fetch */ } }
+// Component props — explicit
+interface Props {
+  transaction: Transaction
+  onDelete: (id: string) => Promise<void>
 }
 ```
 
-## Error Handling
+## Performance
+
+- `React.memo()` for pure display components that receive stable props
+- `useCallback` on handlers passed to memoized children
+- `useMemo` for aggregations over large arrays
+- `useRef` for values that don't trigger renders (timers, DOM refs)
+- Paginate large lists server-side — don't load 1000 records client-side
+
+## Error Boundaries
 
 ```tsx
-// Error boundary for page sections (class component required)
-class SectionErrorBoundary extends React.Component<
+class ErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback: React.ReactNode },
   { hasError: boolean }
 > {
@@ -101,41 +126,26 @@ class SectionErrorBoundary extends React.Component<
 }
 ```
 
-## TypeScript Patterns
+## Next.js App Router APIs
 
 ```tsx
-// API response types — match backend Pydantic schemas
-interface Transaction {
-  id: string
-  amount: number        // Decimal comes as JSON number
-  merchant_name: string
-  category_id: string
-  payment_method: "CREDIT_CARD" | "UPI" | "CASH" | "DEBIT_CARD" | "BANK_TRANSFER" | "OTHER"
-  reward_earned: number | null
-  created_at: string    // ISO 8601
-}
-
-// Component props — explicit, not inferred
-interface TransactionRowProps {
-  transaction: Transaction
-  onDelete: (id: string) => void
-}
+import { useRouter, usePathname, useSearchParams } from "next/navigation"
+import Link from "next/link"
+import Image from "next/image"
+// NOT: import { useRouter } from "next/router"  ❌
 ```
 
-## Performance
+## Common Mistakes
 
-- `React.memo()` for pure list items that re-render frequently
-- `useCallback` for handlers passed to memoized children
-- `useMemo` for expensive derivations (never for simple objects/arrays)
-- Avoid `useState` for values that don't affect rendering — use `useRef`
-- Large lists: implement pagination (backend-driven) rather than frontend filtering
+- Calling `fetch` instead of `apiFetch` (no auth header)
+- Checking `cards.length === 0` for pathway instead of `financial_pathway === "NO_CREDIT_CARD"`
+- Not adding translations for hardcoded English strings
+- Storing derived values in state instead of `useMemo`
+- Using `any` type instead of defining the interface
 
-## Next.js App Router Specifics
+## Debugging
 
-- `usePathname()` and `useRouter()` from `next/navigation` (not `next/router`)
-- `Link` from `next/link` for navigation
-- `Image` from `next/image` for optimized images
-- `metadata` export only valid in Server Components — not applicable in CLIQ's client-only pages
-
-## Testing Hook
-New hooks should have test coverage in `frontend/__tests__/` using the Node native test runner pattern established in the existing test files.
+- React DevTools: component tree inspection and prop values
+- Network tab: verify Bearer header in API requests
+- Console: `apiFetch` logs 401 errors before logout
+- TypeScript: `npx tsc --noEmit` for type errors (app source only)
