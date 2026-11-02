@@ -63,6 +63,51 @@ class CSVStatementParser:
         "closing balance", "payment thank you", "credt payment"
     }
 
+    VALID_CATEGORIES = {
+        "dining", "food_delivery", "grocery", "shopping", "travel",
+        "utility", "fuel", "entertainment", "health", "international", "other"
+    }
+
+    @classmethod
+    def normalize_category(cls, cat: Optional[str]) -> str:
+        """
+        Maps any freeform, display, or CSV category string to one of the 11
+        canonical IDs in `spending_categories`.
+        """
+        if not cat:
+            return "other"
+        
+        clean = cat.lower().strip().replace("-", "_").replace(" ", "_")
+        if clean in cls.VALID_CATEGORIES:
+            return clean
+
+        simplified = re.sub(r"[^\w\s]", " ", cat.lower()).strip()
+        words = simplified.split()
+        joined = " ".join(words)
+
+        if any(k in joined for k in ["food delivery", "food_delivery", "delivery", "swiggy", "zomato", "ubereats"]):
+            return "food_delivery"
+        if any(k in joined for k in ["dining", "restaurant", "restaurants", "cafe", "food", "bakery", "bar", "pub", "coffee"]):
+            return "dining"
+        if any(k in joined for k in ["grocery", "groceries", "supermarket", "supermarkets", "mart", "provisions", "blinkit", "zepto", "instamart", "bigbasket"]):
+            return "grocery"
+        if any(k in joined for k in ["shopping", "retail", "clothing", "apparel", "electronics", "ecommerce", "e commerce", "amazon", "flipkart", "myntra"]):
+            return "shopping"
+        if any(k in joined for k in ["travel", "flight", "flights", "hotel", "hotels", "transport", "cab", "taxi", "uber", "ola", "train", "railway", "irctc", "holiday"]):
+            return "travel"
+        if any(k in joined for k in ["utility", "utilities", "bill", "bills", "electricity", "water", "broadband", "mobile", "recharge", "dth", "gas"]):
+            return "utility"
+        if any(k in joined for k in ["fuel", "petrol", "diesel", "gas station", "hpcl", "bpcl", "ioc", "iocl"]):
+            return "fuel"
+        if any(k in joined for k in ["entertainment", "movie", "movies", "cinema", "theater", "theatre", "netflix", "prime", "hotstar", "spotify", "bookmyshow"]):
+            return "entertainment"
+        if any(k in joined for k in ["health", "healthcare", "medical", "pharmacy", "pharmacies", "doctor", "hospital", "medicine", "apollo", "1mg"]):
+            return "health"
+        if any(k in joined for k in ["international", "forex", "cross border", "foreign", "overseas"]):
+            return "international"
+
+        return "other"
+
     @classmethod
     def clean_amount_string(cls, amount_str: str) -> Tuple[Optional[Decimal], bool]:
         """
@@ -333,8 +378,8 @@ class CSVStatementParser:
                 canonical_merchant = norm_res.canonical_name if norm_res.canonical_name else raw_desc.title()
 
                 if cat_col is not None and len(row) > cat_col and row[cat_col].strip():
-                    # Category explicitly supplied in CSV
-                    category_id = row[cat_col].strip().lower().replace(" ", "_")
+                    # Category explicitly supplied in CSV - normalize to canonical database ID
+                    category_id = cls.normalize_category(row[cat_col].strip())
                     category_confidence = Decimal("1.00")
                     requires_review = False
                 elif norm_res.is_confident_match and norm_res.category_hint:

@@ -537,6 +537,9 @@ async def commit_csv_import(
         else:
             row_payment_method = "OTHER"
 
+        # Ensure category_id is strictly a valid canonical ID in spending_categories
+        canonical_category = CSVStatementParser.normalize_category(row.category_id)
+
         # Rewards evaluation & Card binding: ONLY for eligible CREDIT_CARD transactions
         predicted_reward = Decimal("0.00")
         optimal_reward = Decimal("0.00")
@@ -548,7 +551,7 @@ async def commit_csv_import(
                 eval_res = RewardOptimizationEngine.evaluate_card_for_transaction(
                     card=target_card,
                     amount=row.amount,
-                    category_id=row.category_id,
+                    category_id=canonical_category,
                     merchant_name=row.merchant_name
                 )
                 predicted_reward = eval_res.expected_reward_monetary
@@ -556,7 +559,7 @@ async def commit_csv_import(
             best_opt = RewardOptimizationEngine.optimize_transaction(
                 cards=user_cards,
                 amount=row.amount,
-                category_id=row.category_id,
+                category_id=canonical_category,
                 merchant_name=row.merchant_name
             )
             optimal_reward = best_opt.recommended_card.expected_reward_monetary if best_opt.recommended_card else Decimal("0.00")
@@ -584,7 +587,7 @@ async def commit_csv_import(
             user_id=current_user.id,
             card_id=chosen_card_id,
             payment_method=row_payment_method,
-            category_id=row.category_id.strip().lower(),
+            category_id=canonical_category,
             merchant_name=row.merchant_name.strip(),
             raw_description=row.raw_description.strip(),
             amount=row.amount,
@@ -645,7 +648,7 @@ async def create_transaction(
     norm_res = MerchantNormalizer.resolve_merchant(req.merchant_name)
     canonical_merchant = norm_res.canonical_name if norm_res.canonical_name else req.merchant_name.strip()
 
-    category = req.category_id
+    category = CSVStatementParser.normalize_category(req.category_id) if req.category_id else None
     cat_conf = Decimal("1.00") if req.category_id else None
     if not category:
         if norm_res.is_confident_match and norm_res.category_hint:
@@ -657,6 +660,8 @@ async def create_transaction(
         else:
             category = "other"
             cat_conf = Decimal("0.30")
+    else:
+        category = CSVStatementParser.normalize_category(category)
 
     # Fetch all user active cards with rules for optimization
     stmt = (

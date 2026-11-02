@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useLanguage, Language } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import {
@@ -24,10 +24,20 @@ import {
 export const Navbar: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
+  const pathname = usePathname();
   const { session, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const isHomepage = pathname === "/";
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close profile dropdown on outside click or Escape key
   useEffect(() => {
@@ -58,8 +68,12 @@ export const Navbar: React.FC = () => {
     router.push("/login");
   };
 
+  const navBg = isHomepage && !scrolled
+    ? "bg-transparent border-transparent shadow-none"
+    : "bg-[#050D0A]/80 backdrop-blur-2xl border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]";
+
   return (
-    <header className="sticky top-0 z-50 bg-[#050D0A]/70 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
+    <header className={`sticky top-0 z-50 border-b transition-all duration-500 ${navBg}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-2.5 group">
@@ -337,13 +351,6 @@ export const Navbar: React.FC = () => {
                 className="block text-sm text-teal-400 hover:text-teal-300 font-medium transition-colors"
               >
                 {t.nav.learn}
-              </Link>
-              <Link
-                href="/documents"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
-              >
-                {t.nav.documents}
               </Link>
               <Link
                 href="/profile"

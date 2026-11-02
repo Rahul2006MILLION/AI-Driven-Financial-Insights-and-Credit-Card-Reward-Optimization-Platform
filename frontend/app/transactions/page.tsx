@@ -204,6 +204,7 @@ export default function TransactionsPage() {
           amount: r.amount,
           currency: r.currency || "INR",
           category_id: r.category_id,
+          payment_method: r.payment_method || (importCardId ? "CREDIT_CARD" : undefined),
           category_confidence: r.category_confidence,
           reference_number: r.reference_number,
           deduplication_hash: r.deduplication_hash,

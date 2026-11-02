@@ -7,6 +7,10 @@ import { Navbar } from "@/components/Navbar";
 export const metadata: Metadata = {
   title: "CLIQ — Money Made Simple. In Your Language.",
   description: "AI-Powered Financial Intelligence & Credit Card Reward Optimization Platform. Smarter decisions, Brighter futures. For everyone.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

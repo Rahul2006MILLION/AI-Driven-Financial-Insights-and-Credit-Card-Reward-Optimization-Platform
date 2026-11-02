@@ -96,7 +96,15 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
     let errMsg = "An error occurred while communicating with the server.";
     try {
       const errData = await res.json();
-      errMsg = errData.detail || errData.message || errMsg;
+      if (Array.isArray(errData.detail)) {
+        errMsg = errData.detail.map((e: any) => e.msg || e.message || JSON.stringify(e)).join(", ");
+      } else if (typeof errData.detail === "string") {
+        errMsg = errData.detail;
+      } else if (errData.detail && typeof errData.detail === "object") {
+        errMsg = JSON.stringify(errData.detail);
+      } else if (errData.message) {
+        errMsg = errData.message;
+      }
     } catch (_) {}
     throw new Error(errMsg);
   }

@@ -15,7 +15,6 @@ import {
   BarChart3,
   Activity,
   Bot,
-  FileUp,
   Tag,
   User,
   Settings,
@@ -42,7 +41,6 @@ export const Sidebar: React.FC = () => {
     { href: "/financial-health", label: t.nav.health, icon: Activity },
     { href: "/assistant", label: t.nav.assistant, icon: Bot, highlight: true },
     { href: "/learn", label: t.nav.learn, icon: GraduationCap, highlight: true },
-    { href: "/documents", label: t.nav.documents, icon: FileUp },
     { href: "/profile", label: t.nav.profile, icon: User },
     { href: "/settings", label: t.nav.settings, icon: Settings },
   ];

@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Root tokens ──────────────────────────────────────────────── */
 :root {
   --background: #040707;
   --foreground: #FFFFFF;
+  --lime: #a3e635;
+  --emerald: #10B981;
+  --teal: #14B8A6;
+  /* Original CLIQ brand turquoise from logo (sampled from PNG) */
+  --cliq-turquoise: #00F8D8;
+  --cliq-turquoise-dim: #00C8AE;
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -12,34 +24,36 @@ body {
   color: #FFFFFF;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
-  selection-background-color: #10B981;
 }
 
 ::selection {
-  background: rgba(16, 185, 129, 0.3);
+  background: rgba(163, 230, 53, 0.25);
   color: #FFFFFF;
 }
 
-/* Custom glowing effects */
+/* ── Glow utilities ───────────────────────────────────────────── */
 .glow-emerald {
   text-shadow: 0 0 16px rgba(16, 185, 129, 0.55);
 }
-
+.glow-lime {
+  text-shadow: 0 0 20px rgba(163, 230, 53, 0.6);
+}
+.glow-turquoise {
+  text-shadow: 0 0 20px rgba(0, 248, 216, 0.6);
+}
 .glow-cyan {
   text-shadow: 0 0 16px rgba(16, 185, 129, 0.55);
 }
-
 .border-glow-emerald {
   border-color: rgba(16, 185, 129, 0.4);
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
 }
-
 .border-glow-cyan {
   border-color: rgba(16, 185, 129, 0.4);
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
 }
 
-/* Liquid Glass Panels */
+/* ── Glass panels ─────────────────────────────────────────────── */
 .glass-panel {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%), rgba(8, 18, 14, 0.65);
   backdrop-filter: blur(20px);
@@ -47,7 +61,6 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
 }
-
 .glass-panel-subtle {
   background: rgba(8, 16, 13, 0.45);
   backdrop-filter: blur(14px);
@@ -55,11 +68,9 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
-
 .glass-panel-hover {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .glass-panel-hover:hover {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(16, 185, 129, 0.04) 100%), rgba(12, 26, 20, 0.8);
   border-color: rgba(52, 211, 153, 0.25);
@@ -67,15 +78,13 @@ body {
   transform: translateY(-2px);
 }
 
-/* Emerald Ambient Backdrop */
+/* ── Backgrounds ──────────────────────────────────────────────── */
 .mountain-backdrop {
   background: radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.14) 0%, transparent 55%),
               radial-gradient(circle at 15% 45%, rgba(5, 150, 105, 0.07) 0%, transparent 45%),
               radial-gradient(circle at 85% 75%, rgba(52, 211, 153, 0.06) 0%, transparent 50%),
               #040707;
 }
-
-/* Subtle orbital glow accents */
 .ambient-emerald-glow {
   position: absolute;
   border-radius: 9999px;
@@ -83,18 +92,61 @@ body {
   pointer-events: none;
 }
 
-/* Scrollbar customization */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ── Animated gradient text ───────────────────────────────────── */
+.gradient-text-animated {
+  background-image: linear-gradient(120deg, #a3e635 0%, #34d399 25%, #10B981 50%, #34d399 75%, #a3e635 100%);
+  background-size: 300% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-flow 6s ease infinite;
 }
-::-webkit-scrollbar-track {
-  background: rgba(4, 7, 7, 0.8);
+
+@keyframes gradient-flow {
+  0%, 100% { background-position: 0% center; }
+  50%       { background-position: 100% center; }
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
+
+/* ── Particle floating ────────────────────────────────────────── */
+@keyframes particle-drift {
+  0%   { transform: translate(0, 0)     scale(1);   opacity: 0.25; }
+  20%  { transform: translate(8px, -16px)  scale(1.1); opacity: 0.5; }
+  45%  { transform: translate(-5px, -10px) scale(0.9); opacity: 0.35; }
+  70%  { transform: translate(12px, -22px) scale(1.05); opacity: 0.6; }
+  100% { transform: translate(0, 0)     scale(1);   opacity: 0.25; }
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #10B981;
+.particle-float {
+  animation: particle-drift var(--dur, 10s) var(--delay, 0s) ease-in-out infinite;
 }
+
+/* ── Network pulse ────────────────────────────────────────────── */
+@keyframes net-pulse {
+  0%, 100% { opacity: 0.15; }
+  50%       { opacity: 0.4; }
+}
+.net-pulse { animation: net-pulse 3s ease-in-out infinite; }
+
+/* ── Glow ring ────────────────────────────────────────────────── */
+@keyframes glow-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(163, 230, 53, 0); }
+  50%       { box-shadow: 0 0 0 8px rgba(163, 230, 53, 0.08); }
+}
+.animate-glow-ring { animation: glow-ring 2.5s ease-in-out infinite; }
+
+/* ── Data flow line pulse ─────────────────────────────────────── */
+@keyframes dash-flow {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ── Border gradient rotation ─────────────────────────────────── */
+@keyframes border-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(4, 7, 7, 0.8); }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #10B981; }
