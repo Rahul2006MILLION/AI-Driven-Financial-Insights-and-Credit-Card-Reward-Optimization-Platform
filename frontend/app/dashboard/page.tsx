@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
 import { useLanguage } from "@/lib/i18n";
-import { apiFetch } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
+import { apiFetch, storeSession } from "@/lib/api";
 import { DemoBootstrap } from "@/components/DemoBootstrap";
 import NumericInput from "@/components/NumericInput";
+import NoCreditCardDashboard from "@/components/dashboard/NoCreditCardDashboard";
 import {
   CreditCard,
   Zap,
@@ -29,6 +31,7 @@ import {
 
 export default function DashboardPage() {
   const { t } = useLanguage();
+  const { session } = useAuth();
   const [cards, setCards] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [rewardStats, setRewardStats] = useState<any>(null);
@@ -136,6 +139,22 @@ export default function DashboardPage() {
     }
   };
 
+  // Pathway routing: NO_CREDIT_CARD users get the dedicated Cash & Savings dashboard.
+  // Use session (localStorage-backed, instant) for the initial decision; userProfile
+  // is the authoritative source once loaded and will match since auth.tsx syncs it.
+  const isNoCard =
+    session?.financialPathway === "NO_CREDIT_CARD" ||
+    userProfile?.financial_pathway === "NO_CREDIT_CARD";
+
+  if (isNoCard) {
+    return (
+      <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
+        <Sidebar />
+        <NoCreditCardDashboard userName={userProfile?.full_name || session?.fullName} />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 flex flex-col lg:flex-row bg-[#040707]">
       <Sidebar />
@@ -228,6 +247,20 @@ export default function DashboardPage() {
               >
                 <span>Browse Top Cards</span>
               </Link>
+              <button
+                onClick={async () => {
+                  try {
+                    await apiFetch("/profile", { method: "PUT", body: JSON.stringify({ financial_pathway: "NO_CREDIT_CARD" }) });
+                    if (session) storeSession({ ...session, financialPathway: "NO_CREDIT_CARD" });
+                    window.location.reload();
+                  } catch (e) {
+                    console.error("Failed to switch pathway:", e);
+                  }
+                }}
+                className="px-4 py-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-semibold text-xs border border-emerald-500/30 flex items-center justify-center gap-1.5 transition-all"
+              >
+                <span>No Credit Cards? Switch to Cash &amp; Savings</span>
+              </button>
             </div>
           </div>
         )}

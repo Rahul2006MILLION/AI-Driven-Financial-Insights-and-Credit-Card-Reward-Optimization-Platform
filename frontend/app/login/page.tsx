@@ -47,6 +47,7 @@ export default function LoginPage() {
         preferredLanguage: data.preferred_language,
         role: data.role,
         isAdmin: data.is_admin,
+        financialPathway: data.financial_pathway || "CREDIT_CARD",
       });
 
       router.push("/dashboard");

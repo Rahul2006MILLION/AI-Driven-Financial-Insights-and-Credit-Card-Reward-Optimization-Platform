@@ -48,6 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               preferredLanguage: profile.preferred_language || initialSession.preferredLanguage,
               role: profile.role || initialSession.role,
               isAdmin: profile.is_admin !== undefined ? profile.is_admin : initialSession.isAdmin,
+              financialPathway: profile.financial_pathway || initialSession.financialPathway || "CREDIT_CARD",
             };
             storeSession(updated);
             setSession(updated);
@@ -117,6 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           preferredLanguage: profile.preferred_language || current.preferredLanguage,
           role: profile.role || current.role,
           isAdmin: profile.is_admin !== undefined ? profile.is_admin : current.isAdmin,
+          financialPathway: profile.financial_pathway || current.financialPathway || "CREDIT_CARD",
         };
         storeSession(nextSession);
         setSession(nextSession);

@@ -8,6 +8,7 @@ export interface UserSession {
   preferredLanguage?: string;
   role?: string;
   isAdmin?: boolean;
+  financialPathway?: string; // "CREDIT_CARD" | "NO_CREDIT_CARD"
 }
 
 export const AUTH_CHANGE_EVENT = "cliq-auth-state-change";
@@ -36,6 +37,7 @@ export const getStoredSession = (): UserSession | null => {
     preferredLanguage: localStorage.getItem("cliq_preferred_language") || "en",
     role: localStorage.getItem("cliq_role") || "USER",
     isAdmin: localStorage.getItem("cliq_is_admin") === "true",
+    financialPathway: localStorage.getItem("cliq_financial_pathway") || "CREDIT_CARD",
   };
 };
 
@@ -48,6 +50,7 @@ export const storeSession = (session: UserSession) => {
   if (session.preferredLanguage !== undefined) localStorage.setItem("cliq_preferred_language", session.preferredLanguage);
   if (session.role !== undefined) localStorage.setItem("cliq_role", session.role);
   if (session.isAdmin !== undefined) localStorage.setItem("cliq_is_admin", String(session.isAdmin));
+  if (session.financialPathway !== undefined) localStorage.setItem("cliq_financial_pathway", session.financialPathway);
 
   try {
     window.dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT, { detail: session }));
@@ -63,6 +66,7 @@ export const clearSession = () => {
   localStorage.removeItem("cliq_preferred_language");
   localStorage.removeItem("cliq_role");
   localStorage.removeItem("cliq_is_admin");
+  localStorage.removeItem("cliq_financial_pathway");
 
   try {
     window.dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT, { detail: null }));

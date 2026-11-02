@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useLanguage, Language } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
+import { apiFetch, storeSession } from "@/lib/api";
 import {
   CreditCard,
   Globe,
@@ -19,6 +20,13 @@ import {
   Settings,
   LayoutDashboard,
   GraduationCap,
+  TrendingUp,
+  PiggyBank,
+  Target,
+  Wallet,
+  Receipt,
+  Repeat,
+  Activity,
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
@@ -31,6 +39,7 @@ export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isHomepage = pathname === "/";
+  const isNoCard = session?.financialPathway === "NO_CREDIT_CARD";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -66,6 +75,30 @@ export const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
     logout();
     router.push("/login");
+  };
+
+  const [switchingPathway, setSwitchingPathway] = useState(false);
+
+  const handleTogglePathway = async () => {
+    const nextPathway = isNoCard ? "CREDIT_CARD" : "NO_CREDIT_CARD";
+    setSwitchingPathway(true);
+    try {
+      await apiFetch("/profile", {
+        method: "PUT",
+        body: JSON.stringify({ financial_pathway: nextPathway }),
+      });
+      if (session) {
+        const updated = { ...session, financialPathway: nextPathway };
+        storeSession(updated);
+      }
+      setProfileDropdownOpen(false);
+      setMobileMenuOpen(false);
+      window.location.reload();
+    } catch (e) {
+      console.error("Failed to switch pathway:", e);
+    } finally {
+      setSwitchingPathway(false);
+    }
   };
 
   const navBg = isHomepage && !scrolled
@@ -118,24 +151,49 @@ export const Navbar: React.FC = () => {
               >
                 {t.nav.dashboard}
               </Link>
-              <Link
-                href="/cards"
-                className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
-              >
-                {t.nav.cards}
-              </Link>
-              <Link
-                href="/offers"
-                className="text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
-              >
-                {t.nav.offers}
-              </Link>
-              <Link
-                href="/optimization"
-                className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
-              >
-                {t.nav.optimizer}
-              </Link>
+              {isNoCard ? (
+                <>
+                  <Link
+                    href="/budget"
+                    className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
+                  >
+                    Income & Budget
+                  </Link>
+                  <Link
+                    href="/savings-goals"
+                    className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
+                  >
+                    Savings Goals
+                  </Link>
+                  <Link
+                    href="/emergency-fund"
+                    className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
+                  >
+                    Emergency Fund
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/cards"
+                    className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
+                  >
+                    {t.nav.cards}
+                  </Link>
+                  <Link
+                    href="/offers"
+                    className="text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+                  >
+                    {t.nav.offers}
+                  </Link>
+                  <Link
+                    href="/optimization"
+                    className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors"
+                  >
+                    {t.nav.optimizer}
+                  </Link>
+                </>
+              )}
               <Link
                 href="/assistant"
                 className="text-xs font-medium text-slate-300 hover:text-emerald-400 transition-colors flex items-center gap-1"
@@ -198,14 +256,35 @@ export const Navbar: React.FC = () => {
                         <LayoutDashboard className="w-3.5 h-3.5 text-emerald-400" />
                         <span>{t.nav.dashboard}</span>
                       </Link>
-                      <Link
-                        href="/cards"
-                        onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
-                      >
-                        <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>{t.nav.cards}</span>
-                      </Link>
+                      {isNoCard ? (
+                        <>
+                          <Link
+                            href="/income"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                          >
+                            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>My Income</span>
+                          </Link>
+                          <Link
+                            href="/budget"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                          >
+                            <PiggyBank className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Budget Planner</span>
+                          </Link>
+                        </>
+                      ) : (
+                        <Link
+                          href="/cards"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                        >
+                          <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>{t.nav.cards}</span>
+                        </Link>
+                      )}
                       <Link
                         href="/profile"
                         onClick={() => setProfileDropdownOpen(false)}
@@ -214,6 +293,25 @@ export const Navbar: React.FC = () => {
                         <Settings className="w-3.5 h-3.5 text-emerald-400" />
                         <span>{t.nav?.profileSettings || "Profile & Settings"}</span>
                       </Link>
+                    </div>
+
+                    {/* Mode / Pathway Switcher */}
+                    <div className="my-2 p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                      <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1.5 font-semibold">
+                        <span>Pathway</span>
+                        <span className="text-emerald-400 font-bold">{isNoCard ? "Cash & Savings" : "Credit Cards"}</span>
+                      </div>
+                      <button
+                        onClick={handleTogglePathway}
+                        disabled={switchingPathway}
+                        className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold transition-all disabled:opacity-50"
+                      >
+                        {switchingPathway ? (
+                          <span>Switching...</span>
+                        ) : (
+                          <span>Switch to {isNoCard ? "Credit Card Mode" : "Cash & Savings Mode"}</span>
+                        )}
+                      </button>
                     </div>
 
                     {/* Logout */}
@@ -296,48 +394,104 @@ export const Navbar: React.FC = () => {
               >
                 {t.nav.dashboard}
               </Link>
-              <Link
-                href="/cards"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
-              >
-                {t.nav.cards}
-              </Link>
-              <Link
-                href="/offers"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
-              >
-                {t.nav.offers}
-              </Link>
-              <Link
-                href="/optimization"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
-              >
-                {t.nav.optimizer}
-              </Link>
-              <Link
-                href="/analytics"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
-              >
-                {t.nav.analytics}
-              </Link>
-              <Link
-                href="/financial-health"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
-              >
-                {t.nav.health}
-              </Link>
-              <Link
-                href="/budget"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
-              >
-                {t.nav.budget}
-              </Link>
+              {isNoCard ? (
+                <>
+                  <Link
+                    href="/income"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    My Income
+                  </Link>
+                  <Link
+                    href="/transactions"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    Expense Log
+                  </Link>
+                  <Link
+                    href="/budget"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
+                  >
+                    Budget Planner
+                  </Link>
+                  <Link
+                    href="/savings-goals"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    Savings Goals
+                  </Link>
+                  <Link
+                    href="/emergency-fund"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    Emergency Fund
+                  </Link>
+                  <Link
+                    href="/subscriptions"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    Subscriptions & Bills
+                  </Link>
+                  <Link
+                    href="/financial-health"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    Financial Health
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/cards"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    {t.nav.cards}
+                  </Link>
+                  <Link
+                    href="/offers"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
+                  >
+                    {t.nav.offers}
+                  </Link>
+                  <Link
+                    href="/optimization"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    {t.nav.optimizer}
+                  </Link>
+                  <Link
+                    href="/analytics"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    {t.nav.analytics}
+                  </Link>
+                  <Link
+                    href="/financial-health"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
+                  >
+                    {t.nav.health}
+                  </Link>
+                  <Link
+                    href="/budget"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
+                  >
+                    {t.nav.budget}
+                  </Link>
+                </>
+              )}
               <Link
                 href="/assistant"
                 onClick={() => setMobileMenuOpen(false)}
@@ -359,6 +513,22 @@ export const Navbar: React.FC = () => {
               >
                 {t.nav?.profileSettings || "Profile & Settings"}
               </Link>
+
+              {/* Mobile Pathway Toggle */}
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Mode</p>
+                  <p className="text-xs font-bold text-white">{isNoCard ? "Cash & Savings" : "Credit Cards"}</p>
+                </div>
+                <button
+                  onClick={handleTogglePathway}
+                  disabled={switchingPathway}
+                  className="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all disabled:opacity-50"
+                >
+                  {switchingPathway ? "Switching..." : `Switch to ${isNoCard ? "Cards" : "Cash & Savings"}`}
+                </button>
+              </div>
+
               <div className="pt-3 border-t border-white/[0.08] flex items-center justify-end">
                 <button
                   onClick={handleLogout}

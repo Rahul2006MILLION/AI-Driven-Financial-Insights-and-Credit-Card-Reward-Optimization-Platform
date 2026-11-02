@@ -16,6 +16,7 @@ export default function ProfilePage() {
   const [fullName, setFullName] = useState("");
   const [currency, setCurrency] = useState("INR");
   const [preferredLang, setPreferredLang] = useState<Language>(language);
+  const [financialPathway, setFinancialPathway] = useState("CREDIT_CARD");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
@@ -27,6 +28,7 @@ export default function ProfilePage() {
         setProfile(data);
         setFullName(data.full_name || "");
         setCurrency(data.currency || "INR");
+        setFinancialPathway(data.financial_pathway || "CREDIT_CARD");
         if (data.preferred_language) {
           setPreferredLang(data.preferred_language as Language);
           setLanguage(data.preferred_language as Language);
@@ -52,6 +54,7 @@ export default function ProfilePage() {
           full_name: fullName,
           preferred_language: preferredLang,
           currency,
+          financial_pathway: financialPathway,
         }),
       });
 
@@ -60,6 +63,7 @@ export default function ProfilePage() {
       updateUser({
         fullName: updated.full_name,
         preferredLanguage: updated.preferred_language,
+        financialPathway: updated.financial_pathway,
       });
 
       setSavedSuccess(true);
@@ -167,6 +171,47 @@ export default function ProfilePage() {
                     <option value="hi">हिन्दी (Hindi)</option>
                     <option value="kn">ಕನ್ನಡ (Kannada)</option>
                   </select>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-slate-400 font-medium mb-1.5">
+                    Financial Pathway Mode
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setFinancialPathway("CREDIT_CARD")}
+                      className={`p-3.5 rounded-2xl border text-left transition-all ${
+                        financialPathway === "CREDIT_CARD"
+                          ? "bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                          : "bg-white/[0.02] border-white/10 hover:border-white/20 text-slate-400"
+                      }`}
+                    >
+                      <p className={`font-bold text-xs ${financialPathway === "CREDIT_CARD" ? "text-emerald-400" : "text-white"}`}>
+                        Credit Card Optimization
+                      </p>
+                      <p className="text-[11px] text-slate-400 mt-1">
+                        Reward maximizer, card comparisons, merchant offer radar, and statement analytics.
+                      </p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setFinancialPathway("NO_CREDIT_CARD")}
+                      className={`p-3.5 rounded-2xl border text-left transition-all ${
+                        financialPathway === "NO_CREDIT_CARD"
+                          ? "bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                          : "bg-white/[0.02] border-white/10 hover:border-white/20 text-slate-400"
+                      }`}
+                    >
+                      <p className={`font-bold text-xs ${financialPathway === "NO_CREDIT_CARD" ? "text-emerald-400" : "text-white"}`}>
+                        Cash &amp; Savings Pathway
+                      </p>
+                      <p className="text-[11px] text-slate-400 mt-1">
+                        50/30/20 budget framework, emergency runway shield, UPI &amp; cash expense log, and savings goals.
+                      </p>
+                    </button>
+                  </div>
                 </div>
               </div>
 
