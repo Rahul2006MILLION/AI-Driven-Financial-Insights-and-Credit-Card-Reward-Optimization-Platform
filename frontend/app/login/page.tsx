@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
-import { Sparkles, Lock, Mail, Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Lock, Mail, Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -71,11 +72,14 @@ export default function LoginPage() {
 
       <div className="relative z-10 max-w-md w-full p-8 sm:p-9 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)]">
         <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-500 p-0.5 mb-3 shadow-neonLime">
-            <div className="w-full h-full bg-[#17191E] rounded-[14px] flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-lime-400" />
-            </div>
-          </div>
+          <Image
+            src="/cliq-logo.png"
+            alt="CLIQ"
+            width={1024}
+            height={381}
+            priority
+            className="h-10 w-auto mx-auto mb-4 object-contain"
+          />
           <h2 className="text-2xl font-black text-white">{t.auth.signInTitle}</h2>
           <p className="text-xs text-slate-400 mt-1">{t.auth.signInSubtitle}</p>
         </div>
@@ -131,7 +135,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-sm shadow-neonLime transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-40"
+            className="w-full py-3 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-sm shadow-neonLime transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-40"
           >
             {loading ? (
               <div className="flex items-center gap-1.5">

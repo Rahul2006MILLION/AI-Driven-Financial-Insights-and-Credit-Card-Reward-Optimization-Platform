@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import React from "react";
+import { motion, useMotionTemplate, useTransform } from "framer-motion";
+import { usePointerTilt } from "@/lib/motion";
 import { Wifi, Sparkles, ShieldCheck } from "lucide-react";
 import { getThemeForBank } from "@/lib/cardCatalogue";
 
@@ -35,40 +36,26 @@ export function DigitalCreditCard({
   disableInternalTilt = false,
   glowShadow = true,
 }: DigitalCreditCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
-  const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
-
   const theme = getThemeForBank(bankName || "custom");
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isCompact || disableInternalTilt || !cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotX = ((y - centerY) / centerY) * -10; // max -10 to +10 deg
-    const rotY = ((x - centerX) / centerX) * 10;
-
-    setRotateX(rotX);
-    setRotateY(rotY);
-    setGlarePos({
-      x: (x / rect.width) * 100,
-      y: (y / rect.height) * 100,
-      opacity: 0.25,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    if (disableInternalTilt) return;
-    setRotateX(0);
-    setRotateY(0);
-    setGlarePos((prev) => ({ ...prev, opacity: 0 }));
-  };
+  // Tilt + layered parallax run on motion values (no re-render per pointer move)
+  // and are inert on touch devices / reduced motion via usePointerTilt.
+  const tilt = usePointerTilt(10);
+  const tiltActive = tilt.enabled && !isCompact && !disableInternalTilt;
+  const glareOpacity = useTransform([tilt.px, tilt.py], ([x, y]: number[]) =>
+    Math.min(0.28, (Math.abs(x) + Math.abs(y)) * 0.5)
+  );
+  const glare = useMotionTemplate`radial-gradient(circle at ${tilt.glareX} ${tilt.glareY}, rgba(255,255,255,${glareOpacity}) 0%, transparent 60%)`;
+  // Depth layers: near content drifts with the pointer, background rings drift against it
+  const nearX = useTransform(tilt.px, [-0.5, 0.5], [-5, 5]);
+  const nearY = useTransform(tilt.py, [-0.5, 0.5], [-4, 4]);
+  const midX = useTransform(tilt.px, [-0.5, 0.5], [-2.5, 2.5]);
+  const midY = useTransform(tilt.py, [-0.5, 0.5], [-2, 2]);
+  const farX = useTransform(tilt.px, [-0.5, 0.5], [7, -7]);
+  const farY = useTransform(tilt.py, [-0.5, 0.5], [6, -6]);
+  const near = tiltActive ? { x: nearX, y: nearY } : undefined;
+  const mid = tiltActive ? { x: midX, y: midY } : undefined;
+  const far = tiltActive ? { x: farX, y: farY } : undefined;
 
   // Format masked digits
   const displayDigits = lastFourDigits && lastFourDigits.length === 4
@@ -131,16 +118,13 @@ export function DigitalCreditCard({
       onClick={onClick}
     >
       <motion.div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        animate={{
-          rotateX,
-          rotateY,
-          scale: isCompact ? 1 : 1.01,
-        }}
+        onPointerMove={tiltActive ? tilt.onPointerMove : undefined}
+        onPointerLeave={tiltActive ? tilt.onPointerLeave : undefined}
+        animate={{ scale: isCompact ? 1 : 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         style={{
+          rotateX: tiltActive ? tilt.rotateX : 0,
+          rotateY: tiltActive ? tilt.rotateY : 0,
           transformStyle: "preserve-3d",
           boxShadow: glowShadow
             ? `0 20px 40px -15px ${theme.glowColor}, 0 0 1px 1px rgba(255,255,255,0.1) inset`
@@ -149,19 +133,16 @@ export function DigitalCreditCard({
         className={`relative w-full aspect-[1.586/1] rounded-2xl bg-gradient-to-br ${theme.gradient} border ${theme.borderColor} overflow-hidden cursor-pointer select-none transition-shadow duration-300 p-4 sm:p-6 flex flex-col justify-between`}
       >
         {/* Dynamic Light Sheen Glare */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-          style={{
-            background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,${glarePos.opacity}) 0%, transparent 60%)`,
-          }}
-        />
+        {tiltActive && (
+          <motion.div className="absolute inset-0 pointer-events-none" style={{ background: glare }} />
+        )}
 
-        {/* Subtle Geometric Background Watermark */}
-        <div className="absolute -right-12 -bottom-12 w-48 h-48 rounded-full border border-white/5 pointer-events-none" />
-        <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full border border-white/10 pointer-events-none" />
+        {/* Subtle Geometric Background Watermark (far layer) */}
+        <motion.div style={far} className="absolute -right-12 -bottom-12 w-48 h-48 rounded-full border border-white/5 pointer-events-none" />
+        <motion.div style={far} className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full border border-white/10 pointer-events-none" />
 
         {/* Card Header: Bank & Card Variant Badge */}
-        <div className="relative z-10 flex items-start justify-between">
+        <motion.div style={near} className="relative z-10 flex items-start justify-between">
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs sm:text-sm font-extrabold tracking-wider uppercase text-white/95">
@@ -186,10 +167,10 @@ export function DigitalCreditCard({
             )}
             <Wifi className="w-4 h-4 sm:w-5 sm:h-5 text-white/70 rotate-90" />
           </div>
-        </div>
+        </motion.div>
 
         {/* EMV Chip & Contactless Sensor */}
-        <div className="relative z-10 flex items-center gap-3 my-auto">
+        <motion.div style={mid} className="relative z-10 flex items-center gap-3 my-auto">
           {/* Realistic metallic EMV chip */}
           <div
             className={`w-10 h-7 sm:w-12 sm:h-9 rounded-md border flex flex-col justify-between p-1 shadow-inner relative overflow-hidden ${
@@ -207,17 +188,17 @@ export function DigitalCreditCard({
             </div>
             <div className="w-full h-[1px] bg-black/20" />
           </div>
-        </div>
+        </motion.div>
 
         {/* Card Number (Masked Last-4) */}
-        <div className="relative z-10 my-1">
+        <motion.div style={mid} className="relative z-10 my-1">
           <div className="font-mono text-sm sm:text-lg lg:text-xl tracking-[0.18em] sm:tracking-[0.22em] text-white/95 drop-shadow font-semibold">
             {displayDigits}
           </div>
-        </div>
+        </motion.div>
 
         {/* Card Footer: Cardholder Name, Expiry & Network Logo */}
-        <div className="relative z-10 flex items-end justify-between pt-1">
+        <motion.div style={near} className="relative z-10 flex items-end justify-between pt-1">
           <div className="space-y-0.5">
             <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-white/50 block font-semibold">
               CARDHOLDER
@@ -241,7 +222,7 @@ export function DigitalCreditCard({
               {renderNetworkBadge()}
             </div>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );

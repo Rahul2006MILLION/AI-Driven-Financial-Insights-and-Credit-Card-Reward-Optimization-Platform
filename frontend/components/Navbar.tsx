@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { SPRING, popoverMotion } from "@/lib/motion";
 import { useLanguage, Language } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { apiFetch, storeSession } from "@/lib/api";
@@ -107,7 +109,7 @@ export const Navbar: React.FC = () => {
             width={1024}
             height={381}
             priority
-            className="h-8 sm:h-9 w-auto object-contain [filter:hue-rotate(-95deg)_saturate(1.15)] transition-transform duration-200 group-hover:scale-[1.02]"
+            className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
           />
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-lime-400 text-[#12301A] shrink-0">
             PRO
@@ -123,13 +125,21 @@ export const Navbar: React.FC = () => {
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
-                className={`px-2.5 py-1 text-[11px] font-semibold rounded-full transition-all ${
+                aria-pressed={language === lang}
+                className={`relative px-2.5 py-1 text-[11px] font-semibold rounded-full transition-colors duration-200 ${
                   language === lang
-                    ? "bg-white text-[#0E1013] font-bold"
+                    ? "text-[#0E1013] font-bold"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
-                {lang === "en" ? "EN" : lang === "hi" ? "हिन्दी" : "ಕನ್ನಡ"}
+                {language === lang && (
+                  <motion.span
+                    layoutId="nav-lang-indicator"
+                    className="absolute inset-0 rounded-full bg-white"
+                    transition={SPRING}
+                  />
+                )}
+                <span className="relative">{lang === "en" ? "EN" : lang === "hi" ? "हिन्दी" : "ಕನ್ನಡ"}</span>
               </button>
             ))}
           </div>
@@ -157,71 +167,77 @@ export const Navbar: React.FC = () => {
                   />
                 </button>
 
-                {profileDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-64 rounded-3xl bg-[#1C1F25] border border-white/[0.12] backdrop-blur-2xl p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                    {/* Header Info */}
-                    <div className="px-3 py-2.5 border-b border-white/[0.08] mb-1">
-                      <p className="text-xs font-bold text-white truncate">
-                        {session.fullName || "CLIQ User"}
-                      </p>
-                      <p className="text-[11px] text-slate-400 truncate">{session.email}</p>
-                      <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-semibold text-emerald-400">
-                        <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                        <span>{session.isAdmin ? (t.nav?.administrator || "Administrator") : (t.nav?.proMember || "PRO Member")}</span>
+                <AnimatePresence>
+                  {profileDropdownOpen && (
+                    <motion.div
+                      {...popoverMotion}
+                      style={{ transformOrigin: "top right" }}
+                      className="absolute right-0 top-full mt-2 w-64 rounded-3xl bg-[#1C1F25] border border-white/[0.12] backdrop-blur-2xl p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-50"
+                    >
+                      {/* Header Info */}
+                      <div className="px-3 py-2.5 border-b border-white/[0.08] mb-1">
+                        <p className="text-xs font-bold text-white truncate">
+                          {session.fullName || "CLIQ User"}
+                        </p>
+                        <p className="text-[11px] text-slate-400 truncate">{session.email}</p>
+                        <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-semibold text-emerald-400">
+                          <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                          <span>{session.isAdmin ? (t.nav?.administrator || "Administrator") : (t.nav?.proMember || "PRO Member")}</span>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Menu Links */}
-                    <div className="space-y-0.5 text-xs">
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
-                      >
-                        <LayoutDashboard className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>{t.nav.dashboard}</span>
-                      </Link>
-                      <Link
-                        href="/profile"
-                        onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
-                      >
-                        <Settings className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>{t.nav?.profileSettings || "Profile & Settings"}</span>
-                      </Link>
-                    </div>
-
-                    {/* Mode / Pathway Switcher */}
-                    <div className="my-2 p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                      <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1.5 font-semibold">
-                        <span>Pathway</span>
-                        <span className="text-emerald-400 font-bold">{isNoCard ? "Cash & Savings" : "Credit Cards"}</span>
+                      {/* Menu Links */}
+                      <div className="space-y-0.5 text-xs">
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                        >
+                          <LayoutDashboard className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>{t.nav.dashboard}</span>
+                        </Link>
+                        <Link
+                          href="/profile"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                        >
+                          <Settings className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>{t.nav?.profileSettings || "Profile & Settings"}</span>
+                        </Link>
                       </div>
-                      <button
-                        onClick={handleTogglePathway}
-                        disabled={switchingPathway}
-                        className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold transition-all disabled:opacity-50"
-                      >
-                        {switchingPathway ? (
-                          <span>Switching...</span>
-                        ) : (
-                          <span>Switch to {isNoCard ? "Credit Card Mode" : "Cash & Savings Mode"}</span>
-                        )}
-                      </button>
-                    </div>
 
-                    {/* Logout */}
-                    <div className="pt-1 mt-1 border-t border-white/[0.08]">
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors text-xs font-semibold"
-                      >
-                        <LogOut className="w-3.5 h-3.5 text-rose-400" />
-                        <span>{t.nav.logout}</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
+                      {/* Mode / Pathway Switcher */}
+                      <div className="my-2 p-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                        <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1.5 font-semibold">
+                          <span>{t.nav.pathwayLabel}</span>
+                          <span className="text-emerald-400 font-bold">{isNoCard ? t.nav.modeCashSavings : t.nav.modeCreditCards}</span>
+                        </div>
+                        <button
+                          onClick={handleTogglePathway}
+                          disabled={switchingPathway}
+                          className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold transition-all disabled:opacity-50"
+                        >
+                          {switchingPathway ? (
+                            <span>{t.nav.switching}</span>
+                          ) : (
+                            <span>{isNoCard ? t.nav.switchToCardMode : t.nav.switchToCashMode}</span>
+                          )}
+                        </button>
+                      </div>
+
+                      {/* Logout */}
+                      <div className="pt-1 mt-1 border-t border-white/[0.08]">
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors text-xs font-semibold"
+                        >
+                          <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                          <span>{t.nav.logout}</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           ) : (
@@ -234,7 +250,7 @@ export const Navbar: React.FC = () => {
               </Link>
               <Link
                 href="/register"
-                className="text-xs font-bold px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#12301A] transition-all"
+                className="text-xs font-bold px-4 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#12301A] transition-all"
               >
                 {t.nav.register}
               </Link>
@@ -297,49 +313,49 @@ export const Navbar: React.FC = () => {
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
                   >
-                    My Income
+                    {t.nav.myIncome}
                   </Link>
                   <Link
                     href="/transactions"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
                   >
-                    Expense Log
+                    {t.nav.expenseLog}
                   </Link>
                   <Link
                     href="/budget"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
                   >
-                    Budget Planner
+                    {t.nav.budgetPlanner}
                   </Link>
                   <Link
                     href="/savings-goals"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
                   >
-                    Savings Goals
+                    {t.nav.savingsGoals}
                   </Link>
                   <Link
                     href="/emergency-fund"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
                   >
-                    Emergency Fund
+                    {t.nav.emergencyFund}
                   </Link>
                   <Link
                     href="/subscriptions"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
                   >
-                    Subscriptions & Bills
+                    {t.nav.subscriptions}
                   </Link>
                   <Link
                     href="/financial-health"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm text-slate-300 hover:text-emerald-400 font-medium transition-colors"
                   >
-                    Financial Health
+                    {t.nav.financialHealth}
                   </Link>
                 </>
               ) : (
@@ -413,15 +429,15 @@ export const Navbar: React.FC = () => {
               {/* Mobile Pathway Toggle */}
               <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Mode</p>
-                  <p className="text-xs font-bold text-white">{isNoCard ? "Cash & Savings" : "Credit Cards"}</p>
+                  <p className="text-[10px] text-slate-400 font-semibold uppercase">{t.nav.modeLabel}</p>
+                  <p className="text-xs font-bold text-white">{isNoCard ? t.nav.modeCashSavings : t.nav.modeCreditCards}</p>
                 </div>
                 <button
                   onClick={handleTogglePathway}
                   disabled={switchingPathway}
                   className="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all disabled:opacity-50"
                 >
-                  {switchingPathway ? "Switching..." : `Switch to ${isNoCard ? "Cards" : "Cash & Savings"}`}
+                  {switchingPathway ? t.nav.switching : isNoCard ? t.nav.switchToCardsShort : t.nav.switchToCashShort}
                 </button>
               </div>
 
@@ -447,7 +463,7 @@ export const Navbar: React.FC = () => {
               <Link
                 href="/register"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-center text-xs py-2.5 bg-lime-400 hover:bg-lime-300 rounded-full font-bold text-[#12301A]"
+                className="block text-center text-xs py-2.5 btn-fx bg-lime-400 hover:bg-lime-300 rounded-full font-bold text-[#12301A]"
               >
                 {t.nav.register}
               </Link>

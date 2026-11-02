@@ -445,7 +445,7 @@ export default function AssistantPage() {
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="p-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] disabled:opacity-40 shadow-neonLime transition-all"
+              className="p-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] disabled:opacity-40 shadow-neonLime transition-all"
             >
               <Send className="w-3.5 h-3.5" />
             </button>

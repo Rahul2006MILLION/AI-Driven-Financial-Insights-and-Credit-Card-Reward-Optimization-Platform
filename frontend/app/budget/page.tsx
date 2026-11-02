@@ -276,7 +276,7 @@ export default function BudgetPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowAddIncome(true)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{t.incomes.addIncome}</span>
@@ -394,7 +394,7 @@ export default function BudgetPage() {
                   <button
                     onClick={handleSaveBudget}
                     disabled={savingBudget}
-                    className="px-3 py-1.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all"
+                    className="px-3 py-1.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all"
                   >
                     {savingBudget ? t.incomes.savingLimit : t.incomes.updateLimit}
                   </button>
@@ -411,7 +411,7 @@ export default function BudgetPage() {
               {/* Progress bar */}
               <div className="w-full bg-white/[0.06] rounded-full h-3 overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${
+                  className={`h-full rounded-full progress-anim ${
                     budgetUtilization > 90
                       ? "bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]"
                       : budgetUtilization > 75
@@ -499,7 +499,7 @@ export default function BudgetPage() {
                     </p>
                     <button
                       onClick={() => setShowAddIncome(true)}
-                      className="px-4 py-2 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs"
+                      className="px-4 py-2 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs"
                     >
                       {t.incomes.addFirstIncome}
                     </button>
@@ -664,7 +664,7 @@ export default function BudgetPage() {
                         <button
                           type="submit"
                           disabled={submittingIncome}
-                          className="px-5 py-2 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-1.5"
+                          className="px-5 py-2 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-1.5"
                         >
                           {submittingIncome ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                           <span>{submittingIncome ? t.incomes.saving : t.incomes.saveIncome}</span>
@@ -764,7 +764,7 @@ export default function BudgetPage() {
                     <button
                       type="submit"
                       disabled={recordingExpense}
-                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_15px_rgba(76,192,63,0.25)] transition-all flex items-center justify-center gap-1.5"
+                      className="w-full py-2.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_15px_rgba(76,192,63,0.25)] transition-all flex items-center justify-center gap-1.5"
                     >
                       {recordingExpense ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                       <span>{t.incomes.recordExpense}</span>

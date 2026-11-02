@@ -182,7 +182,7 @@ export default function EmergencyFundPage() {
                 </div>
                 <div className="h-3 bg-white/[0.04] rounded-full overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-lime-400 transition-all duration-700"
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-lime-400 progress-anim"
                     style={{ width: `${efTarget > 0 ? Math.min(100, Math.round((savingsSpend / efTarget) * 100)) : 0}%` }}
                   />
                 </div>

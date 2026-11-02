@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { DigitalCreditCard } from "@/components/DigitalCreditCard";
 import { BANK_ISSUERS } from "@/lib/cardCatalogue";
+import { useLanguage } from "@/lib/i18n";
 import {
   CreditCard, Zap, Gift, BarChart3,
   Wallet, PiggyBank, GraduationCap, TrendingUp,
@@ -26,20 +27,22 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
 
 /* ── Budget bars visual for no-card journey ─────────────────── */
 function BudgetVisual() {
+  const { t } = useLanguage();
+  const j = t.home.journeys;
   const items = [
-    { label: "Income", value: "₹42,000", pct: 100, color: "bg-[#12301A]" },
-    { label: "Expenses", value: "₹28,340", pct: 67, color: "bg-[#12301A]/60" },
-    { label: "Savings", value: "₹13,660", pct: 33, color: "bg-lime-500" },
+    { label: j.income, value: "₹42,000", pct: 100, color: "bg-[#12301A]" },
+    { label: j.expenses, value: "₹28,340", pct: 67, color: "bg-[#12301A]/60" },
+    { label: j.savings, value: "₹13,660", pct: 33, color: "bg-lime-500" },
   ];
 
   const goals = [
-    { label: "Emergency Fund", target: "₹1,00,000", done: 62 },
-    { label: "Education", target: "₹50,000", done: 44 },
+    { label: j.emergencyFund, target: "₹1,00,000", done: 62 },
+    { label: j.education, target: "₹50,000", done: 44 },
   ];
 
   return (
     <div className="rounded-3xl bg-[#F4F6EE] text-[#12301A] p-5 space-y-4 shadow-[0_20px_40px_-20px_rgba(18,48,26,0.5)]">
-      <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase">Monthly Overview</div>
+      <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase">{j.overview}</div>
       <div className="space-y-3">
         {items.map((item) => (
           <div key={item.label} className="space-y-1.5">
@@ -60,7 +63,7 @@ function BudgetVisual() {
         ))}
       </div>
       <div className="pt-3 border-t border-[#12301A]/10 space-y-2">
-        <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase">Savings Goals</div>
+        <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase">{j.goals}</div>
         {goals.map((g) => (
           <div key={g.label} className="flex items-center justify-between">
             <div>
@@ -107,7 +110,7 @@ function JourneyCard({
 
   return (
     <FadeUp delay={delay} className="h-full">
-      <div className={`relative h-full rounded-[2rem] ${shell} overflow-hidden transition-transform duration-500 hover:-translate-y-1`}>
+      <div data-spotlight className={`group relative h-full rounded-[2rem] ${shell} ${isLime ? "spot-light" : ""} overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:hover:-translate-y-1`}>
         <div className="relative p-7 sm:p-9 flex flex-col h-full">
           <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase w-fit mb-6 ${badge}`}>
             {label}
@@ -121,7 +124,7 @@ function JourneyCard({
           <div className="mt-auto space-y-3">
             {features.map((f) => (
               <div key={f.text} className="flex items-center gap-3">
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${iconDot}`}>
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-safe:group-hover:scale-110 ${iconDot}`}>
                   <f.icon className="w-3.5 h-3.5" />
                 </div>
                 <span className={`text-sm font-medium ${feat}`}>{f.text}</span>
@@ -137,20 +140,11 @@ function JourneyCard({
 /* ── Two journeys section ────────────────────────────────────── */
 export function JourneysSection() {
   const heroCard = BANK_ISSUERS[0]?.cards[0];
+  const { t } = useLanguage();
+  const j = t.home.journeys;
 
-  const ccFeatures = [
-    { icon: Zap, text: "Instant reward calculation for 50+ Indian cards" },
-    { icon: Gift, text: "Live offer discovery from 8 bank sources" },
-    { icon: BarChart3, text: "Card-vs-card comparison and fee waiver tracking" },
-    { icon: CreditCard, text: "Purchase intelligence — best card for every merchant" },
-  ];
-
-  const noCardFeatures = [
-    { icon: Wallet, text: "Income tracking — regular, irregular, freelance" },
-    { icon: TrendingUp, text: "Budget planning with configurable category splits" },
-    { icon: PiggyBank, text: "Emergency savings goals with progress tracking" },
-    { icon: GraduationCap, text: "CLIQ Learn — 6 financial literacy modules" },
-  ];
+  const ccFeatures = [Zap, Gift, BarChart3, CreditCard].map((icon, i) => ({ icon, text: j.ccFeatures[i] }));
+  const noCardFeatures = [Wallet, TrendingUp, PiggyBank, GraduationCap].map((icon, i) => ({ icon, text: j.noCardFeatures[i] }));
 
   return (
     <section className="relative py-24 sm:py-28 overflow-hidden">
@@ -159,14 +153,14 @@ export function JourneysSection() {
         <FadeUp className="text-center mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-slate-300 text-[11px] font-bold tracking-wide mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-lime-400" />
-            Two paths. One platform.
+            {j.eyebrow}
           </div>
           <h2 className="font-display text-[clamp(2rem,4.6vw,3.6rem)] font-extrabold uppercase text-white leading-[1] tracking-[-0.03em]">
-            Financial intelligence<br />
-            <span className="text-lime-400">built for everyone.</span>
+            {j.titleLine1}<br />
+            <span className="text-lime-400">{j.titleAccent}</span>
           </h2>
           <p className="mt-5 text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-            CLIQ adapts to your financial reality — whether you hold premium cards or are just starting your journey.
+            {j.subtitle}
           </p>
         </FadeUp>
 
@@ -174,9 +168,9 @@ export function JourneysSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <JourneyCard
             accent="charcoal"
-            label="Credit card path"
-            headline="Maximize every rupee of rewards."
-            description="Track your full card wallet, discover real-time offers, and let CLIQ's AI optimize which card to use for every purchase."
+            label={j.ccLabel}
+            headline={j.ccHeadline}
+            description={j.ccDescription}
             features={ccFeatures}
             visual={
               heroCard ? (
@@ -199,9 +193,9 @@ export function JourneysSection() {
           />
           <JourneyCard
             accent="lime"
-            label="No card required"
-            headline="Build wealth from your first paycheck."
-            description="Track income, plan budgets, grow your emergency fund, and learn financial skills — all without needing a credit card."
+            label={j.noCardLabel}
+            headline={j.noCardHeadline}
+            description={j.noCardDescription}
             features={noCardFeatures}
             visual={<BudgetVisual />}
             delay={0.1}

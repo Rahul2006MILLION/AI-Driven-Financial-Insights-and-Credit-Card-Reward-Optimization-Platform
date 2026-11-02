@@ -90,7 +90,7 @@ export default function CompareCardsPage() {
             <button
               onClick={handleRunComparison}
               disabled={comparing || selectedIds.length < 2}
-              className="px-4 py-1.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-[0_0_15px_rgba(76,192,63,0.35)] transition-all flex items-center gap-1.5 disabled:opacity-40"
+              className="px-4 py-1.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-[0_0_15px_rgba(76,192,63,0.35)] transition-all flex items-center gap-1.5 disabled:opacity-40"
             >
               {comparing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <GitCompare className="w-3.5 h-3.5" />}
               <span>{comparing ? (t.compare?.comparing || "Comparing...") : (t.compare?.runComparison || "Compare")}</span>

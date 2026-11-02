@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Wifi } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
+import { HeroBackdrop } from "./HeroBackdrop";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
@@ -68,10 +70,12 @@ function HeroCard({ tone, label }: { tone: CardTone; label: string }) {
 
 function CardFan() {
   const reduce = useReducedMotion();
+  const { t } = useLanguage();
+  const h = t.home.hero;
   const cards: { tone: CardTone; label: string; rotate: number; x: number; y: number; delay: number }[] = [
-    { tone: "pale",   label: "Savings", rotate: -16, x: -46, y: 30, delay: 0.55 },
-    { tone: "lime",   label: "Rewards", rotate: 0,   x: 0,   y: 0,  delay: 0.45 },
-    { tone: "forest", label: "Premium", rotate: 16,  x: 46,  y: 30, delay: 0.65 },
+    { tone: "pale",   label: h.cardSavings, rotate: -16, x: -46, y: 30, delay: 0.55 },
+    { tone: "lime",   label: h.cardRewards, rotate: 0,   x: 0,   y: 0,  delay: 0.45 },
+    { tone: "forest", label: h.cardPremium, rotate: 16,  x: 46,  y: 30, delay: 0.65 },
   ];
   return (
     <div className="relative h-[280px] sm:h-[360px] md:h-[400px] flex items-end justify-center">
@@ -93,16 +97,9 @@ function CardFan() {
 }
 
 /* ── Feature chip cloud ──────────────────────────────────────── */
-const CHIPS: { label: string; tone: "lime" | "sun" | "forest" | "mist" }[] = [
-  { label: "Reward Optimizer",    tone: "lime"   },
-  { label: "Budget Planner",      tone: "sun"    },
-  { label: "Savings Goals",       tone: "forest" },
-  { label: "Emergency Fund",      tone: "mist"   },
-  { label: "Statement Import",    tone: "lime"   },
-  { label: "AI Assistant",        tone: "forest" },
-  { label: "Financial Health",    tone: "lime"   },
-  { label: "Live Card Offers",    tone: "mist"   },
-  { label: "EN · हिन्दी · ಕನ್ನಡ", tone: "sun"    },
+// Tones pair by index with t.home.hero.chips
+const CHIP_TONES: ("lime" | "sun" | "forest" | "mist")[] = [
+  "lime", "sun", "forest", "mist", "lime", "forest", "lime", "mist", "sun",
 ];
 
 const CHIP_TONE = {
@@ -115,6 +112,10 @@ const CHIP_TONE = {
 /* ── Hero section ─────────────────────────────────────────────── */
 export function HeroSection() {
   const reduce = useReducedMotion();
+  const { t, language } = useLanguage();
+  const h = t.home.hero;
+  // Indic scripts need taller line boxes than the tight Latin display setting
+  const latin = language === "en";
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 22 },
     animate: { opacity: 1, y: 0 },
@@ -129,32 +130,37 @@ export function HeroSection() {
         <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#F4F6EE] text-[#12301A] overflow-hidden">
           {/* ── Hero ── */}
           <div className="relative bg-gradient-to-b from-[#F4F6EE] via-[#EEF4DF] to-[#DCEFB0] rounded-[2rem] sm:rounded-[2.5rem] mx-2 mt-2 sm:mx-3 sm:mt-3 overflow-hidden">
-            <div className="max-w-5xl mx-auto px-5 pt-12 sm:pt-16 text-center">
+            <HeroBackdrop />
+            <div className="relative max-w-5xl mx-auto px-5 pt-12 sm:pt-16 text-center">
               <motion.div
                 {...rise(0)}
                 className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#12301A] text-lime-300 text-[11px] font-bold tracking-wide mb-7"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-lime-400" />
-                Financial intelligence for every Indian
+                {h.badge}
               </motion.div>
 
               <motion.h1
                 {...rise(0.08)}
-                className="font-display font-extrabold uppercase text-[clamp(2.4rem,7.2vw,5.6rem)] leading-[0.95] tracking-[-0.035em]"
+                className={`font-display font-extrabold uppercase ${
+                  latin
+                    ? "text-[clamp(2.4rem,7.2vw,5.6rem)] leading-[0.95] tracking-[-0.035em]"
+                    : "text-[clamp(2.2rem,6.4vw,5rem)] leading-[1.25] tracking-[-0.01em]"
+                }`}
               >
-                Money made
+                {h.line1}
                 <br />
-                simple, in
+                {h.line2}
                 <br />
                 <span className="inline-flex flex-wrap items-center justify-center gap-x-[0.18em] align-middle">
-                  your
+                  {h.line3Lead}
                   <span className="inline-flex items-center gap-[0.18em] rounded-full bg-lime-400 pl-[0.08em] pr-[0.28em] py-[0.06em] text-[0.42em] tracking-normal normal-case align-middle">
                     <span className="inline-flex items-center justify-center w-[1.7em] h-[1.7em] rounded-full bg-[#12301A] text-lime-300">
                       <ArrowRight className="w-[0.9em] h-[0.9em]" />
                     </span>
                     EN&nbsp;हि&nbsp;ಕ
                   </span>
-                  language
+                  {h.line3Tail}
                 </span>
               </motion.h1>
 
@@ -162,23 +168,22 @@ export function HeroSection() {
                 {...rise(0.2)}
                 className="mt-6 mx-auto max-w-md text-[15px] leading-relaxed text-[#12301A]/70"
               >
-                Maximise every card reward, or build your first savings habit. Deterministic
-                math, plain-language guidance, and your data stays yours.
+                {h.subtitle}
               </motion.p>
 
               <motion.div {...rise(0.3)} className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
                   href="/register"
-                  className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#12301A] hover:bg-[#1B4426] text-lime-300 font-bold text-sm transition-colors"
+                  className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full btn-fx bg-[#12301A] hover:bg-[#1B4426] text-lime-300 font-bold text-sm transition-colors"
                 >
-                  Start free
+                  {h.ctaStart}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#12301A] font-bold text-sm transition-colors"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#12301A] font-bold text-sm transition-colors"
                 >
-                  Sign in
+                  {h.ctaSignIn}
                 </Link>
               </motion.div>
             </div>
@@ -195,21 +200,21 @@ export function HeroSection() {
               transition={{ duration: 0.6, ease: EASE_OUT }}
               className="font-display font-extrabold uppercase text-[clamp(1.5rem,3.2vw,2.35rem)] leading-[1.05] tracking-[-0.02em]"
             >
-              <span className="text-[#5E8C12]">Everything</span> your money
+              <span className="text-[#5E8C12]">{h.chipsAccent}</span> {h.chipsRest}
               <br />
-              needs, in one place.
+              {h.chipsLine2}
             </motion.h2>
             <div className="mt-8 flex flex-wrap justify-center gap-2.5 max-w-3xl mx-auto">
-              {CHIPS.map((chip, i) => (
+              {h.chips.map((label, i) => (
                 <motion.span
-                  key={chip.label}
+                  key={label}
                   initial={reduce ? false : { opacity: 0, scale: 0.85 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ type: "spring", stiffness: 260, damping: 20, delay: i * 0.04 }}
-                  className={`px-4 py-2 rounded-full text-[13px] font-semibold ${CHIP_TONE[chip.tone]}`}
+                  className={`px-4 py-2 rounded-full text-[13px] font-semibold ${CHIP_TONE[CHIP_TONES[i % CHIP_TONES.length]]}`}
                 >
-                  {chip.label}
+                  {label}
                 </motion.span>
               ))}
             </div>

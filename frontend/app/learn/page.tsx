@@ -694,7 +694,7 @@ export default function LearnPage() {
                     <button
                       onClick={runInterestCalc}
                       disabled={calculatingInterest}
-                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
+                      className="w-full py-2.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingInterest ? t.learn.calculating : t.learn.calculateButton}
                     </button>
@@ -809,7 +809,7 @@ export default function LearnPage() {
                     <button
                       onClick={runMinDueCalc}
                       disabled={calculatingMinDue}
-                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
+                      className="w-full py-2.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingMinDue ? t.learn.calculating : t.learn.calculateButton}
                     </button>
@@ -941,7 +941,7 @@ export default function LearnPage() {
                     <button
                       onClick={runBudgetCalc}
                       disabled={calculatingBudget}
-                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
+                      className="w-full py-2.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingBudget ? t.learn.calculating : t.learn.calculateButton}
                     </button>
@@ -1019,7 +1019,7 @@ export default function LearnPage() {
                     <button
                       onClick={runUtilCalc}
                       disabled={calculatingUtil}
-                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
+                      className="w-full py-2.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingUtil ? t.learn.calculating : t.learn.calculateButton}
                     </button>
@@ -1118,7 +1118,7 @@ export default function LearnPage() {
                     <button
                       onClick={runBeCalc}
                       disabled={calculatingBe}
-                      className="w-full py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
+                      className="w-full py-2.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,192,63,0.3)]"
                     >
                       {calculatingBe ? t.learn.calculating : t.learn.calculateButton}
                     </button>
@@ -1173,7 +1173,7 @@ export default function LearnPage() {
                 </span>
                 <div className="w-full bg-white/[0.08] h-2 rounded-full mt-3 overflow-hidden">
                   <div
-                    className="bg-emerald-400 h-full rounded-full transition-all duration-500"
+                    className="bg-emerald-400 h-full rounded-full progress-anim"
                     style={{ width: `${overallProgress?.completion_percentage || 0}%` }}
                   />
                 </div>
@@ -1424,7 +1424,7 @@ export default function LearnPage() {
                     <span className="text-xs text-emerald-400 font-semibold">{t.learn.quizPassed}</span>
                     <button
                       onClick={() => setActiveLesson(null)}
-                      className="px-5 py-2.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs"
+                      className="px-5 py-2.5 rounded-xl btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs"
                     >
                       {t.learn.backToLessons}
                     </button>

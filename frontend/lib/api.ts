@@ -47,7 +47,11 @@ export const storeSession = (session: UserSession) => {
   localStorage.setItem("cliq_user_id", session.userId);
   localStorage.setItem("cliq_email", session.email);
   if (session.fullName !== undefined) localStorage.setItem("cliq_full_name", session.fullName);
-  if (session.preferredLanguage !== undefined) localStorage.setItem("cliq_preferred_language", session.preferredLanguage);
+  // The UI language (owned by lib/i18n LanguageProvider) is the source of truth:
+  // only adopt the account's language on a device with no explicit choice yet.
+  if (session.preferredLanguage && !localStorage.getItem("cliq_preferred_language")) {
+    localStorage.setItem("cliq_preferred_language", session.preferredLanguage);
+  }
   if (session.role !== undefined) localStorage.setItem("cliq_role", session.role);
   if (session.isAdmin !== undefined) localStorage.setItem("cliq_is_admin", String(session.isAdmin));
   if (session.financialPathway !== undefined) localStorage.setItem("cliq_financial_pathway", session.financialPathway);
@@ -63,7 +67,8 @@ export const clearSession = () => {
   localStorage.removeItem("cliq_user_id");
   localStorage.removeItem("cliq_email");
   localStorage.removeItem("cliq_full_name");
-  localStorage.removeItem("cliq_preferred_language");
+  // cliq_preferred_language is intentionally kept: language is a device preference
+  // and must not reset to English on logout.
   localStorage.removeItem("cliq_role");
   localStorage.removeItem("cliq_is_admin");
   localStorage.removeItem("cliq_financial_pathway");

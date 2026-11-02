@@ -94,7 +94,7 @@ export default function OffersDiscoveryPage() {
             </Link>
             <Link
               href="/optimization"
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t.offers?.optimizeSpendCta || "Optimize Spend"}</span>

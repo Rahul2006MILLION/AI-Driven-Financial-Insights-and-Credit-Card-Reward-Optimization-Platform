@@ -97,7 +97,7 @@ export default function OnboardingPage() {
               {s === 1
                 ? t.onboarding.stepLangTitle
                 : s === 2
-                ? "Learning Path"
+                ? t.onboarding.stepPathTitle
                 : t.onboarding.stepCompleteTitle}
             </span>
             {s < 3 && <div className="w-8 sm:w-16 h-px bg-white/10" />}
@@ -147,7 +147,7 @@ export default function OnboardingPage() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime flex items-center gap-2"
+                className="px-6 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime flex items-center gap-2"
               >
                 <span>{t.onboarding.continueButton}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -164,10 +164,10 @@ export default function OnboardingPage() {
                 <Compass className="w-6 h-6" />
               </div>
               <h2 className="text-2xl font-black text-white">
-                Choose Your Financial Pathway
+                {t.onboarding.pathwayHeading}
               </h2>
               <p className="text-xs text-slate-400 mt-1.5">
-                CLIQ adapts its features, calculators, and dashboard to match your actual payment habits.
+                {t.onboarding.pathwaySub}
               </p>
             </div>
 
@@ -188,12 +188,12 @@ export default function OnboardingPage() {
                   <div className="flex items-center gap-2">
                     <Wallet className="w-5 h-5 text-emerald-400" />
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                      PATH B
+                      {t.onboarding.pathNoCardBadge}
                     </span>
                   </div>
-                  <h4 className="font-bold text-sm text-white">No-Credit-Card User</h4>
+                  <h4 className="font-bold text-sm text-white">{t.onboarding.pathNoCardTitle}</h4>
                   <p className="text-xs text-slate-300">
-                    I use UPI, Cash, Debit, or Bank Transfers. Help me track cash flow, manage irregular income, and build savings discipline.
+                    {t.onboarding.pathNoCardDesc}
                   </p>
                 </div>
               </div>
@@ -213,12 +213,12 @@ export default function OnboardingPage() {
                   <div className="flex items-center gap-2">
                     <CreditCard className="w-5 h-5 text-teal-400" />
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300">
-                      PATH A
+                      {t.onboarding.pathCardBadge}
                     </span>
                   </div>
-                  <h4 className="font-bold text-sm text-white">Credit Card User</h4>
+                  <h4 className="font-bold text-sm text-white">{t.onboarding.pathCardTitle}</h4>
                   <p className="text-xs text-slate-300">
-                    I own one or more credit cards. Help me maximize cashback and reward miles, audit annual fees, and explore merchant offers.
+                    {t.onboarding.pathCardDesc}
                   </p>
                 </div>
               </div>
@@ -227,7 +227,7 @@ export default function OnboardingPage() {
             {/* Primary Goal Options */}
             <div className="space-y-3 pt-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                Primary Goal
+                {t.onboarding.primaryGoal}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div
@@ -238,8 +238,8 @@ export default function OnboardingPage() {
                       : "bg-white/[0.02] border-white/10 text-slate-400 hover:bg-white/[0.05]"
                   }`}
                 >
-                  <div className="font-bold text-xs text-white">Understand Basics</div>
-                  <p className="text-[11px] text-slate-400 mt-1">Budgeting, cash flow, debt risks</p>
+                  <div className="font-bold text-xs text-white">{t.onboarding.goalBasicsTitle}</div>
+                  <p className="text-[11px] text-slate-400 mt-1">{t.onboarding.goalBasicsDesc}</p>
                 </div>
 
                 <div
@@ -250,8 +250,8 @@ export default function OnboardingPage() {
                       : "bg-white/[0.02] border-white/10 text-slate-400 hover:bg-white/[0.05]"
                   }`}
                 >
-                  <div className="font-bold text-xs text-white">Learn Credit & Score</div>
-                  <p className="text-[11px] text-slate-400 mt-1">How credit scores & interest work</p>
+                  <div className="font-bold text-xs text-white">{t.onboarding.goalCreditTitle}</div>
+                  <p className="text-[11px] text-slate-400 mt-1">{t.onboarding.goalCreditDesc}</p>
                 </div>
 
                 <div
@@ -262,8 +262,8 @@ export default function OnboardingPage() {
                       : "bg-white/[0.02] border-white/10 text-slate-400 hover:bg-white/[0.05]"
                   }`}
                 >
-                  <div className="font-bold text-xs text-white">Optimize Spending</div>
-                  <p className="text-[11px] text-slate-400 mt-1">Smart rewards & expense tracking</p>
+                  <div className="font-bold text-xs text-white">{t.onboarding.goalOptimizeTitle}</div>
+                  <p className="text-[11px] text-slate-400 mt-1">{t.onboarding.goalOptimizeDesc}</p>
                 </div>
               </div>
             </div>
@@ -274,18 +274,18 @@ export default function OnboardingPage() {
                 onClick={() => setStep(1)}
                 className="text-xs text-slate-400 hover:text-white"
               >
-                &larr; Back
+                &larr; {t.onboarding.backButton}
               </button>
               <button
                 type="button"
                 disabled={savingPath}
                 onClick={() => savePathAndNext(financialPath, financialPathway)}
-                className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime flex items-center gap-2 disabled:opacity-50 transition-all"
+                className="px-6 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime flex items-center gap-2 disabled:opacity-50 transition-all"
               >
                 {savingPath ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Activating Pathway...</span>
+                    <span>{t.onboarding.activatingButton}</span>
                   </>
                 ) : (
                   <>
@@ -309,8 +309,8 @@ export default function OnboardingPage() {
             </h2>
             <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
               {financialPathway === "NO_CREDIT_CARD"
-                ? "Your Cash & Savings workspace is active. Track your cash flow, analyze non-card spending, and follow your 50/30/20 budget framework seamlessly."
-                : "Your Credit Card Command Center is ready. Connect your cards anytime, optimize rewards, and explore personalized merchant discounts."}
+                ? t.onboarding.readyNoCardSub
+                : t.onboarding.readyCardSub}
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -321,8 +321,8 @@ export default function OnboardingPage() {
               >
                 <span>
                   {financialPathway === "NO_CREDIT_CARD"
-                    ? "Go to Personal Finance Command Center"
-                    : "Go to Command Center"}
+                    ? t.onboarding.goNoCardButton
+                    : t.onboarding.goCardButton}
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </button>

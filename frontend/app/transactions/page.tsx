@@ -268,7 +268,7 @@ export default function TransactionsPage() {
             {/* Manual Add Button */}
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{t.transactions.addNewTransaction}</span>
@@ -385,7 +385,7 @@ export default function TransactionsPage() {
                     <button
                       type="submit"
                       disabled={!selectedFile || parsing}
-                      className="flex items-center gap-2 px-5 py-2 rounded-full bg-lime-400 hover:bg-lime-300 disabled:opacity-50 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
+                      className="flex items-center gap-2 px-5 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 disabled:opacity-50 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
                     >
                       {parsing ? (
                         <>
@@ -572,7 +572,7 @@ export default function TransactionsPage() {
                         type="button"
                         onClick={handleCommitImport}
                         disabled={committing || previewRows.filter((r) => r.selected_for_import && r.is_valid).length === 0}
-                        className="flex items-center gap-2 px-5 py-2 rounded-full bg-lime-400 hover:bg-lime-300 disabled:opacity-50 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
+                        className="flex items-center gap-2 px-5 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 disabled:opacity-50 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
                       >
                         {committing ? (
                           <>
@@ -632,7 +632,7 @@ export default function TransactionsPage() {
                     <button
                       type="button"
                       onClick={resetImportFlow}
-                      className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
+                      className="px-6 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
                     >
                       Done & View Transactions
                     </button>
@@ -742,7 +742,7 @@ export default function TransactionsPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold shadow-neonLime"
+                    className="px-5 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold shadow-neonLime"
                   >
                     {submitting ? (
                       <div className="flex items-center gap-1.5">

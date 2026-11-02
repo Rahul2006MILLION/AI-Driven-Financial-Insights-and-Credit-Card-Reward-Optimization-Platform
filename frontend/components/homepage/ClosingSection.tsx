@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight, Shield, Globe2, Sparkles } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -54,26 +55,22 @@ function CountStat({ end, label, suffix = "", accent = false }: { end: number; l
 
 /* ── CTA section ─────────────────────────────────────────────── */
 export function ClosingSection() {
+  const { t } = useLanguage();
+  const c = t.home.closing;
+  // Labels pair by index with t.home.closing.footerLinks
   const navLinks = [
-    { label: "Dashboard",        href: "/dashboard" },
-    { label: "Credit Cards",     href: "/cards" },
-    { label: "Offers",           href: "/offers" },
-    { label: "AI Assistant",     href: "/assistant" },
-    { label: "CLIQ Learn",       href: "/learn" },
-    { label: "Budget",           href: "/budget" },
-    { label: "Analytics",        href: "/analytics" },
-    { label: "Financial Health", href: "/financial-health" },
-  ];
+    "/dashboard", "/cards", "/offers", "/assistant", "/learn", "/budget", "/analytics", "/financial-health",
+  ].map((href, i) => ({ href, label: c.footerLinks[i] }));
 
   return (
     <>
       {/* ── Stats tiles ─────────────────────────────────────────── */}
       <section className="relative px-4 sm:px-6 lg:px-8 pb-16">
         <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <CountStat end={50}  suffix="+" label="Indian credit cards supported" accent />
-          <CountStat end={6}   label="Financial literacy modules" />
-          <CountStat end={9}   label="PII redaction rules" />
-          <CountStat end={100} suffix="%" label="Privacy-first architecture" />
+          <CountStat end={50}  suffix="+" label={c.stats[0]} accent />
+          <CountStat end={6}   label={c.stats[1]} />
+          <CountStat end={9}   label={c.stats[2]} />
+          <CountStat end={100} suffix="%" label={c.stats[3]} />
         </div>
       </section>
 
@@ -92,21 +89,20 @@ export function ClosingSection() {
             <FadeUp>
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#12301A] text-lime-300 text-[11px] font-bold tracking-wide mb-7">
                 <Sparkles className="w-3 h-3" />
-                Start your journey
+                {c.eyebrow}
               </div>
             </FadeUp>
 
             <FadeUp delay={0.07}>
               <h2 className="font-display text-[clamp(2.3rem,6vw,4.8rem)] font-extrabold uppercase leading-[0.96] tracking-[-0.035em] mb-6">
-                <span className="text-[#5E8C12]">Your money</span> deserves<br />
-                better intelligence.
+                <span className="text-[#5E8C12]">{c.titleAccent}</span> {c.titleRest}<br />
+                {c.titleLine2}
               </h2>
             </FadeUp>
 
             <FadeUp delay={0.13}>
               <p className="text-base sm:text-lg text-[#12301A]/70 leading-relaxed max-w-xl mx-auto mb-10">
-                Join Indians who manage money smarter, whether they hold premium cards or are just
-                beginning their financial journey.
+                {c.subtitle}
               </p>
             </FadeUp>
 
@@ -114,16 +110,16 @@ export function ClosingSection() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
                   href="/register"
-                  className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-[#12301A] hover:bg-[#1B4426] text-lime-300 font-bold text-base transition-colors duration-300"
+                  className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full btn-fx bg-[#12301A] hover:bg-[#1B4426] text-lime-300 font-bold text-base transition-colors duration-300"
                 >
-                  Create free account
+                  {c.ctaCreate}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-200" />
                 </Link>
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-lime-400 hover:bg-lime-300 text-[#12301A] font-bold text-base transition-colors duration-300"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#12301A] font-bold text-base transition-colors duration-300"
                 >
-                  Sign in to CLIQ
+                  {c.ctaSignIn}
                 </Link>
               </div>
             </FadeUp>
@@ -131,9 +127,9 @@ export function ClosingSection() {
             {/* Trust row */}
             <FadeUp delay={0.24}>
               <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-xs font-medium text-[#12301A]/70">
-                <span className="flex items-center gap-2"><Shield className="w-3.5 h-3.5" />256-bit encryption</span>
-                <span className="flex items-center gap-2"><Globe2 className="w-3.5 h-3.5" />No card required to start</span>
-                <span className="flex items-center gap-2"><Sparkles className="w-3.5 h-3.5" />English · हिन्दी · ಕನ್ನಡ</span>
+                <span className="flex items-center gap-2"><Shield className="w-3.5 h-3.5" />{c.trust[0]}</span>
+                <span className="flex items-center gap-2"><Globe2 className="w-3.5 h-3.5" />{c.trust[1]}</span>
+                <span className="flex items-center gap-2"><Sparkles className="w-3.5 h-3.5" />{c.trust[2]}</span>
               </div>
             </FadeUp>
           </div>
@@ -152,14 +148,14 @@ export function ClosingSection() {
                   alt="CLIQ"
                   width={1024}
                   height={381}
-                  className="h-6 w-auto object-contain [filter:hue-rotate(-95deg)_saturate(1.15)]"
+                  className="h-6 w-auto object-contain"
                 />
               </div>
               <p className="text-xs text-[#12301A]/60 leading-relaxed max-w-[240px]">
-                Financial intelligence for every Indian, with or without a credit card.
+                {c.footerTagline}
               </p>
               <div className="mt-4 flex flex-wrap gap-1.5">
-                {["Privacy-first", "India-built", "Open platform"].map((tag) => (
+                {c.footerTags.map((tag) => (
                   <span key={tag} className="px-2.5 py-1 rounded-full bg-lime-300/60 text-[10px] font-semibold text-[#12301A]">
                     {tag}
                   </span>
@@ -169,7 +165,7 @@ export function ClosingSection() {
 
             {/* Navigation */}
             <div>
-              <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase mb-4">Platform</div>
+              <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase mb-4">{c.footerPlatform}</div>
               <div className="grid grid-cols-2 gap-x-5 gap-y-2">
                 {navLinks.map((l) => (
                   <Link key={l.href} href={l.href}
@@ -182,9 +178,9 @@ export function ClosingSection() {
 
             {/* Security */}
             <div>
-              <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase mb-4">Security</div>
+              <div className="text-[10px] text-[#12301A]/50 font-bold tracking-widest uppercase mb-4">{c.footerSecurity}</div>
               <div className="space-y-2.5">
-                {["Zero PAN / CVV storage", "Row-Level Security", "9-layer PII redaction", "Immutable AI audit log"].map((label) => (
+                {c.footerSecurityItems.map((label) => (
                   <div key={label} className="flex items-center gap-2 text-xs text-[#12301A]/75">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#5E8C12] shrink-0" />
                     {label}
@@ -195,9 +191,9 @@ export function ClosingSection() {
           </div>
 
           <div className="bg-[#12301A] text-lime-100/70 px-6 sm:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p className="text-[11px]">&copy; {new Date().getFullYear()} CLIQ. Built for India.</p>
+            <p className="text-[11px]">&copy; {new Date().getFullYear()} {c.footerCopyright}</p>
             <p className="text-[11px] text-center">
-              Deterministic financial math · AI for explanation only · Never for calculations.
+              {c.footerDisclaimer}
             </p>
           </div>
         </div>

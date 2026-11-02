@@ -297,7 +297,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
 
           <button
             onClick={() => setShowLogModal(true)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all hover:scale-[1.02]"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Log Expense</span>
@@ -326,7 +326,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       {/* ── 4 Top Metric KPI Cards ────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Monthly Inflow */}
-        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Monthly Inflow</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -346,7 +346,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         </div>
 
         {/* Card 2: Monthly Expenses */}
-        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Monthly Expenses</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -366,7 +366,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         </div>
 
         {/* Card 3: Remaining Balance */}
-        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Remaining Balance</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -386,7 +386,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         </div>
 
         {/* Card 4: Savings Rate */}
-        <div className="rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all">
+        <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-slate-400 font-medium">Savings Rate</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
@@ -438,7 +438,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
               </div>
               <div className="h-2 w-full bg-white/[0.05] rounded-full overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(76,192,63,0.5)] transition-all duration-700"
+                  className="h-full rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(76,192,63,0.5)] progress-anim"
                   style={{ width: `${Math.min(100, Math.max(budgetUtilPercent, monthlyExpenses > 0 ? 5 : 0))}%` }}
                 />
               </div>
@@ -508,7 +508,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
           {/* Action CTA Button */}
           <Link
             href="/emergency-fund"
-            className="w-full py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs text-center shadow-[0_0_20px_rgba(76,192,63,0.25)] hover:shadow-[0_0_25px_rgba(76,192,63,0.4)] transition-all block"
+            className="w-full py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs text-center shadow-[0_0_20px_rgba(76,192,63,0.25)] hover:shadow-[0_0_25px_rgba(76,192,63,0.4)] transition-all block"
           >
             View Emergency Safety Shield
           </Link>

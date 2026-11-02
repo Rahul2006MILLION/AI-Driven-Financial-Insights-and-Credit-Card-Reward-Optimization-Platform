@@ -243,7 +243,7 @@ export default function SavingsGoalsPage() {
                 : null;
 
               return (
-                <div key={goal.id} className="rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-white/10 p-5 transition-all group">
+                <div key={goal.id} data-spotlight className="card-interactive rounded-2xl bg-white/[0.03] border border-white/[0.07] p-5 transition-all group">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className={`w-9 h-9 rounded-xl flex items-center justify-center border ${isComplete ? "bg-emerald-500/15 border-emerald-500/25" : "bg-lime-500/10 border-lime-500/20"}`}>
@@ -275,7 +275,7 @@ export default function SavingsGoalsPage() {
                     </div>
                     <div className="h-2.5 bg-white/[0.04] rounded-full overflow-hidden">
                       <div
-                        className={`h-full rounded-full transition-all duration-700 ${isComplete ? "bg-emerald-500" : "bg-lime-500"}`}
+                        className={`h-full rounded-full progress-anim ${isComplete ? "bg-emerald-500" : "bg-lime-500"}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>

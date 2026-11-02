@@ -1,8 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { animate, motion, useMotionValue } from "framer-motion";
+import { SPRING } from "@/lib/motion";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import {
@@ -27,6 +29,14 @@ import {
   Target,
   Repeat,
 } from "lucide-react";
+
+/**
+ * Each page mounts its own <Sidebar />, so a shared layoutId has nothing to
+ * animate from. Remember the active pill's offset across mounts instead and
+ * spring from the previous position to the new one.
+ */
+let lastActivePillTop: number | null = null;
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
@@ -71,6 +81,25 @@ export const Sidebar: React.FC = () => {
 
   const navItems = isNoCard ? nccNavItems : ccNavItems;
 
+  const activeLinkRef = useRef<HTMLAnchorElement>(null);
+  const pillY = useMotionValue(0);
+
+  useIsoLayoutEffect(() => {
+    const el = activeLinkRef.current;
+    if (!el) return;
+    const top = el.offsetTop;
+    const from = lastActivePillTop;
+    lastActivePillTop = top;
+    if (from == null || from === top) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    pillY.set(from - top);
+    const controls = animate(pillY, 0, SPRING);
+    return () => {
+      controls.stop();
+      pillY.set(0); // never leave the pill stranded mid-flight
+    };
+  }, [pathname, pillY]);
+
   return (
     <aside className="w-64 hidden lg:flex flex-col shrink-0 m-3 mr-0 rounded-[1.75rem] bg-[#17191E] border border-white/[0.05] self-start sticky top-[84px] max-h-[calc(100vh-96px)] overflow-y-auto p-3 space-y-0.5">
       <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
@@ -92,16 +121,28 @@ export const Sidebar: React.FC = () => {
           <Link
             key={`${item.href}-${idx}`}
             href={item.href}
-            className={`flex items-center gap-3 px-3.5 py-2 rounded-full text-xs font-semibold transition-all duration-200 ${
+            ref={effectiveActive ? activeLinkRef : undefined}
+            aria-current={effectiveActive ? "page" : undefined}
+            className={`group relative flex items-center gap-3 px-3.5 py-2 rounded-full text-xs font-semibold transition-colors duration-200 ${
               effectiveActive
-                ? "bg-lime-400 text-[#12301A] font-bold"
+                ? "text-[#12301A] font-bold"
                 : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
             }`}
           >
-            <span className={`w-7 h-7 -ml-1.5 rounded-full flex items-center justify-center shrink-0 ${effectiveActive ? "bg-[#12301A]/10" : "bg-white/[0.04]"}`}>
+            {effectiveActive && (
+              <motion.span
+                style={{ y: pillY }}
+                className="absolute inset-0 -z-10 rounded-full bg-lime-400"
+              />
+            )}
+            <span
+              className={`relative w-7 h-7 -ml-1.5 rounded-full flex items-center justify-center shrink-0 transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-rotate-6 ${
+                effectiveActive ? "bg-[#12301A]/10" : "bg-white/[0.04] group-hover:bg-white/[0.08]"
+              }`}
+            >
               <Icon className="w-3.5 h-3.5" />
             </span>
-            <span>{item.label}</span>
+            <span className="relative">{item.label}</span>
           </Link>
         );
       })}

@@ -162,7 +162,7 @@ export default function DocumentProcessingPage() {
             Max 10MB • Extracts reward tiers, caps, annual fees, and exclusions into staging
           </p>
 
-          <label className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime cursor-pointer transition-all">
+          <label className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime cursor-pointer transition-all">
             {uploading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -356,7 +356,7 @@ export default function DocumentProcessingPage() {
                   <button
                     onClick={handleVerify}
                     disabled={verifying || selectedDoc.extracted_data?.is_verified}
-                    className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all disabled:opacity-40 flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all disabled:opacity-40 flex items-center gap-2"
                   >
                     {verifying ? (
                       <div className="flex items-center gap-1.5">

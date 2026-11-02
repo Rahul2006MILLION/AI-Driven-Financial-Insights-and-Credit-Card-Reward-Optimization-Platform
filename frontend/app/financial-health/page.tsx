@@ -17,25 +17,13 @@ import {
   ArrowRight,
   AlertCircle,
 } from "lucide-react";
+import { useCountUp } from "@/lib/motion";
 
 /* ── Animated radial health gauge ────────────────────────────── */
 function HealthGauge({ score }: { score: number | null }) {
-  const [animatedScore, setAnimatedScore] = useState(0);
+  const animatedScore = useCountUp(score == null ? null : Math.min(100, Math.max(0, Math.round(score))), 1100, 400);
   const r = 52;
   const circ = 2 * Math.PI * r;
-
-  useEffect(() => {
-    if (score == null) return;
-    const target = Math.min(100, Math.max(0, Math.round(score)));
-    let current = 0;
-    const step = () => {
-      current = Math.min(target, current + 2);
-      setAnimatedScore(current);
-      if (current < target) requestAnimationFrame(step);
-    };
-    const t = setTimeout(() => requestAnimationFrame(step), 400);
-    return () => clearTimeout(t);
-  }, [score]);
 
   const gap = circ - (animatedScore / 100) * circ;
 
@@ -80,7 +68,6 @@ function HealthGauge({ score }: { score: number | null }) {
             strokeLinecap="round"
             strokeDasharray={circ}
             strokeDashoffset={gap}
-            style={{ transition: "stroke-dashoffset 0.025s linear" }}
             filter="url(#gaugeGlow)"
           />
         </svg>
@@ -317,7 +304,7 @@ export default function FinancialHealthPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {health.recurring_subscriptions.map((sub: any, idx: number) => (
-                    <div key={idx} className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.1] transition-all">
+                    <div key={idx} data-spotlight className="card-interactive p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] transition-all">
                       <div className="flex items-center justify-between mb-2.5">
                         <span className="text-xs font-bold text-white">{sub.merchant_name}</span>
                         <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/[0.05] text-emerald-400 font-semibold border border-emerald-500/20">

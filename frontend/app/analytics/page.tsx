@@ -41,8 +41,8 @@ const PALETTE = [
 const ChartTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-[#07100D] border border-white/10 rounded-2xl px-4 py-3 shadow-2xl text-xs">
-      {label && <div className="text-slate-400 mb-1.5 font-medium">{label}</div>}
+    <div className="animate-in zoom-in-95 bg-[#1C1F25]/95 backdrop-blur-md border border-white/[0.08] rounded-2xl px-4 py-3 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.85)] text-xs space-y-1">
+      {label && <div className="text-white font-bold mb-1">{label}</div>}
       {payload.map((p: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
@@ -202,7 +202,7 @@ export default function AnalyticsPage() {
                               <Cell key={`cell-${index}`} fill={PALETTE[index % PALETTE.length]} />
                             ))}
                           </Pie>
-                          <Tooltip content={<ChartTooltip />} />
+                          <Tooltip content={<ChartTooltip />} animationDuration={200} animationEasing="ease-out" />
                         </PieChart>
                       </ResponsiveContainer>
                     </div>
@@ -288,7 +288,12 @@ export default function AnalyticsPage() {
                           axisLine={false}
                           tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
                         />
-                        <Tooltip content={<ChartTooltip />} />
+                        <Tooltip
+                          content={<ChartTooltip />}
+                          cursor={{ fill: "rgba(255,255,255,0.04)", radius: 8 }}
+                          animationDuration={200}
+                          animationEasing="ease-out"
+                        />
                         <Bar dataKey="total_amount" name="Spend" fill="url(#spendGrad)" radius={[5, 5, 0, 0]} maxBarSize={28} />
                         <Bar dataKey="rewards_earned" name="Rewards" fill="url(#rewardGrad)" radius={[5, 5, 0, 0]} maxBarSize={28} />
                       </BarChart>
@@ -335,7 +340,7 @@ export default function AnalyticsPage() {
                           </div>
                           <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                             <div
-                              className={`h-full rounded-full transition-all duration-700 ${barColors[idx] || "bg-slate-500"}`}
+                              className={`h-full rounded-full progress-anim ${barColors[idx] || "bg-slate-500"}`}
                               style={{ width: `${Math.max(4, pct)}%` }}
                             />
                           </div>

@@ -27,6 +27,22 @@ export interface Translations {
     administrator: string;
     learn: string;
     budget: string;
+    pathwayLabel: string;
+    modeLabel: string;
+    modeCashSavings: string;
+    modeCreditCards: string;
+    switchToCardMode: string;
+    switchToCashMode: string;
+    switchToCardsShort: string;
+    switchToCashShort: string;
+    switching: string;
+    myIncome: string;
+    expenseLog: string;
+    budgetPlanner: string;
+    savingsGoals: string;
+    emergencyFund: string;
+    subscriptions: string;
+    financialHealth: string;
   };
 
   sidebar: {
@@ -53,6 +69,129 @@ export interface Translations {
     footerRls: string;
     footerPan: string;
     footerIndia: string;
+  };
+
+  // Homepage (components/homepage/*)
+  home: {
+    hero: {
+      badge: string;
+      line1: string;
+      line2: string;
+      line3Lead: string;
+      line3Tail: string;
+      subtitle: string;
+      ctaStart: string;
+      ctaSignIn: string;
+      cardSavings: string;
+      cardRewards: string;
+      cardPremium: string;
+      chipsAccent: string;
+      chipsRest: string;
+      chipsLine2: string;
+      chips: string[];
+    };
+    journeys: {
+      eyebrow: string;
+      titleLine1: string;
+      titleAccent: string;
+      subtitle: string;
+      ccLabel: string;
+      ccHeadline: string;
+      ccDescription: string;
+      ccFeatures: string[];
+      noCardLabel: string;
+      noCardHeadline: string;
+      noCardDescription: string;
+      noCardFeatures: string[];
+      overview: string;
+      income: string;
+      expenses: string;
+      savings: string;
+      goals: string;
+      emergencyFund: string;
+      education: string;
+    };
+    universe: {
+      eyebrow: string;
+      titleLead: string;
+      titleAccent: string;
+      titleLine2: string;
+      subtitle: string;
+      nodes: {
+        label: string;
+        sub: string;
+      }[];
+      poweredBy: string;
+      footnote: string;
+    };
+    ai: {
+      eyebrow: string;
+      line1: string;
+      line2: string;
+      line3: string;
+      subtitle: string;
+      trust: {
+        label: string;
+        desc: string;
+      }[];
+      assistantName: string;
+      status: string;
+      chatQuestion: string;
+      chatIntro: string;
+      chatIncome: string;
+      chatExpenses: string;
+      chatSurplus: string;
+      chatVerdict: string;
+      chatHint: string;
+      inputPlaceholder: string;
+    };
+    features: {
+      eyebrow: string;
+      titleLine1: string;
+      titleAccent: string;
+      subtitle: string;
+      subtitleStrong: string;
+      badgeCard: string;
+      badgeAll: string;
+      badgeNoCard: string;
+      items: {
+        title: string;
+        description: string;
+      }[];
+      privacyTitle: string;
+      privacyDescription: string;
+      privacyStats: string[];
+    };
+    privacy: {
+      eyebrow: string;
+      titleLine1: string;
+      titleAccent: string;
+      subtitle: string;
+      steps: {
+        title: string;
+        body: string;
+      }[];
+      trust: string[];
+    };
+    closing: {
+      stats: string[];
+      eyebrow: string;
+      titleAccent: string;
+      titleRest: string;
+      titleLine2: string;
+      subtitle: string;
+      ctaCreate: string;
+      ctaSignIn: string;
+      trust: string[];
+      footerTagline: string;
+      footerTags: string[];
+      footerPlatform: string;
+      footerSecurity: string;
+      footerLinks: string[];
+      footerSecurityItems: string[];
+      footerCopyright: string;
+      footerDisclaimer: string;
+    };
   };
 
   dashboard: {
@@ -457,6 +596,28 @@ export interface Translations {
     portfolioSub: string;
     readyHeading: string;
     readySub: string;
+    stepPathTitle: string;
+    pathwayHeading: string;
+    pathwaySub: string;
+    pathNoCardBadge: string;
+    pathNoCardTitle: string;
+    pathNoCardDesc: string;
+    pathCardBadge: string;
+    pathCardTitle: string;
+    pathCardDesc: string;
+    primaryGoal: string;
+    goalBasicsTitle: string;
+    goalBasicsDesc: string;
+    goalCreditTitle: string;
+    goalCreditDesc: string;
+    goalOptimizeTitle: string;
+    goalOptimizeDesc: string;
+    backButton: string;
+    activatingButton: string;
+    readyNoCardSub: string;
+    readyCardSub: string;
+    goNoCardButton: string;
+    goCardButton: string;
   };
 
   adminOffers: {
@@ -668,10 +829,246 @@ export interface Translations {
 
 export const translations: Record<Language, Translations> = {
   en: {
+    home: {
+      hero: {
+        badge: "Financial intelligence for every Indian",
+        line1: "Money made",
+        line2: "simple, in",
+        line3Lead: "your",
+        line3Tail: "language",
+        subtitle: "Maximise every card reward, or build your first savings habit. Deterministic math, plain-language guidance, and your data stays yours.",
+        ctaStart: "Start free",
+        ctaSignIn: "Sign in",
+        cardSavings: "Savings",
+        cardRewards: "Rewards",
+        cardPremium: "Premium",
+        chipsAccent: "Everything",
+        chipsRest: "your money",
+        chipsLine2: "needs, in one place.",
+        chips: [
+          "Reward Optimizer",
+          "Budget Planner",
+          "Savings Goals",
+          "Emergency Fund",
+          "Statement Import",
+          "AI Assistant",
+          "Financial Health",
+          "Live Card Offers",
+          "EN · हिन्दी · ಕನ್ನಡ",
+        ],
+      },
+      journeys: {
+        eyebrow: "Two paths. One platform.",
+        titleLine1: "Financial intelligence",
+        titleAccent: "built for everyone.",
+        subtitle: "CLIQ adapts to your financial reality — whether you hold premium cards or are just starting your journey.",
+        ccLabel: "Credit card path",
+        ccHeadline: "Maximize every rupee of rewards.",
+        ccDescription: "Track your full card wallet, discover real-time offers, and let CLIQ's AI optimize which card to use for every purchase.",
+        ccFeatures: [
+          "Instant reward calculation for 50+ Indian cards",
+          "Live offer discovery from 8 bank sources",
+          "Card-vs-card comparison and fee waiver tracking",
+          "Purchase intelligence — best card for every merchant",
+        ],
+        noCardLabel: "No card required",
+        noCardHeadline: "Build wealth from your first paycheck.",
+        noCardDescription: "Track income, plan budgets, grow your emergency fund, and learn financial skills — all without needing a credit card.",
+        noCardFeatures: [
+          "Income tracking — regular, irregular, freelance",
+          "Budget planning with configurable category splits",
+          "Emergency savings goals with progress tracking",
+          "CLIQ Learn — 6 financial literacy modules",
+        ],
+        overview: "Monthly Overview",
+        income: "Income",
+        expenses: "Expenses",
+        savings: "Savings",
+        goals: "Savings Goals",
+        emergencyFund: "Emergency Fund",
+        education: "Education",
+      },
+      universe: {
+        eyebrow: "The CLIQ ecosystem",
+        titleLead: "See your",
+        titleAccent: "money clearly,",
+        titleLine2: "all in one place.",
+        subtitle: "CLIQ connects every aspect of your financial life — intelligently, privately and in real time.",
+        nodes: [
+          {
+            label: "Income",
+            sub: "Track every rupee",
+          },
+          {
+            label: "Cards",
+            sub: "Optimize rewards",
+          },
+          {
+            label: "Spending",
+            sub: "Analyse patterns",
+          },
+          {
+            label: "Savings",
+            sub: "Build your cushion",
+          },
+          {
+            label: "Education",
+            sub: "Learn & grow",
+          },
+          {
+            label: "Health Score",
+            sub: "Know your number",
+          },
+        ],
+        poweredBy: "Powered by",
+        footnote: "Every piece of data stays encrypted and consent-gated. CLIQ's AI synthesises signals across all six domains to give you insights that no single tool can provide.",
+      },
+      ai: {
+        eyebrow: "AI financial intelligence",
+        line1: "Ask anything.",
+        line2: "Get answers in",
+        line3: "your language.",
+        subtitle: "Plain-language answers in Hindi, English or Kannada. CLIQ's AI reads your real income and spending data, and never guesses a number.",
+        trust: [
+          {
+            label: "Privacy Gateway",
+            desc: "9-layer PII redaction before any AI call",
+          },
+          {
+            label: "Consent-gated",
+            desc: "You control what data the AI can access",
+          },
+          {
+            label: "Explainable",
+            desc: "Every answer cites your actual numbers",
+          },
+        ],
+        assistantName: "CLIQ AI Assistant",
+        status: "Active — 3 sources analysed",
+        chatQuestion: "Can I afford to save ₹3,000 every month?",
+        chatIntro: "Let's examine your recorded income and expenses to understand whether this savings target is sustainable.",
+        chatIncome: "Monthly income (3-month median)",
+        chatExpenses: "Recorded expenses",
+        chatSurplus: "Available surplus",
+        chatVerdict: "Yes — your current surplus comfortably covers ₹3,000 with a ₹3,520 safety buffer remaining.",
+        chatHint: "Ask about your spending patterns, debt payoff, or investment readiness...",
+        inputPlaceholder: "Ask about your finances...",
+      },
+      features: {
+        eyebrow: "What's inside CLIQ",
+        titleLine1: "Everything you need.",
+        titleAccent: "Nothing you don't.",
+        subtitle: "Built capabilities, not marketing promises.",
+        subtitleStrong: "Every feature ships in the current release.",
+        badgeCard: "Credit card users",
+        badgeAll: "All users",
+        badgeNoCard: "No-card path",
+        items: [
+          {
+            title: "Reward Optimization",
+            description: "Exact Decimal-precision reward calculations for 50+ Indian credit cards. Best card for every merchant, every time.",
+          },
+          {
+            title: "Spending Intelligence",
+            description: "Categorized transaction analytics with CSV statement import from HDFC, SBI, ICICI and Axis. SHA-256 deduplication.",
+          },
+          {
+            title: "Financial Health Score",
+            description: "Two-algorithm health engine — reward efficiency for cardholders, income-surplus path for everyone else. Real numbers.",
+          },
+          {
+            title: "Income & Budget",
+            description: "Rolling 90-day median for irregular income. Configurable category budgets. One-time windfall expiry protection.",
+          },
+          {
+            title: "Document Intelligence",
+            description: "Upload bank PDF circulars and card offer statements. CLIQ extracts merchants, discounts and promo codes automatically.",
+          },
+          {
+            title: "CLIQ Learn",
+            description: "6 financial literacy modules, 5 calculators — EMI, credit utilisation, compound interest. Progress tracked per user.",
+          },
+        ],
+        privacyTitle: "Privacy Gateway",
+        privacyDescription: "9 PII redaction rules run before any AI call. User-consent-gated. Every AI request audit-logged. Zero raw data egress.",
+        privacyStats: ["PII rules", "Data egress", "Audit logged"],
+      },
+      privacy: {
+        eyebrow: "Privacy by design",
+        titleLine1: "Your data. Your control.",
+        titleAccent: "Always.",
+        subtitle: "CLIQ was built with privacy as a constraint, not an afterthought. Here is exactly what happens between you and the AI.",
+        steps: [
+          {
+            title: "You input",
+            body: "Your income, expenses and transactions. Only what you choose to enter — no account scraping, no bank integration, no automatic collection.",
+          },
+          {
+            title: "9-layer PII redaction",
+            body: "Before any AI call, CLIQ runs 9 compiled regex rules that strip card numbers, CVVs, OTPs, Aadhaar, PAN, bank accounts, email addresses and phone numbers.",
+          },
+          {
+            title: "Consent-gated AI",
+            body: "Your explicit consent is checked before every AI request. You can withdraw consent at any time. AI is used only for plain-language explanation — never for calculations.",
+          },
+          {
+            title: "Immutable audit log",
+            body: "Every AI request is logged in an append-only audit table. You can review every query made on your behalf. Logs are anonymized on account deletion.",
+          },
+        ],
+        trust: [
+          "Zero raw PAN or CVV stored",
+          "Row-Level Security on all tables",
+          "User-owned data — export or delete anytime",
+          "Deterministic math, AI for explanations only",
+        ],
+      },
+      closing: {
+        stats: [
+          "Indian credit cards supported",
+          "Financial literacy modules",
+          "PII redaction rules",
+          "Privacy-first architecture",
+        ],
+        eyebrow: "Start your journey",
+        titleAccent: "Your money",
+        titleRest: "deserves",
+        titleLine2: "better intelligence.",
+        subtitle: "Join Indians who manage money smarter, whether they hold premium cards or are just beginning their financial journey.",
+        ctaCreate: "Create free account",
+        ctaSignIn: "Sign in to CLIQ",
+        trust: ["256-bit encryption", "No card required to start", "EN · हिन्दी · ಕನ್ನಡ"],
+        footerTagline: "Financial intelligence for every Indian, with or without a credit card.",
+        footerTags: ["Privacy-first", "India-built", "Open platform"],
+        footerPlatform: "Platform",
+        footerSecurity: "Security",
+        footerLinks: ["Dashboard", "Credit Cards", "Offers", "AI Assistant", "CLIQ Learn", "Budget", "Analytics", "Financial Health"],
+        footerSecurityItems: ["Zero PAN / CVV storage", "Row-Level Security", "9-layer PII redaction", "Immutable AI audit log"],
+        footerCopyright: "CLIQ. Built for India.",
+        footerDisclaimer: "Deterministic financial math · AI for explanation only · Never for calculations.",
+      },
+    },
+
     tagline: "Money Made Simple. In Your Language.",
     supporting: "Smarter decisions, Brighter futures. For everyone.",
 
     nav: {
+      pathwayLabel: "Pathway",
+      modeLabel: "Mode",
+      modeCashSavings: "Cash & Savings",
+      modeCreditCards: "Credit Cards",
+      switchToCardMode: "Switch to Credit Card Mode",
+      switchToCashMode: "Switch to Cash & Savings Mode",
+      switchToCardsShort: "Switch to Cards",
+      switchToCashShort: "Switch to Cash & Savings",
+      switching: "Switching...",
+      myIncome: "My Income",
+      expenseLog: "Expense Log",
+      budgetPlanner: "Budget Planner",
+      savingsGoals: "Savings Goals",
+      emergencyFund: "Emergency Fund",
+      subscriptions: "Subscriptions & Bills",
+      financialHealth: "Financial Health",
       dashboard: "Dashboard",
       cards: "My Credit Cards",
       offers: "Offers & Deals",
@@ -1121,7 +1518,7 @@ export const translations: Record<Language, Translations> = {
       stepCompleteTitle: "Complete",
       selectLanguageHeading: "Select Your Language",
       selectLanguageSub: "All recommendations, assistant dialogues, and analytics adapt to your language.",
-      continueButton: "Continue to Portfolio",
+      continueButton: "Continue",
       seedDemoButton: "Provision Demo Portfolio",
       finishButton: "Launch Command Center",
       seedingText: "Provisioning Verified Portfolio...",
@@ -1129,6 +1526,28 @@ export const translations: Record<Language, Translations> = {
       portfolioSub: "Start with verified Indian credit cards or seed sample demo data.",
       readyHeading: "You're All Set!",
       readySub: "Your account is secured with local-first privacy and deterministic calculation engines.",
+      stepPathTitle: "Learning Path",
+      pathwayHeading: "Choose Your Financial Pathway",
+      pathwaySub: "CLIQ adapts its features, calculators, and dashboard to match your actual payment habits.",
+      pathNoCardBadge: "PATH B",
+      pathNoCardTitle: "No-Credit-Card User",
+      pathNoCardDesc: "I use UPI, Cash, Debit, or Bank Transfers. Help me track cash flow, manage irregular income, and build savings discipline.",
+      pathCardBadge: "PATH A",
+      pathCardTitle: "Credit Card User",
+      pathCardDesc: "I own one or more credit cards. Help me maximize cashback and reward miles, audit annual fees, and explore merchant offers.",
+      primaryGoal: "Primary Goal",
+      goalBasicsTitle: "Understand Basics",
+      goalBasicsDesc: "Budgeting, cash flow, debt risks",
+      goalCreditTitle: "Learn Credit & Score",
+      goalCreditDesc: "How credit scores & interest work",
+      goalOptimizeTitle: "Optimize Spending",
+      goalOptimizeDesc: "Smart rewards & expense tracking",
+      backButton: "Back",
+      activatingButton: "Activating Pathway...",
+      readyNoCardSub: "Your Cash & Savings workspace is active. Track your cash flow, analyze non-card spending, and follow your 50/30/20 budget framework seamlessly.",
+      readyCardSub: "Your Credit Card Command Center is ready. Connect your cards anytime, optimize rewards, and explore personalized merchant discounts.",
+      goNoCardButton: "Go to Personal Finance Command Center",
+      goCardButton: "Go to Command Center",
     },
 
     adminOffers: {
@@ -1339,10 +1758,246 @@ export const translations: Record<Language, Translations> = {
   },
 
   hi: {
+    home: {
+      hero: {
+        badge: "हर भारतीय के लिए वित्तीय समझ",
+        line1: "पैसा हुआ",
+        line2: "आसान,",
+        line3Lead: "आपकी",
+        line3Tail: "भाषा में",
+        subtitle: "हर कार्ड रिवॉर्ड का पूरा फ़ायदा उठाएँ, या बचत की पहली आदत डालें। सटीक गणित, सरल भाषा में मार्गदर्शन, और आपका डेटा सिर्फ़ आपका।",
+        ctaStart: "मुफ़्त शुरू करें",
+        ctaSignIn: "साइन इन करें",
+        cardSavings: "बचत",
+        cardRewards: "रिवॉर्ड",
+        cardPremium: "प्रीमियम",
+        chipsAccent: "आपके पैसे",
+        chipsRest: "की हर ज़रूरत,",
+        chipsLine2: "एक ही जगह।",
+        chips: [
+          "रिवॉर्ड ऑप्टिमाइज़र",
+          "बजट प्लानर",
+          "बचत लक्ष्य",
+          "आपातकालीन निधि",
+          "स्टेटमेंट इम्पोर्ट",
+          "AI सहायक",
+          "वित्तीय स्वास्थ्य",
+          "लाइव कार्ड ऑफ़र",
+          "EN · हिन्दी · ಕನ್ನಡ",
+        ],
+      },
+      journeys: {
+        eyebrow: "दो रास्ते। एक प्लेटफ़ॉर्म।",
+        titleLine1: "वित्तीय समझ,",
+        titleAccent: "सबके लिए।",
+        subtitle: "CLIQ आपकी वित्तीय स्थिति के अनुसार ढल जाता है — चाहे आपके पास प्रीमियम कार्ड हों या आप अभी शुरुआत कर रहे हों।",
+        ccLabel: "क्रेडिट कार्ड पथ",
+        ccHeadline: "हर रुपये का पूरा रिवॉर्ड पाएँ।",
+        ccDescription: "अपने सभी कार्ड एक जगह ट्रैक करें, रियल-टाइम ऑफ़र खोजें, और CLIQ के AI से जानें कि हर ख़रीदारी पर कौन-सा कार्ड इस्तेमाल करें।",
+        ccFeatures: [
+          "50+ भारतीय कार्डों के लिए तुरंत रिवॉर्ड गणना",
+          "8 बैंक स्रोतों से लाइव ऑफ़र",
+          "कार्ड-बनाम-कार्ड तुलना और शुल्क छूट ट्रैकिंग",
+          "ख़रीदारी इंटेलिजेंस — हर मर्चेंट के लिए सबसे अच्छा कार्ड",
+        ],
+        noCardLabel: "कार्ड की ज़रूरत नहीं",
+        noCardHeadline: "पहली तनख़्वाह से संपत्ति बनाएँ।",
+        noCardDescription: "आय ट्रैक करें, बजट बनाएँ, आपातकालीन निधि बढ़ाएँ और वित्तीय कौशल सीखें — बिना किसी क्रेडिट कार्ड के।",
+        noCardFeatures: [
+          "आय ट्रैकिंग — नियमित, अनियमित, फ़्रीलांस",
+          "कस्टम श्रेणियों के साथ बजट योजना",
+          "प्रगति ट्रैकिंग के साथ आपातकालीन बचत लक्ष्य",
+          "CLIQ Learn — 6 वित्तीय साक्षरता मॉड्यूल",
+        ],
+        overview: "मासिक सारांश",
+        income: "आय",
+        expenses: "ख़र्च",
+        savings: "बचत",
+        goals: "बचत लक्ष्य",
+        emergencyFund: "आपातकालीन निधि",
+        education: "शिक्षा",
+      },
+      universe: {
+        eyebrow: "CLIQ इकोसिस्टम",
+        titleLead: "अपने",
+        titleAccent: "पैसे को साफ़ देखें,",
+        titleLine2: "सब एक ही जगह।",
+        subtitle: "CLIQ आपके वित्तीय जीवन के हर पहलू को जोड़ता है — समझदारी से, निजी तौर पर और रियल टाइम में।",
+        nodes: [
+          {
+            label: "आय",
+            sub: "हर रुपये का हिसाब",
+          },
+          {
+            label: "कार्ड",
+            sub: "रिवॉर्ड बढ़ाएँ",
+          },
+          {
+            label: "ख़र्च",
+            sub: "पैटर्न समझें",
+          },
+          {
+            label: "बचत",
+            sub: "सुरक्षा कवच बनाएँ",
+          },
+          {
+            label: "शिक्षा",
+            sub: "सीखें और बढ़ें",
+          },
+          {
+            label: "हेल्थ स्कोर",
+            sub: "अपना स्कोर जानें",
+          },
+        ],
+        poweredBy: "संचालित",
+        footnote: "आपका हर डेटा एन्क्रिप्टेड और आपकी सहमति से ही उपयोग होता है। CLIQ का AI छहों क्षेत्रों के संकेतों को जोड़कर ऐसी समझ देता है जो कोई एक टूल नहीं दे सकता।",
+      },
+      ai: {
+        eyebrow: "AI वित्तीय इंटेलिजेंस",
+        line1: "कुछ भी पूछें।",
+        line2: "जवाब पाएँ",
+        line3: "अपनी भाषा में।",
+        subtitle: "हिंदी, अंग्रेज़ी या कन्नड़ में सरल जवाब। CLIQ का AI आपकी असली आय और ख़र्च पढ़ता है, और कभी कोई संख्या अनुमान से नहीं बताता।",
+        trust: [
+          {
+            label: "प्राइवेसी गेटवे",
+            desc: "हर AI कॉल से पहले 9-स्तरीय PII हटाना",
+          },
+          {
+            label: "सहमति आधारित",
+            desc: "AI किस डेटा तक पहुँचे, यह आप तय करते हैं",
+          },
+          {
+            label: "स्पष्ट जवाब",
+            desc: "हर जवाब आपकी असली संख्याओं पर आधारित",
+          },
+        ],
+        assistantName: "CLIQ AI सहायक",
+        status: "सक्रिय — 3 स्रोतों का विश्लेषण",
+        chatQuestion: "क्या मैं हर महीने ₹3,000 बचा सकता हूँ?",
+        chatIntro: "आइए आपकी दर्ज आय और ख़र्च देखें, ताकि पता चले कि यह बचत लक्ष्य टिकाऊ है या नहीं।",
+        chatIncome: "मासिक आय (3 महीने का माध्यिका)",
+        chatExpenses: "दर्ज ख़र्च",
+        chatSurplus: "उपलब्ध अधिशेष",
+        chatVerdict: "हाँ — आपका मौजूदा अधिशेष ₹3,000 आराम से कवर करता है, और ₹3,520 का सुरक्षा बफ़र बचता है।",
+        chatHint: "अपने ख़र्च के पैटर्न, कर्ज़ चुकाने या निवेश की तैयारी के बारे में पूछें...",
+        inputPlaceholder: "अपने पैसों के बारे में पूछें...",
+      },
+      features: {
+        eyebrow: "CLIQ में क्या है",
+        titleLine1: "जो चाहिए, सब है।",
+        titleAccent: "जो नहीं चाहिए, कुछ नहीं।",
+        subtitle: "बनी हुई सुविधाएँ, मार्केटिंग के वादे नहीं।",
+        subtitleStrong: "हर सुविधा मौजूदा रिलीज़ में उपलब्ध है।",
+        badgeCard: "क्रेडिट कार्ड उपयोगकर्ता",
+        badgeAll: "सभी उपयोगकर्ता",
+        badgeNoCard: "बिना कार्ड पथ",
+        items: [
+          {
+            title: "रिवॉर्ड ऑप्टिमाइज़ेशन",
+            description: "50+ भारतीय क्रेडिट कार्डों के लिए Decimal-सटीक रिवॉर्ड गणना। हर मर्चेंट के लिए हर बार सबसे अच्छा कार्ड।",
+          },
+          {
+            title: "ख़र्च इंटेलिजेंस",
+            description: "HDFC, SBI, ICICI और Axis के CSV स्टेटमेंट इम्पोर्ट के साथ श्रेणीवार लेन-देन विश्लेषण। SHA-256 डुप्लिकेट-रोधी।",
+          },
+          {
+            title: "वित्तीय हेल्थ स्कोर",
+            description: "दो-एल्गोरिदम हेल्थ इंजन — कार्डधारकों के लिए रिवॉर्ड दक्षता, बाकी सबके लिए आय-अधिशेष पथ। असली संख्याएँ।",
+          },
+          {
+            title: "आय और बजट",
+            description: "अनियमित आय के लिए 90 दिन की चलती माध्यिका। कस्टम श्रेणी बजट। एकमुश्त आय की समाप्ति से सुरक्षा।",
+          },
+          {
+            title: "डॉक्यूमेंट इंटेलिजेंस",
+            description: "बैंक PDF सर्कुलर और कार्ड ऑफ़र स्टेटमेंट अपलोड करें। CLIQ मर्चेंट, छूट और प्रोमो कोड अपने आप निकालता है।",
+          },
+          {
+            title: "CLIQ Learn",
+            description: "6 वित्तीय साक्षरता मॉड्यूल, 5 कैलकुलेटर — EMI, क्रेडिट उपयोग, चक्रवृद्धि ब्याज। हर उपयोगकर्ता की प्रगति दर्ज।",
+          },
+        ],
+        privacyTitle: "प्राइवेसी गेटवे",
+        privacyDescription: "हर AI कॉल से पहले 9 PII नियम चलते हैं। उपयोगकर्ता की सहमति ज़रूरी। हर AI अनुरोध ऑडिट लॉग में। कच्चा डेटा बाहर नहीं जाता।",
+        privacyStats: ["PII नियम", "डेटा बाहर", "ऑडिट लॉग"],
+      },
+      privacy: {
+        eyebrow: "डिज़ाइन से ही प्राइवेसी",
+        titleLine1: "आपका डेटा। आपका नियंत्रण।",
+        titleAccent: "हमेशा।",
+        subtitle: "CLIQ में प्राइवेसी बाद में जोड़ी गई चीज़ नहीं, बल्कि बुनियादी शर्त है। आपके और AI के बीच ठीक यही होता है।",
+        steps: [
+          {
+            title: "आप दर्ज करते हैं",
+            body: "आपकी आय, ख़र्च और लेन-देन। सिर्फ़ वही जो आप दर्ज करना चुनें — न खाता स्क्रैपिंग, न बैंक इंटीग्रेशन, न अपने-आप डेटा संग्रह।",
+          },
+          {
+            title: "9-स्तरीय PII हटाना",
+            body: "हर AI कॉल से पहले CLIQ 9 नियम चलाता है जो कार्ड नंबर, CVV, OTP, आधार, PAN, बैंक खाते, ईमेल और फ़ोन नंबर हटा देते हैं।",
+          },
+          {
+            title: "सहमति आधारित AI",
+            body: "हर AI अनुरोध से पहले आपकी स्पष्ट सहमति जाँची जाती है। आप कभी भी सहमति वापस ले सकते हैं। AI सिर्फ़ सरल भाषा में समझाने के लिए है — गणना के लिए कभी नहीं।",
+          },
+          {
+            title: "अपरिवर्तनीय ऑडिट लॉग",
+            body: "हर AI अनुरोध एक केवल-जोड़ने-योग्य ऑडिट तालिका में दर्ज होता है। आप अपनी ओर से हुई हर क्वेरी देख सकते हैं। खाता हटाने पर लॉग गुमनाम कर दिए जाते हैं।",
+          },
+        ],
+        trust: [
+          "कोई कच्चा PAN या CVV संग्रहित नहीं",
+          "हर तालिका पर Row-Level Security",
+          "आपका डेटा आपका — कभी भी एक्सपोर्ट या डिलीट करें",
+          "सटीक गणित, AI सिर्फ़ समझाने के लिए",
+        ],
+      },
+      closing: {
+        stats: [
+          "समर्थित भारतीय क्रेडिट कार्ड",
+          "वित्तीय साक्षरता मॉड्यूल",
+          "PII हटाने के नियम",
+          "प्राइवेसी-प्रथम आर्किटेक्चर",
+        ],
+        eyebrow: "अपनी यात्रा शुरू करें",
+        titleAccent: "आपका पैसा",
+        titleRest: "बेहतर समझ का",
+        titleLine2: "हक़दार है।",
+        subtitle: "उन भारतीयों से जुड़ें जो पैसा समझदारी से संभालते हैं — चाहे उनके पास प्रीमियम कार्ड हों या वे अभी शुरुआत कर रहे हों।",
+        ctaCreate: "मुफ़्त खाता बनाएँ",
+        ctaSignIn: "CLIQ में साइन इन करें",
+        trust: ["256-बिट एन्क्रिप्शन", "शुरू करने के लिए कार्ड ज़रूरी नहीं", "EN · हिन्दी · ಕನ್ನಡ"],
+        footerTagline: "हर भारतीय के लिए वित्तीय समझ, क्रेडिट कार्ड के साथ या उसके बिना।",
+        footerTags: ["प्राइवेसी-प्रथम", "भारत में निर्मित", "ओपन प्लेटफ़ॉर्म"],
+        footerPlatform: "प्लेटफ़ॉर्म",
+        footerSecurity: "सुरक्षा",
+        footerLinks: ["डैशबोर्ड", "क्रेडिट कार्ड", "ऑफ़र", "AI सहायक", "CLIQ Learn", "बजट", "एनालिटिक्स", "वित्तीय स्वास्थ्य"],
+        footerSecurityItems: ["PAN / CVV संग्रह शून्य", "Row-Level Security", "9-स्तरीय PII हटाना", "अपरिवर्तनीय AI ऑडिट लॉग"],
+        footerCopyright: "CLIQ. भारत के लिए निर्मित।",
+        footerDisclaimer: "सटीक वित्तीय गणित · AI सिर्फ़ समझाने के लिए · गणना के लिए कभी नहीं।",
+      },
+    },
+
     tagline: "पैसे की समझ, अब सरल। आपकी अपनी भाषा में।",
     supporting: "सटीक निर्णय, उज्ज्वल भविष्य। हर किसी के लिए।",
 
     nav: {
+      pathwayLabel: "पथ",
+      modeLabel: "मोड",
+      modeCashSavings: "नकद और बचत",
+      modeCreditCards: "क्रेडिट कार्ड",
+      switchToCardMode: "क्रेडिट कार्ड मोड पर जाएँ",
+      switchToCashMode: "नकद और बचत मोड पर जाएँ",
+      switchToCardsShort: "कार्ड मोड पर जाएँ",
+      switchToCashShort: "नकद और बचत पर जाएँ",
+      switching: "बदल रहा है...",
+      myIncome: "मेरी आय",
+      expenseLog: "ख़र्च लॉग",
+      budgetPlanner: "बजट प्लानर",
+      savingsGoals: "बचत लक्ष्य",
+      emergencyFund: "आपातकालीन निधि",
+      subscriptions: "सब्सक्रिप्शन और बिल",
+      financialHealth: "वित्तीय स्वास्थ्य",
       dashboard: "डैशबोर्ड",
       cards: "मेरे क्रेडिट कार्ड्स",
       offers: "ऑफ़र्स और छूट",
@@ -1792,7 +2447,7 @@ export const translations: Record<Language, Translations> = {
       stepCompleteTitle: "पूर्ण",
       selectLanguageHeading: "अपनी भाषा चुनें",
       selectLanguageSub: "सभी सुझाव, सहायक और खर्च विश्लेषण आपकी भाषा में रूपांतरित होंगे।",
-      continueButton: "पोर्टफोलियो पर जाएं",
+      continueButton: "जारी रखें",
       seedDemoButton: "डेमो पोर्टफोलियो जोड़ें",
       finishButton: "कमांड सेंटर शुरू करें",
       seedingText: "सत्यापित पोर्टफोलियो तैयार हो रहा है...",
@@ -1800,6 +2455,28 @@ export const translations: Record<Language, Translations> = {
       portfolioSub: "सत्यापित भारतीय कार्ड जोड़ें या डेमो डेटा के साथ शुरुआत करें।",
       readyHeading: "सब कुछ तैयार है!",
       readySub: "आपका खाता स्थानीय डेटा सुरक्षा और गणितीय इंजनों से सुरक्षित है।",
+      stepPathTitle: "लर्निंग पाथ",
+      pathwayHeading: "अपना वित्तीय पथ चुनें",
+      pathwaySub: "CLIQ अपनी सुविधाएँ, कैलकुलेटर और डैशबोर्ड आपकी असली भुगतान आदतों के अनुसार ढालता है।",
+      pathNoCardBadge: "पथ B",
+      pathNoCardTitle: "बिना क्रेडिट कार्ड वाले उपयोगकर्ता",
+      pathNoCardDesc: "मैं UPI, नकद, डेबिट या बैंक ट्रांसफ़र इस्तेमाल करता हूँ। नकदी प्रवाह ट्रैक करने, अनियमित आय संभालने और बचत का अनुशासन बनाने में मदद करें।",
+      pathCardBadge: "पथ A",
+      pathCardTitle: "क्रेडिट कार्ड उपयोगकर्ता",
+      pathCardDesc: "मेरे पास एक या अधिक क्रेडिट कार्ड हैं। कैशबैक और रिवॉर्ड माइल्स बढ़ाने, वार्षिक शुल्क जाँचने और मर्चेंट ऑफ़र खोजने में मदद करें।",
+      primaryGoal: "मुख्य लक्ष्य",
+      goalBasicsTitle: "बुनियादी बातें समझें",
+      goalBasicsDesc: "बजट, नकदी प्रवाह, कर्ज़ के जोखिम",
+      goalCreditTitle: "क्रेडिट और स्कोर सीखें",
+      goalCreditDesc: "क्रेडिट स्कोर और ब्याज कैसे काम करते हैं",
+      goalOptimizeTitle: "ख़र्च बेहतर करें",
+      goalOptimizeDesc: "स्मार्ट रिवॉर्ड और ख़र्च ट्रैकिंग",
+      backButton: "वापस",
+      activatingButton: "पथ सक्रिय हो रहा है...",
+      readyNoCardSub: "आपका नकद और बचत वर्कस्पेस सक्रिय है। अपना नकदी प्रवाह ट्रैक करें, बिना कार्ड वाले ख़र्च का विश्लेषण करें और 50/30/20 बजट ढाँचे का आसानी से पालन करें।",
+      readyCardSub: "आपका क्रेडिट कार्ड कमांड सेंटर तैयार है। कभी भी अपने कार्ड जोड़ें, रिवॉर्ड बढ़ाएँ और व्यक्तिगत मर्चेंट छूट देखें।",
+      goNoCardButton: "व्यक्तिगत वित्त कमांड सेंटर पर जाएँ",
+      goCardButton: "कमांड सेंटर पर जाएँ",
     },
 
     adminOffers: {
@@ -2010,10 +2687,246 @@ export const translations: Record<Language, Translations> = {
   },
 
   kn: {
+    home: {
+      hero: {
+        badge: "ಪ್ರತಿಯೊಬ್ಬ ಭಾರತೀಯನಿಗೂ ಆರ್ಥಿಕ ಜಾಣ್ಮೆ",
+        line1: "ಹಣ ಈಗ",
+        line2: "ಸರಳ,",
+        line3Lead: "ನಿಮ್ಮ",
+        line3Tail: "ಭಾಷೆಯಲ್ಲಿ",
+        subtitle: "ಪ್ರತಿ ಕಾರ್ಡ್ ರಿವಾರ್ಡ್‌ನ ಪೂರ್ಣ ಲಾಭ ಪಡೆಯಿರಿ, ಅಥವಾ ಉಳಿತಾಯದ ಮೊದಲ ಅಭ್ಯಾಸ ಬೆಳೆಸಿಕೊಳ್ಳಿ. ನಿಖರ ಗಣಿತ, ಸರಳ ಭಾಷೆಯ ಮಾರ್ಗದರ್ಶನ, ಮತ್ತು ನಿಮ್ಮ ಡೇಟಾ ನಿಮ್ಮದೇ.",
+        ctaStart: "ಉಚಿತವಾಗಿ ಆರಂಭಿಸಿ",
+        ctaSignIn: "ಸೈನ್ ಇನ್",
+        cardSavings: "ಉಳಿತಾಯ",
+        cardRewards: "ರಿವಾರ್ಡ್",
+        cardPremium: "ಪ್ರೀಮಿಯಂ",
+        chipsAccent: "ನಿಮ್ಮ ಹಣಕ್ಕೆ",
+        chipsRest: "ಬೇಕಾದ ಎಲ್ಲವೂ,",
+        chipsLine2: "ಒಂದೇ ಕಡೆ.",
+        chips: [
+          "ರಿವಾರ್ಡ್ ಆಪ್ಟಿಮೈಸರ್",
+          "ಬಜೆಟ್ ಯೋಜಕ",
+          "ಉಳಿತಾಯ ಗುರಿಗಳು",
+          "ತುರ್ತು ನಿಧಿ",
+          "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಆಮದು",
+          "AI ಸಹಾಯಕ",
+          "ಆರ್ಥಿಕ ಆರೋಗ್ಯ",
+          "ಲೈವ್ ಕಾರ್ಡ್ ಆಫರ್‌ಗಳು",
+          "EN · हिन्दी · ಕನ್ನಡ",
+        ],
+      },
+      journeys: {
+        eyebrow: "ಎರಡು ದಾರಿಗಳು. ಒಂದೇ ವೇದಿಕೆ.",
+        titleLine1: "ಆರ್ಥಿಕ ಜಾಣ್ಮೆ,",
+        titleAccent: "ಎಲ್ಲರಿಗಾಗಿ.",
+        subtitle: "ನಿಮ್ಮ ಬಳಿ ಪ್ರೀಮಿಯಂ ಕಾರ್ಡ್‌ಗಳಿರಲಿ ಅಥವಾ ನೀವು ಈಗಷ್ಟೇ ಆರಂಭಿಸುತ್ತಿರಲಿ — CLIQ ನಿಮ್ಮ ಆರ್ಥಿಕ ಸ್ಥಿತಿಗೆ ತಕ್ಕಂತೆ ಹೊಂದಿಕೊಳ್ಳುತ್ತದೆ.",
+        ccLabel: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ದಾರಿ",
+        ccHeadline: "ಪ್ರತಿ ರೂಪಾಯಿಗೂ ಪೂರ್ಣ ರಿವಾರ್ಡ್.",
+        ccDescription: "ನಿಮ್ಮ ಎಲ್ಲಾ ಕಾರ್ಡ್‌ಗಳನ್ನು ಒಂದೇ ಕಡೆ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ, ನೈಜ-ಸಮಯದ ಆಫರ್‌ಗಳನ್ನು ಹುಡುಕಿ, ಮತ್ತು ಪ್ರತಿ ಖರೀದಿಗೆ ಯಾವ ಕಾರ್ಡ್ ಬಳಸಬೇಕೆಂದು CLIQ AI ನಿರ್ಧರಿಸಲಿ.",
+        ccFeatures: [
+          "50+ ಭಾರತೀಯ ಕಾರ್ಡ್‌ಗಳಿಗೆ ತಕ್ಷಣದ ರಿವಾರ್ಡ್ ಲೆಕ್ಕಾಚಾರ",
+          "8 ಬ್ಯಾಂಕ್ ಮೂಲಗಳಿಂದ ಲೈವ್ ಆಫರ್‌ಗಳು",
+          "ಕಾರ್ಡ್-ವಿರುದ್ಧ-ಕಾರ್ಡ್ ಹೋಲಿಕೆ ಮತ್ತು ಶುಲ್ಕ ಮನ್ನಾ ಟ್ರ್ಯಾಕಿಂಗ್",
+          "ಖರೀದಿ ಜಾಣ್ಮೆ — ಪ್ರತಿ ಮರ್ಚೆಂಟ್‌ಗೆ ಅತ್ಯುತ್ತಮ ಕಾರ್ಡ್",
+        ],
+        noCardLabel: "ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ",
+        noCardHeadline: "ಮೊದಲ ಸಂಬಳದಿಂದಲೇ ಸಂಪತ್ತು ಕಟ್ಟಿ.",
+        noCardDescription: "ಆದಾಯ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ, ಬಜೆಟ್ ಯೋಜಿಸಿ, ತುರ್ತು ನಿಧಿ ಬೆಳೆಸಿ ಮತ್ತು ಆರ್ಥಿಕ ಕೌಶಲ್ಯ ಕಲಿಯಿರಿ — ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಇಲ್ಲದೆಯೇ.",
+        noCardFeatures: [
+          "ಆದಾಯ ಟ್ರ್ಯಾಕಿಂಗ್ — ನಿಯಮಿತ, ಅನಿಯಮಿತ, ಫ್ರೀಲ್ಯಾನ್ಸ್",
+          "ಹೊಂದಿಸಬಹುದಾದ ವರ್ಗಗಳೊಂದಿಗೆ ಬಜೆಟ್ ಯೋಜನೆ",
+          "ಪ್ರಗತಿ ಟ್ರ್ಯಾಕಿಂಗ್‌ನೊಂದಿಗೆ ತುರ್ತು ಉಳಿತಾಯ ಗುರಿಗಳು",
+          "CLIQ Learn — 6 ಆರ್ಥಿಕ ಸಾಕ್ಷರತಾ ಮಾಡ್ಯೂಲ್‌ಗಳು",
+        ],
+        overview: "ಮಾಸಿಕ ಸಾರಾಂಶ",
+        income: "ಆದಾಯ",
+        expenses: "ಖರ್ಚು",
+        savings: "ಉಳಿತಾಯ",
+        goals: "ಉಳಿತಾಯ ಗುರಿಗಳು",
+        emergencyFund: "ತುರ್ತು ನಿಧಿ",
+        education: "ಶಿಕ್ಷಣ",
+      },
+      universe: {
+        eyebrow: "CLIQ ಪರಿಸರ ವ್ಯವಸ್ಥೆ",
+        titleLead: "ನಿಮ್ಮ",
+        titleAccent: "ಹಣವನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ನೋಡಿ,",
+        titleLine2: "ಎಲ್ಲವೂ ಒಂದೇ ಕಡೆ.",
+        subtitle: "CLIQ ನಿಮ್ಮ ಆರ್ಥಿಕ ಜೀವನದ ಪ್ರತಿಯೊಂದು ಅಂಶವನ್ನೂ ಜೋಡಿಸುತ್ತದೆ — ಜಾಣ್ಮೆಯಿಂದ, ಖಾಸಗಿಯಾಗಿ ಮತ್ತು ನೈಜ ಸಮಯದಲ್ಲಿ.",
+        nodes: [
+          {
+            label: "ಆದಾಯ",
+            sub: "ಪ್ರತಿ ರೂಪಾಯಿಯ ಲೆಕ್ಕ",
+          },
+          {
+            label: "ಕಾರ್ಡ್‌ಗಳು",
+            sub: "ರಿವಾರ್ಡ್ ಹೆಚ್ಚಿಸಿ",
+          },
+          {
+            label: "ಖರ್ಚು",
+            sub: "ಮಾದರಿಗಳನ್ನು ಅರಿಯಿರಿ",
+          },
+          {
+            label: "ಉಳಿತಾಯ",
+            sub: "ಸುರಕ್ಷತಾ ನಿಧಿ ಕಟ್ಟಿ",
+          },
+          {
+            label: "ಶಿಕ್ಷಣ",
+            sub: "ಕಲಿಯಿರಿ, ಬೆಳೆಯಿರಿ",
+          },
+          {
+            label: "ಆರೋಗ್ಯ ಸ್ಕೋರ್",
+            sub: "ನಿಮ್ಮ ಅಂಕ ತಿಳಿಯಿರಿ",
+          },
+        ],
+        poweredBy: "ಆಧಾರಿತ",
+        footnote: "ನಿಮ್ಮ ಪ್ರತಿಯೊಂದು ಡೇಟಾ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಆಗಿರುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಒಪ್ಪಿಗೆಯಿಂದ ಮಾತ್ರ ಬಳಕೆಯಾಗುತ್ತದೆ. CLIQ AI ಆರೂ ಕ್ಷೇತ್ರಗಳ ಸಂಕೇತಗಳನ್ನು ಸೇರಿಸಿ, ಯಾವುದೇ ಒಂದು ಸಾಧನ ನೀಡಲಾಗದ ಒಳನೋಟಗಳನ್ನು ನೀಡುತ್ತದೆ.",
+      },
+      ai: {
+        eyebrow: "AI ಆರ್ಥಿಕ ಜಾಣ್ಮೆ",
+        line1: "ಏನು ಬೇಕಾದರೂ ಕೇಳಿ.",
+        line2: "ಉತ್ತರ ಪಡೆಯಿರಿ",
+        line3: "ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ.",
+        subtitle: "ಹಿಂದಿ, ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಸರಳ ಉತ್ತರಗಳು. CLIQ AI ನಿಮ್ಮ ನಿಜವಾದ ಆದಾಯ ಮತ್ತು ಖರ್ಚನ್ನು ಓದುತ್ತದೆ, ಯಾವ ಸಂಖ್ಯೆಯನ್ನೂ ಊಹಿಸುವುದಿಲ್ಲ.",
+        trust: [
+          {
+            label: "ಪ್ರೈವಸಿ ಗೇಟ್‌ವೇ",
+            desc: "ಪ್ರತಿ AI ಕರೆಗೂ ಮೊದಲು 9-ಹಂತದ PII ತೆಗೆದುಹಾಕುವಿಕೆ",
+          },
+          {
+            label: "ಒಪ್ಪಿಗೆ ಆಧಾರಿತ",
+            desc: "AI ಯಾವ ಡೇಟಾ ನೋಡಬಹುದು ಎಂಬುದು ನಿಮ್ಮ ನಿರ್ಧಾರ",
+          },
+          {
+            label: "ಸ್ಪಷ್ಟ ವಿವರಣೆ",
+            desc: "ಪ್ರತಿ ಉತ್ತರವೂ ನಿಮ್ಮ ನಿಜವಾದ ಸಂಖ್ಯೆಗಳನ್ನು ಉಲ್ಲೇಖಿಸುತ್ತದೆ",
+          },
+        ],
+        assistantName: "CLIQ AI ಸಹಾಯಕ",
+        status: "ಸಕ್ರಿಯ — 3 ಮೂಲಗಳ ವಿಶ್ಲೇಷಣೆ",
+        chatQuestion: "ನಾನು ಪ್ರತಿ ತಿಂಗಳು ₹3,000 ಉಳಿಸಲು ಸಾಧ್ಯವೇ?",
+        chatIntro: "ಈ ಉಳಿತಾಯ ಗುರಿ ಸಾಧ್ಯವೇ ಎಂದು ತಿಳಿಯಲು ನೀವು ದಾಖಲಿಸಿದ ಆದಾಯ ಮತ್ತು ಖರ್ಚನ್ನು ನೋಡೋಣ.",
+        chatIncome: "ಮಾಸಿಕ ಆದಾಯ (3 ತಿಂಗಳ ಮಧ್ಯಮ ಮೌಲ್ಯ)",
+        chatExpenses: "ದಾಖಲಾದ ಖರ್ಚು",
+        chatSurplus: "ಲಭ್ಯವಿರುವ ಹೆಚ್ಚುವರಿ",
+        chatVerdict: "ಹೌದು — ನಿಮ್ಮ ಈಗಿನ ಹೆಚ್ಚುವರಿ ಹಣ ₹3,000 ಅನ್ನು ಸುಲಭವಾಗಿ ಭರಿಸುತ್ತದೆ, ಜೊತೆಗೆ ₹3,520 ಸುರಕ್ಷತಾ ಮೊತ್ತ ಉಳಿಯುತ್ತದೆ.",
+        chatHint: "ನಿಮ್ಮ ಖರ್ಚಿನ ಮಾದರಿ, ಸಾಲ ತೀರಿಸುವಿಕೆ ಅಥವಾ ಹೂಡಿಕೆ ಸಿದ್ಧತೆ ಬಗ್ಗೆ ಕೇಳಿ...",
+        inputPlaceholder: "ನಿಮ್ಮ ಹಣಕಾಸಿನ ಬಗ್ಗೆ ಕೇಳಿ...",
+      },
+      features: {
+        eyebrow: "CLIQ ಒಳಗೆ ಏನಿದೆ",
+        titleLine1: "ಬೇಕಾದ ಎಲ್ಲವೂ ಇದೆ.",
+        titleAccent: "ಬೇಡದ್ದು ಏನೂ ಇಲ್ಲ.",
+        subtitle: "ನಿರ್ಮಿಸಿದ ಸೌಲಭ್ಯಗಳು, ಮಾರ್ಕೆಟಿಂಗ್ ಭರವಸೆಗಳಲ್ಲ.",
+        subtitleStrong: "ಪ್ರತಿಯೊಂದು ಸೌಲಭ್ಯವೂ ಈಗಿನ ಬಿಡುಗಡೆಯಲ್ಲಿ ಲಭ್ಯ.",
+        badgeCard: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಬಳಕೆದಾರರು",
+        badgeAll: "ಎಲ್ಲಾ ಬಳಕೆದಾರರು",
+        badgeNoCard: "ಕಾರ್ಡ್ ರಹಿತ ದಾರಿ",
+        items: [
+          {
+            title: "ರಿವಾರ್ಡ್ ಆಪ್ಟಿಮೈಸೇಶನ್",
+            description: "50+ ಭಾರತೀಯ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳಿಗೆ Decimal-ನಿಖರ ರಿವಾರ್ಡ್ ಲೆಕ್ಕಾಚಾರ. ಪ್ರತಿ ಮರ್ಚೆಂಟ್‌ಗೆ ಪ್ರತಿ ಬಾರಿಯೂ ಅತ್ಯುತ್ತಮ ಕಾರ್ಡ್.",
+          },
+          {
+            title: "ಖರ್ಚಿನ ಒಳನೋಟ",
+            description: "HDFC, SBI, ICICI ಮತ್ತು Axis CSV ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಆಮದಿನೊಂದಿಗೆ ವರ್ಗವಾರು ವಹಿವಾಟು ವಿಶ್ಲೇಷಣೆ. SHA-256 ನಕಲು ತಡೆ.",
+          },
+          {
+            title: "ಆರ್ಥಿಕ ಆರೋಗ್ಯ ಸ್ಕೋರ್",
+            description: "ಎರಡು-ಅಲ್ಗಾರಿದಮ್ ಆರೋಗ್ಯ ಎಂಜಿನ್ — ಕಾರ್ಡ್‌ದಾರರಿಗೆ ರಿವಾರ್ಡ್ ದಕ್ಷತೆ, ಉಳಿದವರಿಗೆ ಆದಾಯ-ಹೆಚ್ಚುವರಿ ದಾರಿ. ನಿಜವಾದ ಸಂಖ್ಯೆಗಳು.",
+          },
+          {
+            title: "ಆದಾಯ ಮತ್ತು ಬಜೆಟ್",
+            description: "ಅನಿಯಮಿತ ಆದಾಯಕ್ಕೆ 90 ದಿನಗಳ ಚಲಿಸುವ ಮಧ್ಯಮ ಮೌಲ್ಯ. ಹೊಂದಿಸಬಹುದಾದ ವರ್ಗ ಬಜೆಟ್. ಒಮ್ಮೆಯ ಆದಾಯದ ಅವಧಿ ರಕ್ಷಣೆ.",
+          },
+          {
+            title: "ಡಾಕ್ಯುಮೆಂಟ್ ಜಾಣ್ಮೆ",
+            description: "ಬ್ಯಾಂಕ್ PDF ಸುತ್ತೋಲೆ ಮತ್ತು ಕಾರ್ಡ್ ಆಫರ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್‌ಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. CLIQ ಮರ್ಚೆಂಟ್, ರಿಯಾಯಿತಿ ಮತ್ತು ಪ್ರೋಮೋ ಕೋಡ್‌ಗಳನ್ನು ತಾನಾಗಿ ತೆಗೆಯುತ್ತದೆ.",
+          },
+          {
+            title: "CLIQ Learn",
+            description: "6 ಆರ್ಥಿಕ ಸಾಕ್ಷರತಾ ಮಾಡ್ಯೂಲ್‌ಗಳು, 5 ಕ್ಯಾಲ್ಕುಲೇಟರ್‌ಗಳು — EMI, ಕ್ರೆಡಿಟ್ ಬಳಕೆ, ಚಕ್ರಬಡ್ಡಿ. ಪ್ರತಿ ಬಳಕೆದಾರರ ಪ್ರಗತಿ ದಾಖಲು.",
+          },
+        ],
+        privacyTitle: "ಪ್ರೈವಸಿ ಗೇಟ್‌ವೇ",
+        privacyDescription: "ಪ್ರತಿ AI ಕರೆಗೂ ಮೊದಲು 9 PII ನಿಯಮಗಳು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತವೆ. ಬಳಕೆದಾರರ ಒಪ್ಪಿಗೆ ಕಡ್ಡಾಯ. ಪ್ರತಿ AI ವಿನಂತಿ ಆಡಿಟ್ ಲಾಗ್‌ನಲ್ಲಿ. ಕಚ್ಚಾ ಡೇಟಾ ಹೊರಗೆ ಹೋಗುವುದಿಲ್ಲ.",
+        privacyStats: ["PII ನಿಯಮಗಳು", "ಡೇಟಾ ಹೊರಹರಿವು", "ಆಡಿಟ್ ದಾಖಲು"],
+      },
+      privacy: {
+        eyebrow: "ವಿನ್ಯಾಸದಲ್ಲೇ ಗೌಪ್ಯತೆ",
+        titleLine1: "ನಿಮ್ಮ ಡೇಟಾ. ನಿಮ್ಮ ನಿಯಂತ್ರಣ.",
+        titleAccent: "ಯಾವಾಗಲೂ.",
+        subtitle: "CLIQ ನಲ್ಲಿ ಗೌಪ್ಯತೆ ನಂತರ ಸೇರಿಸಿದ್ದಲ್ಲ, ಮೂಲಭೂತ ಷರತ್ತು. ನಿಮ್ಮ ಮತ್ತು AI ನಡುವೆ ನಿಖರವಾಗಿ ಏನು ನಡೆಯುತ್ತದೆ ಎಂಬುದು ಇಲ್ಲಿದೆ.",
+        steps: [
+          {
+            title: "ನೀವು ನಮೂದಿಸುತ್ತೀರಿ",
+            body: "ನಿಮ್ಮ ಆದಾಯ, ಖರ್ಚು ಮತ್ತು ವಹಿವಾಟುಗಳು. ನೀವು ನಮೂದಿಸಲು ಆರಿಸಿದ್ದು ಮಾತ್ರ — ಖಾತೆ ಸ್ಕ್ರೇಪಿಂಗ್ ಇಲ್ಲ, ಬ್ಯಾಂಕ್ ಸಂಯೋಜನೆ ಇಲ್ಲ, ಸ್ವಯಂ ಸಂಗ್ರಹ ಇಲ್ಲ.",
+          },
+          {
+            title: "9-ಹಂತದ PII ತೆಗೆದುಹಾಕುವಿಕೆ",
+            body: "ಪ್ರತಿ AI ಕರೆಗೂ ಮೊದಲು CLIQ 9 ನಿಯಮಗಳನ್ನು ಚಲಾಯಿಸಿ ಕಾರ್ಡ್ ಸಂಖ್ಯೆ, CVV, OTP, ಆಧಾರ್, PAN, ಬ್ಯಾಂಕ್ ಖಾತೆ, ಇಮೇಲ್ ಮತ್ತು ಫೋನ್ ಸಂಖ್ಯೆಗಳನ್ನು ತೆಗೆದುಹಾಕುತ್ತದೆ.",
+          },
+          {
+            title: "ಒಪ್ಪಿಗೆ ಆಧಾರಿತ AI",
+            body: "ಪ್ರತಿ AI ವಿನಂತಿಗೂ ಮೊದಲು ನಿಮ್ಮ ಸ್ಪಷ್ಟ ಒಪ್ಪಿಗೆಯನ್ನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ. ಯಾವಾಗ ಬೇಕಾದರೂ ಒಪ್ಪಿಗೆ ಹಿಂಪಡೆಯಬಹುದು. AI ಕೇವಲ ಸರಳ ವಿವರಣೆಗೆ — ಲೆಕ್ಕಾಚಾರಕ್ಕೆ ಎಂದಿಗೂ ಅಲ್ಲ.",
+          },
+          {
+            title: "ಬದಲಿಸಲಾಗದ ಆಡಿಟ್ ಲಾಗ್",
+            body: "ಪ್ರತಿ AI ವಿನಂತಿಯೂ ಸೇರಿಸಲು-ಮಾತ್ರ ಆಡಿಟ್ ಕೋಷ್ಟಕದಲ್ಲಿ ದಾಖಲಾಗುತ್ತದೆ. ನಿಮ್ಮ ಪರವಾಗಿ ಮಾಡಿದ ಪ್ರತಿ ಪ್ರಶ್ನೆಯನ್ನೂ ನೀವು ನೋಡಬಹುದು. ಖಾತೆ ಅಳಿಸಿದಾಗ ಲಾಗ್‌ಗಳು ಅನಾಮಧೇಯಗೊಳ್ಳುತ್ತವೆ.",
+          },
+        ],
+        trust: [
+          "ಕಚ್ಚಾ PAN ಅಥವಾ CVV ಸಂಗ್ರಹವಿಲ್ಲ",
+          "ಎಲ್ಲಾ ಕೋಷ್ಟಕಗಳಲ್ಲಿ Row-Level Security",
+          "ನಿಮ್ಮ ಡೇಟಾ ನಿಮ್ಮದೇ — ಯಾವಾಗ ಬೇಕಾದರೂ ರಫ್ತು ಅಥವಾ ಅಳಿಸಿ",
+          "ನಿಖರ ಗಣಿತ, AI ಕೇವಲ ವಿವರಣೆಗೆ",
+        ],
+      },
+      closing: {
+        stats: [
+          "ಬೆಂಬಲಿತ ಭಾರತೀಯ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು",
+          "ಆರ್ಥಿಕ ಸಾಕ್ಷರತಾ ಮಾಡ್ಯೂಲ್‌ಗಳು",
+          "PII ತೆಗೆದುಹಾಕುವ ನಿಯಮಗಳು",
+          "ಗೌಪ್ಯತೆ-ಮೊದಲ ವಿನ್ಯಾಸ",
+        ],
+        eyebrow: "ನಿಮ್ಮ ಪಯಣ ಆರಂಭಿಸಿ",
+        titleAccent: "ನಿಮ್ಮ ಹಣಕ್ಕೆ",
+        titleRest: "ಉತ್ತಮ ಜಾಣ್ಮೆ",
+        titleLine2: "ಸಿಗಬೇಕು.",
+        subtitle: "ಪ್ರೀಮಿಯಂ ಕಾರ್ಡ್ ಇರಲಿ ಅಥವಾ ಆರ್ಥಿಕ ಪಯಣ ಈಗಷ್ಟೇ ಆರಂಭವಾಗಿರಲಿ — ಹಣವನ್ನು ಜಾಣ್ಮೆಯಿಂದ ನಿರ್ವಹಿಸುವ ಭಾರತೀಯರ ಜೊತೆ ಸೇರಿ.",
+        ctaCreate: "ಉಚಿತ ಖಾತೆ ತೆರೆಯಿರಿ",
+        ctaSignIn: "CLIQ ಗೆ ಸೈನ್ ಇನ್",
+        trust: ["256-ಬಿಟ್ ಎನ್‌ಕ್ರಿಪ್ಶನ್", "ಆರಂಭಿಸಲು ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ", "EN · हिन्दी · ಕನ್ನಡ"],
+        footerTagline: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಇರಲಿ ಇಲ್ಲದಿರಲಿ, ಪ್ರತಿಯೊಬ್ಬ ಭಾರತೀಯನಿಗೂ ಆರ್ಥಿಕ ಜಾಣ್ಮೆ.",
+        footerTags: ["ಗೌಪ್ಯತೆ-ಮೊದಲು", "ಭಾರತದಲ್ಲಿ ನಿರ್ಮಿತ", "ಮುಕ್ತ ವೇದಿಕೆ"],
+        footerPlatform: "ವೇದಿಕೆ",
+        footerSecurity: "ಭದ್ರತೆ",
+        footerLinks: ["ಡ್ಯಾಶ್‌ಬೋರ್ಡ್", "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು", "ಆಫರ್‌ಗಳು", "AI ಸಹಾಯಕ", "CLIQ Learn", "ಬಜೆಟ್", "ವಿಶ್ಲೇಷಣೆ", "ಆರ್ಥಿಕ ಆರೋಗ್ಯ"],
+        footerSecurityItems: ["PAN / CVV ಸಂಗ್ರಹ ಶೂನ್ಯ", "Row-Level Security", "9-ಹಂತದ PII ತೆಗೆದುಹಾಕುವಿಕೆ", "ಬದಲಿಸಲಾಗದ AI ಆಡಿಟ್ ಲಾಗ್"],
+        footerCopyright: "CLIQ. ಭಾರತಕ್ಕಾಗಿ ನಿರ್ಮಿತ.",
+        footerDisclaimer: "ನಿಖರ ಆರ್ಥಿಕ ಗಣಿತ · AI ಕೇವಲ ವಿವರಣೆಗೆ · ಲೆಕ್ಕಾಚಾರಕ್ಕೆ ಎಂದಿಗೂ ಅಲ್ಲ.",
+      },
+    },
+
     tagline: "ಹಣದ ನಿರ್ವಹಣೆ, ಈಗ ಸುಲಭ. ನಿಮ್ಮದೇ ಭಾಷೆಯಲ್ಲಿ.",
     supporting: "ಬುದ್ಧಿವಂತ ನಿರ್ಧಾರಗಳು, ಉಜ್ವಲ ಭವಿಷ್ಯ. ಪ್ರತಿಯೊಬ್ಬರಿಗೂ.",
 
     nav: {
+      pathwayLabel: "ದಾರಿ",
+      modeLabel: "ಮೋಡ್",
+      modeCashSavings: "ನಗದು ಮತ್ತು ಉಳಿತಾಯ",
+      modeCreditCards: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು",
+      switchToCardMode: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಮೋಡ್‌ಗೆ ಬದಲಿಸಿ",
+      switchToCashMode: "ನಗದು ಮತ್ತು ಉಳಿತಾಯ ಮೋಡ್‌ಗೆ ಬದಲಿಸಿ",
+      switchToCardsShort: "ಕಾರ್ಡ್ ಮೋಡ್‌ಗೆ ಬದಲಿಸಿ",
+      switchToCashShort: "ನಗದು ಮತ್ತು ಉಳಿತಾಯಕ್ಕೆ ಬದಲಿಸಿ",
+      switching: "ಬದಲಾಗುತ್ತಿದೆ...",
+      myIncome: "ನನ್ನ ಆದಾಯ",
+      expenseLog: "ಖರ್ಚು ದಾಖಲೆ",
+      budgetPlanner: "ಬಜೆಟ್ ಯೋಜಕ",
+      savingsGoals: "ಉಳಿತಾಯ ಗುರಿಗಳು",
+      emergencyFund: "ತುರ್ತು ನಿಧಿ",
+      subscriptions: "ಚಂದಾದಾರಿಕೆಗಳು ಮತ್ತು ಬಿಲ್‌ಗಳು",
+      financialHealth: "ಆರ್ಥಿಕ ಆರೋಗ್ಯ",
       dashboard: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
       cards: "ನನ್ನ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು",
       offers: "ಆಫರ್‌ಗಳು ಮತ್ತು ಕೊಡುಗೆಗಳು",
@@ -2463,7 +3376,7 @@ export const translations: Record<Language, Translations> = {
       stepCompleteTitle: "ಪೂರ್ಣ",
       selectLanguageHeading: "ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
       selectLanguageSub: "ಎಲ್ಲಾ ಶಿಫಾರಸುಗಳು, ಸಹಾಯಕರು ಮತ್ತು ವಿಶ್ಲೇಷಣೆಗಳು ನಿಮ್ಮ ಭಾಷೆಗೆ ಹೊಂದಿಕೊಳ್ಳುತ್ತವೆ.",
-      continueButton: "ಪೋರ್ಟ್‌ಫೋಲಿಯೊಗೆ ಮುಂದುವರಿಯಿರಿ",
+      continueButton: "ಮುಂದುವರಿಯಿರಿ",
       seedDemoButton: "ಮಾದರಿ ಕಾರ್ಡ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಿ",
       finishButton: "ಕಮಾಂಡ್ ಸೆಂಟರ್‌ಗೆ ಹೋಗಿ",
       seedingText: "ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ಸಿದ್ಧವಾಗುತ್ತಿದೆ...",
@@ -2471,6 +3384,28 @@ export const translations: Record<Language, Translations> = {
       portfolioSub: "ದೃಢೀಕರಿಸಿದ ಭಾರತೀಯ ಕಾರ್ಡ್‌ಗಳನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಮಾದರಿ ಡೇಟಾದೊಂದಿಗೆ ಪ್ರಾರಂಭಿಸಿ.",
       readyHeading: "ಎಲ್ಲವೂ ಸಿದ್ಧವಾಗಿದೆ!",
       readySub: "ನಿಮ್ಮ ಖಾತೆಯು ಸ್ಥಳೀಯ ಭದ್ರತೆ ಮತ್ತು ನಿಖರ ಗಣಿತ ಎಂಜಿನ್‌ಗಳಿಂದ ಸುರಕ್ಷಿತವಾಗಿದೆ.",
+      stepPathTitle: "ಕಲಿಕೆಯ ದಾರಿ",
+      pathwayHeading: "ನಿಮ್ಮ ಆರ್ಥಿಕ ದಾರಿಯನ್ನು ಆರಿಸಿ",
+      pathwaySub: "CLIQ ತನ್ನ ಸೌಲಭ್ಯಗಳು, ಕ್ಯಾಲ್ಕುಲೇಟರ್‌ಗಳು ಮತ್ತು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಅನ್ನು ನಿಮ್ಮ ನಿಜವಾದ ಪಾವತಿ ಅಭ್ಯಾಸಗಳಿಗೆ ತಕ್ಕಂತೆ ಹೊಂದಿಸುತ್ತದೆ.",
+      pathNoCardBadge: "ದಾರಿ B",
+      pathNoCardTitle: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಇಲ್ಲದ ಬಳಕೆದಾರ",
+      pathNoCardDesc: "ನಾನು UPI, ನಗದು, ಡೆಬಿಟ್ ಅಥವಾ ಬ್ಯಾಂಕ್ ವರ್ಗಾವಣೆ ಬಳಸುತ್ತೇನೆ. ನಗದು ಹರಿವು ಟ್ರ್ಯಾಕ್ ಮಾಡಲು, ಅನಿಯಮಿತ ಆದಾಯ ನಿರ್ವಹಿಸಲು ಮತ್ತು ಉಳಿತಾಯದ ಶಿಸ್ತು ಬೆಳೆಸಲು ಸಹಾಯ ಮಾಡಿ.",
+      pathCardBadge: "ದಾರಿ A",
+      pathCardTitle: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಬಳಕೆದಾರ",
+      pathCardDesc: "ನನ್ನ ಬಳಿ ಒಂದು ಅಥವಾ ಹೆಚ್ಚು ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳಿವೆ. ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಮತ್ತು ರಿವಾರ್ಡ್ ಮೈಲ್ಸ್ ಹೆಚ್ಚಿಸಲು, ವಾರ್ಷಿಕ ಶುಲ್ಕ ಪರಿಶೀಲಿಸಲು ಮತ್ತು ಮರ್ಚೆಂಟ್ ಆಫರ್‌ಗಳನ್ನು ಹುಡುಕಲು ಸಹಾಯ ಮಾಡಿ.",
+      primaryGoal: "ಮುಖ್ಯ ಗುರಿ",
+      goalBasicsTitle: "ಮೂಲಭೂತ ಅಂಶಗಳನ್ನು ತಿಳಿಯಿರಿ",
+      goalBasicsDesc: "ಬಜೆಟ್, ನಗದು ಹರಿವು, ಸಾಲದ ಅಪಾಯಗಳು",
+      goalCreditTitle: "ಕ್ರೆಡಿಟ್ ಮತ್ತು ಸ್ಕೋರ್ ಕಲಿಯಿರಿ",
+      goalCreditDesc: "ಕ್ರೆಡಿಟ್ ಸ್ಕೋರ್ ಮತ್ತು ಬಡ್ಡಿ ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತವೆ",
+      goalOptimizeTitle: "ಖರ್ಚನ್ನು ಸುಧಾರಿಸಿ",
+      goalOptimizeDesc: "ಸ್ಮಾರ್ಟ್ ರಿವಾರ್ಡ್ ಮತ್ತು ಖರ್ಚು ಟ್ರ್ಯಾಕಿಂಗ್",
+      backButton: "ಹಿಂದೆ",
+      activatingButton: "ದಾರಿ ಸಕ್ರಿಯಗೊಳ್ಳುತ್ತಿದೆ...",
+      readyNoCardSub: "ನಿಮ್ಮ ನಗದು ಮತ್ತು ಉಳಿತಾಯ ವರ್ಕ್‌ಸ್ಪೇಸ್ ಸಕ್ರಿಯವಾಗಿದೆ. ನಿಮ್ಮ ನಗದು ಹರಿವು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ, ಕಾರ್ಡ್ ರಹಿತ ಖರ್ಚನ್ನು ವಿಶ್ಲೇಷಿಸಿ ಮತ್ತು 50/30/20 ಬಜೆಟ್ ಚೌಕಟ್ಟನ್ನು ಸುಲಭವಾಗಿ ಅನುಸರಿಸಿ.",
+      readyCardSub: "ನಿಮ್ಮ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಕಮಾಂಡ್ ಸೆಂಟರ್ ಸಿದ್ಧವಾಗಿದೆ. ಯಾವಾಗ ಬೇಕಾದರೂ ಕಾರ್ಡ್‌ಗಳನ್ನು ಸೇರಿಸಿ, ರಿವಾರ್ಡ್ ಹೆಚ್ಚಿಸಿ ಮತ್ತು ವೈಯಕ್ತಿಕ ಮರ್ಚೆಂಟ್ ರಿಯಾಯಿತಿಗಳನ್ನು ನೋಡಿ.",
+      goNoCardButton: "ವೈಯಕ್ತಿಕ ಹಣಕಾಸು ಕಮಾಂಡ್ ಸೆಂಟರ್‌ಗೆ ಹೋಗಿ",
+      goCardButton: "ಕಮಾಂಡ್ ಸೆಂಟರ್‌ಗೆ ಹೋಗಿ",
     },
 
     adminOffers: {

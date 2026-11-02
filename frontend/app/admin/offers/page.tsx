@@ -670,7 +670,7 @@ export default function AdminOfferReviewPage() {
             <button
               onClick={handleSyncDiscovery}
               disabled={syncing}
-              className="px-5 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
+              className="px-5 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all flex items-center gap-2 disabled:opacity-40"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} />
               {syncing ? t.adminOffers.syncing : t.adminOffers.syncButton}

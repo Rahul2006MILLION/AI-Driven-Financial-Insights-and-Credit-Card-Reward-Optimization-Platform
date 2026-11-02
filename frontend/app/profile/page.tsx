@@ -21,6 +21,12 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // The form mirrors the active UI language (the source of truth, kept in sync with
+  // the account by LanguageProvider) instead of overriding it from the server.
+  useEffect(() => {
+    setPreferredLang(language);
+  }, [language]);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -29,10 +35,6 @@ export default function ProfilePage() {
         setFullName(data.full_name || "");
         setCurrency(data.currency || "INR");
         setFinancialPathway(data.financial_pathway || "CREDIT_CARD");
-        if (data.preferred_language) {
-          setPreferredLang(data.preferred_language as Language);
-          setLanguage(data.preferred_language as Language);
-        }
       } catch (err) {
         console.error("Failed to fetch profile:", err);
       } finally {
@@ -219,7 +221,7 @@ export default function ProfilePage() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-2 disabled:opacity-40"
+                  className="px-6 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-2 disabled:opacity-40"
                 >
                   {saving ? (
                     <div className="flex items-center gap-1.5">

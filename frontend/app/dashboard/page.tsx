@@ -175,7 +175,7 @@ export default function DashboardPage() {
             <DemoBootstrap onSeeded={loadDashboardData} />
             <Link
               href="/cards/new"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{t.dashboard?.addCardCta || t.nav?.addCard || "Add Card"}</span>
@@ -235,7 +235,7 @@ export default function DashboardPage() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
               <Link
                 href="/cards/new"
-                className="px-6 py-3 rounded-2xl bg-lime-400 hover:bg-lime-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-neonLime transition-all"
+                className="px-6 py-3 rounded-2xl btn-fx bg-lime-400 hover:bg-lime-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-neonLime transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Your First Card</span>
@@ -269,7 +269,7 @@ export default function DashboardPage() {
         {userProfile?.financial_pathway === "NO_CREDIT_CARD" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Monthly Inflow */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">Total Monthly Inflow</span>
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
@@ -291,7 +291,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Monthly Spending */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">Monthly Spending</span>
                 <div className="w-7 h-7 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center">
@@ -311,7 +311,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Target Budget Limit */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">Target Budget</span>
                 <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
@@ -331,7 +331,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Financial Health Score */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">Cash Flow Resilience</span>
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
@@ -353,7 +353,7 @@ export default function DashboardPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Registered Cards */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">
                   {t.dashboard?.registeredCards || "Registered Cards"}
@@ -377,7 +377,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Rewards Earned — filled accent tile */}
-            <div className="p-5 rounded-2xl bg-lime-400 text-[#12301A] relative overflow-hidden group transition-all">
+            <div data-spotlight className="card-interactive spot-light p-5 rounded-2xl bg-lime-400 text-[#12301A] relative overflow-hidden group">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-[#12301A]/70">
                   {t.dashboard?.rewardsRealized || "Rewards Realized"}
@@ -395,7 +395,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Efficiency Rate */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">
                   {t.dashboard?.rewardEfficiency || "Reward Efficiency"}
@@ -419,7 +419,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Health Score */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">
                   {t.dashboard?.financialHealth || "Financial Health"}
@@ -543,7 +543,7 @@ export default function DashboardPage() {
                     <button
                       type="submit"
                       disabled={quickLogging}
-                      className="px-6 py-2 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-1.5"
+                      className="px-6 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-1.5"
                     >
                       {quickLogging ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                       <span>Log Expense</span>
@@ -618,7 +618,7 @@ export default function DashboardPage() {
                     <button
                       type="submit"
                       disabled={optLoading || cards.length === 0}
-                      className="w-full py-2.5 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="w-full py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       {optLoading ? (
                         <Loader2 className="w-4 h-4 animate-spin" />

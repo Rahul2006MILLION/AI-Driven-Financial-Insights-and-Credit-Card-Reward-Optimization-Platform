@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { useLanguage, Language } from "@/lib/i18n";
-import { Sparkles, Lock, Mail, User, Loader2, ArrowRight } from "lucide-react";
+import { Lock, Mail, User, Loader2, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,7 +16,6 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [preferredLanguage, setPrefLanguage] = useState<Language>(language);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,12 +31,10 @@ export default function RegisterPage() {
           full_name: fullName,
           email,
           password,
-          preferred_language: preferredLanguage,
+          preferred_language: language,
           currency: "INR",
         }),
       });
-
-      setLanguage(preferredLanguage);
 
       // If backend supports automatic login (returns token), establish session immediately.
       // Otherwise, redirect user to login with success parameter.
@@ -71,11 +69,14 @@ export default function RegisterPage() {
 
       <div className="relative z-10 max-w-md w-full p-8 sm:p-9 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_20px_50px_0_rgba(0,0,0,0.7)]">
         <div className="text-center mb-6">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-500 p-0.5 mb-3 shadow-neonLime">
-            <div className="w-full h-full bg-[#17191E] rounded-[14px] flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-lime-400" />
-            </div>
-          </div>
+          <Image
+            src="/cliq-logo.png"
+            alt="CLIQ"
+            width={1024}
+            height={381}
+            priority
+            className="h-10 w-auto mx-auto mb-4 object-contain"
+          />
           <h2 className="text-2xl font-black text-white">{t.auth.createAccountTitle}</h2>
           <p className="text-xs text-slate-400 mt-1">{t.auth.createAccountSubtitle}</p>
         </div>
@@ -144,8 +145,8 @@ export default function RegisterPage() {
               {t.auth.preferredLanguageLabel}
             </label>
             <select
-              value={preferredLanguage}
-              onChange={(e) => setPrefLanguage(e.target.value as Language)}
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as Language)}
               className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
             >
               <option value="en">English (Default)</option>
@@ -157,7 +158,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-full bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-sm shadow-neonLime transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-40"
+            className="w-full py-3 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-sm shadow-neonLime transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-40"
           >
             {loading ? (
               <div className="flex items-center gap-1.5">
