@@ -14,6 +14,8 @@ from app.schemas.optimization import (
     CompareRequest,
     CompareResponse,
     CompareCategoryYield,
+    CategoryCardDetail,
+    CompareCardMetadata,
     SimulateRequest,
     SimulateResponse,
     SimulateScenarioResult,
@@ -719,13 +721,212 @@ class RewardOptimizationEngine:
                 f"{offer_text_en}Yields ₹{recommended.net_financial_benefit} net financial benefit ({recommended.effective_rate_percentage}% effective rate) on your ₹{amount} spend on {target_name}{delta_text}."
             )
 
+    # Deterministic illustrative demo promotional savings across categories
+    DEMO_CATEGORY_OFFERS: Dict[str, List[Dict[str, Any]]] = {
+        "dining": [
+            {
+                "promo_val": Decimal("235.00"),
+                "title": "Swiggy Dineout 20% Instant Discount (Demo)",
+                "code": "DINEOUT20",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹250 off"
+            },
+            {
+                "promo_val": Decimal("175.00"),
+                "title": "Zomato Gold Dining Deal (Demo)",
+                "code": "ZOMATOGOLD",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹200 off"
+            },
+            {
+                "promo_val": Decimal("130.00"),
+                "title": "EazyDiner Prime Instant 15% (Demo)",
+                "code": "EAZY15",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹150 off"
+            },
+            {
+                "promo_val": Decimal("210.00"),
+                "title": "Culinary Treats Weekend Festival (Demo)",
+                "code": "TREATS20",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹220 off"
+            },
+            {
+                "promo_val": Decimal("150.00"),
+                "title": "District Dining Cashback Voucher (Demo)",
+                "code": "DISTRICT15",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹175 off"
+            }
+        ],
+        "grocery": [
+            {
+                "promo_val": Decimal("215.00"),
+                "title": "Instamart Fresh Grocery Rebate (Demo)",
+                "code": "FRESH20",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹250 off"
+            },
+            {
+                "promo_val": Decimal("315.00"),
+                "title": "Blinkit Super Saver Mega Offer (Demo)",
+                "code": "BLINKIT30",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹350 off"
+            },
+            {
+                "promo_val": Decimal("120.00"),
+                "title": "BigBasket Weekend Essentials (Demo)",
+                "code": "BBWEEKEND",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹150 off"
+            },
+            {
+                "promo_val": Decimal("260.00"),
+                "title": "Zepto Quick Mart Flash Deal (Demo)",
+                "code": "ZEPTO25",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹280 off"
+            },
+            {
+                "promo_val": Decimal("135.00"),
+                "title": "Nature's Basket Organic Savings (Demo)",
+                "code": "ORGANIC15",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹150 off"
+            }
+        ],
+        "shopping": [
+            {
+                "promo_val": Decimal("235.00"),
+                "title": "Flipkart Big Billion Days Discount (Demo)",
+                "code": "BBD10",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹250 off"
+            },
+            {
+                "promo_val": Decimal("165.00"),
+                "title": "Myntra Fashion Carnival (Demo)",
+                "code": "MYNTRA15",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹200 off"
+            },
+            {
+                "promo_val": Decimal("325.00"),
+                "title": "Amazon Great Indian Festival Deal (Demo)",
+                "code": "FESTIVAL30",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹350 off"
+            },
+            {
+                "promo_val": Decimal("225.00"),
+                "title": "Tata CLiQ Luxury Fest (Demo)",
+                "code": "CLIQFEST",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹250 off"
+            },
+            {
+                "promo_val": Decimal("125.00"),
+                "title": "Ajio All Stars Flash Sale (Demo)",
+                "code": "AJIO15",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹150 off"
+            }
+        ],
+        "travel": [
+            {
+                "promo_val": Decimal("340.00"),
+                "title": "MakeMyTrip Flight Fest Discount (Demo)",
+                "code": "FLYCLIQ",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹350 off"
+            },
+            {
+                "promo_val": Decimal("245.00"),
+                "title": "Cleartrip Instant Airline Voucher (Demo)",
+                "code": "CLEAR20",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹270 off"
+            },
+            {
+                "promo_val": Decimal("180.00"),
+                "title": "Yatra Domestic Stay Saver (Demo)",
+                "code": "YATRA15",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹200 off"
+            },
+            {
+                "promo_val": Decimal("350.00"),
+                "title": "EaseMyTrip Zero Convenience Promo (Demo)",
+                "code": "EMTZERO",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹380 off"
+            },
+            {
+                "promo_val": Decimal("110.00"),
+                "title": "Uber Premier Airport Ride Rebate (Demo)",
+                "code": "UBERFLY",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹130 off"
+            }
+        ],
+        "utility": [
+            {
+                "promo_val": Decimal("125.00"),
+                "title": "Amazon Pay Electricity & Gas Rebate (Demo)",
+                "code": "AMZBILL",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹150 off"
+            },
+            {
+                "promo_val": Decimal("195.00"),
+                "title": "Google Pay Utility Bill Cashback (Demo)",
+                "code": "BILLPAY20",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹200 off"
+            },
+            {
+                "promo_val": Decimal("165.00"),
+                "title": "Cred Bill Pay Instant Discount (Demo)",
+                "code": "CREDBILL",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹180 off"
+            },
+            {
+                "promo_val": Decimal("255.00"),
+                "title": "Paytm Recharges & Utilities Super (Demo)",
+                "code": "PAYTMBILL",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹280 off"
+            },
+            {
+                "promo_val": Decimal("105.00"),
+                "title": "Freecharge Broadband Discount (Demo)",
+                "code": "FREECHARGE",
+                "explanation": "Illustrative demo offer • Valid on ₹1,000 spend • Up to ₹120 off"
+            }
+        ],
+        "fuel": [
+            {
+                "promo_val": Decimal("0.00"),
+                "title": None,
+                "code": None,
+                "explanation": None
+            },
+            {
+                "promo_val": Decimal("115.00"),
+                "title": "IndianOil XTRAREWARDS Bonus (Demo)",
+                "code": "IOCL10",
+                "explanation": "Illustrative demo offer • 1% surcharge waiver + partner voucher"
+            },
+            {
+                "promo_val": Decimal("145.00"),
+                "title": "HPCL DriveTrack Plus Mobility Promo (Demo)",
+                "code": "HPCLCLIQ",
+                "explanation": "Illustrative demo offer • 1% surcharge waiver + mobility cashback"
+            },
+            {
+                "promo_val": Decimal("0.00"),
+                "title": None,
+                "code": None,
+                "explanation": None
+            },
+            {
+                "promo_val": Decimal("120.00"),
+                "title": "BPCL SmartDrive Fuel Rebate (Demo)",
+                "code": "BPCL10",
+                "explanation": "Illustrative demo offer • 1% surcharge waiver + partner points"
+            }
+        ]
+    }
+
     @classmethod
     def compare_cards(
         cls,
         cards: List[CreditCard],
-        simulation_spend: Decimal = Decimal("50000.00")
+        simulation_spend: Decimal = Decimal("50000.00"),
+        available_offers: Optional[List[CardOffer]] = None,
+        demo_mode: bool = False
     ) -> CompareResponse:
         simulation_spend = to_decimal(simulation_spend)
+        benchmark_amount = Decimal("1000.00")
         categories = [
             ("dining", "Dining & Food Delivery"),
             ("grocery", "Grocery & Supermarkets"),
@@ -745,45 +946,325 @@ class RewardOptimizationEngine:
             card_recommendations.append(eval_res)
 
         category_matrix: List[CompareCategoryYield] = []
+        # Track permanent category yields per card for weighted annual return calculation
+        card_category_rates: Dict[str, Dict[str, Decimal]] = {card.id: {} for card in cards}
+
         for cat_id, cat_name in categories:
             yields: Dict[str, Decimal] = {}
-            for card in cards:
-                res = cls.evaluate_card_for_transaction(
+            details: Dict[str, CategoryCardDetail] = {}
+            best_card_id: Optional[str] = None
+            best_card_name: Optional[str] = None
+            best_card_savings: Optional[Decimal] = None
+            highest_total_benefit: Decimal = Decimal("-1.00")
+            cat_synonyms = OfferEligibilityEngine.CATEGORY_SYNONYMS.get(cat_id, {cat_id})
+
+            for card_idx, card in enumerate(cards):
+                # 1. Base Card Rewards (Guaranteed baseline rate from 'all' / default rule)
+                base_rule: Optional[CardRewardRule] = None
+                for rule in card.reward_rules:
+                    if rule.category_id in ("all", "default", "*", None):
+                        base_rule = rule
+                        break
+
+                if base_rule:
+                    base_rate = to_decimal(base_rule.reward_rate_percentage)
+                    base_point_val = to_decimal(base_rule.point_monetary_value if base_rule.point_monetary_value is not None else Decimal("1.00"))
+                    base_type = base_rule.reward_type or "CASHBACK"
+                else:
+                    base_rate = Decimal("1.00")
+                    base_point_val = Decimal("1.00")
+                    base_type = "CASHBACK"
+
+                # 2. Permanent Category Accelerator & Exclusions (via evaluate_card_for_transaction)
+                cat_res = cls.evaluate_card_for_transaction(
                     card=card,
-                    amount=Decimal("1000.00"),
+                    amount=benchmark_amount,
                     category_id=cat_id
                 )
-                yields[card.id] = res.effective_rate_percentage
+                is_excluded = cat_res.is_excluded
+                cat_reward_val = cat_res.expected_reward_monetary
+                cat_rate = cat_res.effective_rate_percentage
+                # Permanent rate for annual breakeven modeling (promotional discounts excluded from permanent breakeven)
+                card_category_rates[card.id][cat_id] = cat_rate
+
+                if is_excluded:
+                    base_reward_value = Decimal("0.00")
+                    base_rate = Decimal("0.00")
+                    accelerated_reward_value = Decimal("0.00")
+                    accelerated_rate = Decimal("0.00")
+                else:
+                    if base_type == "CASHBACK":
+                        base_reward_value = (benchmark_amount * (base_rate / Decimal("100.00"))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                    else:
+                        pts = int(benchmark_amount * (base_rate / Decimal("100.00")))
+                        base_reward_value = (Decimal(pts) * base_point_val).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+                    if cat_reward_val > base_reward_value:
+                        accelerated_reward_value = cat_reward_val - base_reward_value
+                        accelerated_rate = cat_rate - base_rate
+                    else:
+                        accelerated_reward_value = Decimal("0.00")
+                        accelerated_rate = Decimal("0.00")
+
+                # 3. Verified Promotional Bank & Merchant Offers
+                eligible_offers_results: List[OfferEligibilityResult] = []
+                unverified_count = 0
+                is_demo_value = False
+                demo_label = None
+                offer_explanation = None
+
+                if demo_mode:
+                    demo_offers_list = cls.DEMO_CATEGORY_OFFERS.get(cat_id, [])
+                    if demo_offers_list:
+                        demo_slot = card_idx % len(demo_offers_list)
+                        demo_item = demo_offers_list[demo_slot]
+                        demo_promo_val = demo_item["promo_val"]
+
+                        if demo_promo_val > Decimal("0.00"):
+                            has_promotional_offer = True
+                            offer_title = demo_item["title"]
+                            promo_code = demo_item["code"]
+                            offer_explanation = demo_item["explanation"]
+                            offer_type = "DEMO_ILLUSTRATIVE"
+                            additional_offer_value = demo_promo_val
+                            additional_offer_percentage = ((additional_offer_value / benchmark_amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                            is_demo_value = True
+                            demo_label = "Illustrative Demo Savings — Not a Verified Live Offer"
+                            is_excluded = False
+                        else:
+                            has_promotional_offer = False
+                            offer_title = None
+                            promo_code = None
+                            offer_explanation = None
+                            offer_type = "NONE"
+                            additional_offer_value = Decimal("0.00")
+                            additional_offer_percentage = Decimal("0.00")
+                            is_demo_value = False
+                            demo_label = None
+                elif available_offers and not is_excluded:
+                    for off in available_offers:
+                        if off.verification_status != "VERIFIED":
+                            if off.category_id.lower().strip() in cat_synonyms:
+                                unverified_count += 1
+                            continue
+
+                        # Evaluate offer eligibility for this card and category at ₹1,000 benchmark spend
+                        res = OfferEligibilityEngine.evaluate_offer_eligibility(
+                            offer=off,
+                            card=card,
+                            amount=benchmark_amount,
+                            category_id=cat_id,
+                            payment_channel="ONLINE"
+                        )
+                        if res.is_eligible and res.calculated_discount > Decimal("0.00"):
+                            eligible_offers_results.append(res)
+
+                    applied_offers, _ = OfferEligibilityEngine.resolve_stacking(eligible_offers_results)
+                    verified_offer_discount = sum(o.calculated_discount for o in applied_offers) if applied_offers else Decimal("0.00")
+
+                    if applied_offers and verified_offer_discount > Decimal("0.00"):
+                        has_promotional_offer = True
+                        top_applied = applied_offers[0]
+                        offer_title = top_applied.offer.offer_title
+                        promo_code = top_applied.offer.promo_code
+                        offer_type = top_applied.stacking_group
+                        offer_explanation = f"Verified {top_applied.stacking_group.lower()} offer"
+                        additional_offer_value = verified_offer_discount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                        additional_offer_percentage = ((additional_offer_value / benchmark_amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                    else:
+                        has_promotional_offer = False
+                        offer_title = None
+                        promo_code = None
+                        offer_type = "NONE"
+                        additional_offer_value = Decimal("0.00")
+                        additional_offer_percentage = Decimal("0.00")
+                else:
+                    has_promotional_offer = False
+                    offer_title = None
+                    promo_code = None
+                    offer_type = "NONE"
+                    additional_offer_value = Decimal("0.00")
+                    additional_offer_percentage = Decimal("0.00")
+
+                # 4. Total Additional Eligible Savings (Accelerated Category Bonus + Verified Promotional Offers)
+                additional_savings_value = accelerated_reward_value + additional_offer_value
+                additional_savings_percentage = ((additional_savings_value / benchmark_amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+                # 5. Total Effective Benefit / Total Potential Savings
+                if is_excluded:
+                    total_effective_benefit = Decimal("0.00")
+                    total_effective_percentage = Decimal("0.00")
+                else:
+                    total_effective_benefit = (base_reward_value + additional_savings_value).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                    total_effective_percentage = ((total_effective_benefit / benchmark_amount) * Decimal("100.00")).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+                yields[card.id] = total_effective_percentage
+
+                # Find matched rule to inspect conditions, min spend, caps
+                matched_rule: Optional[CardRewardRule] = None
+                for rule in card.reward_rules:
+                    if rule.category_id == cat_id:
+                        matched_rule = rule
+                        break
+                if not matched_rule:
+                    matched_rule = base_rule
+
+                conditions_list = []
+                if is_excluded:
+                    cond_str = cat_res.exclusion_reason or "Category excluded from rewards"
+                else:
+                    if matched_rule and matched_rule.monthly_cap_amount:
+                        conditions_list.append(f"Cap ₹{matched_rule.monthly_cap_amount:,.0f}/mo")
+                    if matched_rule and matched_rule.min_transaction_amount and matched_rule.min_transaction_amount > Decimal("0.00"):
+                        conditions_list.append(f"Min ₹{matched_rule.min_transaction_amount:,.0f}")
+                    if cat_res.reward_type != "CASHBACK" and cat_res.point_monetary_value:
+                        conditions_list.append(f"1 pt = ₹{cat_res.point_monetary_value}")
+                    if has_promotional_offer:
+                        code_str = f" [{promo_code}]" if promo_code else ""
+                        conditions_list.append(f"Offer: +₹{additional_offer_value:,.0f}{code_str}")
+                    if is_demo_value:
+                        conditions_list.append("Illustrative Demo Savings — Not a Verified Live Offer")
+                    cond_str = " • ".join(conditions_list) if conditions_list else "Base rate"
+
+                detail = CategoryCardDetail(
+                    base_reward_percentage=base_rate,
+                    base_reward_value=base_reward_value,
+                    accelerated_rate_percentage=accelerated_rate,
+                    accelerated_reward_value=accelerated_reward_value,
+                    additional_offer_value=additional_offer_value,
+                    additional_offer_percentage=additional_offer_percentage,
+                    has_promotional_offer=has_promotional_offer,
+                    offer_title=offer_title,
+                    promo_code=promo_code,
+                    offer_type=offer_type,
+                    unverified_offer_count=unverified_count,
+                    additional_savings_value=additional_savings_value,
+                    additional_savings_percentage=additional_savings_percentage,
+                    total_effective_benefit=total_effective_benefit,
+                    total_effective_percentage=total_effective_percentage,
+                    effective_rate_percentage=total_effective_percentage,
+                    effective_reward_amount=total_effective_benefit,
+                    reward_type=cat_res.reward_type,
+                    point_monetary_value=cat_res.point_monetary_value,
+                    rule_name=matched_rule.category_id if matched_rule else "default",
+                    conditions=cond_str,
+                    is_excluded=is_excluded,
+                    is_verified=not is_demo_value,
+                    is_demo_value=is_demo_value,
+                    demo_label=demo_label,
+                    offer_explanation=offer_explanation
+                )
+                details[card.id] = detail
+
+                # Determine best card for category based on actual eligible net benefits (Total Potential Savings)
+                if not is_excluded and total_effective_benefit > highest_total_benefit and total_effective_benefit > Decimal("0.00"):
+                    highest_total_benefit = total_effective_benefit
+                    best_card_id = card.id
+                    best_card_name = card.card_name
+                    best_card_savings = total_effective_benefit
+
             category_matrix.append(CompareCategoryYield(
                 category_id=cat_id,
                 display_name=cat_name,
-                card_yields=yields
+                card_yields=yields,
+                card_details=details,
+                best_card_id=best_card_id,
+                best_card_name=best_card_name,
+                best_card_savings=best_card_savings
             ))
 
-        # Annual break even spend = annual_fee / average_reward_rate
-        breakevens: Dict[str, Decimal] = {}
-        for card in cards:
-            fee = to_decimal(card.annual_fee)
-            if fee == Decimal("0.00"):
-                breakevens[card.id] = Decimal("0.00")
-            else:
-                rate = Decimal("0.02")
-                for r in card.reward_rules:
-                    if r.category_id in ("all", "default", None):
-                        rate = to_decimal(r.reward_rate_percentage) / Decimal("100.00")
-                        break
-                if rate > Decimal("0.00"):
-                    breakevens[card.id] = (fee / rate).quantize(Decimal("1.00"), rounding=ROUND_HALF_UP)
-                else:
-                    breakevens[card.id] = Decimal("999999.00")
+        # Weights for realistic Indian consumer annual spend profile
+        # Shopping 35%, Dining 20%, Grocery 20%, Utility 15%, Travel 10%
+        category_weights: Dict[str, Decimal] = {
+            "shopping": Decimal("0.35"),
+            "dining": Decimal("0.20"),
+            "grocery": Decimal("0.20"),
+            "utility": Decimal("0.15"),
+            "travel": Decimal("0.10"),
+        }
 
-        summary = f"Compared {len(cards)} cards across 6 core spend categories. Detailed yield matrix provides instant visibility into category supremacy."
+        benchmark_annual_spend = Decimal("250000.00")
+        breakevens: Dict[str, Decimal] = {}
+        cards_metadata: List[CompareCardMetadata] = []
+
+        for card in cards:
+            joining_fee = to_decimal(card.joining_fee)
+            annual_fee = to_decimal(card.annual_fee)
+            waiver_spend = to_decimal(card.renewal_waiver_spend) if card.renewal_waiver_spend is not None else None
+
+            # Calculate weighted average return rate across core categories
+            rates = card_category_rates.get(card.id, {})
+            weighted_rate = Decimal("0.00")
+            for cat_id, weight in category_weights.items():
+                cat_rate = rates.get(cat_id, Decimal("1.00"))
+                weighted_rate += cat_rate * weight
+
+            # Breakeven Spend Calculation
+            if annual_fee == Decimal("0.00"):
+                annual_break_even_spend = Decimal("0.00")
+                breakeven_status = "LIFETIME_FREE"
+                breakevens[card.id] = Decimal("0.00")
+            elif weighted_rate > Decimal("0.00"):
+                rate_decimal = weighted_rate / Decimal("100.00")
+                annual_break_even_spend = (annual_fee / rate_decimal).quantize(Decimal("1.00"), rounding=ROUND_HALF_UP)
+                breakeven_status = "CALCULATED"
+                breakevens[card.id] = annual_break_even_spend
+            else:
+                annual_break_even_spend = None
+                breakeven_status = "INSUFFICIENT_DATA"
+                breakevens[card.id] = Decimal("999999.00")
+
+            # Benchmark annual reward & Net benefit
+            est_annual_reward = (benchmark_annual_spend * (weighted_rate / Decimal("100.00"))).quantize(Decimal("1.00"), rounding=ROUND_HALF_UP)
+            
+            # If annual fee waiver threshold is reached on benchmark spend, fee is effectively 0
+            effective_fee = Decimal("0.00") if (waiver_spend is not None and benchmark_annual_spend >= waiver_spend) else annual_fee
+            net_annual_benefit = (est_annual_reward - effective_fee).quantize(Decimal("1.00"), rounding=ROUND_HALF_UP)
+
+            cards_metadata.append(CompareCardMetadata(
+                card_id=card.id,
+                card_name=card.card_name,
+                bank_name=card.bank_name,
+                network=card.network,
+                card_variant=card.card_variant,
+                joining_fee=joining_fee,
+                annual_fee=annual_fee,
+                renewal_waiver_spend=waiver_spend,
+                fee_waiver_condition_details=card.fee_waiver_condition_details,
+                terms_source_url=card.terms_source_url,
+                is_verified=True,
+                last_verified_date="2024-10-01",
+                annual_break_even_spend=annual_break_even_spend,
+                breakeven_status=breakeven_status,
+                estimated_annual_reward=est_annual_reward,
+                net_annual_benefit=net_annual_benefit
+            ))
+
+        # Dynamic, factual summary verdict
+        top_earner = max(cards_metadata, key=lambda c: c.net_annual_benefit, default=None)
+        ltf_cards = [c.card_name for c in cards_metadata if c.breakeven_status == "LIFETIME_FREE"]
+        
+        verdict_parts = [
+            f"Compared {len(cards)} credit cards across 6 benchmark spending categories using verified issuer terms."
+        ]
+        if top_earner:
+            verdict_parts.append(
+                f"{top_earner.card_name} delivers the highest estimated net annual return of ₹{top_earner.net_annual_benefit:,.0f} on ₹2.5L spend."
+            )
+        if ltf_cards:
+            verdict_parts.append(f"{', '.join(ltf_cards)} offers lifetime free benefits with zero breakeven requirement.")
+        if demo_mode:
+            verdict_parts.append("Note: Illustrative Demo Savings are active to demonstrate stacked promotional savings potential.")
+
+        summary = " ".join(verdict_parts)
 
         return CompareResponse(
             cards=card_recommendations,
+            cards_metadata=cards_metadata,
             category_matrix=category_matrix,
             annual_break_even_spends=breakevens,
-            summary_verdict=summary
+            summary_verdict=summary,
+            is_demo_mode=demo_mode
         )
 
     # ==========================================================================

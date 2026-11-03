@@ -212,8 +212,20 @@ async def compare_cards(
             detail="At least 2 active credit cards from your portfolio are required for comparison."
         )
 
+    now = datetime.utcnow()
+    offer_stmt = (
+        select(CardOffer)
+        .where(
+            CardOffer.verification_status.in_(["VERIFIED", "SAMPLE"]),
+            CardOffer.valid_to >= now
+        )
+    )
+    available_offers = (await db.execute(offer_stmt)).scalars().all()
+
     result = RewardOptimizationEngine.compare_cards(
         cards=cards,
-        simulation_spend=req.simulation_spend
+        simulation_spend=req.simulation_spend,
+        available_offers=available_offers,
+        demo_mode=bool(req.demo_mode)
     )
     return result

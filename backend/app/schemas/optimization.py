@@ -85,17 +85,85 @@ class RecommendResponse(BaseModel):
 class CompareRequest(BaseModel):
     card_ids: List[str] = Field(..., min_length=2, max_length=5)
     simulation_spend: Optional[Decimal] = Field(Decimal("50000.00"), gt=Decimal("0.0"))
+    demo_mode: Optional[bool] = Field(False, description="Enable varied illustrative demo savings")
+
+class CategoryCardDetail(BaseModel):
+    # 1. Base Guaranteed Card Reward (on standard ₹1,000 spend)
+    base_reward_percentage: Decimal = Decimal("1.00")
+    base_reward_value: Decimal = Decimal("10.00")
+
+    # 2. Category Accelerator Bonus (on standard ₹1,000 spend)
+    accelerated_rate_percentage: Decimal = Decimal("0.00")
+    accelerated_reward_value: Decimal = Decimal("0.00")
+
+    # 3. Verified Promotional Offer Savings (Bank Instant Discounts & Merchant Promos)
+    additional_offer_value: Decimal = Decimal("0.00")
+    additional_offer_percentage: Decimal = Decimal("0.00")
+    has_promotional_offer: bool = False
+    offer_title: Optional[str] = None
+    promo_code: Optional[str] = None
+    offer_type: Optional[str] = None  # "BANK_INSTANT", "MERCHANT_PROMO", "NONE"
+    unverified_offer_count: int = 0
+
+    # 4. Total Additional Eligible Savings (Accelerated Bonus + Verified Promotional Offers)
+    additional_savings_value: Decimal = Decimal("0.00")
+    additional_savings_percentage: Decimal = Decimal("0.00")
+
+    # 5. Total Potential Savings / Total Effective Benefit
+    total_effective_benefit: Decimal = Decimal("10.00")
+    total_effective_percentage: Decimal = Decimal("1.00")
+
+    # Backward compatibility with existing UI
+    effective_rate_percentage: Decimal
+    effective_reward_amount: Decimal
+
+    # Card & Rules Metadata
+    reward_type: str  # CASHBACK, REWARD_POINTS, MILES
+    point_monetary_value: Decimal
+    rule_name: Optional[str] = None
+    conditions: Optional[str] = None
+    is_excluded: bool = False
+    is_verified: bool = True
+
+    # Demo Mode Metadata
+    is_demo_value: bool = False
+    demo_label: Optional[str] = None
+    offer_explanation: Optional[str] = None
 
 class CompareCategoryYield(BaseModel):
     category_id: str
     display_name: str
-    card_yields: Dict[str, Decimal]  # card_id -> effective_percentage
+    card_yields: Dict[str, Decimal]  # card_id -> total_effective_percentage
+    card_details: Optional[Dict[str, CategoryCardDetail]] = None
+    best_card_id: Optional[str] = None
+    best_card_name: Optional[str] = None
+    best_card_savings: Optional[Decimal] = None
+
+class CompareCardMetadata(BaseModel):
+    card_id: str
+    card_name: str
+    bank_name: str
+    network: str
+    card_variant: Optional[str] = None
+    joining_fee: Decimal
+    annual_fee: Decimal
+    renewal_waiver_spend: Optional[Decimal] = None
+    fee_waiver_condition_details: Optional[str] = None
+    terms_source_url: Optional[str] = None
+    is_verified: bool = True
+    last_verified_date: Optional[str] = None
+    annual_break_even_spend: Optional[Decimal] = None
+    breakeven_status: str  # "LIFETIME_FREE", "CALCULATED", "INSUFFICIENT_DATA"
+    estimated_annual_reward: Decimal
+    net_annual_benefit: Decimal
 
 class CompareResponse(BaseModel):
     cards: List[CardRecommendation]
+    cards_metadata: Optional[List[CompareCardMetadata]] = None
     category_matrix: List[CompareCategoryYield]
     annual_break_even_spends: Dict[str, Decimal]
     summary_verdict: str
+    is_demo_mode: bool = False
 
 # ==============================================================================
 # WHAT-IF PURCHASE SIMULATOR SCHEMAS
