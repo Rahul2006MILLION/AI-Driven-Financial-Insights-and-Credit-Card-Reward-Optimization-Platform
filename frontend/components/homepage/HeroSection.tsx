@@ -31,25 +31,27 @@ function ScrollProgress() {
   );
 }
 
-/* ── Fanned card trio ────────────────────────────────────────── */
-type CardTone = "pale" | "lime" | "forest";
+/* ── Fanned card showcase ────────────────────────────────────── */
+type CardTone = "forest" | "pale" | "lime" | "sun" | "mist";
 
 const CARD_TONES: Record<CardTone, { bg: string; ink: string; mark: string }> = {
+  forest: { bg: "bg-[#12301A]", ink: "text-lime-300",  mark: "text-lime-300/[0.08]" },
   pale:   { bg: "bg-[#E4EDD3]", ink: "text-[#12301A]", mark: "text-[#12301A]/[0.07]" },
   lime:   { bg: "bg-lime-400",  ink: "text-[#12301A]", mark: "text-[#12301A]/[0.09]" },
-  forest: { bg: "bg-[#12301A]", ink: "text-lime-300",  mark: "text-lime-300/[0.08]" },
+  sun:    { bg: "bg-[#F6E58D]", ink: "text-[#3A3005]", mark: "text-[#3A3005]/[0.08]" },
+  mist:   { bg: "bg-[#E6EEDB]", ink: "text-[#12301A]", mark: "text-[#12301A]/[0.07]" },
 };
 
 function HeroCard({ tone, label }: { tone: CardTone; label: string }) {
   const c = CARD_TONES[tone];
   return (
     <div
-      className={`relative w-[150px] sm:w-[200px] md:w-[230px] aspect-[5/8] rounded-[1.6rem] ${c.bg} ${c.ink} shadow-[0_30px_60px_-20px_rgba(18,48,26,0.45)] overflow-hidden`}
+      className={`relative w-[140px] sm:w-[185px] md:w-[215px] aspect-[5/8] rounded-[1.6rem] ${c.bg} ${c.ink} shadow-[0_30px_60px_-20px_rgba(18,48,26,0.45)] overflow-hidden`}
     >
       {/* Vertical watermark */}
       <span
         aria-hidden
-        className={`absolute -right-3 top-1/2 -translate-y-1/2 rotate-90 origin-center font-display font-extrabold text-[5.5rem] md:text-[7rem] leading-none tracking-tight ${c.mark} select-none`}
+        className={`absolute -right-3 top-1/2 -translate-y-1/2 rotate-90 origin-center font-display font-extrabold text-[5rem] md:text-[6.5rem] leading-none tracking-tight ${c.mark} select-none`}
       >
         CLIQ
       </span>
@@ -72,18 +74,20 @@ function CardFan() {
   const reduce = useReducedMotion();
   const { t } = useLanguage();
   const h = t.home.hero;
-  const cards: { tone: CardTone; label: string; rotate: number; x: number; y: number; delay: number }[] = [
-    { tone: "pale",   label: h.cardSavings, rotate: -16, x: -46, y: 30, delay: 0.55 },
-    { tone: "lime",   label: h.cardRewards, rotate: 0,   x: 0,   y: 0,  delay: 0.45 },
-    { tone: "forest", label: h.cardPremium, rotate: 16,  x: 46,  y: 30, delay: 0.65 },
+  const cards: { tone: CardTone; label: string; rotate: number; x: number; y: number; delay: number; zIndex: number }[] = [
+    { tone: "forest", label: h.cardPremium || "Platinum", rotate: -20, x: -66, y: 44, delay: 0.65, zIndex: 1 },
+    { tone: "pale",   label: h.cardSavings || "Savings",  rotate: -10, x: -33, y: 18, delay: 0.55, zIndex: 2 },
+    { tone: "lime",   label: h.cardRewards || "Rewards",  rotate: 0,   x: 0,   y: 0,  delay: 0.45, zIndex: 5 },
+    { tone: "sun",    label: "Cashback",                  rotate: 10,  x: 33,  y: 18, delay: 0.55, zIndex: 3 },
+    { tone: "mist",   label: "Smart Cash",                rotate: 20,  x: 66,  y: 44, delay: 0.65, zIndex: 1 },
   ];
   return (
     <div className="relative h-[280px] sm:h-[360px] md:h-[400px] flex items-end justify-center">
-      {cards.map((card, i) => (
+      {cards.map((card) => (
         <motion.div
           key={card.tone}
           className="absolute bottom-[-60px] md:bottom-[-70px]"
-          style={{ zIndex: i === 1 ? 3 : i === 0 ? 1 : 2 }}
+          style={{ zIndex: card.zIndex }}
           initial={reduce ? false : { opacity: 0, y: 120, rotate: 0, x: 0 }}
           animate={{ opacity: 1, y: card.y, rotate: card.rotate, x: `${card.x}%` }}
           whileHover={reduce ? undefined : { y: card.y - 18 }}

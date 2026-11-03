@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useLanguage, fmt as fill, categoryLabel } from "@/lib/i18n";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
@@ -108,6 +109,7 @@ async function clearSampleData(incomes: any[], transactions: any[]): Promise<voi
 
 /* ── Main Component ────────────────────────────────────────────── */
 export default function NoCreditCardDashboard({ userName }: { userName?: string }) {
+  const { t } = useLanguage();
   const router = useRouter();
 
   const [incomeSummary, setIncomeSummary] = useState<any>(null);
@@ -151,7 +153,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       setTransactions(Array.isArray(txns) ? txns : []);
       setIncomes(Array.isArray(incs) ? incs : []);
     } catch (e: any) {
-      setError(e.message || "Failed to load financial data");
+      setError(e.message || t.cashDashboard.loadFailed);
     } finally {
       setLoading(false);
     }
@@ -216,11 +218,11 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       setExpMerchant("");
       setExpAmount("");
       setShowLogModal(false);
-      setStatusMsg({ text: "Expense logged successfully!", type: "success" });
+      setStatusMsg({ text: t.cashDashboard.expenseLogged, type: "success" });
       setTimeout(() => setStatusMsg(null), 3000);
       await loadData();
     } catch (err: any) {
-      setStatusMsg({ text: err.message || "Failed to log expense", type: "error" });
+      setStatusMsg({ text: err.message || t.cashDashboard.expenseLogFailed, type: "error" });
     } finally {
       setExpSaving(false);
     }
@@ -231,11 +233,11 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       setClearing(true);
       try {
         await clearSampleData(incomes, transactions);
-        setStatusMsg({ text: "Sample data cleared", type: "success" });
+        setStatusMsg({ text: t.cashDashboard.sampleCleared, type: "success" });
         setTimeout(() => setStatusMsg(null), 3000);
         await loadData();
       } catch (err: any) {
-        setStatusMsg({ text: err.message || "Error clearing sample data", type: "error" });
+        setStatusMsg({ text: err.message || t.cashDashboard.sampleClearFailed, type: "error" });
       } finally {
         setClearing(false);
       }
@@ -243,11 +245,11 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       setSeeding(true);
       try {
         await seedNoCreditCardPortfolio();
-        setStatusMsg({ text: "Sample portfolio loaded successfully", type: "success" });
+        setStatusMsg({ text: t.cashDashboard.sampleLoaded, type: "success" });
         setTimeout(() => setStatusMsg(null), 3000);
         await loadData();
       } catch (err: any) {
-        setStatusMsg({ text: err.message || "Error seeding portfolio", type: "error" });
+        setStatusMsg({ text: err.message || t.cashDashboard.sampleLoadFailed, type: "error" });
       } finally {
         setSeeding(false);
       }
@@ -268,13 +270,13 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-semibold mb-2">
-            Cash & Savings Pathway
+            {t.cashDashboard.pathwayBadge}
           </div>
           <h1 className="text-3xl font-black tracking-tight text-white">
-            Personal Finance Command Center
+            {t.cashDashboard.title}
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Holistic cash flow, 50/30/20 budget framework, emergency runway, and savings milestones.
+            {t.cashDashboard.subtitle}
           </p>
         </div>
 
@@ -292,7 +294,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             ) : (
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             )}
-            <span>{hasSampleData ? "Clear Sample" : "Sample Portfolio"}</span>
+            <span>{hasSampleData ? t.cashDashboard.clearSample : t.common.samplePortfolio}</span>
           </button>
 
           <button
@@ -300,7 +302,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             className="flex items-center gap-1.5 px-4 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>Log Expense</span>
+            <span>{t.dashboard.logExpense}</span>
           </button>
         </div>
       </div>
@@ -328,7 +330,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         {/* Card 1: Monthly Inflow */}
         <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-slate-400 font-medium">Monthly Inflow</span>
+            <span className="text-xs text-slate-400 font-medium">{t.cashDashboard.monthlyInflow}</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Wallet className="w-3.5 h-3.5 text-emerald-400" />
             </div>
@@ -337,9 +339,9 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             {fmt(monthlyInflow)}
           </div>
           <div className="flex items-center justify-between text-xs pt-1 border-t border-white/[0.04]">
-            <span className="text-emerald-400 font-medium">{totalIncomesRegistered} Incomes Registered</span>
+            <span className="text-emerald-400 font-medium">{fill(t.cashDashboard.incomesRegistered, { count: totalIncomesRegistered })}</span>
             <Link href="/income" className="text-slate-400 hover:text-white transition-colors flex items-center gap-0.5">
-              <span>Manage</span>
+              <span>{t.dashboard.manage}</span>
               <span>&gt;</span>
             </Link>
           </div>
@@ -348,7 +350,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         {/* Card 2: Monthly Expenses */}
         <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-slate-400 font-medium">Monthly Expenses</span>
+            <span className="text-xs text-slate-400 font-medium">{t.cashDashboard.monthlyExpenses}</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Receipt className="w-3.5 h-3.5 text-emerald-400" />
             </div>
@@ -357,9 +359,9 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             {fmt(monthlyExpenses)}
           </div>
           <div className="flex items-center justify-between text-xs pt-1 border-t border-white/[0.04]">
-            <span className="text-emerald-400 font-medium">{totalTransactionsCount} Transactions</span>
+            <span className="text-emerald-400 font-medium">{fill(t.dashboard.transactionsCount, { count: totalTransactionsCount })}</span>
             <Link href="/transactions" className="text-slate-400 hover:text-white transition-colors flex items-center gap-0.5">
-              <span>View Log</span>
+              <span>{t.cashDashboard.viewLog}</span>
               <span>&gt;</span>
             </Link>
           </div>
@@ -368,7 +370,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         {/* Card 3: Remaining Balance */}
         <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-slate-400 font-medium">Remaining Balance</span>
+            <span className="text-xs text-slate-400 font-medium">{t.cashDashboard.remainingBalance}</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
             </div>
@@ -377,9 +379,9 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             {fmt(remainingBalance)}
           </div>
           <div className="flex items-center justify-between text-xs pt-1 border-t border-white/[0.04]">
-            <span className="text-emerald-400 font-medium">Liquid Cash Surplus</span>
+            <span className="text-emerald-400 font-medium">{t.cashDashboard.liquidSurplus}</span>
             <Link href="/budget" className="text-slate-400 hover:text-white transition-colors flex items-center gap-0.5">
-              <span>Plan</span>
+              <span>{t.cashDashboard.plan}</span>
               <span>&gt;</span>
             </Link>
           </div>
@@ -388,7 +390,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
         {/* Card 4: Savings Rate */}
         <div data-spotlight className="card-interactive rounded-2xl bg-[#17191E]/80 border border-white/[0.08] p-5 backdrop-blur-sm flex flex-col justify-between transition-all">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs text-slate-400 font-medium">Savings Rate</span>
+            <span className="text-xs text-slate-400 font-medium">{t.incomes.savingsRate}</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <PiggyBank className="w-3.5 h-3.5 text-emerald-400" />
             </div>
@@ -397,9 +399,9 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             {savingsRate}%
           </div>
           <div className="flex items-center justify-between text-xs pt-1 border-t border-white/[0.04]">
-            <span className="text-slate-400 font-medium">Target: 20% Rule</span>
+            <span className="text-slate-400 font-medium">{t.cashDashboard.target20Rule}</span>
             <Link href="/savings-goals" className="text-slate-400 hover:text-white transition-colors flex items-center gap-0.5">
-              <span>Goals</span>
+              <span>{t.cashDashboard.goals}</span>
               <span>&gt;</span>
             </Link>
           </div>
@@ -416,14 +418,14 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-amber-400" />
                 <h2 className="text-sm font-bold text-white">
-                  Budget Utilization &amp; 50/30/20 Breakdown
+                  {t.cashDashboard.budgetBreakdown}
                 </h2>
               </div>
               <Link
                 href="/budget"
                 className="text-xs text-amber-400 hover:text-amber-300 font-semibold transition-colors flex items-center gap-0.5"
               >
-                <span>Adjust Limits</span>
+                <span>{t.cashDashboard.adjustLimits}</span>
                 <span>&gt;</span>
               </Link>
             </div>
@@ -432,9 +434,9 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             <div className="space-y-2 mb-6">
               <div className="flex items-center justify-between text-xs font-semibold">
                 <span className="text-slate-300">
-                  Monthly Spend: {fmt(monthlyExpenses)} of {fmt(targetBudget)}
+                  {fill(t.cashDashboard.monthlySpendOf, { spent: fmt(monthlyExpenses), budget: fmt(targetBudget) })}
                 </span>
-                <span className="text-emerald-400 font-bold">{budgetUtilPercent}% used</span>
+                <span className="text-emerald-400 font-bold">{fill(t.cashDashboard.percentUsed, { percent: budgetUtilPercent })}</span>
               </div>
               <div className="h-2 w-full bg-white/[0.05] rounded-full overflow-hidden">
                 <div
@@ -449,34 +451,34 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
               {/* Needs Subcard */}
               <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 flex flex-col justify-between">
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Needs (50% target)</span>
+                  <span className="text-xs text-slate-400 font-medium">{t.cashDashboard.needsTarget}</span>
                   <div className="text-lg font-black text-white tabular-nums mt-1">
                     {fmt(needsTarget)}
                   </div>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-3">Rent, Groceries, Utilities</p>
+                <p className="text-[11px] text-slate-500 mt-3">{t.cashDashboard.needsExamples}</p>
               </div>
 
               {/* Wants Subcard */}
               <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 flex flex-col justify-between">
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Wants (30% target)</span>
+                  <span className="text-xs text-slate-400 font-medium">{t.cashDashboard.wantsTarget}</span>
                   <div className="text-lg font-black text-white tabular-nums mt-1">
                     {fmt(wantsTarget)}
                   </div>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-3">Dining, Shopping, Entertainment</p>
+                <p className="text-[11px] text-slate-500 mt-3">{t.cashDashboard.wantsExamples}</p>
               </div>
 
               {/* Savings Subcard */}
               <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 flex flex-col justify-between">
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Savings (20% target)</span>
+                  <span className="text-xs text-slate-400 font-medium">{t.cashDashboard.savingsTarget}</span>
                   <div className="text-lg font-black text-emerald-400 tabular-nums mt-1">
                     {fmt(savingsTarget)}
                   </div>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-3">Emergency &amp; Milestones</p>
+                <p className="text-[11px] text-slate-500 mt-3">{t.cashDashboard.savingsExamples}</p>
               </div>
             </div>
           </div>
@@ -487,20 +489,20 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
           <div>
             <div className="flex items-center gap-2 mb-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <h2 className="text-sm font-bold text-white">Emergency Fund Buffer</h2>
+              <h2 className="text-sm font-bold text-white">{t.cashDashboard.emergencyBuffer}</h2>
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed mb-6">
-              Protect yourself against income interruption. Your calculated runway provides:
+              {t.cashDashboard.runwayIntro}
             </p>
 
             {/* Runway Display Box */}
             <div className="rounded-xl bg-[#0B0D10] border border-white/[0.06] p-6 text-center mb-6">
               <div className="text-3xl font-black text-emerald-400 tabular-nums tracking-tight">
-                {calculatedRunwayMonths} Months
+                {fill(t.cashDashboard.monthsCount, { count: calculatedRunwayMonths })}
               </div>
               <p className="text-[11px] text-slate-500 mt-1.5 font-medium">
-                Recommended Target: 3-6 Months
+                {t.cashDashboard.recommendedTarget}
               </p>
             </div>
           </div>
@@ -510,7 +512,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
             href="/emergency-fund"
             className="w-full py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs text-center shadow-[0_0_20px_rgba(76,192,63,0.25)] hover:shadow-[0_0_25px_rgba(76,192,63,0.4)] transition-all block"
           >
-            View Emergency Safety Shield
+            {t.cashDashboard.viewEmergencyShield}
           </Link>
         </div>
       </div>
@@ -521,13 +523,13 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Receipt className="w-4 h-4 text-emerald-400" />
-              <h3 className="text-sm font-bold text-white">Recent Cash &amp; Bank Expenses</h3>
+              <h3 className="text-sm font-bold text-white">{t.cashDashboard.recentExpenses}</h3>
             </div>
             <Link
               href="/transactions"
               className="text-xs text-slate-400 hover:text-white transition-colors flex items-center gap-1"
             >
-              <span>View All</span>
+              <span>{t.cashDashboard.viewAll}</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -576,26 +578,26 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
                 <Plus className="w-4 h-4 text-emerald-400" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white">Log Cash &amp; Bank Expense</h3>
-                <p className="text-[11px] text-slate-400">Record a non-credit transaction (UPI, Debit, Cash)</p>
+                <h3 className="text-sm font-bold text-white">{t.cashDashboard.logModalTitle}</h3>
+                <p className="text-[11px] text-slate-400">{t.cashDashboard.logModalSub}</p>
               </div>
             </div>
 
             <form onSubmit={handleCreateExpense} className="space-y-4 text-xs">
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Merchant / Recipient</label>
+                <label className="block text-slate-300 font-semibold mb-1">{t.cashDashboard.merchantRecipient}</label>
                 <input
                   type="text"
                   required
                   value={expMerchant}
                   onChange={(e) => setExpMerchant(e.target.value)}
-                  placeholder="e.g. Swiggy, Groceries, Electricity"
+                  placeholder={t.cashDashboard.merchantPlaceholder}
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-xs focus:border-emerald-500 focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Amount (₹)</label>
+                <label className="block text-slate-300 font-semibold mb-1">{t.incomes.amount}</label>
                 <NumericInput
                   value={expAmount}
                   onChange={setExpAmount}
@@ -606,7 +608,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Category</label>
+                  <label className="block text-slate-300 font-semibold mb-1">{t.dashboard.category}</label>
                   <select
                     value={expCategory}
                     onChange={(e) => setExpCategory(e.target.value)}
@@ -626,23 +628,23 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
                       "other",
                     ].map((c) => (
                       <option key={c} value={c}>
-                        {c.charAt(0).toUpperCase() + c.slice(1)}
+                        {categoryLabel(t, c)}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Payment Method</label>
+                  <label className="block text-slate-300 font-semibold mb-1">{t.dashboard.paymentMethod}</label>
                   <select
                     value={expMethod}
                     onChange={(e) => setExpMethod(e.target.value)}
                     className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:border-emerald-500 focus:outline-none"
                   >
-                    <option value="UPI">UPI / GPay / PhonePe</option>
-                    <option value="DEBIT_CARD">Debit Card</option>
-                    <option value="BANK_TRANSFER">Net Banking / IMPS</option>
-                    <option value="CASH">Cash</option>
+                    <option value="UPI">{t.cashDashboard.methodUpiApps}</option>
+                    <option value="DEBIT_CARD">{t.dashboard.methodDebitCard}</option>
+                    <option value="BANK_TRANSFER">{t.cashDashboard.methodNetBanking}</option>
+                    <option value="CASH">{t.dashboard.methodCash}</option>
                   </select>
                 </div>
               </div>
@@ -653,7 +655,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
                   onClick={() => setShowLogModal(false)}
                   className="px-4 py-2 rounded-full border border-white/10 text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors"
                 >
-                  Cancel
+                  {t.cards.cancel}
                 </button>
                 <button
                   type="submit"
@@ -661,7 +663,7 @@ export default function NoCreditCardDashboard({ userName }: { userName?: string 
                   className="px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(76,192,63,0.3)] disabled:opacity-50 transition-all"
                 >
                   {expSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
-                  <span>Save Expense</span>
+                  <span>{t.cashDashboard.saveExpense}</span>
                 </button>
               </div>
             </form>

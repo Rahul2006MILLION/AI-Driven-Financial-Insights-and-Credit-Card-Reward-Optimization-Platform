@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import { CreditCard } from "@/lib/api";
 import { DigitalCreditCard } from "@/components/DigitalCreditCard";
@@ -34,6 +35,7 @@ export function CardFanCollection({
   onSelectCard,
   className = "",
 }: CardFanCollectionProps) {
+  const { t } = useLanguage();
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -209,11 +211,11 @@ export function CardFanCollection({
           </span>
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-              <span>Card Stack Showcase</span>
+              <span>{t.cards.stackShowcase}</span>
               <Sparkles className="w-3 h-3 text-emerald-400" />
             </h3>
             <p className="text-[10px] text-slate-400">
-              Click cards or use arrow keys to browse • Front card active
+              {t.cards.stackHint}
             </p>
           </div>
         </div>
@@ -225,8 +227,8 @@ export function CardFanCollection({
               type="button"
               onClick={handlePrevCard}
               className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors"
-              title="Previous Card (Left Arrow)"
-              aria-label="Previous Card"
+              title={t.cards.prevCardHint}
+              aria-label={t.cards.prevCard}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -237,8 +239,8 @@ export function CardFanCollection({
               type="button"
               onClick={handleNextCard}
               className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-slate-300 hover:text-white transition-colors"
-              title="Next Card (Right Arrow)"
-              aria-label="Next Card"
+              title={t.cards.nextCardHint}
+              aria-label={t.cards.nextCard}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -257,8 +259,8 @@ export function CardFanCollection({
             type="button"
             onClick={handlePrevCard}
             className="absolute left-2 z-50 p-2 rounded-full bg-black/40 hover:bg-black/60 border border-white/10 text-slate-300 hover:text-emerald-400 backdrop-blur-md transition-all hidden sm:flex items-center justify-center shadow-lg hover:scale-110"
-            title="Previous Card"
-            aria-label="Previous Card"
+            title={t.cards.prevCard}
+            aria-label={t.cards.prevCard}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -335,8 +337,8 @@ export function CardFanCollection({
             type="button"
             onClick={handleNextCard}
             className="absolute right-2 z-50 p-2 rounded-full bg-black/40 hover:bg-black/60 border border-white/10 text-slate-300 hover:text-emerald-400 backdrop-blur-md transition-all hidden sm:flex items-center justify-center shadow-lg hover:scale-110"
-            title="Next Card"
-            aria-label="Next Card"
+            title={t.cards.nextCard}
+            aria-label={t.cards.nextCard}
           >
             <ChevronRight className="w-5 h-5" />
           </button>

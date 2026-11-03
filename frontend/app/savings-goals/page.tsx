@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useLanguage, fmt as fill } from "@/lib/i18n";
 import { Sidebar } from "@/components/Sidebar";
 import { Target, Plus, Trash2, Loader2, AlertCircle, CheckCircle2, TrendingUp, Info } from "lucide-react";
 import NumericInput from "@/components/NumericInput";
@@ -36,6 +37,7 @@ const fmt = (n: any) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Number(n) || 0);
 
 export default function SavingsGoalsPage() {
+  const { t } = useLanguage();
   const [goals,       setGoals]       = useState<SavingsGoal[]>([]);
   const [incomeSummary, setIncomeSummary] = useState<any>(null);
   const [showAdd,     setShowAdd]     = useState(false);
@@ -110,15 +112,15 @@ export default function SavingsGoalsPage() {
           <div>
             <h1 className="text-2xl font-black text-white flex items-center gap-3">
               <Target className="w-6 h-6 text-lime-400" />
-              Savings Goals
+              {t.nav.savingsGoals}
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Set milestones and track progress toward your financial targets.</p>
+            <p className="text-sm text-slate-400 mt-1">{t.savingsGoals.subtitle}</p>
           </div>
           <button
             onClick={() => setShowAdd((v) => !v)}
             className="flex items-center gap-2 px-4 py-2 rounded-full bg-lime-500 hover:bg-lime-400 text-slate-950 text-xs font-bold transition-all shadow-[0_0_20px_rgba(132,204,22,0.25)]"
           >
-            <Plus className="w-4 h-4" /> New Goal
+            <Plus className="w-4 h-4" /> {t.savingsGoals.newGoalButton}
           </button>
         </div>
 
@@ -127,8 +129,8 @@ export default function SavingsGoalsPage() {
           <div className="grid grid-cols-3 gap-4">
             {[
               { label: "Goals",         value: String(goals.length),   color: "text-white"       },
-              { label: "Total Target",  value: fmt(totalTarget),        color: "text-lime-300"    },
-              { label: "Total Saved",   value: fmt(totalSaved),         color: "text-emerald-400" },
+              { label: t.savingsGoals.totalTarget,  value: fmt(totalTarget),        color: "text-lime-300"    },
+              { label: t.savingsGoals.totalSaved,   value: fmt(totalSaved),         color: "text-emerald-400" },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl bg-white/[0.03] border border-white/[0.08] p-4">
                 <div className={`text-xl font-black ${s.color}`}>{s.value}</div>
@@ -152,30 +154,30 @@ export default function SavingsGoalsPage() {
         {/* Add goal form */}
         {showAdd && (
           <form onSubmit={handleAdd} className="rounded-2xl bg-white/[0.03] border border-lime-500/25 p-6 space-y-4">
-            <h3 className="text-sm font-bold text-white">New Savings Goal</h3>
+            <h3 className="text-sm font-bold text-white">{t.savingsGoals.newGoal}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Goal Name</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.savingsGoals.goalName}</label>
                 <input
                   type="text" required value={name} onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Emergency Fund, Trip to Goa"
+                  placeholder={t.savingsGoals.goalNamePlaceholder}
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-lime-500 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Target Amount (₹)</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.savingsGoals.targetAmount}</label>
                 <NumericInput value={target} onChange={setTarget} placeholder="e.g. 100000"
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-lime-500 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Current Savings (₹) — optional</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.savingsGoals.currentSavings}</label>
                 <NumericInput value={current} onChange={setCurrent} placeholder="0"
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-lime-500 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Target Date — optional</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.savingsGoals.targetDate}</label>
                 <input
                   type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)}
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-lime-500 focus:outline-none"
@@ -187,10 +189,10 @@ export default function SavingsGoalsPage() {
               <button type="submit"
                 className="flex items-center gap-2 px-5 py-2 rounded-full bg-lime-500 hover:bg-lime-400 text-slate-950 text-xs font-bold transition-all"
               >
-                <CheckCircle2 className="w-3.5 h-3.5" /> Create Goal
+                <CheckCircle2 className="w-3.5 h-3.5" /> {t.savingsGoals.createGoal}
               </button>
               <button type="button" onClick={() => setShowAdd(false)} className="text-xs text-slate-400 hover:text-white transition-colors">
-                Cancel
+                {t.cards.cancel}
               </button>
             </div>
           </form>
@@ -200,20 +202,20 @@ export default function SavingsGoalsPage() {
         {contributeId && (
           <form onSubmit={handleContribute} className="rounded-2xl bg-white/[0.03] border border-emerald-500/25 p-5 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white">Add Contribution</h3>
-              <button type="button" onClick={() => { setContributeId(null); setContribAmt(""); }} className="text-xs text-slate-400 hover:text-white">Cancel</button>
+              <h3 className="text-sm font-bold text-white">{t.savingsGoals.addContribution}</h3>
+              <button type="button" onClick={() => { setContributeId(null); setContribAmt(""); }} className="text-xs text-slate-400 hover:text-white">{t.cards.cancel}</button>
             </div>
             <p className="text-xs text-slate-400">
               Goal: <span className="text-white font-semibold">{goals.find((g) => g.id === contributeId)?.name}</span>
             </p>
             <div className="flex gap-3">
-              <NumericInput value={contribAmt} onChange={setContribAmt} placeholder="Amount (₹)"
+              <NumericInput value={contribAmt} onChange={setContribAmt} placeholder={t.incomes.amount}
                 className="flex-1 bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-emerald-500 focus:outline-none"
               />
               <button type="submit"
                 className="flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all"
               >
-                <TrendingUp className="w-3.5 h-3.5" /> Add
+                <TrendingUp className="w-3.5 h-3.5" /> {t.savingsGoals.add}
               </button>
             </div>
           </form>
@@ -223,8 +225,8 @@ export default function SavingsGoalsPage() {
         {goals.length === 0 ? (
           <div className="text-center py-16 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
             <Target className="w-8 h-8 text-slate-600 mx-auto mb-3" />
-            <p className="text-sm text-slate-400 mb-1">No savings goals yet.</p>
-            <p className="text-xs text-slate-600">Create your first goal to start tracking your progress.</p>
+            <p className="text-sm text-slate-400 mb-1">{t.savingsGoals.noGoals}</p>
+            <p className="text-xs text-slate-600">{t.savingsGoals.createFirst}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -254,7 +256,7 @@ export default function SavingsGoalsPage() {
                         {goal.deadline && (
                           <div className="text-[10px] text-slate-500 mt-0.5">
                             Target date: {new Date(goal.deadline).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
-                            {monthsLeft !== null && monthsLeft > 0 && ` · ${monthsLeft}mo left`}
+                            {monthsLeft !== null && monthsLeft > 0 && fill(t.savingsGoals.monthsLeft, { count: monthsLeft })}
                           </div>
                         )}
                       </div>
@@ -281,17 +283,17 @@ export default function SavingsGoalsPage() {
                     </div>
                     <div className="flex justify-between text-[10px] text-slate-500">
                       <span>{fmt(goal.currentAmount)} / {fmt(goal.targetAmount)}</span>
-                      {!isComplete && <span>{fmt(remaining)} remaining</span>}
+                      {!isComplete && <span>{fill(t.savingsGoals.remaining, { amount: fmt(remaining) })}</span>}
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     {monthlyNeeded && !isComplete ? (
                       <span className="text-[10px] text-slate-500">
-                        {fmt(monthlyNeeded)}/month needed to hit deadline
+                        {fill(t.savingsGoals.perMonthNeeded, { amount: fmt(monthlyNeeded) })}
                       </span>
                     ) : isComplete ? (
-                      <span className="text-[10px] text-emerald-400 font-semibold">Goal achieved!</span>
+                      <span className="text-[10px] text-emerald-400 font-semibold">{t.savingsGoals.achieved}</span>
                     ) : (
                       <span />
                     )}
@@ -300,7 +302,7 @@ export default function SavingsGoalsPage() {
                         onClick={() => { setContributeId(goal.id); setContribAmt(""); }}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-lime-500/10 hover:bg-lime-500/20 border border-lime-500/20 text-lime-400 text-[10px] font-semibold transition-all"
                       >
-                        <Plus className="w-3 h-3" /> Add savings
+                        <Plus className="w-3 h-3" /> {t.savingsGoals.addSavings}
                       </button>
                     )}
                   </div>
@@ -312,7 +314,7 @@ export default function SavingsGoalsPage() {
 
         {/* Disclaimer */}
         <p className="text-[10px] text-slate-600 border-t border-white/[0.05] pt-4 leading-relaxed">
-          Savings goals are stored locally in your browser. They reflect amounts you manually track here, not your account balances. Connect your income and transactions for richer insights.
+          {t.savingsGoals.localNote}
         </p>
       </main>
     </div>

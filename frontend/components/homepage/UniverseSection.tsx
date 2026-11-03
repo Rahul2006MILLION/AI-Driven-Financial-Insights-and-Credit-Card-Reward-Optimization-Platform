@@ -5,6 +5,7 @@ import { useLanguage } from "@/lib/i18n";
 import { motion, useInView } from "framer-motion";
 import { Wallet, CreditCard, TrendingUp, PiggyBank, GraduationCap, Activity } from "lucide-react";
 import Image from "next/image";
+import { EmblemHalo, GeoBackdrop } from "./GeoBackdrop";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -81,6 +82,7 @@ export function UniverseSection() {
   return (
     <section className="relative px-3 sm:px-4 py-4">
       <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#F4F6EE] text-[#12301A] overflow-hidden py-20 sm:py-24">
+        <GeoBackdrop variant="ecosystem" />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <FadeUp className="text-center mb-14">
@@ -109,6 +111,7 @@ export function UniverseSection() {
             {/* Central hub */}
             <FadeUp delay={0.18} className="flex justify-center my-10">
               <div className="relative">
+                <EmblemHalo />
                 <motion.div
                   className="absolute -inset-5 rounded-full border-2 border-dashed border-[#12301A]/15"
                   animate={{ rotate: 360 }}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, fmt } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import {
   GraduationCap,
@@ -530,7 +530,7 @@ export default function LearnPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search lessons & topics..."
+                  placeholder={t.learn.searchLessonsPlaceholder}
                   className="w-full bg-[#17191E]/80 border border-white/[0.1] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
@@ -540,13 +540,13 @@ export default function LearnPage() {
             {loadingLessons ? (
               <div className="text-center py-16 text-slate-400 space-y-3">
                 <RefreshCw className="w-6 h-6 animate-spin mx-auto text-emerald-400" />
-                <p className="text-sm">Loading lessons...</p>
+                <p className="text-sm">{t.learn.loadingLessons}</p>
               </div>
             ) : filteredLessons.length === 0 ? (
               <div className="text-center py-16 bg-[#17191E]/40 border border-white/[0.06] rounded-2xl text-slate-400 space-y-2">
                 <HelpCircle className="w-8 h-8 mx-auto text-slate-500" />
-                <p className="text-base font-semibold text-slate-300">No lessons match your search</p>
-                <p className="text-xs text-slate-500">Try adjusting your filters or search keywords.</p>
+                <p className="text-base font-semibold text-slate-300">{t.learn.noLessonsMatch}</p>
+                <p className="text-xs text-slate-500">{t.learn.adjustFilters}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -708,7 +708,7 @@ export default function LearnPage() {
                         <div className="bg-white/[0.03] border border-white/[0.06] p-3 rounded-xl">
                           <span className="text-[11px] text-slate-400 block">{t.learn.monthsToPayoff}</span>
                           <span className="text-xl font-bold text-white">
-                            {interestResult.is_perpetual_debt ? "∞ (Never)" : `${interestResult.months_to_payoff} mo`}
+                            {interestResult.is_perpetual_debt ? t.learn.neverPaidOff : `${interestResult.months_to_payoff} mo`}
                           </span>
                         </div>
                         <div className="bg-white/[0.03] border border-white/[0.06] p-3 rounded-xl">
@@ -739,11 +739,11 @@ export default function LearnPage() {
                           <table className="w-full text-left">
                             <thead className="bg-white/[0.04] text-slate-400 text-[10px] uppercase">
                               <tr>
-                                <th className="p-2">Mo</th>
-                                <th className="p-2">Start Bal</th>
-                                <th className="p-2">Interest</th>
-                                <th className="p-2">Principal</th>
-                                <th className="p-2">End Bal</th>
+                                <th className="p-2">{t.learn.colMonth}</th>
+                                <th className="p-2">{t.learn.colStartBal}</th>
+                                <th className="p-2">{t.learn.colInterest}</th>
+                                <th className="p-2">{t.learn.colPrincipal}</th>
+                                <th className="p-2">{t.learn.colEndBal}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-white/[0.04] text-slate-200">
@@ -764,7 +764,7 @@ export default function LearnPage() {
                       <p className="text-[11px] text-slate-500 italic">{interestResult.disclaimer}</p>
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-slate-400">Calculating...</div>
+                    <div className="text-center py-12 text-slate-400">{t.common.processing}</div>
                   )}
                 </div>
               </div>
@@ -798,7 +798,7 @@ export default function LearnPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-300 block mb-1 font-medium">Alternative Fixed Payment (₹)</label>
+                      <label className="text-xs text-slate-300 block mb-1 font-medium">{t.learn.altFixedPayment}</label>
                       <input
                         type="number"
                         value={minDueFixed}
@@ -841,11 +841,11 @@ export default function LearnPage() {
                             </div>
                             <div className="flex items-center gap-4 text-xs font-semibold">
                               <div>
-                                <span className="opacity-70 block text-[10px]">Time</span>
-                                <span>{sc.months_to_payoff} months</span>
+                                <span className="opacity-70 block text-[10px]">{t.learn.colTime}</span>
+                                <span>{fmt(t.learn.monthsCount, { count: sc.months_to_payoff })}</span>
                               </div>
                               <div>
-                                <span className="opacity-70 block text-[10px]">Interest</span>
+                                <span className="opacity-70 block text-[10px]">{t.learn.colInterest}</span>
                                 <span className={idx === 2 ? "text-rose-400 font-bold" : ""}>
                                   ₹{sc.total_interest_paid?.toLocaleString()}
                                 </span>
@@ -858,7 +858,7 @@ export default function LearnPage() {
                       <p className="text-[11px] text-slate-500 italic">{minDueResult.disclaimer}</p>
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-slate-400">Calculating...</div>
+                    <div className="text-center py-12 text-slate-400">{t.common.processing}</div>
                   )}
                 </div>
               </div>
@@ -884,7 +884,7 @@ export default function LearnPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div>
-                        <label className="text-slate-400 block mb-1">Groceries (₹)</label>
+                        <label className="text-slate-400 block mb-1">{t.learn.groceriesInr}</label>
                         <input
                           type="number"
                           value={budgetGrocery}
@@ -893,7 +893,7 @@ export default function LearnPage() {
                         />
                       </div>
                       <div>
-                        <label className="text-slate-400 block mb-1">Utilities (₹)</label>
+                        <label className="text-slate-400 block mb-1">{t.learn.utilitiesInr}</label>
                         <input
                           type="number"
                           value={budgetUtility}
@@ -902,7 +902,7 @@ export default function LearnPage() {
                         />
                       </div>
                       <div>
-                        <label className="text-slate-400 block mb-1">Dining Out (₹)</label>
+                        <label className="text-slate-400 block mb-1">{t.learn.diningOutInr}</label>
                         <input
                           type="number"
                           value={budgetDining}
@@ -911,7 +911,7 @@ export default function LearnPage() {
                         />
                       </div>
                       <div>
-                        <label className="text-slate-400 block mb-1">Shopping (₹)</label>
+                        <label className="text-slate-400 block mb-1">{t.learn.shoppingInr}</label>
                         <input
                           type="number"
                           value={budgetShopping}
@@ -920,7 +920,7 @@ export default function LearnPage() {
                         />
                       </div>
                       <div>
-                        <label className="text-slate-400 block mb-1">Fuel & Commute (₹)</label>
+                        <label className="text-slate-400 block mb-1">{t.learn.fuelCommuteInr}</label>
                         <input
                           type="number"
                           value={budgetFuel}
@@ -929,7 +929,7 @@ export default function LearnPage() {
                         />
                       </div>
                       <div>
-                        <label className="text-slate-400 block mb-1">Monthly Savings (₹)</label>
+                        <label className="text-slate-400 block mb-1">{t.learn.monthlySavingsInr}</label>
                         <input
                           type="number"
                           value={budgetSavings}
@@ -971,7 +971,7 @@ export default function LearnPage() {
 
                       {/* Educational Advice List */}
                       <div className="space-y-2 pt-2">
-                        <span className="text-xs font-semibold text-slate-300 block">Guidance & Observations</span>
+                        <span className="text-xs font-semibold text-slate-300 block">{t.learn.guidanceObservations}</span>
                         <div className="space-y-1.5">
                           {budgetResult.advice?.map((adv: string, idx: number) => (
                             <div key={idx} className="flex items-start gap-2 text-xs text-slate-300 bg-white/[0.02] p-2 rounded-lg border border-white/[0.04]">
@@ -983,7 +983,7 @@ export default function LearnPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-slate-400">Calculating...</div>
+                    <div className="text-center py-12 text-slate-400">{t.common.processing}</div>
                   )}
                 </div>
               </div>
@@ -1050,7 +1050,7 @@ export default function LearnPage() {
                       </div>
 
                       <div className="p-3.5 bg-white/[0.02] border border-white/[0.06] rounded-xl space-y-2">
-                        <span className="text-xs font-semibold text-emerald-400 block">CIBIL Score Impact</span>
+                        <span className="text-xs font-semibold text-emerald-400 block">{t.learn.cibilImpact}</span>
                         <p className="text-xs text-slate-300 leading-relaxed">
                           {utilResult.cibil_impact_assessment}
                         </p>
@@ -1064,7 +1064,7 @@ export default function LearnPage() {
                       )}
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-slate-400">Calculating...</div>
+                    <div className="text-center py-12 text-slate-400">{t.common.processing}</div>
                   )}
                 </div>
               </div>
@@ -1107,7 +1107,7 @@ export default function LearnPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-300 block mb-1 font-medium">Renewal Waiver Threshold (₹)</label>
+                      <label className="text-xs text-slate-300 block mb-1 font-medium">{t.learn.renewalWaiverThreshold}</label>
                       <input
                         type="number"
                         value={beWaiver}
@@ -1144,7 +1144,7 @@ export default function LearnPage() {
                       </div>
 
                       <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                        <span className="text-xs font-semibold text-emerald-400 block">Assessment Verdict</span>
+                        <span className="text-xs font-semibold text-emerald-400 block">{t.learn.assessmentVerdict}</span>
                         <p className="text-xs text-slate-200 mt-1 leading-relaxed">
                           {beResult.verdict}
                         </p>
@@ -1153,7 +1153,7 @@ export default function LearnPage() {
                       <p className="text-[11px] text-slate-500 italic">{beResult.disclaimer}</p>
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-slate-400">Calculating...</div>
+                    <div className="text-center py-12 text-slate-400">{t.common.processing}</div>
                   )}
                 </div>
               </div>
@@ -1184,7 +1184,7 @@ export default function LearnPage() {
                 <span className="text-3xl font-extrabold text-white mt-1 block">
                   {overallProgress ? `${overallProgress.completed_topics} / ${overallProgress.total_topics}` : "0 / 12"}
                 </span>
-                <p className="text-xs text-slate-500 mt-2">Interactive topics mastered across 5 disciplines</p>
+                <p className="text-xs text-slate-500 mt-2">{t.learn.topicsMastered}</p>
               </div>
 
               <div className="bg-[#17191E]/70 border border-white/[0.08] rounded-2xl p-5 backdrop-blur-2xl">
@@ -1192,7 +1192,7 @@ export default function LearnPage() {
                 <span className="text-3xl font-extrabold text-emerald-400 mt-1 block">
                   {overallProgress?.average_quiz_score ? `${overallProgress.average_quiz_score}%` : "100%"}
                 </span>
-                <p className="text-xs text-slate-500 mt-2">Knowledge check quiz performance</p>
+                <p className="text-xs text-slate-500 mt-2">{t.learn.quizPerformance}</p>
               </div>
             </div>
 

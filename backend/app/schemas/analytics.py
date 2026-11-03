@@ -1,5 +1,6 @@
 from typing import List, Dict, Optional, Any
 from decimal import Decimal
+from datetime import datetime
 from pydantic import BaseModel
 
 class CategorySpend(BaseModel):
@@ -59,3 +60,42 @@ class FinancialHealthResponse(BaseModel):
     calculation_breakdown: Optional[Dict[str, Any]] = None
     data_sufficiency: Optional[str] = "COMPLETE"
     omitted_indicators: List[str] = []
+
+class CreditScoreCreateRequest(BaseModel):
+    score: int
+    source: Optional[str] = "User-Provided (Manual Entry)"
+    notes: Optional[str] = None
+    recorded_at: Optional[datetime] = None
+
+class CreditScoreUpdateRequest(BaseModel):
+    score: int
+    notes: Optional[str] = None
+    recorded_at: Optional[datetime] = None
+
+class CreditScoreResponse(BaseModel):
+    id: str
+    score: int
+    score_band: str
+    source: str
+    recorded_at: datetime
+    notes: Optional[str] = None
+
+class CreditHealthSummaryResponse(BaseModel):
+    current_score: Optional[int] = None
+    score_band: Optional[str] = None
+    source: Optional[str] = None
+    last_updated: Optional[str] = None
+    score_history: List[CreditScoreResponse] = []
+    credit_utilization_pct: Optional[Decimal] = None
+    total_credit_limit: Decimal = Decimal("0.00")
+    total_outstanding_balance: Decimal = Decimal("0.00")
+    cards_count: int = 0
+    financial_pathway: str = "CREDIT_CARD"
+
+class AdvancedFinancialAnalyticsResponse(BaseModel):
+    overview_kpis: Dict[str, Any]
+    time_series: Dict[str, List[Dict[str, Any]]]
+    category_distribution: List[Dict[str, Any]]
+    monthly_insights: Dict[str, Any]
+    credit_health: CreditHealthSummaryResponse
+

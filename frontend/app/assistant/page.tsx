@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
-import { useLanguage, Language } from "@/lib/i18n";
+import { useLanguage, Language, fmt } from "@/lib/i18n";
 import { apiFetch, api, AiConsent } from "@/lib/api";
 import {
   Bot,
@@ -103,9 +103,7 @@ export default function AssistantPage() {
       });
       setConsent(updated);
       setConsentSuccessMsg(
-        value
-          ? `Consent updated: ${field.replace(/_/g, " ")} is now enabled.`
-          : `Consent updated: ${field.replace(/_/g, " ")} is now disabled.`
+        fmt(value ? t.assistant.consentEnabled : t.assistant.consentDisabled, { field: field.replace(/_/g, " ") })
       );
       setTimeout(() => setConsentSuccessMsg(null), 3000);
     } catch (_) {
@@ -151,7 +149,7 @@ export default function AssistantPage() {
     } catch (err: any) {
       const errMsg: Message = {
         role: "assistant",
-        content: "I encountered an error: " + (err.message || "Please check backend connection."),
+        content: t.assistant.errorPrefix + (err.message || t.assistant.checkBackend),
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
       setMessages((prev) => [...prev, errMsg]);
@@ -192,7 +190,7 @@ export default function AssistantPage() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 text-xs text-slate-300 transition-colors"
             >
               <Sliders className="w-3.5 h-3.5 text-lime-400" />
-              <span className="font-medium">Governance</span>
+              <span className="font-medium">{t.assistant.governance}</span>
               {showPrivacyPanel ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
 
@@ -264,7 +262,7 @@ export default function AssistantPage() {
               <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                 <div>
                   <span className="font-semibold text-white block">{t.assistant.allowCardContextLabel}</span>
-                  <span className="text-[10px] text-slate-500">Card names & rates</span>
+                  <span className="text-[10px] text-slate-500">{t.assistant.cardNamesRates}</span>
                 </div>
                 <input
                   type="checkbox"
@@ -278,7 +276,7 @@ export default function AssistantPage() {
               <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
                 <div>
                   <span className="font-semibold text-white block">{t.assistant.allowSpendingContextLabel}</span>
-                  <span className="text-[10px] text-slate-500">Aggregated totals</span>
+                  <span className="text-[10px] text-slate-500">{t.assistant.aggregatedTotals}</span>
                 </div>
                 <input
                   type="checkbox"
@@ -293,7 +291,10 @@ export default function AssistantPage() {
             <div className="p-2.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[10px] text-slate-400 flex items-start gap-2">
               <ShieldAlert className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-white">Strict Redaction Guarantee:</strong> 16-digit PANs, CVVs, PINs, OTPs, Aadhaar, and credentials are <strong className="text-amber-300">never transmitted</strong> to any external AI provider.
+                <strong className="text-white">{t.assistant.redactionTitle}</strong>{" "}
+                {t.assistant.redactionBody.split("{never}")[0]}
+                <strong className="text-amber-300">{t.assistant.neverTransmitted}</strong>
+                {t.assistant.redactionBody.split("{never}")[1]}
               </div>
             </div>
           </div>
@@ -324,7 +325,7 @@ export default function AssistantPage() {
                 {m.citations && m.citations.length > 0 && (
                   <div className="mt-3 pt-2.5 border-t border-white/[0.07] flex flex-wrap items-center gap-1.5">
                     <span className="text-[10px] text-slate-500 uppercase font-semibold">
-                      Grounded:
+                      {t.assistant.grounded}
                     </span>
                     {m.citations.map((c, i) => (
                       <span
@@ -344,12 +345,12 @@ export default function AssistantPage() {
                       {m.is_external_ai_used ? (
                         <span className="text-emerald-400 font-semibold flex items-center gap-1">
                           <Sparkles className="w-3 h-3 text-emerald-400" />
-                          Gemini 2.5 Flash • PII Redacted
+                          {t.assistant.geminiRedacted}
                         </span>
                       ) : (
                         <span className="text-emerald-400 font-semibold flex items-center gap-1">
                           <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                          Local Engine • Zero Exposure
+                          {t.assistant.localEngine}
                         </span>
                       )}
 
@@ -382,7 +383,7 @@ export default function AssistantPage() {
                 <Loader2 className="w-3.5 h-3.5 text-lime-400 animate-spin" />
               </div>
               <div className="p-3.5 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl text-xs text-slate-400 flex items-center gap-2">
-                <span>Analyzing portfolio rules...</span>
+                <span>{t.assistant.analyzing}</span>
               </div>
             </div>
           )}
@@ -391,30 +392,13 @@ export default function AssistantPage() {
 
         {/* Suggestion Chips */}
         <div className="py-2 flex items-center gap-2 overflow-x-auto scrollbar-none">
-          {(language === "hi"
-            ? [
-                "न्यूनतम देय (Minimum Due) क्यों नहीं चुकाना चाहिए?",
-                "बिलिंग चक्र और ग्रेस पीरियड कैसे काम करते हैं?",
-                "50-30-20 बजट नियम क्या है?",
-                "भोजन के लिए कौन सा कार्ड सबसे अच्छा है?",
-                "लाउंज विज़िट सीमाएं दिखाएं",
-              ]
-            : language === "kn"
-            ? [
-                "ಕನಿಷ್ಠ ಬಾಕಿ (Minimum Due) ಪಾವತಿಯ ಅಪಾಯಗಳೇನು?",
-                "ಬಿಲ್ಲಿಂಗ್ ಸೈಕಲ್ ಮತ್ತು ರಿಯಾಯಿತಿ ಅವಧಿ ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ?",
-                "50-30-20 ಬಜೆಟ್ ಸೂತ್ರ ಎಂದರೇನು?",
-                "ಡೈನಿಂಗ್‌ಗಾಗಿ ಯಾವ ಕಾರ್ಡ್ ಅತ್ಯುತ್ತಮವಾಗಿದೆ?",
-                "ಲೌಂಜ್ ಪ್ರವೇಶ ಮಿತಿಗಳನ್ನು ತೋರಿಸಿ",
-              ]
-            : [
-                "Why should I avoid paying only the minimum due?",
-                "How does the billing cycle and grace period work?",
-                "Explain the 50-30-20 budget framework",
-                "Which card is best for dining?",
-                "Show lounge visit limits",
-              ]
-          ).map((prompt, idx) => (
+          {[
+            t.assistant.suggestion1,
+            t.assistant.suggestion2,
+            t.assistant.suggestion3,
+            t.assistant.suggestion4,
+            t.assistant.suggestion5,
+          ].map((prompt, idx) => (
             <button
               key={idx}
               onClick={() => handleSend(prompt)}

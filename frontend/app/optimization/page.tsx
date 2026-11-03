@@ -38,7 +38,7 @@ export default function RewardOptimizationPage() {
     e.preventDefault();
     const numericAmount = typeof amount === "number" ? amount : parseFloat(amount);
     if (!amount || isNaN(numericAmount) || numericAmount <= 0) {
-      setError("Please enter a valid spend amount greater than 0.");
+      setError(t.optimizer.invalidSpend);
       return;
     }
 
@@ -132,7 +132,7 @@ export default function RewardOptimizationPage() {
               </label>
               <input
                 type="text"
-                placeholder="e.g. Swiggy, Amazon, Croma"
+                placeholder={t.optimizer.merchantPlaceholder}
                 value={merchant}
                 onChange={(e) => setMerchant(e.target.value)}
                 className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-lime-400 transition-colors"
@@ -333,14 +333,14 @@ export default function RewardOptimizationPage() {
               {/* Source Verification Link */}
               {result.recommended_card.source_references && result.recommended_card.source_references.length > 0 && (
                 <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-slate-500">
-                  <span>Official Verification:</span>
+                  <span>{t.optimizer.officialVerification}</span>
                   <a
                     href={result.recommended_card.source_references[0]}
                     target="_blank"
                     rel="noreferrer"
                     className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium"
                   >
-                    <span>Schedule of Charges</span>
+                    <span>{t.optimizer.scheduleOfCharges}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>

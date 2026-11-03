@@ -43,6 +43,8 @@ export interface Translations {
     emergencyFund: string;
     subscriptions: string;
     financialHealth: string;
+    cashSavingsBadge: string;
+    defaultUserName: string;
   };
 
   sidebar: {
@@ -241,6 +243,42 @@ export interface Translations {
     addCardCta: string;
     sampleSuggestion1: string;
     sampleSuggestion2: string;
+    learnInclusionBadge: string;
+    noCardBannerTitle: string;
+    noCardBannerDesc: string;
+    exploreLearn: string;
+    manageIncomes: string;
+    portfolioSetupBadge: string;
+    portfolioSetupTitle: string;
+    portfolioSetupDesc: string;
+    browseTopCards: string;
+    switchToCashSavings: string;
+    manage: string;
+    monthlySpending: string;
+    view: string;
+    targetBudget: string;
+    framework503020: string;
+    cashFlowResilience: string;
+    resilienceIndex: string;
+    breakdown: string;
+    quickExpenseTitle: string;
+    noCardFlowMode: string;
+    expenseRecorded: string;
+    quickMerchantPlaceholder: string;
+    paymentMethod: string;
+    methodCash: string;
+    methodBankTransfer: string;
+    methodDebitCard: string;
+    methodOther: string;
+    addCreditCardLink: string;
+    logExpense: string;
+    optimizerMerchantPlaceholder: string;
+    manageBudget: string;
+    noIncomeStreams: string;
+    incomesCount: string;
+    transactionsCount: string;
+    wantRewardPerks: string;
+    monthlyEquiv: string;
   };
 
   cards: {
@@ -275,6 +313,33 @@ export interface Translations {
     savingCard: string;
     saveChanges: string;
     cancel: string;
+    deleteFailed: string;
+    updateFailed: string;
+    loadingWallet: string;
+    totalAnnualFees: string;
+    potentialWaiverTargets: string;
+    renewalWaiver: string;
+    viewInFan: string;
+    editCard: string;
+    deactivateCard: string;
+    editSpecsTitle: string;
+    cardNameRequired: string;
+    bankNameRequired: string;
+    nickname: string;
+    nicknamePlaceholder: string;
+    lastFourDigits: string;
+    network: string;
+    renewalWaiverSpend: string;
+    optionalWaiverSpend: string;
+    waiverConditionDetails: string;
+    termsUrl: string;
+    deactivate: string;
+    stackShowcase: string;
+    stackHint: string;
+    prevCardHint: string;
+    prevCard: string;
+    nextCardHint: string;
+    nextCard: string;
   };
 
   cardDetails: {
@@ -297,6 +362,20 @@ export interface Translations {
     noBenefitsAvailable: string;
     rulePerkExclusion: string;
     monthlyCapPrefix: string;
+    cardholderLabel: string;
+    notSpecified: string;
+    verifiedBankData: string;
+    chargesTitle: string;
+    joiningFee: string;
+    noWaiver: string;
+    waiverCondition: string;
+    multipliersTitle: string;
+    baselineCashback: string;
+    loungeTitle: string;
+    loungeNotConfigured: string;
+    verifiedSource: string;
+    officialCharges: string;
+    editSpecs: string;
   };
 
   cardSelection: {
@@ -328,6 +407,88 @@ export interface Translations {
     cardAddedSuccess: string;
     selectIssuerFirst: string;
     customCardNotice: string;
+    airportLounge: string;
+    airportLoungeDesc: string;
+    cardholderRequired: string;
+    lastFourInvalid: string;
+    feesNegative: string;
+    termsUrlInvalid: string;
+    addFailed: string;
+    verified: string;
+    custom: string;
+    variantTier: string;
+    nicknameOptional: string;
+    registeredRedirecting: string;
+    backToWallet: string;
+    pageSubtitle: string;
+    tenIssuers: string;
+    preconfigured: string;
+    step3Customize: string;
+    previewRealtime: string;
+    identityTitle: string;
+    customManual: string;
+    cardholderNameRequired: string;
+    appearsOnCardFace: string;
+    cardholderPlaceholderNew: string;
+    issuingBankRequired: string;
+    paymentNetworkRequired: string;
+    variantPlaceholder: string;
+    nicknamePlaceholderNew: string;
+    safeMaskedOnly: string;
+    feesTitle: string;
+    waiverPlaceholder: string;
+    termsUrlTitle: string;
+    openUrl: string;
+    rulesHelp: string;
+    remove: string;
+    catAllRetail: string;
+    catShopping: string;
+    catDining: string;
+    catTravel: string;
+    catGrocery: string;
+    catUtility: string;
+    catFuel: string;
+    rewardType: string;
+    directCashback: string;
+    airlineMiles: string;
+    rateLabel: string;
+    merchantPatternOptional: string;
+    merchantPatternPlaceholder: string;
+    monthlyCap: string;
+    noCap: string;
+    addRewardRule: string;
+    addPerk: string;
+    privacyTitle: string;
+    privacyBody: string;
+    registeringCreditCard: string;
+    saveToWallet: string;
+    liveInteractiveCard: string;
+    hoverToTilt: string;
+    rewardHighlights: string;
+    keyPerk: string;
+    addedUpdating: string;
+    step3Personalize: string;
+    updatesLive: string;
+    appearsOnCard: string;
+    cardholderPlaceholderFlow: string;
+    cardName: string;
+    issuingBank: string;
+    paymentNetwork: string;
+    nicknamePlaceholderFlow: string;
+    safeMasked: string;
+    waiverSpend: string;
+    addingToWallet: string;
+    addToCollection: string;
+    livePreview: string;
+    waiverSpendShort: string;
+    testFanPrompt: string;
+    testFanDesc: string;
+    feeLabel: string;
+    free: string;
+    rulesSection: string;
+    benefitsSection: string;
+    customIssuerName: string;
+    customIssuerShort: string;
   };
 
   compare: {
@@ -343,6 +504,12 @@ export interface Translations {
     netBenefitProjection: string;
     bestForSummary: string;
     noCardsToCompare: string;
+    comparisonFailed: string;
+    annualFeeLabel: string;
+    lifetimeFree: string;
+    breakevenSpend: string;
+    yieldMatrix: string;
+    leadingYield: string;
   };
 
   offers: {
@@ -364,6 +531,22 @@ export interface Translations {
     sample: string;
     noOffersFound: string;
     clearFilters: string;
+    loadingPromotions: string;
+    noOffersTitle: string;
+    noOffersForCards: string;
+    noOffersForFilter: string;
+    showAllOffers: string;
+    omniChannel: string;
+    maxSavings: string;
+    eligibleCards: string;
+    allMajorCards: string;
+    coupon: string;
+    copied: string;
+    copy: string;
+    terms: string;
+    percentOff: string;
+    flatOff: string;
+    expiresOn: string;
   };
 
   optimizer: {
@@ -399,6 +582,10 @@ export interface Translations {
     stepReason: string;
     capStatus: string;
     matchedCoupons: string;
+    invalidSpend: string;
+    merchantPlaceholder: string;
+    officialVerification: string;
+    scheduleOfCharges: string;
   };
 
   transactions: {
@@ -449,6 +636,36 @@ export interface Translations {
     originalDescription: string;
     allRowsReady: string;
     backToFileSelect: string;
+    invalidAmount: string;
+    createFailed: string;
+    selectCsvFirst: string;
+    analyzeFailed: string;
+    noRowsSelected: string;
+    commitFailed: string;
+    bankFormat: string;
+    autoDetect: string;
+    fmtHdfc: string;
+    fmtIcici: string;
+    fmtSbi: string;
+    fmtAxis: string;
+    fmtAmex: string;
+    fmtGeneric: string;
+    supportedFormats: string;
+    parsePreview: string;
+    estimatedSpend: string;
+    colImport: string;
+    colStatementLine: string;
+    colEstReward: string;
+    colReconciliation: string;
+    importSuccess: string;
+    imported: string;
+    duplicatesSkipped: string;
+    totalSpend: string;
+    rewardsYield: string;
+    doneView: string;
+    merchantPlaceholder: string;
+    deleteTitle: string;
+    deleteMessage: string;
   };
 
   analytics: {
@@ -465,6 +682,8 @@ export interface Translations {
     computingAnalytics: string;
     categoryAllocation: string;
     monthlyVelocityChart: string;
+    seriesSpend: string;
+    seriesRewards: string;
   };
 
   health: {
@@ -488,6 +707,21 @@ export interface Translations {
     netRoi: string;
     feeWaiverStatus: string;
     actionableAdvice: string;
+    bandExcellent: string;
+    bandGood: string;
+    bandNeedsWork: string;
+    noData: string;
+    scoreShort: string;
+    addDataHint: string;
+    next30Estimated: string;
+    potentialRewards: string;
+    spendingTrend: string;
+    modelNote: string;
+    observationsTitle: string;
+    annualOutflow: string;
+    actionsCount: string;
+    activeCount: string;
+    vsPrior30: string;
   };
 
   assistant: {
@@ -510,6 +744,25 @@ export interface Translations {
     auditIdLabel: string;
     tokensRedactedLabel: string;
     localProtectedStatus: string;
+    errorPrefix: string;
+    checkBackend: string;
+    governance: string;
+    cardNamesRates: string;
+    aggregatedTotals: string;
+    grounded: string;
+    geminiRedacted: string;
+    localEngine: string;
+    analyzing: string;
+    consentEnabled: string;
+    consentDisabled: string;
+    redactionTitle: string;
+    redactionBody: string;
+    neverTransmitted: string;
+    suggestion1: string;
+    suggestion2: string;
+    suggestion3: string;
+    suggestion4: string;
+    suggestion5: string;
   };
 
   documents: {
@@ -527,6 +780,16 @@ export interface Translations {
     uploadedDocumentsList: string;
     extractedSpecTitle: string;
     processingDocument: string;
+    newCardDefault: string;
+    uploadFailed: string;
+    verifyFailed: string;
+    uploadHint: string;
+    noDocuments: string;
+    noRules: string;
+    selectDocument: string;
+    processedSuccess: string;
+    cardVerified: string;
+    confidence: string;
   };
 
   settings: {
@@ -549,6 +812,35 @@ export interface Translations {
     exportArchiveButton: string;
     deleteAccountButton: string;
     deleteAccountConfirm: string;
+    savePrefsFailed: string;
+    exportFailedShort: string;
+    exportDownloaded: string;
+    exportFailed: string;
+    typeToConfirmToast: string;
+    enterPassword: string;
+    deleteFailed: string;
+    statusActive: string;
+    statusCompliant: string;
+    jwtTitle: string;
+    jwtDesc: string;
+    statusHs256: string;
+    rateLimitTitle: string;
+    rateLimitDesc: string;
+    statusEnforced: string;
+    loadingPrefs: string;
+    budgetAlertTitle: string;
+    budgetAlertDesc: string;
+    exportDesc: string;
+    deleteDesc: string;
+    changePassword: string;
+    changePasswordDesc: string;
+    deleteAccount: string;
+    deleteDialogMessage: string;
+    deleting: string;
+    deleteMyAccount: string;
+    yourPassword: string;
+    currentPasswordPlaceholder: string;
+    typeToConfirm: string;
   };
 
   profile: {
@@ -561,6 +853,15 @@ export interface Translations {
     saveProfileButton: string;
     saving: string;
     savedSuccess: string;
+    currencyInr: string;
+    currencyUsd: string;
+    currencyEur: string;
+    pathwayMode: string;
+    pathwayCardTitle: string;
+    pathwayCardDesc: string;
+    pathwayCashTitle: string;
+    pathwayCashDesc: string;
+    saveFailed: string;
   };
 
   auth: {
@@ -580,6 +881,36 @@ export interface Translations {
     noAccountPrompt: string;
     haveAccountPrompt: string;
     registeredSuccessBanner: string;
+    signInFailed: string;
+    registrationFailed: string;
+    passwordMinPlaceholder: string;
+    languageEnglishDefault: string;
+    languageHindiOption: string;
+    languageKannadaOption: string;
+    genericError: string;
+    checkInbox: string;
+    noEmailHint: string;
+    backToLogin: string;
+    forgotTitle: string;
+    forgotSub: string;
+    emailAddress: string;
+    sendResetLink: string;
+    resetLinkSent: string;
+    noResetToken: string;
+    passwordTooShort: string;
+    passwordsMismatch: string;
+    passwordResetSuccess: string;
+    passwordResetFailed: string;
+    passwordUpdated: string;
+    redirectingLogin: string;
+    setNewPassword: string;
+    setNewPasswordSub: string;
+    newPassword: string;
+    atLeast6: string;
+    confirmPassword: string;
+    repeatPassword: string;
+    resetPassword: string;
+    loading: string;
   };
 
   onboarding: {
@@ -654,6 +985,10 @@ export interface Translations {
     health: string;
     international: string;
     other: string;
+    transport: string;
+    medical: string;
+    rent: string;
+    savings: string;
   };
 
   channels: {
@@ -763,6 +1098,31 @@ export interface Translations {
     pathOptimizeExistingDesc: string;
     switchPath: string;
     pathUpdatedSuccess: string;
+    searchLessonsPlaceholder: string;
+    loadingLessons: string;
+    noLessonsMatch: string;
+    adjustFilters: string;
+    neverPaidOff: string;
+    colMonth: string;
+    colStartBal: string;
+    colInterest: string;
+    colPrincipal: string;
+    colEndBal: string;
+    altFixedPayment: string;
+    colTime: string;
+    groceriesInr: string;
+    utilitiesInr: string;
+    diningOutInr: string;
+    shoppingInr: string;
+    fuelCommuteInr: string;
+    monthlySavingsInr: string;
+    guidanceObservations: string;
+    cibilImpact: string;
+    renewalWaiverThreshold: string;
+    assessmentVerdict: string;
+    topicsMastered: string;
+    quizPerformance: string;
+    monthsCount: string;
   };
 
   incomes: {
@@ -824,11 +1184,339 @@ export interface Translations {
     recordExpense: string;
     paymentMethodBreakdown: string;
     loadingData: string;
+    pageSubtitle: string;
+    addIncomeButton: string;
+    regularIncome: string;
+    irregularIncome: string;
+    incomeSources: string;
+    sourcePlaceholder2: string;
+    frequency: string;
+    notesPlaceholder2: string;
+    noStreamsYet: string;
+    newLimitPlaceholder: string;
+    needs50: string;
+    threshold80: string;
+    hideAllocations: string;
+    editAllocations: string;
+    allocationHint: string;
+    exceeds100: string;
+    deleteIncomeAria: string;
+    deleteSourceTitle: string;
+    recurring: string;
+    totalPercent: string;
+  };
+
+  cashDashboard: {
+    loadFailed: string;
+    expenseLogged: string;
+    expenseLogFailed: string;
+    sampleCleared: string;
+    sampleClearFailed: string;
+    sampleLoaded: string;
+    sampleLoadFailed: string;
+    pathwayBadge: string;
+    title: string;
+    subtitle: string;
+    clearSample: string;
+    monthlyInflow: string;
+    monthlyExpenses: string;
+    viewLog: string;
+    remainingBalance: string;
+    liquidSurplus: string;
+    plan: string;
+    target20Rule: string;
+    goals: string;
+    adjustLimits: string;
+    needsTarget: string;
+    needsExamples: string;
+    wantsTarget: string;
+    wantsExamples: string;
+    savingsTarget: string;
+    savingsExamples: string;
+    emergencyBuffer: string;
+    runwayIntro: string;
+    recommendedTarget: string;
+    viewEmergencyShield: string;
+    recentExpenses: string;
+    viewAll: string;
+    logModalTitle: string;
+    logModalSub: string;
+    merchantRecipient: string;
+    merchantPlaceholder: string;
+    methodUpiApps: string;
+    methodNetBanking: string;
+    saveExpense: string;
+    monthlySpendOf: string;
+    percentUsed: string;
+    monthsCount: string;
+    budgetBreakdown: string;
+    incomesRegistered: string;
+  };
+
+  savingsGoals: {
+    subtitle: string;
+    totalTarget: string;
+    totalSaved: string;
+    newGoal: string;
+    goalName: string;
+    goalNamePlaceholder: string;
+    targetAmount: string;
+    currentSavings: string;
+    targetDate: string;
+    addContribution: string;
+    noGoals: string;
+    createFirst: string;
+    achieved: string;
+    localNote: string;
+    monthsLeft: string;
+    remaining: string;
+    perMonthNeeded: string;
+    newGoalButton: string;
+    createGoal: string;
+    add: string;
+    addSavings: string;
+  };
+
+  emergencyFund: {
+    tierBasic: string;
+    tierBasicDesc: string;
+    tierStandard: string;
+    tierStandardDesc: string;
+    tierConservative: string;
+    tierConservativeDesc: string;
+    subtitle: string;
+    insufficientData: string;
+    insufficientDesc: string;
+    whatsNeeded: string;
+    needIncome: string;
+    needExpense: string;
+    budgetImproves: string;
+    threeMonthTarget: string;
+    needsBasis: string;
+    estimateBasis: string;
+    monthContribution: string;
+    singleMonthNote: string;
+    monthlyEssentials: string;
+    threeMonthTargetShort: string;
+    currentMonthSavings: string;
+    howMuch: string;
+    buildingTitle: string;
+    tip1: string;
+    tip2: string;
+    tip3: string;
+    tip4: string;
+    tip5: string;
+    dataNote: string;
+    basedOnEssentials: string;
+    addIncome: string;
+    logExpenses: string;
+  };
+
+  subscriptionsPage: {
+    subtitle: string;
+    recurringEntries: string;
+    monthlyCommitment: string;
+    categories: string;
+    showingNote: string;
+    logTransactionsLink: string;
+    noRecurring: string;
+    noRecurringHint: string;
+    logATransaction: string;
+    markedRecurring: string;
+    totalMonthlyCommitment: string;
+    detectionNote: string;
+    categorySuffix: string;
+    allTransactions: string;
+  };
+
+  healthMessages: {
+    budgetAlert: string;
+    budgetNotice: string;
+    baselineNoData: string;
+    incomeSetup: string;
+    budgeting: string;
+    expenseTracking: string;
+    cashFlowDeficit: string;
+    incomeRecorded: string;
+    incomeMissing: string;
+    budgetSetNoTxns: string;
+    budgetSetup: string;
+    fixedCostAudit: string;
+    noCardModeActive: string;
+    emergencyGoal: string;
+    rewardLeakage: string;
+    cardReview: string;
+    trendUp: string;
+    trendDown: string;
+    subscriptionHygiene: string;
+    greatJob: string;
+    baselineNoCards: string;
+    incomeNoStreams: string;
+    incomeAddEarnings: string;
+    incomeCalculatedAcross: string;
+    incomeRollingMedian: string;
+    incomeNoRecurring: string;
+    incomeOldExcluded: string;
+    incomeIrregularShare: string;
   };
 }
 
 export const translations: Record<Language, Translations> = {
   en: {
+    healthMessages: {
+      budgetAlert: "Monthly Budget Alert: Current 30-day spend ({spent}) has exceeded your planned limit of {limit} ({pct}%).",
+      budgetNotice: "Monthly Budget Notice: You are at {pct}% of your budget limit ({spent} of {limit}).",
+      baselineNoData: "Data Baseline Notice: No income, budget, or transaction records found. Add your monthly income and log expenses to unlock your personalized financial health index.",
+      incomeSetup: "Income Setup: Add your monthly income streams under Budget & Incomes.",
+      budgeting: "Budgeting: Create a category-wise 50/30/20 budget to guide your monthly spending.",
+      expenseTracking: "Expense Tracking: Record daily cash, UPI, or bank transactions to start tracking cash flow.",
+      cashFlowDeficit: "Cash Flow Deficit: Last 30-day spending ({spent}) exceeded monthly income ({income}) by {gap}.",
+      incomeRecorded: "Data Notice: Monthly income is recorded. Add expenses to calculate your actual monthly savings rate.",
+      incomeMissing: "Data Notice: Monthly income has not been recorded. Add income streams under Budget to unlock savings rate scoring.",
+      budgetSetNoTxns: "Data Notice: Monthly budget target is set. Record daily transactions to assess budget adherence.",
+      budgetSetup: "Budget Setup: Creating a category-wise monthly budget helps prevent end-of-month cash pinches.",
+      fixedCostAudit: "Fixed Cost Audit: Recurring commitments represent {pct}% of monthly outflow. Review unused subscriptions.",
+      noCardModeActive: "No-Credit-Card Mode Active: Health score evaluates cash-flow resilience, savings rate, and budget discipline. Card reward and fee audits are omitted.",
+      emergencyGoal: "Emergency Reserve Goal: Build a 3-month liquid buffer of approx. {amount} in a high-yield savings account.",
+      rewardLeakage: "Reward Leakage Alert: You left {amount} on the table by using suboptimal cards for routine purchases.",
+      cardReview: "Card Review: {card} annual fee of {fee} exceeded earned rewards ({rewards}). Consider waiver criteria or alternative cards.",
+      trendUp: "Spending Trend: Your expenditure increased by {pct}% compared to the prior 30 days. Review discretionary categories like dining and shopping.",
+      trendDown: "Spending Trend: Your expenditure decreased by {pct}% compared to the prior 30 days. Good job on keeping spending constrained!",
+      subscriptionHygiene: "Subscription Hygiene: You have {count} recurring subscriptions totaling approx. {amount}/year.",
+      greatJob: "Great job! Your spending is well-aligned with your financial goals.",
+      baselineNoCards: "Data Baseline Notice: No credit cards or transaction history found. Add your card portfolio or transactions to calculate your credit optimization score.",
+      incomeNoStreams: "No income streams recorded.",
+      incomeAddEarnings: "Add your salary, freelance payments, or other earnings to unlock cash-flow analytics and savings guidance.",
+      incomeCalculatedAcross: "Calculated across {count} recorded income stream(s).",
+      incomeRollingMedian: "90-day rolling monthly median is {amount} based on {periods} active monthly period(s).",
+      incomeNoRecurring: "No active recurring income streams.",
+      incomeOldExcluded: "Historical one-time incomes older than 90 days are excluded from recurring cash flow.",
+      incomeIrregularShare: "Irregular income constitutes {pct}% of monthly inflow; using rolling median for resilience forecasting.",
+    },
+
+    subscriptionsPage: {
+      subtitle: "Recurring expenses — subscriptions, utilities, insurance, EMIs, and rent.",
+      recurringEntries: "Recurring Entries",
+      monthlyCommitment: "Monthly Commitment",
+      categories: "Categories",
+      showingNote: "Showing transactions marked as recurring by the system, plus the latest entry from subscriptions, utilities, insurance, EMI, and rent categories.",
+      logTransactionsLink: "Log transactions →",
+      noRecurring: "No recurring transactions found.",
+      noRecurringHint: "Log expenses in subscriptions, utility, insurance, EMI, or rent categories to see them here.",
+      logATransaction: "Log a Transaction",
+      markedRecurring: "Marked recurring",
+      totalMonthlyCommitment: "Total monthly commitment",
+      detectionNote: "Recurring detection is based on transaction categories and backend flags. For accurate tracking, categorize expenses correctly when logging them.",
+      categorySuffix: "{category} category",
+      allTransactions: "All Transactions",
+    },
+
+    emergencyFund: {
+      tierBasic: "Basic (3 months)",
+      tierBasicDesc: "Covers a job gap or major unexpected expense",
+      tierStandard: "Standard (6 months)",
+      tierStandardDesc: "Recommended for most salaried employees",
+      tierConservative: "Conservative (12 months)",
+      tierConservativeDesc: "For freelancers, irregular income earners",
+      subtitle: "A 3–6 month financial buffer for unexpected expenses — the cornerstone of financial security.",
+      insufficientData: "Insufficient data to calculate target",
+      insufficientDesc: "Your emergency fund target is based on 3× your monthly essential expenses. To calculate this accurately, CLIQ needs real spending data.",
+      whatsNeeded: "What's needed:",
+      needIncome: "At least one income source — so we can understand your financial baseline",
+      needExpense: "At least one logged expense — to calculate your monthly essential spending",
+      budgetImproves: "Configuring a budget improves category-level accuracy",
+      threeMonthTarget: "3-Month Emergency Target",
+      needsBasis: " (needs category spending)",
+      estimateBasis: " (estimated at 50% of total expenses)",
+      monthContribution: "This month's savings contribution",
+      singleMonthNote: "Note: This reflects single-month savings data. Your actual cumulative savings balance may differ.",
+      monthlyEssentials: "Monthly essentials",
+      threeMonthTargetShort: "3-month target",
+      currentMonthSavings: "Current month savings",
+      howMuch: "How much should you save?",
+      buildingTitle: "Building your emergency fund",
+      tip1: "Start with a micro-goal: save ₹5,000–₹10,000 first, then scale up.",
+      tip2: "Keep your emergency fund in a liquid savings account — not investments.",
+      tip3: "Automate a monthly transfer to a dedicated account on salary day.",
+      tip4: "Only use it for true emergencies — job loss, medical crisis, urgent repairs.",
+      tip5: "Rebuild immediately after any withdrawal.",
+      dataNote: "Targets are based on your actual spending data from the current month. For accurate calculations, log all essential expenses (rent, groceries, utilities, transport, medical) in the correct categories.",
+      basedOnEssentials: "Based on {amount}/month in essential expenses",
+      addIncome: "Add Income",
+      logExpenses: "Log Expenses",
+    },
+
+    savingsGoals: {
+      subtitle: "Set milestones and track progress toward your financial targets.",
+      totalTarget: "Total Target",
+      totalSaved: "Total Saved",
+      newGoal: "New Savings Goal",
+      goalName: "Goal Name",
+      goalNamePlaceholder: "e.g. Emergency Fund, Trip to Goa",
+      targetAmount: "Target Amount (₹)",
+      currentSavings: "Current Savings (₹) — optional",
+      targetDate: "Target Date — optional",
+      addContribution: "Add Contribution",
+      noGoals: "No savings goals yet.",
+      createFirst: "Create your first goal to start tracking your progress.",
+      achieved: "Goal achieved!",
+      localNote: "Savings goals are stored locally in your browser. They reflect amounts you manually track here, not your account balances. Connect your income and transactions for richer insights.",
+      monthsLeft: " · {count}mo left",
+      remaining: "{amount} remaining",
+      perMonthNeeded: "{amount}/month needed to hit deadline",
+      newGoalButton: "New Goal",
+      createGoal: "Create Goal",
+      add: "Add",
+      addSavings: "Add savings",
+    },
+
+    cashDashboard: {
+      loadFailed: "Failed to load financial data",
+      expenseLogged: "Expense logged successfully!",
+      expenseLogFailed: "Failed to log expense",
+      sampleCleared: "Sample data cleared",
+      sampleClearFailed: "Error clearing sample data",
+      sampleLoaded: "Sample portfolio loaded successfully",
+      sampleLoadFailed: "Error seeding portfolio",
+      pathwayBadge: "Cash & Savings Pathway",
+      title: "Personal Finance Command Center",
+      subtitle: "Holistic cash flow, 50/30/20 budget framework, emergency runway, and savings milestones.",
+      clearSample: "Clear Sample",
+      monthlyInflow: "Monthly Inflow",
+      monthlyExpenses: "Monthly Expenses",
+      viewLog: "View Log",
+      remainingBalance: "Remaining Balance",
+      liquidSurplus: "Liquid Cash Surplus",
+      plan: "Plan",
+      target20Rule: "Target: 20% Rule",
+      goals: "Goals",
+      adjustLimits: "Adjust Limits",
+      needsTarget: "Needs (50% target)",
+      needsExamples: "Rent, Groceries, Utilities",
+      wantsTarget: "Wants (30% target)",
+      wantsExamples: "Dining, Shopping, Entertainment",
+      savingsTarget: "Savings (20% target)",
+      savingsExamples: "Emergency & Milestones",
+      emergencyBuffer: "Emergency Fund Buffer",
+      runwayIntro: "Protect yourself against income interruption. Your calculated runway provides:",
+      recommendedTarget: "Recommended Target: 3-6 Months",
+      viewEmergencyShield: "View Emergency Safety Shield",
+      recentExpenses: "Recent Cash & Bank Expenses",
+      viewAll: "View All",
+      logModalTitle: "Log Cash & Bank Expense",
+      logModalSub: "Record a non-credit transaction (UPI, Debit, Cash)",
+      merchantRecipient: "Merchant / Recipient",
+      merchantPlaceholder: "e.g. Swiggy, Groceries, Electricity",
+      methodUpiApps: "UPI / GPay / PhonePe",
+      methodNetBanking: "Net Banking / IMPS",
+      saveExpense: "Save Expense",
+      monthlySpendOf: "Monthly Spend: {spent} of {budget}",
+      percentUsed: "{percent}% used",
+      monthsCount: "{count} Months",
+      budgetBreakdown: "Budget Utilization & 50/30/20 Breakdown",
+      incomesRegistered: "{count} Incomes Registered",
+    },
+
     home: {
       hero: {
         badge: "Financial intelligence for every Indian",
@@ -1091,6 +1779,8 @@ export const translations: Record<Language, Translations> = {
       administrator: "Administrator",
       learn: "CLIQ Learn",
       budget: "Income & Budget",
+      cashSavingsBadge: "CASH & SAVINGS",
+      defaultUserName: "CLIQ User",
     },
 
     sidebar: {
@@ -1166,6 +1856,42 @@ export const translations: Record<Language, Translations> = {
       addCardCta: "Add Card",
       sampleSuggestion1: "Which card gives the highest cashback on Swiggy?",
       sampleSuggestion2: "Show airport lounge access across my cards",
+      learnInclusionBadge: "CLIQ Learn & Financial Inclusion",
+      noCardBannerTitle: "Financial Command Center — No Credit Card Required",
+      noCardBannerDesc: "Build financial resilience, track your regular & irregular earnings, plan with the 50-30-20 budget framework, and learn how credit actually works before you apply.",
+      exploreLearn: "Explore CLIQ Learn",
+      manageIncomes: "Manage Incomes",
+      portfolioSetupBadge: "Credit Card Portfolio Setup",
+      portfolioSetupTitle: "Add Your First Credit Card to Maximize Rewards",
+      portfolioSetupDesc: "Connect your cards to unlock automated purchase recommendations, discover bank merchant discounts, track fee waiver thresholds, and eliminate reward leakage.",
+      browseTopCards: "Browse Top Cards",
+      switchToCashSavings: "No Credit Cards? Switch to Cash & Savings",
+      manage: "Manage",
+      monthlySpending: "Monthly Spending",
+      view: "View",
+      targetBudget: "Target Budget",
+      framework503020: "50/30/20 Framework",
+      cashFlowResilience: "Cash Flow Resilience",
+      resilienceIndex: "Resilience Index",
+      breakdown: "Breakdown",
+      quickExpenseTitle: "Quick Expense & UPI Tracker",
+      noCardFlowMode: "No-Card Cash Flow Mode",
+      expenseRecorded: "Expense recorded to cash flow and budget.",
+      quickMerchantPlaceholder: "e.g. Metro Card, Grocery",
+      paymentMethod: "Payment Method",
+      methodCash: "Cash",
+      methodBankTransfer: "Bank Transfer",
+      methodDebitCard: "Debit Card",
+      methodOther: "Other",
+      addCreditCardLink: "Add a credit card",
+      logExpense: "Log Expense",
+      optimizerMerchantPlaceholder: "e.g. Swiggy, Amazon",
+      manageBudget: "Manage Budget",
+      noIncomeStreams: "No income streams recorded yet.",
+      incomesCount: "{count} Incomes",
+      transactionsCount: "{count} Transactions",
+      wantRewardPerks: "Want card reward perks?",
+      monthlyEquiv: "Monthly equiv: {amount}",
     },
 
     cards: {
@@ -1200,6 +1926,33 @@ export const translations: Record<Language, Translations> = {
       savingCard: "Saving...",
       saveChanges: "Save Changes",
       cancel: "Cancel",
+      deleteFailed: "Failed to delete card: ",
+      updateFailed: "Failed to update card: ",
+      loadingWallet: "Loading your credit card wallet...",
+      totalAnnualFees: "Total Annual Fees:",
+      potentialWaiverTargets: "Potential Waiver Targets:",
+      renewalWaiver: "Renewal Waiver",
+      viewInFan: "View in Fan",
+      editCard: "Edit Card",
+      deactivateCard: "Deactivate Card",
+      editSpecsTitle: "Edit Card Specifications",
+      cardNameRequired: "Card Name *",
+      bankNameRequired: "Bank Name *",
+      nickname: "Nickname",
+      nicknamePlaceholder: "e.g. Travel Card",
+      lastFourDigits: "Last 4 Digits",
+      network: "Network",
+      renewalWaiverSpend: "Renewal Waiver Spend (₹)",
+      optionalWaiverSpend: "Optional waiver spend",
+      waiverConditionDetails: "Waiver Condition Details",
+      termsUrl: "Terms URL",
+      deactivate: "Deactivate",
+      stackShowcase: "Card Stack Showcase",
+      stackHint: "Click cards or use arrow keys to browse • Front card active",
+      prevCardHint: "Previous Card (Left Arrow)",
+      prevCard: "Previous Card",
+      nextCardHint: "Next Card (Right Arrow)",
+      nextCard: "Next Card",
     },
 
     cardDetails: {
@@ -1222,6 +1975,20 @@ export const translations: Record<Language, Translations> = {
       noBenefitsAvailable: "No complimentary benefits registered.",
       rulePerkExclusion: "Exclusion Rule",
       monthlyCapPrefix: "Cap: ₹",
+      cardholderLabel: "Cardholder:",
+      notSpecified: "Not specified",
+      verifiedBankData: "Verified Bank Data",
+      chargesTitle: "Schedule of Charges & Fee Waivers",
+      joiningFee: "Joining Fee",
+      noWaiver: "No Waiver",
+      waiverCondition: "Waiver Condition",
+      multipliersTitle: "Category Multipliers & Cashback",
+      baselineCashback: "Standard baseline 1.0% cashback across all categories.",
+      loungeTitle: "Lounge & Lifestyle Perks",
+      loungeNotConfigured: "Lounge & lifestyle benefits: Not configured for this card.",
+      verifiedSource: "Verified Source",
+      officialCharges: "Official Schedule of Charges",
+      editSpecs: "Edit Specs",
     },
 
     cardSelection: {
@@ -1253,6 +2020,88 @@ export const translations: Record<Language, Translations> = {
       cardAddedSuccess: "Card successfully registered in portfolio!",
       selectIssuerFirst: "Please select an issuing bank above.",
       customCardNotice: "Custom card parameters can be manually defined.",
+      airportLounge: "Airport Lounge Access",
+      airportLoungeDesc: "Complimentary airport lounge visits per calendar quarter.",
+      cardholderRequired: "Please enter the cardholder name as displayed on the physical or virtual card.",
+      lastFourInvalid: "Last 4 digits must contain exactly 4 numeric digits (e.g. 8821).",
+      feesNegative: "Fees and renewal waiver thresholds cannot be negative numbers.",
+      termsUrlInvalid: "Official terms URL must begin with https:// or http://",
+      addFailed: "Failed to add card. Please check your inputs.",
+      verified: "Verified",
+      custom: "Custom",
+      variantTier: "Variant / Tier",
+      nicknameOptional: "Nickname (Optional)",
+      registeredRedirecting: "Credit card registered successfully! Redirecting to wallet...",
+      backToWallet: "Back to Wallet",
+      pageSubtitle: "Select an issuer catalogue or customize your own card specifications",
+      tenIssuers: "10 Issuers",
+      preconfigured: "Pre-configured with official rewards & benefits",
+      step3Customize: "3. Review, Customize & Save Card",
+      previewRealtime: "Card preview updates in real time",
+      identityTitle: "Card Identity & Specifications",
+      customManual: "Custom Manual",
+      cardholderNameRequired: "Cardholder Name *",
+      appearsOnCardFace: "Appears on card face",
+      cardholderPlaceholderNew: "e.g. PRIYA SHARMA",
+      issuingBankRequired: "Issuing Bank *",
+      paymentNetworkRequired: "Payment Network *",
+      variantPlaceholder: "e.g. Signature, Metal, Infinite",
+      nicknamePlaceholderNew: "e.g. Primary Travel, Daily Groceries",
+      safeMaskedOnly: "Safe: masked only",
+      feesTitle: "Annual Fees & Renewal Waiver Spend",
+      waiverPlaceholder: "e.g. Spend ₹4,00,000 in anniversary year to waive fee.",
+      termsUrlTitle: "Official Terms & Schedule of Charges URL",
+      openUrl: "Open URL",
+      rulesHelp: "CLIQ's optimization engine uses these rules to evaluate real net cashback and points on every spend.",
+      remove: "Remove",
+      catAllRetail: "All Retail Spends",
+      catShopping: "Shopping / E-commerce",
+      catDining: "Dining & Food Delivery",
+      catTravel: "Travel & Flights",
+      catGrocery: "Grocery & Supermarket",
+      catUtility: "Utility Bills",
+      catFuel: "Fuel",
+      rewardType: "Reward Type",
+      directCashback: "Direct Cashback (%)",
+      airlineMiles: "Airlines Miles",
+      rateLabel: "Rate (% or Pts per 100)",
+      merchantPatternOptional: "Merchant Pattern (Optional)",
+      merchantPatternPlaceholder: "e.g. Amazon, Swiggy, Flipkart",
+      monthlyCap: "Monthly Cap (₹)",
+      noCap: "No cap",
+      addRewardRule: "Add Reward Rule",
+      addPerk: "Add Lounge / Custom Perk",
+      privacyTitle: "Privacy Safeguard & Data Minimization",
+      privacyBody: "CLIQ never solicits or stores primary account numbers (PAN), CVVs, expiration credentials, or net banking passwords. Only authorized reward rules and your reference alias are saved.",
+      registeringCreditCard: "Registering Credit Card...",
+      saveToWallet: "Save to Credit Card Wallet",
+      liveInteractiveCard: "Live Interactive Card",
+      hoverToTilt: "Hover to tilt 3D sheen",
+      rewardHighlights: "Reward Highlights",
+      keyPerk: "Key Perk",
+      addedUpdating: "Card successfully added! Updating your digital collection...",
+      step3Personalize: "3. Review, Personalize & Save to Wallet",
+      updatesLive: "Updates live in preview",
+      appearsOnCard: "Appears on card",
+      cardholderPlaceholderFlow: "e.g. RAHUL JAIN",
+      cardName: "Card Name",
+      issuingBank: "Issuing Bank",
+      paymentNetwork: "Payment Network",
+      nicknamePlaceholderFlow: "e.g. Primary Travel",
+      safeMasked: "Safe masked",
+      waiverSpend: "Waiver Spend (₹)",
+      addingToWallet: "Adding to Wallet...",
+      addToCollection: "Add Card to My Collection",
+      livePreview: "Live Card Preview",
+      waiverSpendShort: "Waiver Spend",
+      testFanPrompt: "Want to test the Fan Collection immediately?",
+      testFanDesc: "Instantly seed 3 sample cards (HDFC Millennia, SBI Cashback, Axis Ace) to test the interactive fan hand.",
+      feeLabel: "Fee:",
+      free: "FREE",
+      rulesSection: "Category Multipliers & Reward Rules ({count})",
+      benefitsSection: "Lounge & Premium Benefits ({count})",
+      customIssuerName: "Other / Custom Card",
+      customIssuerShort: "Custom",
     },
 
     compare: {
@@ -1268,6 +2117,12 @@ export const translations: Record<Language, Translations> = {
       netBenefitProjection: "Net Benefit Projection",
       bestForSummary: "Ideal Spend Profile",
       noCardsToCompare: "Please add at least 2 cards to run a comparative matrix.",
+      comparisonFailed: "Comparison failed: ",
+      annualFeeLabel: "Annual Fee:",
+      lifetimeFree: "Lifetime Free",
+      breakevenSpend: "Breakeven Spend:",
+      yieldMatrix: "Category Yield Matrix (%)",
+      leadingYield: "Leading Yield Highlighted",
     },
 
     offers: {
@@ -1289,6 +2144,22 @@ export const translations: Record<Language, Translations> = {
       sample: "SAMPLE",
       noOffersFound: "No verified offers match your search criteria.",
       clearFilters: "Clear Filters",
+      loadingPromotions: "Loading promotions...",
+      noOffersTitle: "No Offers Found",
+      noOffersForCards: "No active promotions currently match your portfolio cards.",
+      noOffersForFilter: "No offers match the current filter criteria.",
+      showAllOffers: "Show All Offers",
+      omniChannel: "Omni",
+      maxSavings: "Max Savings",
+      eligibleCards: "Eligible Cards:",
+      allMajorCards: "All major cards",
+      coupon: "Coupon",
+      copied: "Copied",
+      copy: "Copy",
+      terms: "Terms",
+      percentOff: "{value}% OFF",
+      flatOff: "{value} FLAT OFF",
+      expiresOn: "Expires {date}",
     },
 
     optimizer: {
@@ -1324,6 +2195,10 @@ export const translations: Record<Language, Translations> = {
       stepReason: "Reason / Logic",
       capStatus: "Monthly Cap",
       matchedCoupons: "Matched Promotional Offers",
+      invalidSpend: "Please enter a valid spend amount greater than 0.",
+      merchantPlaceholder: "e.g. Swiggy, Amazon, Croma",
+      officialVerification: "Official Verification:",
+      scheduleOfCharges: "Schedule of Charges",
     },
 
     transactions: {
@@ -1374,6 +2249,36 @@ export const translations: Record<Language, Translations> = {
       originalDescription: "Original Statement Description",
       allRowsReady: "All transactions verified and ready for import.",
       backToFileSelect: "Upload Another File",
+      invalidAmount: "Please enter a valid transaction amount greater than 0.",
+      createFailed: "Failed to create transaction: ",
+      selectCsvFirst: "Please select a CSV statement file first.",
+      analyzeFailed: "Failed to analyze CSV statement.",
+      noRowsSelected: "No rows selected for import.",
+      commitFailed: "Failed to commit imported transactions: ",
+      bankFormat: "Statement Bank Format",
+      autoDetect: "Auto-Detect Statement Layout (Default)",
+      fmtHdfc: "HDFC Bank Credit Card Statement",
+      fmtIcici: "ICICI Bank Credit Card Statement",
+      fmtSbi: "SBI Card Statement",
+      fmtAxis: "Axis Bank Credit Card Statement",
+      fmtAmex: "American Express (Amex) Statement",
+      fmtGeneric: "Generic / CLIQ Standard CSV",
+      supportedFormats: "Supported: CSV exports from HDFC, ICICI, SBI, Axis, Amex & custom CSV (Max 5MB)",
+      parsePreview: "Parse & Preview Statement",
+      estimatedSpend: "Estimated Spend",
+      colImport: "Import",
+      colStatementLine: "Statement Line & Normalized",
+      colEstReward: "Est. Reward",
+      colReconciliation: "Reconciliation Status",
+      importSuccess: "Statement Successfully Imported",
+      imported: "Imported",
+      duplicatesSkipped: "Duplicates Skipped",
+      totalSpend: "Total Spend",
+      rewardsYield: "Rewards Yield",
+      doneView: "Done & View Transactions",
+      merchantPlaceholder: "e.g. Swiggy, Amazon, HPCL",
+      deleteTitle: "Delete Transaction",
+      deleteMessage: "This transaction will be permanently removed. This action cannot be undone.",
     },
 
     analytics: {
@@ -1390,6 +2295,8 @@ export const translations: Record<Language, Translations> = {
       computingAnalytics: "Computing portfolio telemetry...",
       categoryAllocation: "Category Distribution",
       monthlyVelocityChart: "Spend vs. Rewards Velocity",
+      seriesSpend: "Spend",
+      seriesRewards: "Rewards",
     },
 
     health: {
@@ -1413,6 +2320,21 @@ export const translations: Record<Language, Translations> = {
       netRoi: "Net Fee ROI",
       feeWaiverStatus: "Fee Waiver Trajectory",
       actionableAdvice: "Actionable Recommendations",
+      bandExcellent: "Excellent",
+      bandGood: "Good",
+      bandNeedsWork: "Needs work",
+      noData: "No data",
+      scoreShort: "Score",
+      addDataHint: "Add cards + transactions to generate your health score.",
+      next30Estimated: "Next 30 days estimated",
+      potentialRewards: "Potential rewards to earn",
+      spendingTrend: "30-day spending trend:",
+      modelNote: "Modeled on historical spending patterns and optimal category allocation.",
+      observationsTitle: "Financial Health Observations",
+      annualOutflow: "Annual outflow",
+      actionsCount: "{count} actions",
+      activeCount: "{count} active",
+      vsPrior30: "{change}% vs prior 30 days",
     },
 
     assistant: {
@@ -1440,6 +2362,25 @@ export const translations: Record<Language, Translations> = {
       auditIdLabel: "Audit Request ID",
       tokensRedactedLabel: "Tokens Redacted",
       localProtectedStatus: "Local Processing (Zero Exposure)",
+      errorPrefix: "I encountered an error: ",
+      checkBackend: "Please check backend connection.",
+      governance: "Governance",
+      cardNamesRates: "Card names & rates",
+      aggregatedTotals: "Aggregated totals",
+      grounded: "Grounded:",
+      geminiRedacted: "Gemini 2.5 Flash • PII Redacted",
+      localEngine: "Local Engine • Zero Exposure",
+      analyzing: "Analyzing portfolio rules...",
+      consentEnabled: "Consent updated: {field} is now enabled.",
+      consentDisabled: "Consent updated: {field} is now disabled.",
+      redactionTitle: "Strict Redaction Guarantee:",
+      redactionBody: "16-digit PANs, CVVs, PINs, OTPs, Aadhaar, and credentials are {never} to any external AI provider.",
+      neverTransmitted: "never transmitted",
+      suggestion1: "Why should I avoid paying only the minimum due?",
+      suggestion2: "How does the billing cycle and grace period work?",
+      suggestion3: "Explain the 50-30-20 budget framework",
+      suggestion4: "Which card is best for dining?",
+      suggestion5: "Show lounge visit limits",
     },
 
     documents: {
@@ -1457,6 +2398,16 @@ export const translations: Record<Language, Translations> = {
       uploadedDocumentsList: "Uploaded Documents Archive",
       extractedSpecTitle: "Extracted Card Specifications",
       processingDocument: "Processing document rules with PyMuPDF...",
+      newCardDefault: "New Card",
+      uploadFailed: "Upload failed.",
+      verifyFailed: "Verification failed.",
+      uploadHint: "Max 10MB • Extracts reward tiers, caps, annual fees, and exclusions into staging",
+      noDocuments: "No documents in queue.",
+      noRules: "No rules extracted.",
+      selectDocument: "Select a document to inspect staged rules.",
+      processedSuccess: "Document '{name}' processed successfully.",
+      cardVerified: "Card '{name}' verified and added to active portfolio.",
+      confidence: "Confidence:",
     },
 
     settings: {
@@ -1479,6 +2430,35 @@ export const translations: Record<Language, Translations> = {
       exportArchiveButton: "Export Encrypted Portfolio Archive",
       deleteAccountButton: "Delete Account & Purge Data",
       deleteAccountConfirm: "Are you sure you want to delete your account? All stored card profiles and transaction logs will be scrubbed.",
+      savePrefsFailed: "Failed to save preferences.",
+      exportFailedShort: "Export failed",
+      exportDownloaded: "Export downloaded successfully.",
+      exportFailed: "Export failed.",
+      typeToConfirmToast: "Please type DELETE MY ACCOUNT exactly to confirm.",
+      enterPassword: "Please enter your password.",
+      deleteFailed: "Account deletion failed.",
+      statusActive: "ACTIVE",
+      statusCompliant: "COMPLIANT",
+      jwtTitle: "JWT Cryptographic Validation",
+      jwtDesc: "Bearer Token Auth",
+      statusHs256: "HS256 VERIFIED",
+      rateLimitTitle: "Rate Limiting & Headers",
+      rateLimitDesc: "CSP, HSTS, 600 req/min",
+      statusEnforced: "ENFORCED",
+      loadingPrefs: "Loading preferences…",
+      budgetAlertTitle: "Budget Alert Threshold",
+      budgetAlertDesc: "Alert when spending reaches this % of budget",
+      exportDesc: "Download a JSON archive of all your profile, cards, transactions, income, and budget data.",
+      deleteDesc: "Permanently delete your account and all associated data. This action cannot be undone.",
+      changePassword: "Change Password",
+      changePasswordDesc: "Reset your password via email verification",
+      deleteAccount: "Delete Account",
+      deleteDialogMessage: "This will permanently delete your account, all cards, transactions, budgets, and income records. Audit logs are retained for compliance. This cannot be undone.",
+      deleting: "Deleting…",
+      deleteMyAccount: "Delete My Account",
+      yourPassword: "Your password",
+      currentPasswordPlaceholder: "Enter your current password",
+      typeToConfirm: "Type {phrase} to confirm",
     },
 
     profile: {
@@ -1491,6 +2471,15 @@ export const translations: Record<Language, Translations> = {
       saveProfileButton: "Save Profile",
       saving: "Saving Profile...",
       savedSuccess: "Profile updated successfully.",
+      currencyInr: "INR (₹) - Indian Rupee",
+      currencyUsd: "USD ($) - US Dollar",
+      currencyEur: "EUR (€) - Euro",
+      pathwayMode: "Financial Pathway Mode",
+      pathwayCardTitle: "Credit Card Optimization",
+      pathwayCardDesc: "Reward maximizer, card comparisons, merchant offer radar, and statement analytics.",
+      pathwayCashTitle: "Cash & Savings Pathway",
+      pathwayCashDesc: "50/30/20 budget framework, emergency runway shield, UPI & cash expense log, and savings goals.",
+      saveFailed: "Failed to save profile: ",
     },
 
     auth: {
@@ -1510,6 +2499,36 @@ export const translations: Record<Language, Translations> = {
       noAccountPrompt: "Don't have an account?",
       haveAccountPrompt: "Already have an account?",
       registeredSuccessBanner: "Account created successfully! Please sign in with your credentials.",
+      signInFailed: "Failed to sign in. Please verify your credentials.",
+      registrationFailed: "Registration failed. Please try again.",
+      passwordMinPlaceholder: "Minimum 8 characters",
+      languageEnglishDefault: "English (Default)",
+      languageHindiOption: "हिन्दी (Hindi)",
+      languageKannadaOption: "ಕನ್ನಡ (Kannada)",
+      genericError: "Something went wrong. Please try again.",
+      checkInbox: "Check your inbox",
+      noEmailHint: "Don't see it? Check your spam folder.",
+      backToLogin: "Back to login",
+      forgotTitle: "Forgot password?",
+      forgotSub: "Enter your email and we'll send you a reset link.",
+      emailAddress: "Email address",
+      sendResetLink: "Send reset link",
+      resetLinkSent: "If {email} is registered with CLIQ, you will receive a password reset link shortly. The link expires in 60 minutes.",
+      noResetToken: "No reset token found. Please request a new reset link.",
+      passwordTooShort: "Password must be at least 6 characters.",
+      passwordsMismatch: "Passwords do not match.",
+      passwordResetSuccess: "Password reset successfully.",
+      passwordResetFailed: "Failed to reset password.",
+      passwordUpdated: "Password updated",
+      redirectingLogin: "Redirecting you to login…",
+      setNewPassword: "Set new password",
+      setNewPasswordSub: "Choose a strong password for your CLIQ account.",
+      newPassword: "New password",
+      atLeast6: "At least 6 characters",
+      confirmPassword: "Confirm password",
+      repeatPassword: "Repeat your password",
+      resetPassword: "Reset password",
+      loading: "Loading…",
     },
 
     onboarding: {
@@ -1584,6 +2603,10 @@ export const translations: Record<Language, Translations> = {
       health: "Healthcare & Pharmacy",
       international: "International Spends",
       other: "General Spends",
+      transport: "Transport",
+      medical: "Medical",
+      rent: "Rent",
+      savings: "Savings",
     },
 
     channels: {
@@ -1693,6 +2716,31 @@ export const translations: Record<Language, Translations> = {
       pathOptimizeExistingDesc: "Maximize cashback, monitor reward caps, audit annual fees, and prevent leakage.",
       switchPath: "Change Learning Path",
       pathUpdatedSuccess: "Financial learning path updated successfully!",
+      searchLessonsPlaceholder: "Search lessons & topics...",
+      loadingLessons: "Loading lessons...",
+      noLessonsMatch: "No lessons match your search",
+      adjustFilters: "Try adjusting your filters or search keywords.",
+      neverPaidOff: "∞ (Never)",
+      colMonth: "Mo",
+      colStartBal: "Start Bal",
+      colInterest: "Interest",
+      colPrincipal: "Principal",
+      colEndBal: "End Bal",
+      altFixedPayment: "Alternative Fixed Payment (₹)",
+      colTime: "Time",
+      groceriesInr: "Groceries (₹)",
+      utilitiesInr: "Utilities (₹)",
+      diningOutInr: "Dining Out (₹)",
+      shoppingInr: "Shopping (₹)",
+      fuelCommuteInr: "Fuel & Commute (₹)",
+      monthlySavingsInr: "Monthly Savings (₹)",
+      guidanceObservations: "Guidance & Observations",
+      cibilImpact: "CIBIL Score Impact",
+      renewalWaiverThreshold: "Renewal Waiver Threshold (₹)",
+      assessmentVerdict: "Assessment Verdict",
+      topicsMastered: "Interactive topics mastered across 5 disciplines",
+      quizPerformance: "Knowledge check quiz performance",
+      monthsCount: "{count} months",
     },
 
     incomes: {
@@ -1754,10 +2802,184 @@ export const translations: Record<Language, Translations> = {
       recordExpense: "Record Expense",
       paymentMethodBreakdown: "Payment Method Breakdown",
       loadingData: "Loading cash flow and budget telemetry...",
+      pageSubtitle: "Track your salary, freelance, and other income streams.",
+      addIncomeButton: "Add Income",
+      regularIncome: "Regular Income",
+      irregularIncome: "Irregular Income",
+      incomeSources: "Income Sources",
+      sourcePlaceholder2: "e.g. Primary Salary",
+      frequency: "Frequency",
+      notesPlaceholder2: "e.g. Q1 bonus",
+      noStreamsYet: "No income streams yet. Add your first one above.",
+      newLimitPlaceholder: "New limit",
+      needs50: "50% (Needs)",
+      threshold80: "80% (Threshold Warning)",
+      hideAllocations: "▲ Hide category allocations",
+      editAllocations: "▼ Edit category allocations",
+      allocationHint: "Set the % of your budget for each category. Total shown below.",
+      exceeds100: " — exceeds 100%",
+      deleteIncomeAria: "Delete income",
+      deleteSourceTitle: "Delete Income Source",
+      recurring: "Recurring",
+      totalPercent: "Total: {percent}%",
     },
   },
 
   hi: {
+    healthMessages: {
+      budgetAlert: "मासिक बजट चेतावनी: पिछले 30 दिनों का ख़र्च ({spent}) आपकी तय सीमा {limit} से ज़्यादा हो गया है ({pct}%)।",
+      budgetNotice: "मासिक बजट सूचना: आप अपनी बजट सीमा के {pct}% पर हैं ({limit} में से {spent})।",
+      baselineNoData: "डेटा सूचना: कोई आय, बजट या लेन-देन रिकॉर्ड नहीं मिला। अपना व्यक्तिगत वित्तीय स्वास्थ्य सूचकांक पाने के लिए मासिक आय जोड़ें और ख़र्च दर्ज करें।",
+      incomeSetup: "आय सेटअप: 'बजट और आय' में अपने मासिक आय स्रोत जोड़ें।",
+      budgeting: "बजट बनाना: मासिक ख़र्च के मार्गदर्शन के लिए श्रेणीवार 50/30/20 बजट बनाएँ।",
+      expenseTracking: "ख़र्च ट्रैकिंग: नकदी प्रवाह ट्रैक करने के लिए रोज़ के नकद, UPI या बैंक लेन-देन दर्ज करें।",
+      cashFlowDeficit: "नकदी प्रवाह घाटा: पिछले 30 दिनों का ख़र्च ({spent}) मासिक आय ({income}) से {gap} ज़्यादा रहा।",
+      incomeRecorded: "डेटा सूचना: मासिक आय दर्ज है। अपनी असली मासिक बचत दर जानने के लिए ख़र्च जोड़ें।",
+      incomeMissing: "डेटा सूचना: मासिक आय दर्ज नहीं है। बचत दर का स्कोर पाने के लिए 'बजट' में आय स्रोत जोड़ें।",
+      budgetSetNoTxns: "डेटा सूचना: मासिक बजट लक्ष्य तय है। बजट का पालन आँकने के लिए रोज़ के लेन-देन दर्ज करें।",
+      budgetSetup: "बजट सेटअप: श्रेणीवार मासिक बजट बनाने से महीने के आख़िर में पैसों की तंगी से बचाव होता है।",
+      fixedCostAudit: "तय ख़र्च की जाँच: आवर्ती भुगतान मासिक ख़र्च का {pct}% हैं। इस्तेमाल न होने वाले सब्सक्रिप्शन देखें।",
+      noCardModeActive: "बिना क्रेडिट कार्ड मोड सक्रिय: हेल्थ स्कोर नकदी प्रवाह की मज़बूती, बचत दर और बजट अनुशासन को आँकता है। कार्ड रिवॉर्ड और शुल्क की जाँच शामिल नहीं है।",
+      emergencyGoal: "आपातकालीन निधि लक्ष्य: ज़्यादा ब्याज वाले बचत खाते में लगभग {amount} की 3 महीने की नकद सुरक्षा बनाएँ।",
+      rewardLeakage: "रिवॉर्ड नुकसान चेतावनी: रोज़ की ख़रीदारी में कम फ़ायदेमंद कार्ड इस्तेमाल करने से आपने {amount} गँवा दिए।",
+      cardReview: "कार्ड समीक्षा: {card} का वार्षिक शुल्क {fee} मिले रिवॉर्ड ({rewards}) से ज़्यादा रहा। शुल्क माफ़ी की शर्तें या दूसरे कार्ड पर विचार करें।",
+      trendUp: "ख़र्च रुझान: पिछले 30 दिनों की तुलना में आपका ख़र्च {pct}% बढ़ा है। बाहर खाना और ख़रीदारी जैसी ग़ैर-ज़रूरी श्रेणियाँ देखें।",
+      trendDown: "ख़र्च रुझान: पिछले 30 दिनों की तुलना में आपका ख़र्च {pct}% घटा है। ख़र्च पर काबू रखने के लिए शाबाश!",
+      subscriptionHygiene: "सब्सक्रिप्शन जाँच: आपके {count} आवर्ती सब्सक्रिप्शन हैं, जिनका कुल लगभग {amount}/साल है।",
+      greatJob: "बहुत बढ़िया! आपका ख़र्च आपके वित्तीय लक्ष्यों के अनुरूप है।",
+      baselineNoCards: "डेटा सूचना: कोई क्रेडिट कार्ड या लेन-देन इतिहास नहीं मिला। क्रेडिट ऑप्टिमाइज़ेशन स्कोर के लिए अपने कार्ड या लेन-देन जोड़ें।",
+      incomeNoStreams: "कोई आय स्रोत दर्ज नहीं है।",
+      incomeAddEarnings: "नकदी प्रवाह विश्लेषण और बचत मार्गदर्शन पाने के लिए अपनी तनख़्वाह, फ़्रीलांस भुगतान या अन्य कमाई जोड़ें।",
+      incomeCalculatedAcross: "{count} दर्ज आय स्रोतों के आधार पर गणना।",
+      incomeRollingMedian: "90 दिन का चलता मासिक माध्यिका {amount} है, जो {periods} सक्रिय मासिक अवधियों पर आधारित है।",
+      incomeNoRecurring: "कोई सक्रिय आवर्ती आय स्रोत नहीं है।",
+      incomeOldExcluded: "90 दिन से पुरानी एकमुश्त आय आवर्ती नकदी प्रवाह में शामिल नहीं की जाती।",
+      incomeIrregularShare: "अनियमित आय मासिक आय का {pct}% है; मज़बूती के अनुमान के लिए चलता माध्यिका इस्तेमाल हो रहा है।",
+    },
+
+    subscriptionsPage: {
+      subtitle: "आवर्ती ख़र्च — सब्सक्रिप्शन, बिजली-पानी, बीमा, EMI और किराया।",
+      recurringEntries: "आवर्ती प्रविष्टियाँ",
+      monthlyCommitment: "मासिक प्रतिबद्धता",
+      categories: "श्रेणियाँ",
+      showingNote: "सिस्टम द्वारा आवर्ती चिह्नित लेन-देन, और सब्सक्रिप्शन, बिजली-पानी, बीमा, EMI और किराया श्रेणियों की सबसे नई प्रविष्टि दिखाई जा रही है।",
+      logTransactionsLink: "लेन-देन दर्ज करें →",
+      noRecurring: "कोई आवर्ती लेन-देन नहीं मिला।",
+      noRecurringHint: "उन्हें यहाँ देखने के लिए सब्सक्रिप्शन, बिजली-पानी, बीमा, EMI या किराया श्रेणी में ख़र्च दर्ज करें।",
+      logATransaction: "लेन-देन दर्ज करें",
+      markedRecurring: "आवर्ती चिह्नित",
+      totalMonthlyCommitment: "कुल मासिक प्रतिबद्धता",
+      detectionNote: "आवर्ती पहचान लेन-देन की श्रेणियों और सिस्टम संकेतों पर आधारित है। सही ट्रैकिंग के लिए ख़र्च दर्ज करते समय सही श्रेणी चुनें।",
+      categorySuffix: "{category} श्रेणी",
+      allTransactions: "सभी लेन-देन",
+    },
+
+    emergencyFund: {
+      tierBasic: "बुनियादी (3 महीने)",
+      tierBasicDesc: "नौकरी छूटने या बड़े अचानक ख़र्च में मदद",
+      tierStandard: "मानक (6 महीने)",
+      tierStandardDesc: "ज़्यादातर वेतनभोगी कर्मचारियों के लिए सुझाया गया",
+      tierConservative: "सुरक्षित (12 महीने)",
+      tierConservativeDesc: "फ़्रीलांसर और अनियमित आय वालों के लिए",
+      subtitle: "अचानक ख़र्चों के लिए 3–6 महीने की वित्तीय सुरक्षा — आर्थिक सुरक्षा की नींव।",
+      insufficientData: "लक्ष्य निकालने के लिए पर्याप्त डेटा नहीं",
+      insufficientDesc: "आपका आपातकालीन निधि लक्ष्य आपके मासिक ज़रूरी ख़र्च का 3 गुना है। इसे सही निकालने के लिए CLIQ को असली ख़र्च का डेटा चाहिए।",
+      whatsNeeded: "क्या चाहिए:",
+      needIncome: "कम से कम एक आय स्रोत — ताकि हम आपकी वित्तीय स्थिति समझ सकें",
+      needExpense: "कम से कम एक दर्ज ख़र्च — ताकि मासिक ज़रूरी ख़र्च निकाला जा सके",
+      budgetImproves: "बजट सेट करने से श्रेणीवार सटीकता बढ़ती है",
+      threeMonthTarget: "3 महीने का आपातकालीन लक्ष्य",
+      needsBasis: " (ज़रूरी श्रेणियों के ख़र्च पर आधारित)",
+      estimateBasis: " (कुल ख़र्च का 50% मानकर अनुमान)",
+      monthContribution: "इस महीने का बचत योगदान",
+      singleMonthNote: "नोट: यह सिर्फ़ एक महीने का बचत डेटा है। आपकी कुल जमा बचत अलग हो सकती है।",
+      monthlyEssentials: "मासिक ज़रूरी ख़र्च",
+      threeMonthTargetShort: "3 महीने का लक्ष्य",
+      currentMonthSavings: "इस महीने की बचत",
+      howMuch: "आपको कितना बचाना चाहिए?",
+      buildingTitle: "अपनी आपातकालीन निधि बनाना",
+      tip1: "छोटे लक्ष्य से शुरुआत करें: पहले ₹5,000–₹10,000 बचाएँ, फिर बढ़ाएँ।",
+      tip2: "आपातकालीन निधि आसानी से निकाली जा सकने वाले बचत खाते में रखें — निवेश में नहीं।",
+      tip3: "तनख़्वाह वाले दिन एक अलग खाते में हर महीने अपने-आप ट्रांसफ़र सेट करें।",
+      tip4: "इसे सिर्फ़ असली आपात स्थिति में इस्तेमाल करें — नौकरी जाना, इलाज, ज़रूरी मरम्मत।",
+      tip5: "निकासी के बाद तुरंत फिर से भरें।",
+      dataNote: "लक्ष्य इस महीने के आपके असली ख़र्च पर आधारित हैं। सही गणना के लिए सभी ज़रूरी ख़र्च (किराया, किराना, बिजली-पानी, परिवहन, इलाज) सही श्रेणियों में दर्ज करें।",
+      basedOnEssentials: "हर महीने {amount} के ज़रूरी ख़र्च पर आधारित",
+      addIncome: "आय जोड़ें",
+      logExpenses: "ख़र्च दर्ज करें",
+    },
+
+    savingsGoals: {
+      subtitle: "पड़ाव तय करें और अपने वित्तीय लक्ष्यों की ओर प्रगति ट्रैक करें।",
+      totalTarget: "कुल लक्ष्य",
+      totalSaved: "कुल बचत",
+      newGoal: "नया बचत लक्ष्य",
+      goalName: "लक्ष्य का नाम",
+      goalNamePlaceholder: "जैसे आपातकालीन निधि, गोवा यात्रा",
+      targetAmount: "लक्ष्य राशि (₹)",
+      currentSavings: "मौजूदा बचत (₹) — वैकल्पिक",
+      targetDate: "लक्ष्य तिथि — वैकल्पिक",
+      addContribution: "योगदान जोड़ें",
+      noGoals: "अभी कोई बचत लक्ष्य नहीं है।",
+      createFirst: "प्रगति ट्रैक करने के लिए अपना पहला लक्ष्य बनाएँ।",
+      achieved: "लक्ष्य पूरा हुआ!",
+      localNote: "बचत लक्ष्य आपके ब्राउज़र में ही सहेजे जाते हैं। ये वही राशियाँ हैं जो आप यहाँ ख़ुद दर्ज करते हैं, आपके खाते का बैलेंस नहीं। बेहतर जानकारी के लिए अपनी आय और लेन-देन जोड़ें।",
+      monthsLeft: " · {count} महीने बाकी",
+      remaining: "{amount} बाकी",
+      perMonthNeeded: "समय पर लक्ष्य के लिए हर महीने {amount} चाहिए",
+      newGoalButton: "नया लक्ष्य",
+      createGoal: "लक्ष्य बनाएँ",
+      add: "जोड़ें",
+      addSavings: "बचत जोड़ें",
+    },
+
+    cashDashboard: {
+      loadFailed: "वित्तीय डेटा लोड नहीं हो सका",
+      expenseLogged: "ख़र्च सफलतापूर्वक दर्ज हुआ!",
+      expenseLogFailed: "ख़र्च दर्ज नहीं हो सका",
+      sampleCleared: "सैंपल डेटा हटा दिया गया",
+      sampleClearFailed: "सैंपल डेटा हटाने में त्रुटि",
+      sampleLoaded: "सैंपल पोर्टफोलियो सफलतापूर्वक लोड हुआ",
+      sampleLoadFailed: "पोर्टफोलियो लोड करने में त्रुटि",
+      pathwayBadge: "नकद और बचत पथ",
+      title: "व्यक्तिगत वित्त कमांड सेंटर",
+      subtitle: "पूरा नकदी प्रवाह, 50/30/20 बजट ढाँचा, आपातकालीन रनवे और बचत के पड़ाव — एक ही जगह।",
+      clearSample: "सैंपल हटाएँ",
+      monthlyInflow: "मासिक आय",
+      monthlyExpenses: "मासिक ख़र्च",
+      viewLog: "लॉग देखें",
+      remainingBalance: "शेष राशि",
+      liquidSurplus: "उपलब्ध नकद अधिशेष",
+      plan: "योजना",
+      target20Rule: "लक्ष्य: 20% नियम",
+      goals: "लक्ष्य",
+      adjustLimits: "सीमाएँ बदलें",
+      needsTarget: "ज़रूरतें (50% लक्ष्य)",
+      needsExamples: "किराया, किराना, बिजली-पानी",
+      wantsTarget: "इच्छाएँ (30% लक्ष्य)",
+      wantsExamples: "बाहर खाना, ख़रीदारी, मनोरंजन",
+      savingsTarget: "बचत (20% लक्ष्य)",
+      savingsExamples: "आपातकाल और पड़ाव",
+      emergencyBuffer: "आपातकालीन निधि सुरक्षा",
+      runwayIntro: "आय रुकने पर ख़ुद को सुरक्षित रखें। आपका अनुमानित रनवे देता है:",
+      recommendedTarget: "सुझाया गया लक्ष्य: 3-6 महीने",
+      viewEmergencyShield: "आपातकालीन सुरक्षा कवच देखें",
+      recentExpenses: "हाल के नकद और बैंक ख़र्च",
+      viewAll: "सभी देखें",
+      logModalTitle: "नकद और बैंक ख़र्च दर्ज करें",
+      logModalSub: "बिना क्रेडिट वाला लेन-देन दर्ज करें (UPI, डेबिट, नकद)",
+      merchantRecipient: "मर्चेंट / प्राप्तकर्ता",
+      merchantPlaceholder: "जैसे Swiggy, किराना, बिजली",
+      methodUpiApps: "UPI / GPay / PhonePe",
+      methodNetBanking: "नेट बैंकिंग / IMPS",
+      saveExpense: "ख़र्च सहेजें",
+      monthlySpendOf: "मासिक ख़र्च: {budget} में से {spent}",
+      percentUsed: "{percent}% उपयोग",
+      monthsCount: "{count} महीने",
+      budgetBreakdown: "बजट उपयोग और 50/30/20 विवरण",
+      incomesRegistered: "{count} आय स्रोत दर्ज",
+    },
+
     home: {
       hero: {
         badge: "हर भारतीय के लिए वित्तीय समझ",
@@ -2020,6 +3242,8 @@ export const translations: Record<Language, Translations> = {
       administrator: "प्रशासक",
       learn: "सीखें (CLIQ Learn)",
       budget: "आय और बजट",
+      cashSavingsBadge: "नकद और बचत",
+      defaultUserName: "CLIQ उपयोगकर्ता",
     },
 
     sidebar: {
@@ -2095,6 +3319,42 @@ export const translations: Record<Language, Translations> = {
       addCardCta: "कार्ड जोड़ें",
       sampleSuggestion1: "Swiggy पर कौन सा कार्ड सबसे ज्यादा कैशबैक देता है?",
       sampleSuggestion2: "मेरे कार्ड्स पर एयरपोर्ट लाउंज सुविधा दिखाएं",
+      learnInclusionBadge: "CLIQ Learn और वित्तीय समावेशन",
+      noCardBannerTitle: "वित्तीय कमांड सेंटर — क्रेडिट कार्ड की ज़रूरत नहीं",
+      noCardBannerDesc: "वित्तीय मज़बूती बनाएँ, अपनी नियमित और अनियमित कमाई ट्रैक करें, 50-30-20 बजट ढाँचे से योजना बनाएँ, और आवेदन से पहले समझें कि क्रेडिट असल में कैसे काम करता है।",
+      exploreLearn: "CLIQ Learn देखें",
+      manageIncomes: "आय प्रबंधित करें",
+      portfolioSetupBadge: "क्रेडिट कार्ड पोर्टफोलियो सेटअप",
+      portfolioSetupTitle: "रिवॉर्ड बढ़ाने के लिए अपना पहला क्रेडिट कार्ड जोड़ें",
+      portfolioSetupDesc: "अपने कार्ड जोड़ें और पाएँ हर ख़रीदारी पर अपने-आप कार्ड सुझाव, बैंक मर्चेंट छूट, शुल्क माफ़ी की सीमा की ट्रैकिंग, और रिवॉर्ड का कोई नुकसान नहीं।",
+      browseTopCards: "टॉप कार्ड देखें",
+      switchToCashSavings: "क्रेडिट कार्ड नहीं है? नकद और बचत मोड पर जाएँ",
+      manage: "प्रबंधित करें",
+      monthlySpending: "मासिक ख़र्च",
+      view: "देखें",
+      targetBudget: "लक्ष्य बजट",
+      framework503020: "50/30/20 ढाँचा",
+      cashFlowResilience: "नकदी प्रवाह मज़बूती",
+      resilienceIndex: "मज़बूती सूचकांक",
+      breakdown: "विवरण",
+      quickExpenseTitle: "त्वरित ख़र्च और UPI ट्रैकर",
+      noCardFlowMode: "बिना कार्ड नकदी प्रवाह मोड",
+      expenseRecorded: "ख़र्च नकदी प्रवाह और बजट में दर्ज हो गया।",
+      quickMerchantPlaceholder: "जैसे मेट्रो कार्ड, किराना",
+      paymentMethod: "भुगतान का तरीका",
+      methodCash: "नकद",
+      methodBankTransfer: "बैंक ट्रांसफ़र",
+      methodDebitCard: "डेबिट कार्ड",
+      methodOther: "अन्य",
+      addCreditCardLink: "क्रेडिट कार्ड जोड़ें",
+      logExpense: "ख़र्च दर्ज करें",
+      optimizerMerchantPlaceholder: "जैसे Swiggy, Amazon",
+      manageBudget: "बजट प्रबंधित करें",
+      noIncomeStreams: "अभी तक कोई आय स्रोत दर्ज नहीं है।",
+      incomesCount: "{count} आय स्रोत",
+      transactionsCount: "{count} लेन-देन",
+      wantRewardPerks: "कार्ड रिवॉर्ड के फ़ायदे चाहिए?",
+      monthlyEquiv: "मासिक समतुल्य: {amount}",
     },
 
     cards: {
@@ -2129,6 +3389,33 @@ export const translations: Record<Language, Translations> = {
       savingCard: "सुरक्षित हो रहा है...",
       saveChanges: "सुरक्षित करें",
       cancel: "रद्द करें",
+      deleteFailed: "कार्ड हटाया नहीं जा सका: ",
+      updateFailed: "कार्ड अपडेट नहीं हो सका: ",
+      loadingWallet: "आपका क्रेडिट कार्ड वॉलेट लोड हो रहा है...",
+      totalAnnualFees: "कुल वार्षिक शुल्क:",
+      potentialWaiverTargets: "संभावित छूट लक्ष्य:",
+      renewalWaiver: "नवीनीकरण छूट",
+      viewInFan: "कार्ड स्टैक में देखें",
+      editCard: "कार्ड संपादित करें",
+      deactivateCard: "कार्ड निष्क्रिय करें",
+      editSpecsTitle: "कार्ड विवरण संपादित करें",
+      cardNameRequired: "कार्ड का नाम *",
+      bankNameRequired: "बैंक का नाम *",
+      nickname: "उपनाम",
+      nicknamePlaceholder: "जैसे ट्रैवल कार्ड",
+      lastFourDigits: "आख़िरी 4 अंक",
+      network: "नेटवर्क",
+      renewalWaiverSpend: "नवीनीकरण छूट के लिए ख़र्च (₹)",
+      optionalWaiverSpend: "वैकल्पिक छूट ख़र्च",
+      waiverConditionDetails: "छूट की शर्तें",
+      termsUrl: "नियम व शर्तों का URL",
+      deactivate: "निष्क्रिय करें",
+      stackShowcase: "कार्ड स्टैक",
+      stackHint: "देखने के लिए कार्ड पर क्लिक करें या ऐरो कुंजियाँ दबाएँ • सामने वाला कार्ड सक्रिय है",
+      prevCardHint: "पिछला कार्ड (बायाँ ऐरो)",
+      prevCard: "पिछला कार्ड",
+      nextCardHint: "अगला कार्ड (दायाँ ऐरो)",
+      nextCard: "अगला कार्ड",
     },
 
     cardDetails: {
@@ -2151,6 +3438,20 @@ export const translations: Record<Language, Translations> = {
       noBenefitsAvailable: "कोई मानार्थ सुविधा पंजीकृत नहीं है।",
       rulePerkExclusion: "छूट नियम",
       monthlyCapPrefix: "अधिकतम सीमा: ₹",
+      cardholderLabel: "कार्डधारक:",
+      notSpecified: "निर्दिष्ट नहीं",
+      verifiedBankData: "सत्यापित बैंक डेटा",
+      chargesTitle: "शुल्क सूची और शुल्क छूट",
+      joiningFee: "जॉइनिंग शुल्क",
+      noWaiver: "कोई छूट नहीं",
+      waiverCondition: "छूट की शर्त",
+      multipliersTitle: "श्रेणी मल्टीप्लायर और कैशबैक",
+      baselineCashback: "सभी श्रेणियों में मानक 1.0% कैशबैक।",
+      loungeTitle: "लाउंज और लाइफ़स्टाइल लाभ",
+      loungeNotConfigured: "लाउंज और लाइफ़स्टाइल लाभ: इस कार्ड के लिए सेट नहीं हैं।",
+      verifiedSource: "सत्यापित स्रोत",
+      officialCharges: "आधिकारिक शुल्क सूची",
+      editSpecs: "विवरण संपादित करें",
     },
 
     cardSelection: {
@@ -2182,6 +3483,88 @@ export const translations: Record<Language, Translations> = {
       cardAddedSuccess: "कार्ड सफलतापूर्वक पंजीकृत हो गया!",
       selectIssuerFirst: "कृपया ऊपर दिए गए जारीकर्ता बैंक का चयन करें।",
       customCardNotice: "कस्टम कार्ड विवरण मैन्युअल रूप से सेट किए जा सकते हैं।",
+      airportLounge: "एयरपोर्ट लाउंज एक्सेस",
+      airportLoungeDesc: "हर तिमाही मुफ़्त एयरपोर्ट लाउंज विज़िट।",
+      cardholderRequired: "कृपया कार्ड पर छपा कार्डधारक का नाम दर्ज करें।",
+      lastFourInvalid: "आख़िरी 4 अंकों में ठीक 4 संख्याएँ होनी चाहिए (जैसे 8821)।",
+      feesNegative: "शुल्क और नवीनीकरण छूट सीमा ऋणात्मक नहीं हो सकती।",
+      termsUrlInvalid: "आधिकारिक नियमों का URL https:// या http:// से शुरू होना चाहिए",
+      addFailed: "कार्ड नहीं जुड़ सका। कृपया अपनी जानकारी जाँचें।",
+      verified: "सत्यापित",
+      custom: "कस्टम",
+      variantTier: "वेरिएंट / श्रेणी",
+      nicknameOptional: "उपनाम (वैकल्पिक)",
+      registeredRedirecting: "क्रेडिट कार्ड सफलतापूर्वक जुड़ गया! वॉलेट पर ले जा रहे हैं...",
+      backToWallet: "वॉलेट पर वापस",
+      pageSubtitle: "बैंक कैटलॉग से कार्ड चुनें या अपने कार्ड का विवरण ख़ुद भरें",
+      tenIssuers: "10 बैंक",
+      preconfigured: "आधिकारिक रिवॉर्ड और लाभों के साथ पहले से सेट",
+      step3Customize: "3. जाँचें, बदलें और कार्ड सहेजें",
+      previewRealtime: "कार्ड प्रीव्यू तुरंत अपडेट होता है",
+      identityTitle: "कार्ड पहचान और विवरण",
+      customManual: "कस्टम (ख़ुद भरा)",
+      cardholderNameRequired: "कार्डधारक का नाम *",
+      appearsOnCardFace: "कार्ड पर दिखता है",
+      cardholderPlaceholderNew: "जैसे PRIYA SHARMA",
+      issuingBankRequired: "जारी करने वाला बैंक *",
+      paymentNetworkRequired: "भुगतान नेटवर्क *",
+      variantPlaceholder: "जैसे Signature, Metal, Infinite",
+      nicknamePlaceholderNew: "जैसे मुख्य यात्रा, रोज़ का किराना",
+      safeMaskedOnly: "सुरक्षित: केवल छिपा हुआ",
+      feesTitle: "वार्षिक शुल्क और नवीनीकरण छूट ख़र्च",
+      waiverPlaceholder: "जैसे सालाना ₹4,00,000 ख़र्च करने पर शुल्क माफ़।",
+      termsUrlTitle: "आधिकारिक नियम और शुल्क सूची का URL",
+      openUrl: "URL खोलें",
+      rulesHelp: "CLIQ का ऑप्टिमाइज़ेशन इंजन इन नियमों से हर ख़र्च पर असली कैशबैक और पॉइंट्स निकालता है।",
+      remove: "हटाएँ",
+      catAllRetail: "सभी रिटेल ख़र्च",
+      catShopping: "शॉपिंग / ई-कॉमर्स",
+      catDining: "डाइनिंग और फ़ूड डिलीवरी",
+      catTravel: "यात्रा और उड़ानें",
+      catGrocery: "किराना और सुपरमार्केट",
+      catUtility: "बिजली-पानी के बिल",
+      catFuel: "ईंधन",
+      rewardType: "रिवॉर्ड प्रकार",
+      directCashback: "सीधा कैशबैक (%)",
+      airlineMiles: "एयरलाइन माइल्स",
+      rateLabel: "दर (% या प्रति 100 पर पॉइंट्स)",
+      merchantPatternOptional: "मर्चेंट पैटर्न (वैकल्पिक)",
+      merchantPatternPlaceholder: "जैसे Amazon, Swiggy, Flipkart",
+      monthlyCap: "मासिक सीमा (₹)",
+      noCap: "कोई सीमा नहीं",
+      addRewardRule: "रिवॉर्ड नियम जोड़ें",
+      addPerk: "लाउंज / कस्टम लाभ जोड़ें",
+      privacyTitle: "प्राइवेसी सुरक्षा और न्यूनतम डेटा",
+      privacyBody: "CLIQ कभी भी पूरा कार्ड नंबर (PAN), CVV, एक्सपायरी विवरण या नेट बैंकिंग पासवर्ड न माँगता है, न सहेजता है। सिर्फ़ अधिकृत रिवॉर्ड नियम और आपका दिया उपनाम सहेजा जाता है।",
+      registeringCreditCard: "क्रेडिट कार्ड जोड़ा जा रहा है...",
+      saveToWallet: "क्रेडिट कार्ड वॉलेट में सहेजें",
+      liveInteractiveCard: "लाइव इंटरैक्टिव कार्ड",
+      hoverToTilt: "3D झुकाव के लिए माउस ले जाएँ",
+      rewardHighlights: "रिवॉर्ड की मुख्य बातें",
+      keyPerk: "मुख्य लाभ",
+      addedUpdating: "कार्ड सफलतापूर्वक जुड़ गया! आपका डिजिटल कलेक्शन अपडेट हो रहा है...",
+      step3Personalize: "3. जाँचें, अपने हिसाब से बदलें और वॉलेट में सहेजें",
+      updatesLive: "प्रीव्यू में तुरंत अपडेट",
+      appearsOnCard: "कार्ड पर दिखता है",
+      cardholderPlaceholderFlow: "जैसे RAHUL JAIN",
+      cardName: "कार्ड का नाम",
+      issuingBank: "जारी करने वाला बैंक",
+      paymentNetwork: "भुगतान नेटवर्क",
+      nicknamePlaceholderFlow: "जैसे मुख्य यात्रा",
+      safeMasked: "सुरक्षित रूप से छिपा",
+      waiverSpend: "छूट के लिए ख़र्च (₹)",
+      addingToWallet: "वॉलेट में जोड़ा जा रहा है...",
+      addToCollection: "कार्ड मेरे कलेक्शन में जोड़ें",
+      livePreview: "लाइव कार्ड प्रीव्यू",
+      waiverSpendShort: "छूट के लिए ख़र्च",
+      testFanPrompt: "कार्ड स्टैक अभी आज़माना चाहते हैं?",
+      testFanDesc: "इंटरैक्टिव कार्ड स्टैक आज़माने के लिए तुरंत 3 सैंपल कार्ड (HDFC Millennia, SBI Cashback, Axis Ace) जोड़ें।",
+      feeLabel: "शुल्क:",
+      free: "मुफ़्त",
+      rulesSection: "श्रेणी मल्टीप्लायर और रिवॉर्ड नियम ({count})",
+      benefitsSection: "लाउंज और प्रीमियम लाभ ({count})",
+      customIssuerName: "अन्य / कस्टम कार्ड",
+      customIssuerShort: "कस्टम",
     },
 
     compare: {
@@ -2197,6 +3580,12 @@ export const translations: Record<Language, Translations> = {
       netBenefitProjection: "शुद्ध वार्षिक लाभ अनुमान",
       bestForSummary: "उपयुक्त खर्च प्रोफ़ाइल",
       noCardsToCompare: "तुलना करने के लिए कृपया कम से कम 2 कार्ड चुनें।",
+      comparisonFailed: "तुलना नहीं हो सकी: ",
+      annualFeeLabel: "वार्षिक शुल्क:",
+      lifetimeFree: "आजीवन मुफ़्त",
+      breakevenSpend: "ब्रेकईवन ख़र्च:",
+      yieldMatrix: "श्रेणीवार रिटर्न मैट्रिक्स (%)",
+      leadingYield: "सबसे अधिक रिटर्न हाइलाइट किया गया",
     },
 
     offers: {
@@ -2218,6 +3607,22 @@ export const translations: Record<Language, Translations> = {
       sample: "सैंपल",
       noOffersFound: "आपकी खोज के अनुसार कोई ऑफ़र उपलब्ध नहीं है।",
       clearFilters: "फ़िल्टर हटाएं",
+      loadingPromotions: "प्रमोशन लोड हो रहे हैं...",
+      noOffersTitle: "कोई ऑफ़र नहीं मिला",
+      noOffersForCards: "अभी आपके कार्डों से मेल खाता कोई सक्रिय प्रमोशन नहीं है।",
+      noOffersForFilter: "मौजूदा फ़िल्टर से कोई ऑफ़र मेल नहीं खाता।",
+      showAllOffers: "सभी ऑफ़र दिखाएँ",
+      omniChannel: "दोनों",
+      maxSavings: "अधिकतम बचत",
+      eligibleCards: "योग्य कार्ड:",
+      allMajorCards: "सभी प्रमुख कार्ड",
+      coupon: "कूपन",
+      copied: "कॉपी हुआ",
+      copy: "कॉपी करें",
+      terms: "शर्तें",
+      percentOff: "{value}% छूट",
+      flatOff: "{value} की सीधी छूट",
+      expiresOn: "{date} को समाप्त",
     },
 
     optimizer: {
@@ -2253,6 +3658,10 @@ export const translations: Record<Language, Translations> = {
       stepReason: "तर्क / कारण",
       capStatus: "मासिक सीमा स्थिति",
       matchedCoupons: "लागू प्रोमोशनल ऑफ़र्स",
+      invalidSpend: "कृपया 0 से अधिक मान्य ख़र्च राशि दर्ज करें।",
+      merchantPlaceholder: "जैसे Swiggy, Amazon, Croma",
+      officialVerification: "आधिकारिक सत्यापन:",
+      scheduleOfCharges: "शुल्क सूची",
     },
 
     transactions: {
@@ -2303,6 +3712,36 @@ export const translations: Record<Language, Translations> = {
       originalDescription: "मूल स्टेटमेंट विवरण",
       allRowsReady: "सभी लेन-देन सत्यापित और आयात के लिए तैयार हैं।",
       backToFileSelect: "दूसरी फ़ाइल अपलोड करें",
+      invalidAmount: "कृपया 0 से अधिक मान्य लेन-देन राशि दर्ज करें।",
+      createFailed: "लेन-देन नहीं बन सका: ",
+      selectCsvFirst: "कृपया पहले CSV स्टेटमेंट फ़ाइल चुनें।",
+      analyzeFailed: "CSV स्टेटमेंट का विश्लेषण नहीं हो सका।",
+      noRowsSelected: "इम्पोर्ट के लिए कोई पंक्ति नहीं चुनी गई।",
+      commitFailed: "इम्पोर्ट किए गए लेन-देन सहेजे नहीं जा सके: ",
+      bankFormat: "स्टेटमेंट बैंक फ़ॉर्मेट",
+      autoDetect: "स्टेटमेंट लेआउट अपने-आप पहचानें (डिफ़ॉल्ट)",
+      fmtHdfc: "HDFC Bank क्रेडिट कार्ड स्टेटमेंट",
+      fmtIcici: "ICICI Bank क्रेडिट कार्ड स्टेटमेंट",
+      fmtSbi: "SBI Card स्टेटमेंट",
+      fmtAxis: "Axis Bank क्रेडिट कार्ड स्टेटमेंट",
+      fmtAmex: "American Express (Amex) स्टेटमेंट",
+      fmtGeneric: "सामान्य / CLIQ मानक CSV",
+      supportedFormats: "समर्थित: HDFC, ICICI, SBI, Axis, Amex के CSV एक्सपोर्ट और कस्टम CSV (अधिकतम 5MB)",
+      parsePreview: "स्टेटमेंट पढ़ें और देखें",
+      estimatedSpend: "अनुमानित ख़र्च",
+      colImport: "इम्पोर्ट",
+      colStatementLine: "स्टेटमेंट पंक्ति और मानकीकृत",
+      colEstReward: "अनुमानित रिवॉर्ड",
+      colReconciliation: "मिलान स्थिति",
+      importSuccess: "स्टेटमेंट सफलतापूर्वक इम्पोर्ट हुआ",
+      imported: "इम्पोर्ट हुए",
+      duplicatesSkipped: "डुप्लिकेट छोड़े गए",
+      totalSpend: "कुल ख़र्च",
+      rewardsYield: "रिवॉर्ड रिटर्न",
+      doneView: "पूर्ण — लेन-देन देखें",
+      merchantPlaceholder: "जैसे Swiggy, Amazon, HPCL",
+      deleteTitle: "लेन-देन हटाएँ",
+      deleteMessage: "यह लेन-देन हमेशा के लिए हटा दिया जाएगा। इसे वापस नहीं लिया जा सकता।",
     },
 
     analytics: {
@@ -2319,6 +3758,8 @@ export const translations: Record<Language, Translations> = {
       computingAnalytics: "डेटा विश्लेषण जारी है...",
       categoryAllocation: "श्रेणीवार वितरण",
       monthlyVelocityChart: "मासिक खर्च और रिवॉर्ड गति",
+      seriesSpend: "ख़र्च",
+      seriesRewards: "रिवॉर्ड",
     },
 
     health: {
@@ -2342,6 +3783,21 @@ export const translations: Record<Language, Translations> = {
       netRoi: "वार्षिक शुल्क ROI",
       feeWaiverStatus: "शुल्क माफी प्रगति",
       actionableAdvice: "कार्रवाई योग्य सुझाव",
+      bandExcellent: "उत्कृष्ट",
+      bandGood: "अच्छा",
+      bandNeedsWork: "सुधार चाहिए",
+      noData: "डेटा नहीं",
+      scoreShort: "स्कोर",
+      addDataHint: "अपना हेल्थ स्कोर बनाने के लिए कार्ड और लेन-देन जोड़ें।",
+      next30Estimated: "अगले 30 दिनों का अनुमान",
+      potentialRewards: "मिल सकने वाले रिवॉर्ड",
+      spendingTrend: "30 दिन का ख़र्च रुझान:",
+      modelNote: "पिछले ख़र्च के पैटर्न और श्रेणियों के सर्वोत्तम बँटवारे पर आधारित।",
+      observationsTitle: "वित्तीय स्वास्थ्य से जुड़ी बातें",
+      annualOutflow: "सालाना ख़र्च",
+      actionsCount: "{count} सुझाव",
+      activeCount: "{count} सक्रिय",
+      vsPrior30: "पिछले 30 दिनों की तुलना में {change}%",
     },
 
     assistant: {
@@ -2369,6 +3825,25 @@ export const translations: Record<Language, Translations> = {
       auditIdLabel: "ऑडिट अनुरोध आईडी",
       tokensRedactedLabel: "हटाए गए संवेदनशील टोकन",
       localProtectedStatus: "स्थानीय प्रोसेसिंग (पूर्ण सुरक्षा)",
+      errorPrefix: "मुझे एक त्रुटि मिली: ",
+      checkBackend: "कृपया बैकएंड कनेक्शन जाँचें।",
+      governance: "नियंत्रण",
+      cardNamesRates: "कार्ड के नाम और दरें",
+      aggregatedTotals: "कुल योग",
+      grounded: "आधार:",
+      geminiRedacted: "Gemini 2.5 Flash • PII हटाया गया",
+      localEngine: "लोकल इंजन • शून्य जोखिम",
+      analyzing: "पोर्टफोलियो नियमों का विश्लेषण हो रहा है...",
+      consentEnabled: "सहमति अपडेट हुई: {field} अब चालू है।",
+      consentDisabled: "सहमति अपडेट हुई: {field} अब बंद है।",
+      redactionTitle: "सख़्त गोपनीयता गारंटी:",
+      redactionBody: "16 अंकों के PAN, CVV, PIN, OTP, आधार और लॉगिन विवरण किसी भी बाहरी AI प्रदाता को {never}।",
+      neverTransmitted: "कभी नहीं भेजे जाते",
+      suggestion1: "न्यूनतम देय (Minimum Due) क्यों नहीं चुकाना चाहिए?",
+      suggestion2: "बिलिंग चक्र और ग्रेस पीरियड कैसे काम करते हैं?",
+      suggestion3: "50-30-20 बजट नियम क्या है?",
+      suggestion4: "भोजन के लिए कौन सा कार्ड सबसे अच्छा है?",
+      suggestion5: "लाउंज विज़िट सीमाएं दिखाएं",
     },
 
     documents: {
@@ -2386,6 +3861,16 @@ export const translations: Record<Language, Translations> = {
       uploadedDocumentsList: "अपलोड किए गए दस्तावेज़",
       extractedSpecTitle: "निकाले गए कार्ड विनिर्देश",
       processingDocument: "PyMuPDF के साथ दस्तावेज़ प्रोसेस हो रहा है...",
+      newCardDefault: "नया कार्ड",
+      uploadFailed: "अपलोड नहीं हो सका।",
+      verifyFailed: "सत्यापन नहीं हो सका।",
+      uploadHint: "अधिकतम 10MB • रिवॉर्ड स्तर, सीमाएँ, वार्षिक शुल्क और अपवाद समीक्षा के लिए निकालता है",
+      noDocuments: "कतार में कोई दस्तावेज़ नहीं है।",
+      noRules: "कोई नियम नहीं निकला।",
+      selectDocument: "निकाले गए नियम देखने के लिए कोई दस्तावेज़ चुनें।",
+      processedSuccess: "दस्तावेज़ '{name}' सफलतापूर्वक प्रोसेस हुआ।",
+      cardVerified: "कार्ड '{name}' सत्यापित होकर सक्रिय पोर्टफोलियो में जुड़ गया।",
+      confidence: "विश्वसनीयता:",
     },
 
     settings: {
@@ -2408,6 +3893,35 @@ export const translations: Record<Language, Translations> = {
       exportArchiveButton: "एन्क्रिप्टेड डेटा डाउनलोड करें",
       deleteAccountButton: "खाता और डेटा पूरी तरह हटाएं",
       deleteAccountConfirm: "क्या आप वाकई अपना खाता हटाना चाहते हैं? सभी कार्ड और लेन-देन हमेशा के लिए मिटा दिए जाएंगे।",
+      savePrefsFailed: "प्राथमिकताएँ सहेजी नहीं जा सकीं।",
+      exportFailedShort: "एक्सपोर्ट नहीं हो सका",
+      exportDownloaded: "एक्सपोर्ट सफलतापूर्वक डाउनलोड हुआ।",
+      exportFailed: "एक्सपोर्ट नहीं हो सका।",
+      typeToConfirmToast: "पुष्टि के लिए ठीक-ठीक DELETE MY ACCOUNT लिखें।",
+      enterPassword: "कृपया अपना पासवर्ड दर्ज करें।",
+      deleteFailed: "खाता हटाया नहीं जा सका।",
+      statusActive: "सक्रिय",
+      statusCompliant: "अनुपालित",
+      jwtTitle: "JWT क्रिप्टोग्राफ़िक सत्यापन",
+      jwtDesc: "Bearer टोकन प्रमाणीकरण",
+      statusHs256: "HS256 सत्यापित",
+      rateLimitTitle: "रेट लिमिटिंग और हेडर",
+      rateLimitDesc: "CSP, HSTS, 600 अनुरोध/मिनट",
+      statusEnforced: "लागू",
+      loadingPrefs: "प्राथमिकताएँ लोड हो रही हैं…",
+      budgetAlertTitle: "बजट अलर्ट सीमा",
+      budgetAlertDesc: "जब ख़र्च बजट के इतने % तक पहुँचे तब अलर्ट करें",
+      exportDesc: "अपनी प्रोफ़ाइल, कार्ड, लेन-देन, आय और बजट के पूरे डेटा का JSON आर्काइव डाउनलोड करें।",
+      deleteDesc: "अपना खाता और उससे जुड़ा सारा डेटा हमेशा के लिए हटाएँ। यह कार्रवाई वापस नहीं ली जा सकती।",
+      changePassword: "पासवर्ड बदलें",
+      changePasswordDesc: "ईमेल सत्यापन से अपना पासवर्ड रीसेट करें",
+      deleteAccount: "खाता हटाएँ",
+      deleteDialogMessage: "इससे आपका खाता, सभी कार्ड, लेन-देन, बजट और आय रिकॉर्ड हमेशा के लिए हट जाएँगे। अनुपालन के लिए ऑडिट लॉग रखे जाते हैं। इसे वापस नहीं लिया जा सकता।",
+      deleting: "हटाया जा रहा है…",
+      deleteMyAccount: "मेरा खाता हटाएँ",
+      yourPassword: "आपका पासवर्ड",
+      currentPasswordPlaceholder: "अपना मौजूदा पासवर्ड दर्ज करें",
+      typeToConfirm: "पुष्टि के लिए {phrase} लिखें",
     },
 
     profile: {
@@ -2420,6 +3934,15 @@ export const translations: Record<Language, Translations> = {
       saveProfileButton: "प्रोफ़ाइल सुरक्षित करें",
       saving: "सुरक्षित हो रहा है...",
       savedSuccess: "प्रोफ़ाइल सफलतापूर्वक अपडेट हो गई।",
+      currencyInr: "INR (₹) - भारतीय रुपया",
+      currencyUsd: "USD ($) - अमेरिकी डॉलर",
+      currencyEur: "EUR (€) - यूरो",
+      pathwayMode: "वित्तीय पथ मोड",
+      pathwayCardTitle: "क्रेडिट कार्ड ऑप्टिमाइज़ेशन",
+      pathwayCardDesc: "रिवॉर्ड बढ़ाने वाला टूल, कार्ड तुलना, मर्चेंट ऑफ़र रडार और स्टेटमेंट विश्लेषण।",
+      pathwayCashTitle: "नकद और बचत पथ",
+      pathwayCashDesc: "50/30/20 बजट ढाँचा, आपातकालीन रनवे कवच, UPI और नकद ख़र्च लॉग, और बचत लक्ष्य।",
+      saveFailed: "प्रोफ़ाइल सहेजी नहीं जा सकी: ",
     },
 
     auth: {
@@ -2439,6 +3962,36 @@ export const translations: Record<Language, Translations> = {
       noAccountPrompt: "खाता नहीं है?",
       haveAccountPrompt: "पहले से खाता है?",
       registeredSuccessBanner: "खाता सफलतापूर्वक बन गया! कृपया अपनी साख के साथ लॉगिन करें।",
+      signInFailed: "साइन इन नहीं हो सका। कृपया अपनी जानकारी जाँचें।",
+      registrationFailed: "पंजीकरण नहीं हो सका। कृपया फिर से कोशिश करें।",
+      passwordMinPlaceholder: "कम से कम 8 अक्षर",
+      languageEnglishDefault: "English (डिफ़ॉल्ट)",
+      languageHindiOption: "हिन्दी",
+      languageKannadaOption: "ಕನ್ನಡ (कन्नड़)",
+      genericError: "कुछ गड़बड़ हो गई। कृपया फिर से कोशिश करें।",
+      checkInbox: "अपना इनबॉक्स देखें",
+      noEmailHint: "ईमेल नहीं दिखा? अपना स्पैम फ़ोल्डर देखें।",
+      backToLogin: "लॉगिन पर वापस जाएँ",
+      forgotTitle: "पासवर्ड भूल गए?",
+      forgotSub: "अपना ईमेल दर्ज करें, हम आपको रीसेट लिंक भेजेंगे।",
+      emailAddress: "ईमेल पता",
+      sendResetLink: "रीसेट लिंक भेजें",
+      resetLinkSent: "अगर {email} CLIQ पर पंजीकृत है, तो आपको जल्द ही पासवर्ड रीसेट लिंक मिलेगा। यह लिंक 60 मिनट में समाप्त हो जाएगा।",
+      noResetToken: "रीसेट टोकन नहीं मिला। कृपया नया रीसेट लिंक माँगें।",
+      passwordTooShort: "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।",
+      passwordsMismatch: "पासवर्ड मेल नहीं खाते।",
+      passwordResetSuccess: "पासवर्ड सफलतापूर्वक रीसेट हुआ।",
+      passwordResetFailed: "पासवर्ड रीसेट नहीं हो सका।",
+      passwordUpdated: "पासवर्ड अपडेट हो गया",
+      redirectingLogin: "आपको लॉगिन पर ले जा रहे हैं…",
+      setNewPassword: "नया पासवर्ड सेट करें",
+      setNewPasswordSub: "अपने CLIQ खाते के लिए एक मज़बूत पासवर्ड चुनें।",
+      newPassword: "नया पासवर्ड",
+      atLeast6: "कम से कम 6 अक्षर",
+      confirmPassword: "पासवर्ड की पुष्टि करें",
+      repeatPassword: "पासवर्ड दोबारा लिखें",
+      resetPassword: "पासवर्ड रीसेट करें",
+      loading: "लोड हो रहा है…",
     },
 
     onboarding: {
@@ -2513,6 +4066,10 @@ export const translations: Record<Language, Translations> = {
       health: "स्वास्थ्य और फ़ार्मेसी",
       international: "अंतर्राष्ट्रीय खर्च",
       other: "सामान्य खर्च",
+      transport: "परिवहन",
+      medical: "चिकित्सा",
+      rent: "किराया",
+      savings: "बचत",
     },
 
     channels: {
@@ -2622,6 +4179,31 @@ export const translations: Record<Language, Translations> = {
       pathOptimizeExistingDesc: "कैशबैक को अधिकतम करें, रिवॉर्ड सीमा पर नजर रखें, वार्षिक शुल्क का ऑडिट करें और नुकसान रोकें।",
       switchPath: "सीखने का मार्ग बदलें",
       pathUpdatedSuccess: "वित्तीय शिक्षण मार्ग सफलतापूर्वक अपडेट किया गया!",
+      searchLessonsPlaceholder: "पाठ और विषय खोजें...",
+      loadingLessons: "पाठ लोड हो रहे हैं...",
+      noLessonsMatch: "आपकी खोज से कोई पाठ मेल नहीं खाता",
+      adjustFilters: "अपने फ़िल्टर या खोज शब्द बदलकर देखें।",
+      neverPaidOff: "∞ (कभी नहीं)",
+      colMonth: "माह",
+      colStartBal: "शुरुआती शेष",
+      colInterest: "ब्याज",
+      colPrincipal: "मूलधन",
+      colEndBal: "अंतिम शेष",
+      altFixedPayment: "वैकल्पिक तय भुगतान (₹)",
+      colTime: "समय",
+      groceriesInr: "किराना (₹)",
+      utilitiesInr: "बिजली-पानी (₹)",
+      diningOutInr: "बाहर खाना (₹)",
+      shoppingInr: "ख़रीदारी (₹)",
+      fuelCommuteInr: "ईंधन और आवाजाही (₹)",
+      monthlySavingsInr: "मासिक बचत (₹)",
+      guidanceObservations: "मार्गदर्शन और टिप्पणियाँ",
+      cibilImpact: "CIBIL स्कोर पर असर",
+      renewalWaiverThreshold: "नवीनीकरण छूट सीमा (₹)",
+      assessmentVerdict: "आकलन का निष्कर्ष",
+      topicsMastered: "5 विषय-क्षेत्रों में सीखे गए इंटरैक्टिव विषय",
+      quizPerformance: "ज्ञान परीक्षण क्विज़ का प्रदर्शन",
+      monthsCount: "{count} महीने",
     },
 
     incomes: {
@@ -2683,10 +4265,184 @@ export const translations: Record<Language, Translations> = {
       recordExpense: "खर्च दर्ज करें",
       paymentMethodBreakdown: "भुगतान विधि विवरण",
       loadingData: "नकदी प्रवाह और बजट डेटा लोड हो रहा है...",
+      pageSubtitle: "अपनी तनख़्वाह, फ़्रीलांस और अन्य आय स्रोतों को ट्रैक करें।",
+      addIncomeButton: "आय जोड़ें",
+      regularIncome: "नियमित आय",
+      irregularIncome: "अनियमित आय",
+      incomeSources: "आय स्रोत",
+      sourcePlaceholder2: "जैसे मुख्य तनख़्वाह",
+      frequency: "आवृत्ति",
+      notesPlaceholder2: "जैसे पहली तिमाही का बोनस",
+      noStreamsYet: "अभी कोई आय स्रोत नहीं है। ऊपर अपना पहला स्रोत जोड़ें।",
+      newLimitPlaceholder: "नई सीमा",
+      needs50: "50% (ज़रूरतें)",
+      threshold80: "80% (चेतावनी सीमा)",
+      hideAllocations: "▲ श्रेणी बँटवारा छिपाएँ",
+      editAllocations: "▼ श्रेणी बँटवारा बदलें",
+      allocationHint: "हर श्रेणी के लिए बजट का % तय करें। कुल नीचे दिखेगा।",
+      exceeds100: " — 100% से ज़्यादा",
+      deleteIncomeAria: "आय हटाएँ",
+      deleteSourceTitle: "आय स्रोत हटाएँ",
+      recurring: "आवर्ती",
+      totalPercent: "कुल: {percent}%",
     },
   },
 
   kn: {
+    healthMessages: {
+      budgetAlert: "ಮಾಸಿಕ ಬಜೆಟ್ ಎಚ್ಚರಿಕೆ: ಕಳೆದ 30 ದಿನಗಳ ಖರ್ಚು ({spent}) ನಿಮ್ಮ ಯೋಜಿತ ಮಿತಿ {limit} ಮೀರಿದೆ ({pct}%).",
+      budgetNotice: "ಮಾಸಿಕ ಬಜೆಟ್ ಸೂಚನೆ: ನೀವು ಬಜೆಟ್ ಮಿತಿಯ {pct}% ತಲುಪಿದ್ದೀರಿ ({limit} ರಲ್ಲಿ {spent}).",
+      baselineNoData: "ಡೇಟಾ ಸೂಚನೆ: ಯಾವುದೇ ಆದಾಯ, ಬಜೆಟ್ ಅಥವಾ ವಹಿವಾಟು ದಾಖಲೆ ಸಿಗಲಿಲ್ಲ. ನಿಮ್ಮ ವೈಯಕ್ತಿಕ ಆರ್ಥಿಕ ಆರೋಗ್ಯ ಸೂಚ್ಯಂಕ ಪಡೆಯಲು ಮಾಸಿಕ ಆದಾಯ ಸೇರಿಸಿ ಮತ್ತು ಖರ್ಚು ದಾಖಲಿಸಿ.",
+      incomeSetup: "ಆದಾಯ ಸೆಟಪ್: 'ಬಜೆಟ್ ಮತ್ತು ಆದಾಯ' ವಿಭಾಗದಲ್ಲಿ ನಿಮ್ಮ ಮಾಸಿಕ ಆದಾಯ ಮೂಲಗಳನ್ನು ಸೇರಿಸಿ.",
+      budgeting: "ಬಜೆಟ್ ರಚನೆ: ಮಾಸಿಕ ಖರ್ಚಿಗೆ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ವರ್ಗವಾರು 50/30/20 ಬಜೆಟ್ ರಚಿಸಿ.",
+      expenseTracking: "ಖರ್ಚು ಟ್ರ್ಯಾಕಿಂಗ್: ನಗದು ಹರಿವು ಟ್ರ್ಯಾಕ್ ಮಾಡಲು ದಿನನಿತ್ಯದ ನಗದು, UPI ಅಥವಾ ಬ್ಯಾಂಕ್ ವಹಿವಾಟುಗಳನ್ನು ದಾಖಲಿಸಿ.",
+      cashFlowDeficit: "ನಗದು ಹರಿವಿನ ಕೊರತೆ: ಕಳೆದ 30 ದಿನಗಳ ಖರ್ಚು ({spent}) ಮಾಸಿಕ ಆದಾಯ ({income}) ಗಿಂತ {gap} ಹೆಚ್ಚಾಗಿದೆ.",
+      incomeRecorded: "ಡೇಟಾ ಸೂಚನೆ: ಮಾಸಿಕ ಆದಾಯ ದಾಖಲಾಗಿದೆ. ನಿಜವಾದ ಮಾಸಿಕ ಉಳಿತಾಯ ದರ ಲೆಕ್ಕಹಾಕಲು ಖರ್ಚುಗಳನ್ನು ಸೇರಿಸಿ.",
+      incomeMissing: "ಡೇಟಾ ಸೂಚನೆ: ಮಾಸಿಕ ಆದಾಯ ದಾಖಲಾಗಿಲ್ಲ. ಉಳಿತಾಯ ದರದ ಅಂಕ ಪಡೆಯಲು 'ಬಜೆಟ್' ವಿಭಾಗದಲ್ಲಿ ಆದಾಯ ಮೂಲಗಳನ್ನು ಸೇರಿಸಿ.",
+      budgetSetNoTxns: "ಡೇಟಾ ಸೂಚನೆ: ಮಾಸಿಕ ಬಜೆಟ್ ಗುರಿ ಹೊಂದಿಸಲಾಗಿದೆ. ಬಜೆಟ್ ಪಾಲನೆ ಅಳೆಯಲು ದಿನನಿತ್ಯದ ವಹಿವಾಟುಗಳನ್ನು ದಾಖಲಿಸಿ.",
+      budgetSetup: "ಬಜೆಟ್ ಸೆಟಪ್: ವರ್ಗವಾರು ಮಾಸಿಕ ಬಜೆಟ್ ರಚಿಸಿದರೆ ತಿಂಗಳ ಕೊನೆಯ ಹಣದ ಕೊರತೆ ತಪ್ಪುತ್ತದೆ.",
+      fixedCostAudit: "ಸ್ಥಿರ ವೆಚ್ಚ ಪರಿಶೀಲನೆ: ಪುನರಾವರ್ತಿತ ಬದ್ಧತೆಗಳು ಮಾಸಿಕ ಹೊರಹರಿವಿನ {pct}% ಆಗಿವೆ. ಬಳಸದ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+      noCardModeActive: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ರಹಿತ ಮೋಡ್ ಸಕ್ರಿಯ: ಆರೋಗ್ಯ ಸ್ಕೋರ್ ನಗದು ಹರಿವಿನ ಸ್ಥಿರತೆ, ಉಳಿತಾಯ ದರ ಮತ್ತು ಬಜೆಟ್ ಶಿಸ್ತನ್ನು ಅಳೆಯುತ್ತದೆ. ಕಾರ್ಡ್ ರಿವಾರ್ಡ್ ಮತ್ತು ಶುಲ್ಕ ಪರಿಶೀಲನೆ ಒಳಗೊಂಡಿಲ್ಲ.",
+      emergencyGoal: "ತುರ್ತು ನಿಧಿ ಗುರಿ: ಹೆಚ್ಚಿನ ಬಡ್ಡಿಯ ಉಳಿತಾಯ ಖಾತೆಯಲ್ಲಿ ಸುಮಾರು {amount} ರಷ್ಟು 3 ತಿಂಗಳ ನಗದು ಸುರಕ್ಷೆ ಕಟ್ಟಿ.",
+      rewardLeakage: "ರಿವಾರ್ಡ್ ನಷ್ಟ ಎಚ್ಚರಿಕೆ: ದಿನನಿತ್ಯದ ಖರೀದಿಗಳಿಗೆ ಕಡಿಮೆ ಲಾಭದ ಕಾರ್ಡ್ ಬಳಸಿದ್ದರಿಂದ ನೀವು {amount} ಕಳೆದುಕೊಂಡಿದ್ದೀರಿ.",
+      cardReview: "ಕಾರ್ಡ್ ಪರಿಶೀಲನೆ: {card} ವಾರ್ಷಿಕ ಶುಲ್ಕ {fee} ಗಳಿಸಿದ ರಿವಾರ್ಡ್ ({rewards}) ಗಿಂತ ಹೆಚ್ಚಾಗಿದೆ. ಶುಲ್ಕ ಮನ್ನಾ ಷರತ್ತುಗಳು ಅಥವಾ ಪರ್ಯಾಯ ಕಾರ್ಡ್‌ಗಳನ್ನು ಪರಿಗಣಿಸಿ.",
+      trendUp: "ಖರ್ಚಿನ ಪ್ರವೃತ್ತಿ: ಹಿಂದಿನ 30 ದಿನಗಳಿಗೆ ಹೋಲಿಸಿದರೆ ನಿಮ್ಮ ಖರ್ಚು {pct}% ಹೆಚ್ಚಾಗಿದೆ. ಹೊರಗೆ ಊಟ, ಶಾಪಿಂಗ್ ಮುಂತಾದ ಐಚ್ಛಿಕ ವರ್ಗಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+      trendDown: "ಖರ್ಚಿನ ಪ್ರವೃತ್ತಿ: ಹಿಂದಿನ 30 ದಿನಗಳಿಗೆ ಹೋಲಿಸಿದರೆ ನಿಮ್ಮ ಖರ್ಚು {pct}% ಕಡಿಮೆಯಾಗಿದೆ. ಖರ್ಚು ನಿಯಂತ್ರಣದಲ್ಲಿಟ್ಟಿದ್ದಕ್ಕೆ ಶಭಾಷ್!",
+      subscriptionHygiene: "ಚಂದಾದಾರಿಕೆ ಪರಿಶೀಲನೆ: ನಿಮ್ಮ ಬಳಿ {count} ಪುನರಾವರ್ತಿತ ಚಂದಾದಾರಿಕೆಗಳಿವೆ, ಒಟ್ಟು ಸುಮಾರು {amount}/ವರ್ಷ.",
+      greatJob: "ಅತ್ಯುತ್ತಮ! ನಿಮ್ಮ ಖರ್ಚು ನಿಮ್ಮ ಆರ್ಥಿಕ ಗುರಿಗಳಿಗೆ ಸರಿಯಾಗಿ ಹೊಂದಿಕೊಂಡಿದೆ.",
+      baselineNoCards: "ಡೇಟಾ ಸೂಚನೆ: ಯಾವುದೇ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಅಥವಾ ವಹಿವಾಟು ಇತಿಹಾಸ ಸಿಗಲಿಲ್ಲ. ಕ್ರೆಡಿಟ್ ಆಪ್ಟಿಮೈಸೇಶನ್ ಸ್ಕೋರ್‌ಗಾಗಿ ನಿಮ್ಮ ಕಾರ್ಡ್‌ಗಳು ಅಥವಾ ವಹಿವಾಟುಗಳನ್ನು ಸೇರಿಸಿ.",
+      incomeNoStreams: "ಯಾವುದೇ ಆದಾಯ ಮೂಲ ದಾಖಲಾಗಿಲ್ಲ.",
+      incomeAddEarnings: "ನಗದು ಹರಿವು ವಿಶ್ಲೇಷಣೆ ಮತ್ತು ಉಳಿತಾಯ ಮಾರ್ಗದರ್ಶನ ಪಡೆಯಲು ನಿಮ್ಮ ಸಂಬಳ, ಫ್ರೀಲ್ಯಾನ್ಸ್ ಪಾವತಿಗಳು ಅಥವಾ ಇತರ ಗಳಿಕೆಗಳನ್ನು ಸೇರಿಸಿ.",
+      incomeCalculatedAcross: "ದಾಖಲಾದ {count} ಆದಾಯ ಮೂಲಗಳ ಆಧಾರದ ಮೇಲೆ ಲೆಕ್ಕಾಚಾರ.",
+      incomeRollingMedian: "90 ದಿನಗಳ ಚಲಿಸುವ ಮಾಸಿಕ ಮಧ್ಯಮ ಮೌಲ್ಯ {amount}, {periods} ಸಕ್ರಿಯ ಮಾಸಿಕ ಅವಧಿಗಳ ಆಧಾರದ ಮೇಲೆ.",
+      incomeNoRecurring: "ಯಾವುದೇ ಸಕ್ರಿಯ ಪುನರಾವರ್ತಿತ ಆದಾಯ ಮೂಲವಿಲ್ಲ.",
+      incomeOldExcluded: "90 ದಿನಗಳಿಗಿಂತ ಹಳೆಯ ಒಮ್ಮೆಯ ಆದಾಯಗಳನ್ನು ಪುನರಾವರ್ತಿತ ನಗದು ಹರಿವಿನಿಂದ ಹೊರಗಿಡಲಾಗಿದೆ.",
+      incomeIrregularShare: "ಅನಿಯಮಿತ ಆದಾಯ ಮಾಸಿಕ ಒಳಹರಿವಿನ {pct}% ಆಗಿದೆ; ಸ್ಥಿರತೆಯ ಮುನ್ಸೂಚನೆಗೆ ಚಲಿಸುವ ಮಧ್ಯಮ ಮೌಲ್ಯ ಬಳಸಲಾಗುತ್ತಿದೆ.",
+    },
+
+    subscriptionsPage: {
+      subtitle: "ಪುನರಾವರ್ತಿತ ಖರ್ಚುಗಳು — ಚಂದಾದಾರಿಕೆಗಳು, ವಿದ್ಯುತ್-ನೀರು, ವಿಮೆ, EMI ಮತ್ತು ಬಾಡಿಗೆ.",
+      recurringEntries: "ಪುನರಾವರ್ತಿತ ನಮೂದುಗಳು",
+      monthlyCommitment: "ಮಾಸಿಕ ಬದ್ಧತೆ",
+      categories: "ವರ್ಗಗಳು",
+      showingNote: "ವ್ಯವಸ್ಥೆ ಪುನರಾವರ್ತಿತ ಎಂದು ಗುರುತಿಸಿದ ವಹಿವಾಟುಗಳು ಮತ್ತು ಚಂದಾದಾರಿಕೆ, ವಿದ್ಯುತ್-ನೀರು, ವಿಮೆ, EMI, ಬಾಡಿಗೆ ವರ್ಗಗಳ ಇತ್ತೀಚಿನ ನಮೂದನ್ನು ತೋರಿಸಲಾಗುತ್ತಿದೆ.",
+      logTransactionsLink: "ವಹಿವಾಟು ದಾಖಲಿಸಿ →",
+      noRecurring: "ಯಾವುದೇ ಪುನರಾವರ್ತಿತ ವಹಿವಾಟು ಸಿಗಲಿಲ್ಲ.",
+      noRecurringHint: "ಇಲ್ಲಿ ನೋಡಲು ಚಂದಾದಾರಿಕೆ, ವಿದ್ಯುತ್-ನೀರು, ವಿಮೆ, EMI ಅಥವಾ ಬಾಡಿಗೆ ವರ್ಗಗಳಲ್ಲಿ ಖರ್ಚು ದಾಖಲಿಸಿ.",
+      logATransaction: "ವಹಿವಾಟು ದಾಖಲಿಸಿ",
+      markedRecurring: "ಪುನರಾವರ್ತಿತ ಎಂದು ಗುರುತಿಸಲಾಗಿದೆ",
+      totalMonthlyCommitment: "ಒಟ್ಟು ಮಾಸಿಕ ಬದ್ಧತೆ",
+      detectionNote: "ಪುನರಾವರ್ತಿತ ಪತ್ತೆ ವಹಿವಾಟು ವರ್ಗಗಳು ಮತ್ತು ವ್ಯವಸ್ಥೆಯ ಸಂಕೇತಗಳ ಆಧಾರದ ಮೇಲಿದೆ. ನಿಖರ ಟ್ರ್ಯಾಕಿಂಗ್‌ಗಾಗಿ ಖರ್ಚು ದಾಖಲಿಸುವಾಗ ಸರಿಯಾದ ವರ್ಗ ಆರಿಸಿ.",
+      categorySuffix: "{category} ವರ್ಗ",
+      allTransactions: "ಎಲ್ಲಾ ವಹಿವಾಟುಗಳು",
+    },
+
+    emergencyFund: {
+      tierBasic: "ಮೂಲ (3 ತಿಂಗಳು)",
+      tierBasicDesc: "ಕೆಲಸ ಹೋದಾಗ ಅಥವಾ ದೊಡ್ಡ ಅನಿರೀಕ್ಷಿತ ಖರ್ಚಿಗೆ ನೆರವು",
+      tierStandard: "ಪ್ರಮಾಣಿತ (6 ತಿಂಗಳು)",
+      tierStandardDesc: "ಹೆಚ್ಚಿನ ಸಂಬಳದ ಉದ್ಯೋಗಿಗಳಿಗೆ ಶಿಫಾರಸು",
+      tierConservative: "ಸುರಕ್ಷಿತ (12 ತಿಂಗಳು)",
+      tierConservativeDesc: "ಫ್ರೀಲ್ಯಾನ್ಸರ್‌ಗಳು ಮತ್ತು ಅನಿಯಮಿತ ಆದಾಯದವರಿಗೆ",
+      subtitle: "ಅನಿರೀಕ್ಷಿತ ಖರ್ಚುಗಳಿಗೆ 3–6 ತಿಂಗಳ ಆರ್ಥಿಕ ಸುರಕ್ಷೆ — ಆರ್ಥಿಕ ಭದ್ರತೆಯ ಅಡಿಪಾಯ.",
+      insufficientData: "ಗುರಿ ಲೆಕ್ಕಹಾಕಲು ಸಾಕಷ್ಟು ಡೇಟಾ ಇಲ್ಲ",
+      insufficientDesc: "ನಿಮ್ಮ ತುರ್ತು ನಿಧಿ ಗುರಿ ನಿಮ್ಮ ಮಾಸಿಕ ಅಗತ್ಯ ಖರ್ಚಿನ 3 ಪಟ್ಟು. ಇದನ್ನು ನಿಖರವಾಗಿ ಲೆಕ್ಕಹಾಕಲು CLIQ ಗೆ ನಿಜವಾದ ಖರ್ಚಿನ ಡೇಟಾ ಬೇಕು.",
+      whatsNeeded: "ಏನು ಬೇಕು:",
+      needIncome: "ಕನಿಷ್ಠ ಒಂದು ಆದಾಯ ಮೂಲ — ನಿಮ್ಮ ಆರ್ಥಿಕ ಸ್ಥಿತಿ ತಿಳಿಯಲು",
+      needExpense: "ಕನಿಷ್ಠ ಒಂದು ದಾಖಲಾದ ಖರ್ಚು — ಮಾಸಿಕ ಅಗತ್ಯ ಖರ್ಚು ಲೆಕ್ಕಹಾಕಲು",
+      budgetImproves: "ಬಜೆಟ್ ಹೊಂದಿಸಿದರೆ ವರ್ಗವಾರು ನಿಖರತೆ ಹೆಚ್ಚುತ್ತದೆ",
+      threeMonthTarget: "3 ತಿಂಗಳ ತುರ್ತು ಗುರಿ",
+      needsBasis: " (ಅಗತ್ಯ ವರ್ಗದ ಖರ್ಚಿನ ಆಧಾರದ ಮೇಲೆ)",
+      estimateBasis: " (ಒಟ್ಟು ಖರ್ಚಿನ 50% ಎಂದು ಅಂದಾಜು)",
+      monthContribution: "ಈ ತಿಂಗಳ ಉಳಿತಾಯ ಕೊಡುಗೆ",
+      singleMonthNote: "ಗಮನಿಸಿ: ಇದು ಒಂದು ತಿಂಗಳ ಉಳಿತಾಯ ಡೇಟಾ ಮಾತ್ರ. ನಿಮ್ಮ ಒಟ್ಟು ಉಳಿತಾಯ ಬಾಕಿ ಬೇರೆಯಾಗಿರಬಹುದು.",
+      monthlyEssentials: "ಮಾಸಿಕ ಅಗತ್ಯಗಳು",
+      threeMonthTargetShort: "3 ತಿಂಗಳ ಗುರಿ",
+      currentMonthSavings: "ಈ ತಿಂಗಳ ಉಳಿತಾಯ",
+      howMuch: "ನೀವು ಎಷ್ಟು ಉಳಿಸಬೇಕು?",
+      buildingTitle: "ನಿಮ್ಮ ತುರ್ತು ನಿಧಿ ಕಟ್ಟುವುದು",
+      tip1: "ಸಣ್ಣ ಗುರಿಯಿಂದ ಆರಂಭಿಸಿ: ಮೊದಲು ₹5,000–₹10,000 ಉಳಿಸಿ, ನಂತರ ಹೆಚ್ಚಿಸಿ.",
+      tip2: "ತುರ್ತು ನಿಧಿಯನ್ನು ಸುಲಭವಾಗಿ ಹಿಂಪಡೆಯಬಹುದಾದ ಉಳಿತಾಯ ಖಾತೆಯಲ್ಲಿ ಇಡಿ — ಹೂಡಿಕೆಯಲ್ಲಿ ಅಲ್ಲ.",
+      tip3: "ಸಂಬಳದ ದಿನ ಪ್ರತ್ಯೇಕ ಖಾತೆಗೆ ಮಾಸಿಕ ಸ್ವಯಂ ವರ್ಗಾವಣೆ ಹೊಂದಿಸಿ.",
+      tip4: "ನಿಜವಾದ ತುರ್ತು ಸಂದರ್ಭಗಳಲ್ಲಿ ಮಾತ್ರ ಬಳಸಿ — ಕೆಲಸ ನಷ್ಟ, ವೈದ್ಯಕೀಯ ತುರ್ತು, ತುರ್ತು ದುರಸ್ತಿ.",
+      tip5: "ಹಿಂಪಡೆದ ತಕ್ಷಣ ಮತ್ತೆ ತುಂಬಿಸಿ.",
+      dataNote: "ಗುರಿಗಳು ಈ ತಿಂಗಳ ನಿಮ್ಮ ನಿಜವಾದ ಖರ್ಚಿನ ಆಧಾರದ ಮೇಲಿವೆ. ನಿಖರ ಲೆಕ್ಕಕ್ಕಾಗಿ ಎಲ್ಲಾ ಅಗತ್ಯ ಖರ್ಚುಗಳನ್ನು (ಬಾಡಿಗೆ, ದಿನಸಿ, ವಿದ್ಯುತ್-ನೀರು, ಸಾರಿಗೆ, ವೈದ್ಯಕೀಯ) ಸರಿಯಾದ ವರ್ಗಗಳಲ್ಲಿ ದಾಖಲಿಸಿ.",
+      basedOnEssentials: "ತಿಂಗಳಿಗೆ {amount} ಅಗತ್ಯ ಖರ್ಚಿನ ಆಧಾರದ ಮೇಲೆ",
+      addIncome: "ಆದಾಯ ಸೇರಿಸಿ",
+      logExpenses: "ಖರ್ಚು ದಾಖಲಿಸಿ",
+    },
+
+    savingsGoals: {
+      subtitle: "ಮೈಲಿಗಲ್ಲುಗಳನ್ನು ಹೊಂದಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಆರ್ಥಿಕ ಗುರಿಗಳತ್ತ ಪ್ರಗತಿ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ.",
+      totalTarget: "ಒಟ್ಟು ಗುರಿ",
+      totalSaved: "ಒಟ್ಟು ಉಳಿತಾಯ",
+      newGoal: "ಹೊಸ ಉಳಿತಾಯ ಗುರಿ",
+      goalName: "ಗುರಿಯ ಹೆಸರು",
+      goalNamePlaceholder: "ಉದಾ. ತುರ್ತು ನಿಧಿ, ಗೋವಾ ಪ್ರವಾಸ",
+      targetAmount: "ಗುರಿ ಮೊತ್ತ (₹)",
+      currentSavings: "ಈಗಿನ ಉಳಿತಾಯ (₹) — ಐಚ್ಛಿಕ",
+      targetDate: "ಗುರಿ ದಿನಾಂಕ — ಐಚ್ಛಿಕ",
+      addContribution: "ಕೊಡುಗೆ ಸೇರಿಸಿ",
+      noGoals: "ಇನ್ನೂ ಯಾವುದೇ ಉಳಿತಾಯ ಗುರಿ ಇಲ್ಲ.",
+      createFirst: "ಪ್ರಗತಿ ಟ್ರ್ಯಾಕ್ ಮಾಡಲು ನಿಮ್ಮ ಮೊದಲ ಗುರಿ ರಚಿಸಿ.",
+      achieved: "ಗುರಿ ಸಾಧಿಸಲಾಗಿದೆ!",
+      localNote: "ಉಳಿತಾಯ ಗುರಿಗಳನ್ನು ನಿಮ್ಮ ಬ್ರೌಸರ್‌ನಲ್ಲೇ ಉಳಿಸಲಾಗುತ್ತದೆ. ಇವು ನೀವು ಇಲ್ಲಿ ಕೈಯಾರೆ ದಾಖಲಿಸುವ ಮೊತ್ತಗಳು, ನಿಮ್ಮ ಖಾತೆಯ ಬಾಕಿ ಅಲ್ಲ. ಹೆಚ್ಚಿನ ಒಳನೋಟಕ್ಕಾಗಿ ನಿಮ್ಮ ಆದಾಯ ಮತ್ತು ವಹಿವಾಟುಗಳನ್ನು ಸೇರಿಸಿ.",
+      monthsLeft: " · {count} ತಿಂಗಳು ಬಾಕಿ",
+      remaining: "{amount} ಬಾಕಿ",
+      perMonthNeeded: "ಗಡುವಿನೊಳಗೆ ಗುರಿ ತಲುಪಲು ತಿಂಗಳಿಗೆ {amount} ಬೇಕು",
+      newGoalButton: "ಹೊಸ ಗುರಿ",
+      createGoal: "ಗುರಿ ರಚಿಸಿ",
+      add: "ಸೇರಿಸಿ",
+      addSavings: "ಉಳಿತಾಯ ಸೇರಿಸಿ",
+    },
+
+    cashDashboard: {
+      loadFailed: "ಆರ್ಥಿಕ ಡೇಟಾ ಲೋಡ್ ಆಗಲಿಲ್ಲ",
+      expenseLogged: "ಖರ್ಚು ಯಶಸ್ವಿಯಾಗಿ ದಾಖಲಾಗಿದೆ!",
+      expenseLogFailed: "ಖರ್ಚು ದಾಖಲಿಸಲು ಆಗಲಿಲ್ಲ",
+      sampleCleared: "ಮಾದರಿ ಡೇಟಾ ತೆರವುಗೊಳಿಸಲಾಗಿದೆ",
+      sampleClearFailed: "ಮಾದರಿ ಡೇಟಾ ತೆರವುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ",
+      sampleLoaded: "ಮಾದರಿ ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ಯಶಸ್ವಿಯಾಗಿ ಲೋಡ್ ಆಗಿದೆ",
+      sampleLoadFailed: "ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ದೋಷ",
+      pathwayBadge: "ನಗದು ಮತ್ತು ಉಳಿತಾಯ ದಾರಿ",
+      title: "ವೈಯಕ್ತಿಕ ಹಣಕಾಸು ಕಮಾಂಡ್ ಸೆಂಟರ್",
+      subtitle: "ಸಂಪೂರ್ಣ ನಗದು ಹರಿವು, 50/30/20 ಬಜೆಟ್ ಚೌಕಟ್ಟು, ತುರ್ತು ರನ್‌ವೇ ಮತ್ತು ಉಳಿತಾಯದ ಮೈಲಿಗಲ್ಲುಗಳು — ಒಂದೇ ಕಡೆ.",
+      clearSample: "ಮಾದರಿ ತೆರವುಗೊಳಿಸಿ",
+      monthlyInflow: "ಮಾಸಿಕ ಒಳಹರಿವು",
+      monthlyExpenses: "ಮಾಸಿಕ ಖರ್ಚುಗಳು",
+      viewLog: "ದಾಖಲೆ ನೋಡಿ",
+      remainingBalance: "ಉಳಿದ ಮೊತ್ತ",
+      liquidSurplus: "ಲಭ್ಯ ನಗದು ಹೆಚ್ಚುವರಿ",
+      plan: "ಯೋಜನೆ",
+      target20Rule: "ಗುರಿ: 20% ನಿಯಮ",
+      goals: "ಗುರಿಗಳು",
+      adjustLimits: "ಮಿತಿಗಳನ್ನು ಹೊಂದಿಸಿ",
+      needsTarget: "ಅಗತ್ಯಗಳು (50% ಗುರಿ)",
+      needsExamples: "ಬಾಡಿಗೆ, ದಿನಸಿ, ವಿದ್ಯುತ್-ನೀರು",
+      wantsTarget: "ಆಸೆಗಳು (30% ಗುರಿ)",
+      wantsExamples: "ಹೊರಗೆ ಊಟ, ಶಾಪಿಂಗ್, ಮನರಂಜನೆ",
+      savingsTarget: "ಉಳಿತಾಯ (20% ಗುರಿ)",
+      savingsExamples: "ತುರ್ತು ಮತ್ತು ಮೈಲಿಗಲ್ಲುಗಳು",
+      emergencyBuffer: "ತುರ್ತು ನಿಧಿ ಸುರಕ್ಷೆ",
+      runwayIntro: "ಆದಾಯ ನಿಂತರೂ ನಿಮ್ಮನ್ನು ರಕ್ಷಿಸಿಕೊಳ್ಳಿ. ನಿಮ್ಮ ಲೆಕ್ಕಹಾಕಿದ ರನ್‌ವೇ ನೀಡುವುದು:",
+      recommendedTarget: "ಶಿಫಾರಸು ಗುರಿ: 3-6 ತಿಂಗಳು",
+      viewEmergencyShield: "ತುರ್ತು ಸುರಕ್ಷಾ ಕವಚ ನೋಡಿ",
+      recentExpenses: "ಇತ್ತೀಚಿನ ನಗದು ಮತ್ತು ಬ್ಯಾಂಕ್ ಖರ್ಚುಗಳು",
+      viewAll: "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+      logModalTitle: "ನಗದು ಮತ್ತು ಬ್ಯಾಂಕ್ ಖರ್ಚು ದಾಖಲಿಸಿ",
+      logModalSub: "ಕ್ರೆಡಿಟ್ ರಹಿತ ವಹಿವಾಟು ದಾಖಲಿಸಿ (UPI, ಡೆಬಿಟ್, ನಗದು)",
+      merchantRecipient: "ಮರ್ಚೆಂಟ್ / ಸ್ವೀಕರಿಸುವವರು",
+      merchantPlaceholder: "ಉದಾ. Swiggy, ದಿನಸಿ, ವಿದ್ಯುತ್",
+      methodUpiApps: "UPI / GPay / PhonePe",
+      methodNetBanking: "ನೆಟ್ ಬ್ಯಾಂಕಿಂಗ್ / IMPS",
+      saveExpense: "ಖರ್ಚು ಉಳಿಸಿ",
+      monthlySpendOf: "ಮಾಸಿಕ ಖರ್ಚು: {budget} ರಲ್ಲಿ {spent}",
+      percentUsed: "{percent}% ಬಳಕೆ",
+      monthsCount: "{count} ತಿಂಗಳು",
+      budgetBreakdown: "ಬಜೆಟ್ ಬಳಕೆ ಮತ್ತು 50/30/20 ವಿವರ",
+      incomesRegistered: "{count} ಆದಾಯ ಮೂಲಗಳು ದಾಖಲಾಗಿವೆ",
+    },
+
     home: {
       hero: {
         badge: "ಪ್ರತಿಯೊಬ್ಬ ಭಾರತೀಯನಿಗೂ ಆರ್ಥಿಕ ಜಾಣ್ಮೆ",
@@ -2949,6 +4705,8 @@ export const translations: Record<Language, Translations> = {
       administrator: "ನಿರ್ವಾಹಕ",
       learn: "ಕಲಿಯಿರಿ (CLIQ Learn)",
       budget: "ಆದಾಯ ಮತ್ತು ಬಜೆಟ್",
+      cashSavingsBadge: "ನಗದು ಮತ್ತು ಉಳಿತಾಯ",
+      defaultUserName: "CLIQ ಬಳಕೆದಾರ",
     },
 
     sidebar: {
@@ -3024,6 +4782,42 @@ export const translations: Record<Language, Translations> = {
       addCardCta: "ಕಾರ್ಡ್ ಸೇರಿಸಿ",
       sampleSuggestion1: "Swiggy ನಲ್ಲಿ ಯಾವ ಕಾರ್ಡ್ ಬಳಸಿದರೆ ಹೆಚ್ಚು ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಸಿಗುತ್ತದೆ?",
       sampleSuggestion2: "ನನ್ನ ಕಾರ್ಡ್‌ಗಳ ಏರ್‌ಪೋರ್ಟ್ ಲೌಂಜ್ ಪ್ರವೇಶ ವಿವರಗಳನ್ನು ತೋರಿಸಿ",
+      learnInclusionBadge: "CLIQ Learn ಮತ್ತು ಆರ್ಥಿಕ ಒಳಗೊಳ್ಳುವಿಕೆ",
+      noCardBannerTitle: "ಆರ್ಥಿಕ ಕಮಾಂಡ್ ಸೆಂಟರ್ — ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಬೇಕಿಲ್ಲ",
+      noCardBannerDesc: "ಆರ್ಥಿಕ ಸ್ಥಿರತೆ ಬೆಳೆಸಿ, ನಿಮ್ಮ ನಿಯಮಿತ ಮತ್ತು ಅನಿಯಮಿತ ಗಳಿಕೆಯನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ, 50-30-20 ಬಜೆಟ್ ಚೌಕಟ್ಟಿನಲ್ಲಿ ಯೋಜಿಸಿ, ಮತ್ತು ಅರ್ಜಿ ಹಾಕುವ ಮೊದಲು ಕ್ರೆಡಿಟ್ ನಿಜವಾಗಿ ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ ಎಂದು ತಿಳಿಯಿರಿ.",
+      exploreLearn: "CLIQ Learn ಅನ್ವೇಷಿಸಿ",
+      manageIncomes: "ಆದಾಯ ನಿರ್ವಹಿಸಿ",
+      portfolioSetupBadge: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ಸೆಟಪ್",
+      portfolioSetupTitle: "ರಿವಾರ್ಡ್ ಹೆಚ್ಚಿಸಲು ನಿಮ್ಮ ಮೊದಲ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸೇರಿಸಿ",
+      portfolioSetupDesc: "ನಿಮ್ಮ ಕಾರ್ಡ್‌ಗಳನ್ನು ಸೇರಿಸಿ: ಪ್ರತಿ ಖರೀದಿಗೆ ಸ್ವಯಂ ಕಾರ್ಡ್ ಸಲಹೆ, ಬ್ಯಾಂಕ್ ಮರ್ಚೆಂಟ್ ರಿಯಾಯಿತಿಗಳು, ಶುಲ್ಕ ಮನ್ನಾ ಮಿತಿ ಟ್ರ್ಯಾಕಿಂಗ್, ಮತ್ತು ರಿವಾರ್ಡ್ ನಷ್ಟ ತಡೆ.",
+      browseTopCards: "ಉತ್ತಮ ಕಾರ್ಡ್‌ಗಳನ್ನು ನೋಡಿ",
+      switchToCashSavings: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಇಲ್ಲವೇ? ನಗದು ಮತ್ತು ಉಳಿತಾಯಕ್ಕೆ ಬದಲಿಸಿ",
+      manage: "ನಿರ್ವಹಿಸಿ",
+      monthlySpending: "ಮಾಸಿಕ ಖರ್ಚು",
+      view: "ನೋಡಿ",
+      targetBudget: "ಗುರಿ ಬಜೆಟ್",
+      framework503020: "50/30/20 ಚೌಕಟ್ಟು",
+      cashFlowResilience: "ನಗದು ಹರಿವಿನ ಸ್ಥಿರತೆ",
+      resilienceIndex: "ಸ್ಥಿರತಾ ಸೂಚ್ಯಂಕ",
+      breakdown: "ವಿವರ",
+      quickExpenseTitle: "ತ್ವರಿತ ಖರ್ಚು ಮತ್ತು UPI ಟ್ರ್ಯಾಕರ್",
+      noCardFlowMode: "ಕಾರ್ಡ್ ರಹಿತ ನಗದು ಹರಿವು ಮೋಡ್",
+      expenseRecorded: "ಖರ್ಚು ನಗದು ಹರಿವು ಮತ್ತು ಬಜೆಟ್‌ನಲ್ಲಿ ದಾಖಲಾಗಿದೆ.",
+      quickMerchantPlaceholder: "ಉದಾ. ಮೆಟ್ರೋ ಕಾರ್ಡ್, ದಿನಸಿ",
+      paymentMethod: "ಪಾವತಿ ವಿಧಾನ",
+      methodCash: "ನಗದು",
+      methodBankTransfer: "ಬ್ಯಾಂಕ್ ವರ್ಗಾವಣೆ",
+      methodDebitCard: "ಡೆಬಿಟ್ ಕಾರ್ಡ್",
+      methodOther: "ಇತರೆ",
+      addCreditCardLink: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸೇರಿಸಿ",
+      logExpense: "ಖರ್ಚು ದಾಖಲಿಸಿ",
+      optimizerMerchantPlaceholder: "ಉದಾ. Swiggy, Amazon",
+      manageBudget: "ಬಜೆಟ್ ನಿರ್ವಹಿಸಿ",
+      noIncomeStreams: "ಇನ್ನೂ ಯಾವುದೇ ಆದಾಯ ಮೂಲ ದಾಖಲಾಗಿಲ್ಲ.",
+      incomesCount: "{count} ಆದಾಯ ಮೂಲಗಳು",
+      transactionsCount: "{count} ವಹಿವಾಟುಗಳು",
+      wantRewardPerks: "ಕಾರ್ಡ್ ರಿವಾರ್ಡ್ ಸೌಲಭ್ಯಗಳು ಬೇಕೇ?",
+      monthlyEquiv: "ಮಾಸಿಕ ಸಮಾನ: {amount}",
     },
 
     cards: {
@@ -3058,6 +4852,33 @@ export const translations: Record<Language, Translations> = {
       savingCard: "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
       saveChanges: "ಉಳಿಸಿ",
       cancel: "ರದ್ದುಮಾಡಿ",
+      deleteFailed: "ಕಾರ್ಡ್ ಅಳಿಸಲು ಆಗಲಿಲ್ಲ: ",
+      updateFailed: "ಕಾರ್ಡ್ ನವೀಕರಿಸಲು ಆಗಲಿಲ್ಲ: ",
+      loadingWallet: "ನಿಮ್ಮ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ವ್ಯಾಲೆಟ್ ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+      totalAnnualFees: "ಒಟ್ಟು ವಾರ್ಷಿಕ ಶುಲ್ಕ:",
+      potentialWaiverTargets: "ಸಂಭಾವ್ಯ ಮನ್ನಾ ಗುರಿಗಳು:",
+      renewalWaiver: "ನವೀಕರಣ ಮನ್ನಾ",
+      viewInFan: "ಕಾರ್ಡ್ ಸ್ಟ್ಯಾಕ್‌ನಲ್ಲಿ ನೋಡಿ",
+      editCard: "ಕಾರ್ಡ್ ಸಂಪಾದಿಸಿ",
+      deactivateCard: "ಕಾರ್ಡ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ",
+      editSpecsTitle: "ಕಾರ್ಡ್ ವಿವರಗಳನ್ನು ಸಂಪಾದಿಸಿ",
+      cardNameRequired: "ಕಾರ್ಡ್ ಹೆಸರು *",
+      bankNameRequired: "ಬ್ಯಾಂಕ್ ಹೆಸರು *",
+      nickname: "ಅಡ್ಡಹೆಸರು",
+      nicknamePlaceholder: "ಉದಾ. ಪ್ರಯಾಣ ಕಾರ್ಡ್",
+      lastFourDigits: "ಕೊನೆಯ 4 ಅಂಕಿಗಳು",
+      network: "ನೆಟ್‌ವರ್ಕ್",
+      renewalWaiverSpend: "ನವೀಕರಣ ಮನ್ನಾ ಖರ್ಚು (₹)",
+      optionalWaiverSpend: "ಐಚ್ಛಿಕ ಮನ್ನಾ ಖರ್ಚು",
+      waiverConditionDetails: "ಮನ್ನಾ ಷರತ್ತುಗಳ ವಿವರ",
+      termsUrl: "ನಿಯಮಗಳ URL",
+      deactivate: "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ",
+      stackShowcase: "ಕಾರ್ಡ್ ಸ್ಟ್ಯಾಕ್",
+      stackHint: "ನೋಡಲು ಕಾರ್ಡ್ ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಬಾಣದ ಕೀಲಿಗಳನ್ನು ಬಳಸಿ • ಮುಂದಿನ ಕಾರ್ಡ್ ಸಕ್ರಿಯ",
+      prevCardHint: "ಹಿಂದಿನ ಕಾರ್ಡ್ (ಎಡ ಬಾಣ)",
+      prevCard: "ಹಿಂದಿನ ಕಾರ್ಡ್",
+      nextCardHint: "ಮುಂದಿನ ಕಾರ್ಡ್ (ಬಲ ಬಾಣ)",
+      nextCard: "ಮುಂದಿನ ಕಾರ್ಡ್",
     },
 
     cardDetails: {
@@ -3080,6 +4901,20 @@ export const translations: Record<Language, Translations> = {
       noBenefitsAvailable: "ಯಾವುದೇ ಪೂರಕ ಪ್ರಯೋಜನಗಳು ನೋಂದಾಯಿತವಾಗಿಲ್ಲ.",
       rulePerkExclusion: "ಹೊರಗಿಡುವಿಕೆ ನಿಯಮ",
       monthlyCapPrefix: "ಗರಿಷ್ಠ ಮಿತಿ: ₹",
+      cardholderLabel: "ಕಾರ್ಡ್‌ದಾರರು:",
+      notSpecified: "ನಮೂದಿಸಿಲ್ಲ",
+      verifiedBankData: "ಪರಿಶೀಲಿತ ಬ್ಯಾಂಕ್ ಡೇಟಾ",
+      chargesTitle: "ಶುಲ್ಕ ಪಟ್ಟಿ ಮತ್ತು ಶುಲ್ಕ ಮನ್ನಾ",
+      joiningFee: "ಸೇರ್ಪಡೆ ಶುಲ್ಕ",
+      noWaiver: "ಮನ್ನಾ ಇಲ್ಲ",
+      waiverCondition: "ಮನ್ನಾ ಷರತ್ತು",
+      multipliersTitle: "ವರ್ಗ ಮಲ್ಟಿಪ್ಲೈಯರ್ ಮತ್ತು ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್",
+      baselineCashback: "ಎಲ್ಲಾ ವರ್ಗಗಳಲ್ಲಿ ಪ್ರಮಾಣಿತ 1.0% ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್.",
+      loungeTitle: "ಲೌಂಜ್ ಮತ್ತು ಜೀವನಶೈಲಿ ಸೌಲಭ್ಯಗಳು",
+      loungeNotConfigured: "ಲೌಂಜ್ ಮತ್ತು ಜೀವನಶೈಲಿ ಸೌಲಭ್ಯಗಳು: ಈ ಕಾರ್ಡ್‌ಗೆ ಹೊಂದಿಸಿಲ್ಲ.",
+      verifiedSource: "ಪರಿಶೀಲಿತ ಮೂಲ",
+      officialCharges: "ಅಧಿಕೃತ ಶುಲ್ಕ ಪಟ್ಟಿ",
+      editSpecs: "ವಿವರ ಸಂಪಾದಿಸಿ",
     },
 
     cardSelection: {
@@ -3111,6 +4946,88 @@ export const translations: Record<Language, Translations> = {
       cardAddedSuccess: "ಕಾರ್ಡ್ ಯಶಸ್ವಿಯಾಗಿ ನೋಂದಾಯಿಸಲಾಗಿದೆ!",
       selectIssuerFirst: "ದಯವಿಟ್ಟು ಮೇಲೆ ಬ್ಯಾಂಕ್ ಆಯ್ಕೆಮಾಡಿ.",
       customCardNotice: "ಕಸ್ಟಮ್ ಕಾರ್ಡ್ ವಿವರಗಳನ್ನು ಹಸ್ತಚಾಲಿತವಾಗಿ ಹೊಂದಿಸಬಹುದು.",
+      airportLounge: "ವಿಮಾನ ನಿಲ್ದಾಣ ಲೌಂಜ್ ಪ್ರವೇಶ",
+      airportLoungeDesc: "ಪ್ರತಿ ತ್ರೈಮಾಸಿಕ ಉಚಿತ ವಿಮಾನ ನಿಲ್ದಾಣ ಲೌಂಜ್ ಭೇಟಿಗಳು.",
+      cardholderRequired: "ದಯವಿಟ್ಟು ಕಾರ್ಡ್‌ನಲ್ಲಿರುವಂತೆ ಕಾರ್ಡ್‌ದಾರರ ಹೆಸರು ನಮೂದಿಸಿ.",
+      lastFourInvalid: "ಕೊನೆಯ 4 ಅಂಕಿಗಳಲ್ಲಿ ನಿಖರವಾಗಿ 4 ಸಂಖ್ಯೆಗಳಿರಬೇಕು (ಉದಾ. 8821).",
+      feesNegative: "ಶುಲ್ಕ ಮತ್ತು ನವೀಕರಣ ಮನ್ನಾ ಮಿತಿಗಳು ಋಣಾತ್ಮಕವಾಗಿರಬಾರದು.",
+      termsUrlInvalid: "ಅಧಿಕೃತ ನಿಯಮಗಳ URL https:// ಅಥವಾ http:// ಇಂದ ಆರಂಭವಾಗಬೇಕು",
+      addFailed: "ಕಾರ್ಡ್ ಸೇರಿಸಲು ಆಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+      verified: "ಪರಿಶೀಲಿತ",
+      custom: "ಕಸ್ಟಮ್",
+      variantTier: "ವೇರಿಯಂಟ್ / ಶ್ರೇಣಿ",
+      nicknameOptional: "ಅಡ್ಡಹೆಸರು (ಐಚ್ಛಿಕ)",
+      registeredRedirecting: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಯಶಸ್ವಿಯಾಗಿ ನೋಂದಾಯಿಸಲಾಗಿದೆ! ವ್ಯಾಲೆಟ್‌ಗೆ ಕರೆದೊಯ್ಯಲಾಗುತ್ತಿದೆ...",
+      backToWallet: "ವ್ಯಾಲೆಟ್‌ಗೆ ಹಿಂತಿರುಗಿ",
+      pageSubtitle: "ಬ್ಯಾಂಕ್ ಕ್ಯಾಟಲಾಗ್‌ನಿಂದ ಕಾರ್ಡ್ ಆರಿಸಿ ಅಥವಾ ನಿಮ್ಮ ಕಾರ್ಡ್ ವಿವರಗಳನ್ನು ನೀವೇ ನಮೂದಿಸಿ",
+      tenIssuers: "10 ಬ್ಯಾಂಕ್‌ಗಳು",
+      preconfigured: "ಅಧಿಕೃತ ರಿವಾರ್ಡ್ ಮತ್ತು ಸೌಲಭ್ಯಗಳೊಂದಿಗೆ ಮೊದಲೇ ಹೊಂದಿಸಲಾಗಿದೆ",
+      step3Customize: "3. ಪರಿಶೀಲಿಸಿ, ಬದಲಿಸಿ ಮತ್ತು ಕಾರ್ಡ್ ಉಳಿಸಿ",
+      previewRealtime: "ಕಾರ್ಡ್ ಪೂರ್ವವೀಕ್ಷಣೆ ತಕ್ಷಣ ನವೀಕರಿಸುತ್ತದೆ",
+      identityTitle: "ಕಾರ್ಡ್ ಗುರುತು ಮತ್ತು ವಿವರಗಳು",
+      customManual: "ಕಸ್ಟಮ್ (ಕೈಯಾರೆ)",
+      cardholderNameRequired: "ಕಾರ್ಡ್‌ದಾರರ ಹೆಸರು *",
+      appearsOnCardFace: "ಕಾರ್ಡ್ ಮೇಲೆ ಕಾಣುತ್ತದೆ",
+      cardholderPlaceholderNew: "ಉದಾ. PRIYA SHARMA",
+      issuingBankRequired: "ಕಾರ್ಡ್ ನೀಡಿದ ಬ್ಯಾಂಕ್ *",
+      paymentNetworkRequired: "ಪಾವತಿ ನೆಟ್‌ವರ್ಕ್ *",
+      variantPlaceholder: "ಉದಾ. Signature, Metal, Infinite",
+      nicknamePlaceholderNew: "ಉದಾ. ಮುಖ್ಯ ಪ್ರಯಾಣ, ದಿನದ ದಿನಸಿ",
+      safeMaskedOnly: "ಸುರಕ್ಷಿತ: ಮರೆಮಾಡಲಾಗಿದೆ",
+      feesTitle: "ವಾರ್ಷಿಕ ಶುಲ್ಕ ಮತ್ತು ನವೀಕರಣ ಮನ್ನಾ ಖರ್ಚು",
+      waiverPlaceholder: "ಉದಾ. ವಾರ್ಷಿಕ ₹4,00,000 ಖರ್ಚು ಮಾಡಿದರೆ ಶುಲ್ಕ ಮನ್ನಾ.",
+      termsUrlTitle: "ಅಧಿಕೃತ ನಿಯಮಗಳು ಮತ್ತು ಶುಲ್ಕ ಪಟ್ಟಿಯ URL",
+      openUrl: "URL ತೆರೆಯಿರಿ",
+      rulesHelp: "CLIQ ಆಪ್ಟಿಮೈಸೇಶನ್ ಎಂಜಿನ್ ಈ ನಿಯಮಗಳ ಮೂಲಕ ಪ್ರತಿ ಖರ್ಚಿನ ನಿಜವಾದ ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಮತ್ತು ಪಾಯಿಂಟ್‌ಗಳನ್ನು ಲೆಕ್ಕಹಾಕುತ್ತದೆ.",
+      remove: "ತೆಗೆದುಹಾಕಿ",
+      catAllRetail: "ಎಲ್ಲಾ ಚಿಲ್ಲರೆ ಖರ್ಚುಗಳು",
+      catShopping: "ಶಾಪಿಂಗ್ / ಇ-ಕಾಮರ್ಸ್",
+      catDining: "ಡೈನಿಂಗ್ ಮತ್ತು ಆಹಾರ ವಿತರಣೆ",
+      catTravel: "ಪ್ರಯಾಣ ಮತ್ತು ವಿಮಾನಗಳು",
+      catGrocery: "ದಿನಸಿ ಮತ್ತು ಸೂಪರ್‌ಮಾರ್ಕೆಟ್",
+      catUtility: "ಉಪಯುಕ್ತತಾ ಬಿಲ್‌ಗಳು",
+      catFuel: "ಇಂಧನ",
+      rewardType: "ರಿವಾರ್ಡ್ ವಿಧ",
+      directCashback: "ನೇರ ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ (%)",
+      airlineMiles: "ವಿಮಾನಯಾನ ಮೈಲ್ಸ್",
+      rateLabel: "ದರ (% ಅಥವಾ ಪ್ರತಿ 100ಕ್ಕೆ ಪಾಯಿಂಟ್)",
+      merchantPatternOptional: "ಮರ್ಚೆಂಟ್ ಮಾದರಿ (ಐಚ್ಛಿಕ)",
+      merchantPatternPlaceholder: "ಉದಾ. Amazon, Swiggy, Flipkart",
+      monthlyCap: "ಮಾಸಿಕ ಮಿತಿ (₹)",
+      noCap: "ಮಿತಿ ಇಲ್ಲ",
+      addRewardRule: "ರಿವಾರ್ಡ್ ನಿಯಮ ಸೇರಿಸಿ",
+      addPerk: "ಲೌಂಜ್ / ಕಸ್ಟಮ್ ಸೌಲಭ್ಯ ಸೇರಿಸಿ",
+      privacyTitle: "ಗೌಪ್ಯತಾ ರಕ್ಷಣೆ ಮತ್ತು ಕನಿಷ್ಠ ಡೇಟಾ",
+      privacyBody: "CLIQ ಎಂದಿಗೂ ಪೂರ್ಣ ಕಾರ್ಡ್ ಸಂಖ್ಯೆ (PAN), CVV, ಅವಧಿ ವಿವರಗಳು ಅಥವಾ ನೆಟ್ ಬ್ಯಾಂಕಿಂಗ್ ಪಾಸ್‌ವರ್ಡ್‌ಗಳನ್ನು ಕೇಳುವುದಿಲ್ಲ ಅಥವಾ ಉಳಿಸುವುದಿಲ್ಲ. ಅಧಿಕೃತ ರಿವಾರ್ಡ್ ನಿಯಮಗಳು ಮತ್ತು ನಿಮ್ಮ ಅಡ್ಡಹೆಸರು ಮಾತ್ರ ಉಳಿಸಲಾಗುತ್ತದೆ.",
+      registeringCreditCard: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ನೋಂದಾಯಿಸಲಾಗುತ್ತಿದೆ...",
+      saveToWallet: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ವ್ಯಾಲೆಟ್‌ಗೆ ಉಳಿಸಿ",
+      liveInteractiveCard: "ಲೈವ್ ಇಂಟರಾಕ್ಟಿವ್ ಕಾರ್ಡ್",
+      hoverToTilt: "3D ಓರೆಗಾಗಿ ಮೌಸ್ ತನ್ನಿ",
+      rewardHighlights: "ರಿವಾರ್ಡ್ ಮುಖ್ಯಾಂಶಗಳು",
+      keyPerk: "ಮುಖ್ಯ ಸೌಲಭ್ಯ",
+      addedUpdating: "ಕಾರ್ಡ್ ಯಶಸ್ವಿಯಾಗಿ ಸೇರಿಸಲಾಗಿದೆ! ನಿಮ್ಮ ಡಿಜಿಟಲ್ ಸಂಗ್ರಹ ನವೀಕರಿಸಲಾಗುತ್ತಿದೆ...",
+      step3Personalize: "3. ಪರಿಶೀಲಿಸಿ, ವೈಯಕ್ತೀಕರಿಸಿ ಮತ್ತು ವ್ಯಾಲೆಟ್‌ಗೆ ಉಳಿಸಿ",
+      updatesLive: "ಪೂರ್ವವೀಕ್ಷಣೆಯಲ್ಲಿ ತಕ್ಷಣ ನವೀಕರಣ",
+      appearsOnCard: "ಕಾರ್ಡ್ ಮೇಲೆ ಕಾಣುತ್ತದೆ",
+      cardholderPlaceholderFlow: "ಉದಾ. RAHUL JAIN",
+      cardName: "ಕಾರ್ಡ್ ಹೆಸರು",
+      issuingBank: "ಕಾರ್ಡ್ ನೀಡಿದ ಬ್ಯಾಂಕ್",
+      paymentNetwork: "ಪಾವತಿ ನೆಟ್‌ವರ್ಕ್",
+      nicknamePlaceholderFlow: "ಉದಾ. ಮುಖ್ಯ ಪ್ರಯಾಣ",
+      safeMasked: "ಸುರಕ್ಷಿತವಾಗಿ ಮರೆಮಾಡಲಾಗಿದೆ",
+      waiverSpend: "ಮನ್ನಾ ಖರ್ಚು (₹)",
+      addingToWallet: "ವ್ಯಾಲೆಟ್‌ಗೆ ಸೇರಿಸಲಾಗುತ್ತಿದೆ...",
+      addToCollection: "ನನ್ನ ಸಂಗ್ರಹಕ್ಕೆ ಕಾರ್ಡ್ ಸೇರಿಸಿ",
+      livePreview: "ಲೈವ್ ಕಾರ್ಡ್ ಪೂರ್ವವೀಕ್ಷಣೆ",
+      waiverSpendShort: "ಮನ್ನಾ ಖರ್ಚು",
+      testFanPrompt: "ಕಾರ್ಡ್ ಸ್ಟ್ಯಾಕ್ ಈಗಲೇ ಪ್ರಯತ್ನಿಸಬೇಕೇ?",
+      testFanDesc: "ಇಂಟರಾಕ್ಟಿವ್ ಕಾರ್ಡ್ ಸ್ಟ್ಯಾಕ್ ಪ್ರಯತ್ನಿಸಲು ತಕ್ಷಣ 3 ಮಾದರಿ ಕಾರ್ಡ್‌ಗಳನ್ನು (HDFC Millennia, SBI Cashback, Axis Ace) ಸೇರಿಸಿ.",
+      feeLabel: "ಶುಲ್ಕ:",
+      free: "ಉಚಿತ",
+      rulesSection: "ವರ್ಗ ಮಲ್ಟಿಪ್ಲೈಯರ್ ಮತ್ತು ರಿವಾರ್ಡ್ ನಿಯಮಗಳು ({count})",
+      benefitsSection: "ಲೌಂಜ್ ಮತ್ತು ಪ್ರೀಮಿಯಂ ಸೌಲಭ್ಯಗಳು ({count})",
+      customIssuerName: "ಇತರೆ / ಕಸ್ಟಮ್ ಕಾರ್ಡ್",
+      customIssuerShort: "ಕಸ್ಟಮ್",
     },
 
     compare: {
@@ -3126,6 +5043,12 @@ export const translations: Record<Language, Translations> = {
       netBenefitProjection: "ನಿವ್ವಳ ವಾರ್ಷಿಕ ಲಾಭ ಅಂದಾಜು",
       bestForSummary: "ಸೂಕ್ತ ವೆಚ್ಚ ಪ್ರೊಫೈಲ್",
       noCardsToCompare: "ಹೋಲಿಕೆ ಮಾಡಲು ದಯವಿಟ್ಟು ಕನಿಷ್ಠ 2 ಕಾರ್ಡ್‌ಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+      comparisonFailed: "ಹೋಲಿಕೆ ವಿಫಲವಾಗಿದೆ: ",
+      annualFeeLabel: "ವಾರ್ಷಿಕ ಶುಲ್ಕ:",
+      lifetimeFree: "ಜೀವಮಾನ ಉಚಿತ",
+      breakevenSpend: "ಬ್ರೇಕ್‌ಈವನ್ ಖರ್ಚು:",
+      yieldMatrix: "ವರ್ಗವಾರು ಲಾಭ ಮ್ಯಾಟ್ರಿಕ್ಸ್ (%)",
+      leadingYield: "ಅತ್ಯಧಿಕ ಲಾಭ ಹೈಲೈಟ್ ಮಾಡಲಾಗಿದೆ",
     },
 
     offers: {
@@ -3147,6 +5070,22 @@ export const translations: Record<Language, Translations> = {
       sample: "ಮಾದರಿ",
       noOffersFound: "ನಿಮ್ಮ ಶೋಧನೆಗೆ ಯಾವುದೇ ಆಫರ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
       clearFilters: "ಫಿಲ್ಟರ್ ತೆರವುಗೊಳಿಸಿ",
+      loadingPromotions: "ಪ್ರಚಾರಗಳು ಲೋಡ್ ಆಗುತ್ತಿವೆ...",
+      noOffersTitle: "ಯಾವುದೇ ಆಫರ್ ಸಿಗಲಿಲ್ಲ",
+      noOffersForCards: "ಸದ್ಯ ನಿಮ್ಮ ಕಾರ್ಡ್‌ಗಳಿಗೆ ಹೊಂದುವ ಯಾವುದೇ ಸಕ್ರಿಯ ಪ್ರಚಾರವಿಲ್ಲ.",
+      noOffersForFilter: "ಈಗಿನ ಫಿಲ್ಟರ್‌ಗೆ ಯಾವುದೇ ಆಫರ್ ಹೊಂದುತ್ತಿಲ್ಲ.",
+      showAllOffers: "ಎಲ್ಲಾ ಆಫರ್‌ಗಳನ್ನು ತೋರಿಸಿ",
+      omniChannel: "ಎರಡೂ",
+      maxSavings: "ಗರಿಷ್ಠ ಉಳಿತಾಯ",
+      eligibleCards: "ಅರ್ಹ ಕಾರ್ಡ್‌ಗಳು:",
+      allMajorCards: "ಎಲ್ಲಾ ಪ್ರಮುಖ ಕಾರ್ಡ್‌ಗಳು",
+      coupon: "ಕೂಪನ್",
+      copied: "ನಕಲಿಸಲಾಗಿದೆ",
+      copy: "ನಕಲಿಸಿ",
+      terms: "ನಿಯಮಗಳು",
+      percentOff: "{value}% ರಿಯಾಯಿತಿ",
+      flatOff: "{value} ನೇರ ರಿಯಾಯಿತಿ",
+      expiresOn: "{date} ರಂದು ಮುಕ್ತಾಯ",
     },
 
     optimizer: {
@@ -3182,6 +5121,10 @@ export const translations: Record<Language, Translations> = {
       stepReason: "ಕಾರಣ / ತರ್ಕ",
       capStatus: "ಮಾಸಿಕ ಮಿತಿ ಸ್ಥಿತಿ",
       matchedCoupons: "ಹೊಂದಾಣಿಕೆಯಾದ ಪ್ರಚಾರ ಕೊಡುಗೆಗಳು",
+      invalidSpend: "ದಯವಿಟ್ಟು 0 ಕ್ಕಿಂತ ಹೆಚ್ಚಿನ ಮಾನ್ಯ ಖರ್ಚಿನ ಮೊತ್ತ ನಮೂದಿಸಿ.",
+      merchantPlaceholder: "ಉದಾ. Swiggy, Amazon, Croma",
+      officialVerification: "ಅಧಿಕೃತ ಪರಿಶೀಲನೆ:",
+      scheduleOfCharges: "ಶುಲ್ಕ ಪಟ್ಟಿ",
     },
 
     transactions: {
@@ -3232,6 +5175,36 @@ export const translations: Record<Language, Translations> = {
       originalDescription: "ಮೂಲ ಸ್ಟೇಟ್‌ಮೆಂಟ್ ವಿವರಣೆ",
       allRowsReady: "ಎಲ್ಲಾ ವಹಿವಾಟುಗಳು ಪರಿಶೀಲಿಸಲ್ಪಟ್ಟಿವೆ ಮತ್ತು ಆಮದಿಗೆ ಸಿದ್ಧವಾಗಿವೆ.",
       backToFileSelect: "ಮತ್ತೊಂದು ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+      invalidAmount: "ದಯವಿಟ್ಟು 0 ಕ್ಕಿಂತ ಹೆಚ್ಚಿನ ಮಾನ್ಯ ವಹಿವಾಟು ಮೊತ್ತ ನಮೂದಿಸಿ.",
+      createFailed: "ವಹಿವಾಟು ರಚಿಸಲು ಆಗಲಿಲ್ಲ: ",
+      selectCsvFirst: "ದಯವಿಟ್ಟು ಮೊದಲು CSV ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಫೈಲ್ ಆರಿಸಿ.",
+      analyzeFailed: "CSV ಸ್ಟೇಟ್‌ಮೆಂಟ್ ವಿಶ್ಲೇಷಿಸಲು ಆಗಲಿಲ್ಲ.",
+      noRowsSelected: "ಆಮದಿಗೆ ಯಾವುದೇ ಸಾಲು ಆರಿಸಿಲ್ಲ.",
+      commitFailed: "ಆಮದು ಮಾಡಿದ ವಹಿವಾಟುಗಳನ್ನು ಉಳಿಸಲು ಆಗಲಿಲ್ಲ: ",
+      bankFormat: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಬ್ಯಾಂಕ್ ಸ್ವರೂಪ",
+      autoDetect: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ವಿನ್ಯಾಸ ಸ್ವಯಂ ಪತ್ತೆ (ಡೀಫಾಲ್ಟ್)",
+      fmtHdfc: "HDFC Bank ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್",
+      fmtIcici: "ICICI Bank ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್",
+      fmtSbi: "SBI Card ಸ್ಟೇಟ್‌ಮೆಂಟ್",
+      fmtAxis: "Axis Bank ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸ್ಟೇಟ್‌ಮೆಂಟ್",
+      fmtAmex: "American Express (Amex) ಸ್ಟೇಟ್‌ಮೆಂಟ್",
+      fmtGeneric: "ಸಾಮಾನ್ಯ / CLIQ ಪ್ರಮಾಣಿತ CSV",
+      supportedFormats: "ಬೆಂಬಲಿತ: HDFC, ICICI, SBI, Axis, Amex CSV ರಫ್ತುಗಳು ಮತ್ತು ಕಸ್ಟಮ್ CSV (ಗರಿಷ್ಠ 5MB)",
+      parsePreview: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಓದಿ ಮತ್ತು ಪೂರ್ವವೀಕ್ಷಿಸಿ",
+      estimatedSpend: "ಅಂದಾಜು ಖರ್ಚು",
+      colImport: "ಆಮದು",
+      colStatementLine: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಸಾಲು ಮತ್ತು ಪ್ರಮಾಣೀಕೃತ",
+      colEstReward: "ಅಂದಾಜು ರಿವಾರ್ಡ್",
+      colReconciliation: "ಹೊಂದಾಣಿಕೆ ಸ್ಥಿತಿ",
+      importSuccess: "ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಯಶಸ್ವಿಯಾಗಿ ಆಮದು ಆಗಿದೆ",
+      imported: "ಆಮದು ಆದವು",
+      duplicatesSkipped: "ನಕಲುಗಳನ್ನು ಬಿಡಲಾಗಿದೆ",
+      totalSpend: "ಒಟ್ಟು ಖರ್ಚು",
+      rewardsYield: "ರಿವಾರ್ಡ್ ಲಾಭ",
+      doneView: "ಮುಗಿದಿದೆ — ವಹಿವಾಟುಗಳನ್ನು ನೋಡಿ",
+      merchantPlaceholder: "ಉದಾ. Swiggy, Amazon, HPCL",
+      deleteTitle: "ವಹಿವಾಟು ಅಳಿಸಿ",
+      deleteMessage: "ಈ ವಹಿವಾಟು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲಾಗುತ್ತದೆ. ಇದನ್ನು ಹಿಂಪಡೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ.",
     },
 
     analytics: {
@@ -3248,6 +5221,8 @@ export const translations: Record<Language, Translations> = {
       computingAnalytics: "ವಿಶ್ಲೇಷಣೆ ಪ್ರಕ್ರಿಯೆ ನಡೆಯುತ್ತಿದೆ...",
       categoryAllocation: "ವರ್ಗವಾರು ಹಂಚಿಕೆ",
       monthlyVelocityChart: "ಮಾಸಿಕ ವೆಚ್ಚ ಮತ್ತು ರಿವಾರ್ಡ್ ವೇಗ",
+      seriesSpend: "ಖರ್ಚು",
+      seriesRewards: "ರಿವಾರ್ಡ್",
     },
 
     health: {
@@ -3271,6 +5246,21 @@ export const translations: Record<Language, Translations> = {
       netRoi: "ವಾರ್ಷಿಕ ಶುಲ್ಕ ROI",
       feeWaiverStatus: "ಶುಲ್ಕ ಮನ್ನಾ ಪ್ರಗತಿ",
       actionableAdvice: "ಉಪಯುಕ್ತ ಆರ್ಥಿಕ ಸಲಹೆಗಳು",
+      bandExcellent: "ಅತ್ಯುತ್ತಮ",
+      bandGood: "ಉತ್ತಮ",
+      bandNeedsWork: "ಸುಧಾರಣೆ ಬೇಕು",
+      noData: "ಡೇಟಾ ಇಲ್ಲ",
+      scoreShort: "ಸ್ಕೋರ್",
+      addDataHint: "ನಿಮ್ಮ ಆರೋಗ್ಯ ಸ್ಕೋರ್ ಪಡೆಯಲು ಕಾರ್ಡ್ ಮತ್ತು ವಹಿವಾಟುಗಳನ್ನು ಸೇರಿಸಿ.",
+      next30Estimated: "ಮುಂದಿನ 30 ದಿನಗಳ ಅಂದಾಜು",
+      potentialRewards: "ಗಳಿಸಬಹುದಾದ ರಿವಾರ್ಡ್",
+      spendingTrend: "30 ದಿನಗಳ ಖರ್ಚಿನ ಪ್ರವೃತ್ತಿ:",
+      modelNote: "ಹಿಂದಿನ ಖರ್ಚಿನ ಮಾದರಿ ಮತ್ತು ಉತ್ತಮ ವರ್ಗ ಹಂಚಿಕೆಯ ಆಧಾರದ ಮೇಲೆ.",
+      observationsTitle: "ಆರ್ಥಿಕ ಆರೋಗ್ಯದ ಗಮನಾರ್ಹ ಅಂಶಗಳು",
+      annualOutflow: "ವಾರ್ಷಿಕ ಹೊರಹರಿವು",
+      actionsCount: "{count} ಕ್ರಮಗಳು",
+      activeCount: "{count} ಸಕ್ರಿಯ",
+      vsPrior30: "ಹಿಂದಿನ 30 ದಿನಗಳಿಗೆ ಹೋಲಿಸಿದರೆ {change}%",
     },
 
     assistant: {
@@ -3298,6 +5288,25 @@ export const translations: Record<Language, Translations> = {
       auditIdLabel: "ಆಡಿಟ್ ವಿನಂತಿ ID",
       tokensRedactedLabel: "ತೆಗೆದುಹಾಕಲಾದ ಸೂಕ್ಷ್ಮ ಟೋಕನ್‌ಗಳು",
       localProtectedStatus: "ಸ್ಥಳೀಯ ಸಂಸ್ಕರಣೆ (ಸಂಪೂರ್ಣ ಸುರಕ್ಷಿತ)",
+      errorPrefix: "ನನಗೆ ದೋಷ ಎದುರಾಯಿತು: ",
+      checkBackend: "ದಯವಿಟ್ಟು ಬ್ಯಾಕೆಂಡ್ ಸಂಪರ್ಕ ಪರಿಶೀಲಿಸಿ.",
+      governance: "ಆಡಳಿತ",
+      cardNamesRates: "ಕಾರ್ಡ್ ಹೆಸರು ಮತ್ತು ದರಗಳು",
+      aggregatedTotals: "ಒಟ್ಟು ಮೊತ್ತಗಳು",
+      grounded: "ಆಧಾರ:",
+      geminiRedacted: "Gemini 2.5 Flash • PII ತೆಗೆದುಹಾಕಲಾಗಿದೆ",
+      localEngine: "ಸ್ಥಳೀಯ ಎಂಜಿನ್ • ಶೂನ್ಯ ಬಹಿರಂಗ",
+      analyzing: "ಪೋರ್ಟ್‌ಫೋಲಿಯೊ ನಿಯಮಗಳನ್ನು ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...",
+      consentEnabled: "ಒಪ್ಪಿಗೆ ನವೀಕರಿಸಲಾಗಿದೆ: {field} ಈಗ ಸಕ್ರಿಯವಾಗಿದೆ.",
+      consentDisabled: "ಒಪ್ಪಿಗೆ ನವೀಕರಿಸಲಾಗಿದೆ: {field} ಈಗ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.",
+      redactionTitle: "ಕಟ್ಟುನಿಟ್ಟಾದ ಮರೆಮಾಚುವಿಕೆ ಭರವಸೆ:",
+      redactionBody: "16 ಅಂಕಿಯ PAN, CVV, PIN, OTP, ಆಧಾರ್ ಮತ್ತು ಲಾಗಿನ್ ವಿವರಗಳನ್ನು ಯಾವುದೇ ಹೊರಗಿನ AI ಪೂರೈಕೆದಾರರಿಗೆ {never}.",
+      neverTransmitted: "ಎಂದಿಗೂ ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ",
+      suggestion1: "ಕನಿಷ್ಠ ಬಾಕಿ (Minimum Due) ಪಾವತಿಯ ಅಪಾಯಗಳೇನು?",
+      suggestion2: "ಬಿಲ್ಲಿಂಗ್ ಸೈಕಲ್ ಮತ್ತು ರಿಯಾಯಿತಿ ಅವಧಿ ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ?",
+      suggestion3: "50-30-20 ಬಜೆಟ್ ಸೂತ್ರ ಎಂದರೇನು?",
+      suggestion4: "ಡೈನಿಂಗ್‌ಗಾಗಿ ಯಾವ ಕಾರ್ಡ್ ಅತ್ಯುತ್ತಮವಾಗಿದೆ?",
+      suggestion5: "ಲೌಂಜ್ ಪ್ರವೇಶ ಮಿತಿಗಳನ್ನು ತೋರಿಸಿ",
     },
 
     documents: {
@@ -3315,6 +5324,16 @@ export const translations: Record<Language, Translations> = {
       uploadedDocumentsList: "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ದಾಖಲೆಗಳು",
       extractedSpecTitle: "ಹೊರತೆಗೆದ ಕಾರ್ಡ್ ವಿವರಗಳು",
       processingDocument: "PyMuPDF ಮೂಲಕ ದಾಖಲೆ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ...",
+      newCardDefault: "ಹೊಸ ಕಾರ್ಡ್",
+      uploadFailed: "ಅಪ್‌ಲೋಡ್ ವಿಫಲವಾಗಿದೆ.",
+      verifyFailed: "ಪರಿಶೀಲನೆ ವಿಫಲವಾಗಿದೆ.",
+      uploadHint: "ಗರಿಷ್ಠ 10MB • ರಿವಾರ್ಡ್ ಹಂತಗಳು, ಮಿತಿಗಳು, ವಾರ್ಷಿಕ ಶುಲ್ಕ ಮತ್ತು ಹೊರಗಿಡುವಿಕೆಗಳನ್ನು ಪರಿಶೀಲನೆಗೆ ತೆಗೆಯುತ್ತದೆ",
+      noDocuments: "ಸರತಿಯಲ್ಲಿ ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ.",
+      noRules: "ಯಾವುದೇ ನಿಯಮ ಸಿಗಲಿಲ್ಲ.",
+      selectDocument: "ತೆಗೆದ ನಿಯಮಗಳನ್ನು ನೋಡಲು ದಾಖಲೆ ಆರಿಸಿ.",
+      processedSuccess: "ದಾಖಲೆ '{name}' ಯಶಸ್ವಿಯಾಗಿ ಸಂಸ್ಕರಿಸಲಾಗಿದೆ.",
+      cardVerified: "ಕಾರ್ಡ್ '{name}' ಪರಿಶೀಲಿಸಿ ಸಕ್ರಿಯ ಪೋರ್ಟ್‌ಫೋಲಿಯೊಗೆ ಸೇರಿಸಲಾಗಿದೆ.",
+      confidence: "ವಿಶ್ವಾಸಾರ್ಹತೆ:",
     },
 
     settings: {
@@ -3337,6 +5356,35 @@ export const translations: Record<Language, Translations> = {
       exportArchiveButton: "ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿದ ಡೇಟಾ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
       deleteAccountButton: "ಖಾತೆ ಮತ್ತು ಡೇಟಾವನ್ನು ಅಳಿಸಿ",
       deleteAccountConfirm: "ನಿಮ್ಮ ಖಾತೆಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಎಲ್ಲಾ ಕಾರ್ಡ್ ಮತ್ತು ವಹಿವಾಟು ದಾಖಲೆಗಳು ಅಳಿಸಲ್ಪಡುತ್ತವೆ.",
+      savePrefsFailed: "ಆದ್ಯತೆಗಳನ್ನು ಉಳಿಸಲು ಆಗಲಿಲ್ಲ.",
+      exportFailedShort: "ರಫ್ತು ವಿಫಲವಾಗಿದೆ",
+      exportDownloaded: "ರಫ್ತು ಯಶಸ್ವಿಯಾಗಿ ಡೌನ್‌ಲೋಡ್ ಆಗಿದೆ.",
+      exportFailed: "ರಫ್ತು ವಿಫಲವಾಗಿದೆ.",
+      typeToConfirmToast: "ದೃಢೀಕರಿಸಲು ನಿಖರವಾಗಿ DELETE MY ACCOUNT ಎಂದು ಟೈಪ್ ಮಾಡಿ.",
+      enterPassword: "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ.",
+      deleteFailed: "ಖಾತೆ ಅಳಿಸಲು ಆಗಲಿಲ್ಲ.",
+      statusActive: "ಸಕ್ರಿಯ",
+      statusCompliant: "ಅನುಸರಣೆ ಇದೆ",
+      jwtTitle: "JWT ಕ್ರಿಪ್ಟೋಗ್ರಾಫಿಕ್ ಪರಿಶೀಲನೆ",
+      jwtDesc: "Bearer ಟೋಕನ್ ದೃಢೀಕರಣ",
+      statusHs256: "HS256 ಪರಿಶೀಲಿತ",
+      rateLimitTitle: "ರೇಟ್ ಲಿಮಿಟಿಂಗ್ ಮತ್ತು ಹೆಡರ್‌ಗಳು",
+      rateLimitDesc: "CSP, HSTS, 600 ವಿನಂತಿ/ನಿಮಿಷ",
+      statusEnforced: "ಜಾರಿಯಲ್ಲಿದೆ",
+      loadingPrefs: "ಆದ್ಯತೆಗಳು ಲೋಡ್ ಆಗುತ್ತಿವೆ…",
+      budgetAlertTitle: "ಬಜೆಟ್ ಎಚ್ಚರಿಕೆ ಮಿತಿ",
+      budgetAlertDesc: "ಖರ್ಚು ಬಜೆಟ್‌ನ ಈ % ತಲುಪಿದಾಗ ಎಚ್ಚರಿಸಿ",
+      exportDesc: "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್, ಕಾರ್ಡ್‌ಗಳು, ವಹಿವಾಟುಗಳು, ಆದಾಯ ಮತ್ತು ಬಜೆಟ್ ಡೇಟಾದ JSON ಆರ್ಕೈವ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.",
+      deleteDesc: "ನಿಮ್ಮ ಖಾತೆ ಮತ್ತು ಸಂಬಂಧಿತ ಎಲ್ಲಾ ಡೇಟಾವನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಿ. ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂಪಡೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+      changePassword: "ಪಾಸ್‌ವರ್ಡ್ ಬದಲಿಸಿ",
+      changePasswordDesc: "ಇಮೇಲ್ ಪರಿಶೀಲನೆ ಮೂಲಕ ಪಾಸ್‌ವರ್ಡ್ ರೀಸೆಟ್ ಮಾಡಿ",
+      deleteAccount: "ಖಾತೆ ಅಳಿಸಿ",
+      deleteDialogMessage: "ಇದು ನಿಮ್ಮ ಖಾತೆ, ಎಲ್ಲಾ ಕಾರ್ಡ್‌ಗಳು, ವಹಿವಾಟುಗಳು, ಬಜೆಟ್‌ಗಳು ಮತ್ತು ಆದಾಯ ದಾಖಲೆಗಳನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸುತ್ತದೆ. ಅನುಸರಣೆಗಾಗಿ ಆಡಿಟ್ ಲಾಗ್‌ಗಳನ್ನು ಉಳಿಸಲಾಗುತ್ತದೆ. ಇದನ್ನು ಹಿಂಪಡೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+      deleting: "ಅಳಿಸಲಾಗುತ್ತಿದೆ…",
+      deleteMyAccount: "ನನ್ನ ಖಾತೆ ಅಳಿಸಿ",
+      yourPassword: "ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್",
+      currentPasswordPlaceholder: "ನಿಮ್ಮ ಈಗಿನ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ",
+      typeToConfirm: "ದೃಢೀಕರಿಸಲು {phrase} ಎಂದು ಟೈಪ್ ಮಾಡಿ",
     },
 
     profile: {
@@ -3349,6 +5397,15 @@ export const translations: Record<Language, Translations> = {
       saveProfileButton: "ಪ್ರೊಫೈಲ್ ಉಳಿಸಿ",
       saving: "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
       savedSuccess: "ಪ್ರೊಫೈಲ್ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ.",
+      currencyInr: "INR (₹) - ಭಾರತೀಯ ರೂಪಾಯಿ",
+      currencyUsd: "USD ($) - ಅಮೆರಿಕನ್ ಡಾಲರ್",
+      currencyEur: "EUR (€) - ಯೂರೋ",
+      pathwayMode: "ಆರ್ಥಿಕ ದಾರಿ ಮೋಡ್",
+      pathwayCardTitle: "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಆಪ್ಟಿಮೈಸೇಶನ್",
+      pathwayCardDesc: "ರಿವಾರ್ಡ್ ಹೆಚ್ಚಿಸುವ ಸಾಧನ, ಕಾರ್ಡ್ ಹೋಲಿಕೆ, ಮರ್ಚೆಂಟ್ ಆಫರ್ ರಾಡಾರ್ ಮತ್ತು ಸ್ಟೇಟ್‌ಮೆಂಟ್ ವಿಶ್ಲೇಷಣೆ.",
+      pathwayCashTitle: "ನಗದು ಮತ್ತು ಉಳಿತಾಯ ದಾರಿ",
+      pathwayCashDesc: "50/30/20 ಬಜೆಟ್ ಚೌಕಟ್ಟು, ತುರ್ತು ರನ್‌ವೇ ಕವಚ, UPI ಮತ್ತು ನಗದು ಖರ್ಚು ದಾಖಲೆ, ಮತ್ತು ಉಳಿತಾಯ ಗುರಿಗಳು.",
+      saveFailed: "ಪ್ರೊಫೈಲ್ ಉಳಿಸಲು ಆಗಲಿಲ್ಲ: ",
     },
 
     auth: {
@@ -3368,6 +5425,36 @@ export const translations: Record<Language, Translations> = {
       noAccountPrompt: "ಖಾತೆ ಇಲ್ಲವೇ?",
       haveAccountPrompt: "ಈಗಾಗಲೇ ಖಾತೆ ಹೊಂದಿದ್ದೀರಾ?",
       registeredSuccessBanner: "ಖಾತೆ ಯಶಸ್ವಿಯಾಗಿ ಸೃಷ್ಟಿಯಾಗಿದೆ! ದಯವಿಟ್ಟು ಲಾಗಿನ್ ಮಾಡಿ.",
+      signInFailed: "ಸೈನ್ ಇನ್ ಆಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+      registrationFailed: "ನೋಂದಣಿ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+      passwordMinPlaceholder: "ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳು",
+      languageEnglishDefault: "English (ಡೀಫಾಲ್ಟ್)",
+      languageHindiOption: "हिन्दी (ಹಿಂದಿ)",
+      languageKannadaOption: "ಕನ್ನಡ",
+      genericError: "ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+      checkInbox: "ನಿಮ್ಮ ಇನ್‌ಬಾಕ್ಸ್ ನೋಡಿ",
+      noEmailHint: "ಇಮೇಲ್ ಕಾಣುತ್ತಿಲ್ಲವೇ? ಸ್ಪ್ಯಾಮ್ ಫೋಲ್ಡರ್ ನೋಡಿ.",
+      backToLogin: "ಲಾಗಿನ್‌ಗೆ ಹಿಂತಿರುಗಿ",
+      forgotTitle: "ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿರಾ?",
+      forgotSub: "ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂದಿಸಿ, ನಾವು ರೀಸೆಟ್ ಲಿಂಕ್ ಕಳುಹಿಸುತ್ತೇವೆ.",
+      emailAddress: "ಇಮೇಲ್ ವಿಳಾಸ",
+      sendResetLink: "ರೀಸೆಟ್ ಲಿಂಕ್ ಕಳುಹಿಸಿ",
+      resetLinkSent: "{email} CLIQ ನಲ್ಲಿ ನೋಂದಾಯಿತವಾಗಿದ್ದರೆ, ಶೀಘ್ರದಲ್ಲೇ ಪಾಸ್‌ವರ್ಡ್ ರೀಸೆಟ್ ಲಿಂಕ್ ಬರುತ್ತದೆ. ಲಿಂಕ್ 60 ನಿಮಿಷಗಳಲ್ಲಿ ಅವಧಿ ಮೀರುತ್ತದೆ.",
+      noResetToken: "ರೀಸೆಟ್ ಟೋಕನ್ ಸಿಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಹೊಸ ರೀಸೆಟ್ ಲಿಂಕ್ ವಿನಂತಿಸಿ.",
+      passwordTooShort: "ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 6 ಅಕ್ಷರಗಳಿರಬೇಕು.",
+      passwordsMismatch: "ಪಾಸ್‌ವರ್ಡ್‌ಗಳು ಹೊಂದಿಕೆಯಾಗುತ್ತಿಲ್ಲ.",
+      passwordResetSuccess: "ಪಾಸ್‌ವರ್ಡ್ ಯಶಸ್ವಿಯಾಗಿ ರೀಸೆಟ್ ಆಗಿದೆ.",
+      passwordResetFailed: "ಪಾಸ್‌ವರ್ಡ್ ರೀಸೆಟ್ ಆಗಲಿಲ್ಲ.",
+      passwordUpdated: "ಪಾಸ್‌ವರ್ಡ್ ನವೀಕರಿಸಲಾಗಿದೆ",
+      redirectingLogin: "ನಿಮ್ಮನ್ನು ಲಾಗಿನ್‌ಗೆ ಕರೆದೊಯ್ಯಲಾಗುತ್ತಿದೆ…",
+      setNewPassword: "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್ ಹೊಂದಿಸಿ",
+      setNewPasswordSub: "ನಿಮ್ಮ CLIQ ಖಾತೆಗೆ ಬಲವಾದ ಪಾಸ್‌ವರ್ಡ್ ಆರಿಸಿ.",
+      newPassword: "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್",
+      atLeast6: "ಕನಿಷ್ಠ 6 ಅಕ್ಷರಗಳು",
+      confirmPassword: "ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಿಸಿ",
+      repeatPassword: "ಪಾಸ್‌ವರ್ಡ್ ಮತ್ತೆ ನಮೂದಿಸಿ",
+      resetPassword: "ಪಾಸ್‌ವರ್ಡ್ ರೀಸೆಟ್ ಮಾಡಿ",
+      loading: "ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
     },
 
     onboarding: {
@@ -3442,6 +5529,10 @@ export const translations: Record<Language, Translations> = {
       health: "ಆರೋಗ್ಯ ಮತ್ತು ಔಷಧಾಲಯ",
       international: "ಅಂತಾರಾಷ್ಟ್ರೀಯ ವೆಚ್ಚಗಳು",
       other: "ಸಾಮಾನ್ಯ ಖರ್ಚುಗಳು",
+      transport: "ಸಾರಿಗೆ",
+      medical: "ವೈದ್ಯಕೀಯ",
+      rent: "ಬಾಡಿಗೆ",
+      savings: "ಉಳಿತಾಯ",
     },
 
     channels: {
@@ -3551,6 +5642,31 @@ export const translations: Record<Language, Translations> = {
       pathOptimizeExistingDesc: "ಕ್ಯಾಶ್‌ಬ್ಯಾಕ್ ಹೆಚ್ಚಿಸಿಕೊಳ್ಳಿ, ರಿವಾರ್ಡ್ ಮಿತಿಗಳನ್ನು ಗಮನಿಸಿ ಮತ್ತು ವಾರ್ಷಿಕ ಶುಲ್ಕಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
       switchPath: "ಕಲಿಕೆಯ ಮಾರ್ಗ ಬದಲಾಯಿಸಿ",
       pathUpdatedSuccess: "ಹಣಕಾಸು ಕಲಿಕೆಯ ಮಾರ್ಗ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ!",
+      searchLessonsPlaceholder: "ಪಾಠಗಳು ಮತ್ತು ವಿಷಯಗಳನ್ನು ಹುಡುಕಿ...",
+      loadingLessons: "ಪಾಠಗಳು ಲೋಡ್ ಆಗುತ್ತಿವೆ...",
+      noLessonsMatch: "ನಿಮ್ಮ ಹುಡುಕಾಟಕ್ಕೆ ಯಾವುದೇ ಪಾಠ ಹೊಂದುತ್ತಿಲ್ಲ",
+      adjustFilters: "ನಿಮ್ಮ ಫಿಲ್ಟರ್ ಅಥವಾ ಹುಡುಕಾಟ ಪದಗಳನ್ನು ಬದಲಿಸಿ ನೋಡಿ.",
+      neverPaidOff: "∞ (ಎಂದಿಗೂ ಇಲ್ಲ)",
+      colMonth: "ತಿಂ",
+      colStartBal: "ಆರಂಭಿಕ ಬಾಕಿ",
+      colInterest: "ಬಡ್ಡಿ",
+      colPrincipal: "ಅಸಲು",
+      colEndBal: "ಅಂತಿಮ ಬಾಕಿ",
+      altFixedPayment: "ಪರ್ಯಾಯ ಸ್ಥಿರ ಪಾವತಿ (₹)",
+      colTime: "ಸಮಯ",
+      groceriesInr: "ದಿನಸಿ (₹)",
+      utilitiesInr: "ವಿದ್ಯುತ್-ನೀರು (₹)",
+      diningOutInr: "ಹೊರಗೆ ಊಟ (₹)",
+      shoppingInr: "ಶಾಪಿಂಗ್ (₹)",
+      fuelCommuteInr: "ಇಂಧನ ಮತ್ತು ಪ್ರಯಾಣ (₹)",
+      monthlySavingsInr: "ಮಾಸಿಕ ಉಳಿತಾಯ (₹)",
+      guidanceObservations: "ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ಗಮನಿಸಿದ ಅಂಶಗಳು",
+      cibilImpact: "CIBIL ಸ್ಕೋರ್ ಮೇಲೆ ಪರಿಣಾಮ",
+      renewalWaiverThreshold: "ನವೀಕರಣ ಮನ್ನಾ ಮಿತಿ (₹)",
+      assessmentVerdict: "ಮೌಲ್ಯಮಾಪನದ ತೀರ್ಮಾನ",
+      topicsMastered: "5 ವಿಭಾಗಗಳಲ್ಲಿ ಕಲಿತ ಸಂವಾದಾತ್ಮಕ ವಿಷಯಗಳು",
+      quizPerformance: "ಜ್ಞಾನ ಪರೀಕ್ಷಾ ಕ್ವಿಜ್ ಸಾಧನೆ",
+      monthsCount: "{count} ತಿಂಗಳು",
     },
 
     incomes: {
@@ -3612,6 +5728,26 @@ export const translations: Record<Language, Translations> = {
       recordExpense: "ಖರ್ಚು ದಾಖಲಿಸಿ",
       paymentMethodBreakdown: "ಪಾವತಿ ವಿಧಾನ ವಿವರಣೆ",
       loadingData: "ನಗದು ಹರಿವು ಮತ್ತು ಬಜೆಟ್ ಡೇಟಾ ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+      pageSubtitle: "ನಿಮ್ಮ ಸಂಬಳ, ಫ್ರೀಲ್ಯಾನ್ಸ್ ಮತ್ತು ಇತರ ಆದಾಯ ಮೂಲಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ.",
+      addIncomeButton: "ಆದಾಯ ಸೇರಿಸಿ",
+      regularIncome: "ನಿಯಮಿತ ಆದಾಯ",
+      irregularIncome: "ಅನಿಯಮಿತ ಆದಾಯ",
+      incomeSources: "ಆದಾಯ ಮೂಲಗಳು",
+      sourcePlaceholder2: "ಉದಾ. ಮುಖ್ಯ ಸಂಬಳ",
+      frequency: "ಆವರ್ತನ",
+      notesPlaceholder2: "ಉದಾ. ಮೊದಲ ತ್ರೈಮಾಸಿಕ ಬೋನಸ್",
+      noStreamsYet: "ಇನ್ನೂ ಯಾವುದೇ ಆದಾಯ ಮೂಲವಿಲ್ಲ. ಮೇಲೆ ನಿಮ್ಮ ಮೊದಲನೆಯದನ್ನು ಸೇರಿಸಿ.",
+      newLimitPlaceholder: "ಹೊಸ ಮಿತಿ",
+      needs50: "50% (ಅಗತ್ಯಗಳು)",
+      threshold80: "80% (ಎಚ್ಚರಿಕೆ ಮಿತಿ)",
+      hideAllocations: "▲ ವರ್ಗ ಹಂಚಿಕೆ ಮರೆಮಾಡಿ",
+      editAllocations: "▼ ವರ್ಗ ಹಂಚಿಕೆ ಸಂಪಾದಿಸಿ",
+      allocationHint: "ಪ್ರತಿ ವರ್ಗಕ್ಕೆ ಬಜೆಟ್‌ನ % ಹೊಂದಿಸಿ. ಒಟ್ಟು ಕೆಳಗೆ ತೋರುತ್ತದೆ.",
+      exceeds100: " — 100% ಮೀರಿದೆ",
+      deleteIncomeAria: "ಆದಾಯ ಅಳಿಸಿ",
+      deleteSourceTitle: "ಆದಾಯ ಮೂಲ ಅಳಿಸಿ",
+      recurring: "ಪುನರಾವರ್ತಿತ",
+      totalPercent: "ಒಟ್ಟು: {percent}%",
     },
   },
 };

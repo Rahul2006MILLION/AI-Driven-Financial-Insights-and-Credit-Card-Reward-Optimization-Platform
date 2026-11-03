@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, fmt, categoryLabel, frequencyLabel } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
 import NumericInput from "@/components/NumericInput";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
@@ -84,15 +84,10 @@ export default function BudgetPage() {
   const [budgetSavedToast, setBudgetSavedToast] = useState(false);
 
   // Category budget state — user-configurable
-  const CATEGORIES = [
-    { id: "grocery", label: "Groceries" },
-    { id: "dining", label: "Dining & Food" },
-    { id: "utility", label: "Bills & Utilities" },
-    { id: "shopping", label: "Shopping" },
-    { id: "travel", label: "Transport & Travel" },
-    { id: "health", label: "Healthcare" },
-    { id: "other", label: "General Expense" },
-  ];
+  const CATEGORIES = ["grocery", "dining", "utility", "shopping", "travel", "health", "other"].map((id) => ({
+    id,
+    label: categoryLabel(t, id),
+  }));
   const [categoryAllocations, setCategoryAllocations] = useState<Record<string, number>>({
     grocery: 35,
     dining: 15,
@@ -389,7 +384,7 @@ export default function BudgetPage() {
                     value={editBudgetLimit}
                     onChange={(e) => setEditBudgetLimit(e.target.value)}
                     className="w-32 px-3 py-1.5 rounded-xl bg-white/[0.05] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
-                    placeholder="New limit"
+                    placeholder={t.incomes.newLimitPlaceholder}
                   />
                   <button
                     onClick={handleSaveBudget}
@@ -424,8 +419,8 @@ export default function BudgetPage() {
 
               <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
                 <span>₹0</span>
-                <span>50% (Needs)</span>
-                <span>80% (Threshold Warning)</span>
+                <span>{t.incomes.needs50}</span>
+                <span>{t.incomes.threshold80}</span>
                 <span>₹{budgetLimit.toLocaleString("en-IN")}</span>
               </div>
 
@@ -435,12 +430,12 @@ export default function BudgetPage() {
                   onClick={() => setShowCategoryEdit(!showCategoryEdit)}
                   className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
                 >
-                  {showCategoryEdit ? "▲ Hide category allocations" : "▼ Edit category allocations"}
+                  {showCategoryEdit ? t.incomes.hideAllocations : t.incomes.editAllocations}
                 </button>
                 {showCategoryEdit && (
                   <div className="mt-3 space-y-2">
                     <p className="text-[11px] text-slate-400">
-                      Set the % of your budget for each category. Total shown below.
+                      {t.incomes.allocationHint}
                     </p>
                     {CATEGORIES.map((cat) => (
                       <div key={cat.id} className="flex items-center gap-3">
@@ -467,8 +462,8 @@ export default function BudgetPage() {
                       </div>
                     ))}
                     <div className={`text-xs font-semibold mt-1 ${Object.values(categoryAllocations).reduce((s, v) => s + v, 0) > 100 ? "text-rose-400" : "text-slate-400"}`}>
-                      Total: {Object.values(categoryAllocations).reduce((s, v) => s + v, 0)}%
-                      {Object.values(categoryAllocations).reduce((s, v) => s + v, 0) > 100 && " — exceeds 100%"}
+                      {fmt(t.incomes.totalPercent, { percent: Object.values(categoryAllocations).reduce((s, v) => s + v, 0) })}
+                      {Object.values(categoryAllocations).reduce((s, v) => s + v, 0) > 100 && t.incomes.exceeds100}
                     </div>
                   </div>
                 )}
@@ -529,11 +524,11 @@ export default function BudgetPage() {
                                   ? t.incomes.irregularVariable
                                   : item.frequency === "ONE_TIME"
                                   ? t.incomes.oneTime
-                                  : item.frequency}
+                                  : frequencyLabel(t, item.frequency)}
                               </span>
                             </div>
                             <p className="text-[11px] text-slate-400 mt-0.5">
-                              {item.received_date ? new Date(item.received_date).toLocaleDateString() : "Recurring"}
+                              {item.received_date ? new Date(item.received_date).toLocaleDateString() : t.incomes.recurring}
                               {item.notes ? ` • ${item.notes}` : ""}
                             </p>
                           </div>
@@ -551,7 +546,7 @@ export default function BudgetPage() {
                           <button
                             onClick={() => handleDeleteIncome(item.id)}
                             className="p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
-                            title="Delete income"
+                            title={t.incomes.deleteIncomeAria}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -734,10 +729,10 @@ export default function BudgetPage() {
                           className="w-full px-3 py-2 rounded-xl bg-[#17191E] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
                         >
                           <option value="UPI">UPI</option>
-                          <option value="CASH">Cash</option>
-                          <option value="BANK_TRANSFER">Bank Transfer</option>
-                          <option value="DEBIT_CARD">Debit Card</option>
-                          <option value="OTHER">Other</option>
+                          <option value="CASH">{t.dashboard.methodCash}</option>
+                          <option value="BANK_TRANSFER">{t.dashboard.methodBankTransfer}</option>
+                          <option value="DEBIT_CARD">{t.dashboard.methodDebitCard}</option>
+                          <option value="OTHER">{t.dashboard.methodOther}</option>
                         </select>
                       </div>
                     </div>
@@ -751,13 +746,9 @@ export default function BudgetPage() {
                         onChange={(e) => setExpenseCategory(e.target.value)}
                         className="w-full px-3 py-2 rounded-xl bg-[#17191E] border border-white/10 text-white text-xs focus:border-emerald-500 focus:outline-none"
                       >
-                        <option value="grocery">Groceries</option>
-                        <option value="dining">Dining & Food</option>
-                        <option value="utility">Bills & Utilities</option>
-                        <option value="travel">Transport & Travel</option>
-                        <option value="shopping">Shopping</option>
-                        <option value="health">Healthcare</option>
-                        <option value="other">General Expense</option>
+                        {["grocery", "dining", "utility", "travel", "shopping", "health", "other"].map((id) => (
+                          <option key={id} value={id}>{categoryLabel(t, id)}</option>
+                        ))}
                       </select>
                     </div>
 
@@ -799,10 +790,10 @@ export default function BudgetPage() {
 
       {deleteIncomeId && (
         <ConfirmDialog
-          title="Delete Income Source"
+          title={t.incomes.deleteSourceTitle}
           message={t.incomes.deleteConfirm}
-          confirmLabel="Delete"
-          cancelLabel="Cancel"
+          confirmLabel={t.common.delete}
+          cancelLabel={t.cards.cancel}
           variant="danger"
           onConfirm={confirmDeleteIncome}
           onCancel={() => setDeleteIncomeId(null)}

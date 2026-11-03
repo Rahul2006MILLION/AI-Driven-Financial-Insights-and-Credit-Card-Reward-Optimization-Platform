@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, fmt, frequencyLabel, categoryLabel } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { apiFetch, storeSession } from "@/lib/api";
 import { DemoBootstrap } from "@/components/DemoBootstrap";
@@ -164,10 +164,10 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-black tracking-tight text-white">
-              {t.dashboard?.commandCenter || "Command Center"}
+              {t.dashboard.commandCenter}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
-              {t.dashboard?.subtitle || "Financial intelligence and real-time portfolio metrics"}
+              {t.dashboard.subtitle}
             </p>
           </div>
 
@@ -178,7 +178,7 @@ export default function DashboardPage() {
               className="flex items-center gap-1.5 px-4 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-neonLime transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>{t.dashboard?.addCardCta || t.nav?.addCard || "Add Card"}</span>
+              <span>{t.dashboard?.addCardCta || t.nav.addCard}</span>
             </Link>
           </div>
         </div>
@@ -189,13 +189,13 @@ export default function DashboardPage() {
             <div className="space-y-2 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
                 <GraduationCap className="w-3.5 h-3.5" />
-                CLIQ Learn & Financial Inclusion
+                {t.dashboard.learnInclusionBadge}
               </div>
               <h2 className="text-xl md:text-2xl font-black text-white">
-                Financial Command Center — No Credit Card Required
+                {t.dashboard.noCardBannerTitle}
               </h2>
               <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
-                Build financial resilience, track your regular & irregular earnings, plan with the 50-30-20 budget framework, and learn how credit actually works before you apply.
+                {t.dashboard.noCardBannerDesc}
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
@@ -204,14 +204,14 @@ export default function DashboardPage() {
                 className="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(20,184,166,0.3)] transition-all"
               >
                 <BookOpen className="w-4 h-4" />
-                <span>Explore CLIQ Learn</span>
+                <span>{t.dashboard.exploreLearn}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/budget"
                 className="px-5 py-3 rounded-2xl bg-white/[0.05] hover:bg-white/[0.08] text-white font-semibold text-xs border border-white/10 flex items-center justify-center gap-2 transition-all"
               >
-                <span>Manage Incomes</span>
+                <span>{t.dashboard.manageIncomes}</span>
               </Link>
             </div>
           </div>
@@ -223,13 +223,13 @@ export default function DashboardPage() {
             <div className="space-y-2 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
                 <CreditCard className="w-3.5 h-3.5" />
-                Credit Card Portfolio Setup
+                {t.dashboard.portfolioSetupBadge}
               </div>
               <h2 className="text-xl md:text-2xl font-black text-white">
-                Add Your First Credit Card to Maximize Rewards
+                {t.dashboard.portfolioSetupTitle}
               </h2>
               <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
-                Connect your cards to unlock automated purchase recommendations, discover bank merchant discounts, track fee waiver thresholds, and eliminate reward leakage.
+                {t.dashboard.portfolioSetupDesc}
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
@@ -238,14 +238,14 @@ export default function DashboardPage() {
                 className="px-6 py-3 rounded-2xl btn-fx bg-lime-400 hover:bg-lime-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-neonLime transition-all"
               >
                 <Plus className="w-4 h-4" />
-                <span>Add Your First Card</span>
+                <span>{t.dashboard.addYourFirstCard}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/cards/compare"
                 className="px-5 py-3 rounded-2xl bg-white/[0.05] hover:bg-white/[0.08] text-white font-semibold text-xs border border-white/10 flex items-center justify-center gap-2 transition-all"
               >
-                <span>Browse Top Cards</span>
+                <span>{t.dashboard.browseTopCards}</span>
               </Link>
               <button
                 onClick={async () => {
@@ -259,7 +259,7 @@ export default function DashboardPage() {
                 }}
                 className="px-4 py-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-semibold text-xs border border-emerald-500/30 flex items-center justify-center gap-1.5 transition-all"
               >
-                <span>No Credit Cards? Switch to Cash &amp; Savings</span>
+                <span>{t.dashboard.switchToCashSavings}</span>
               </button>
             </div>
           </div>
@@ -271,7 +271,7 @@ export default function DashboardPage() {
             {/* Monthly Inflow */}
             <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">Total Monthly Inflow</span>
+                <span className="text-xs font-medium text-slate-400">{t.incomes.totalMonthlyInflow}</span>
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                   <Wallet className="w-3.5 h-3.5" />
                 </div>
@@ -281,10 +281,10 @@ export default function DashboardPage() {
               </div>
               <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
                 <span className="text-emerald-400 font-medium">
-                  {incomeSummary?.income_sources_count || 0} Incomes
+                  {fmt(t.dashboard.incomesCount, { count: incomeSummary?.income_sources_count || 0 })}
                 </span>
                 <Link href="/budget" className="text-slate-400 hover:text-white flex items-center gap-0.5">
-                  <span>Manage</span>
+                  <span>{t.dashboard.manage}</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -293,7 +293,7 @@ export default function DashboardPage() {
             {/* Monthly Spending */}
             <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">Monthly Spending</span>
+                <span className="text-xs font-medium text-slate-400">{t.dashboard.monthlySpending}</span>
                 <div className="w-7 h-7 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center">
                   <Receipt className="w-3.5 h-3.5" />
                 </div>
@@ -302,9 +302,9 @@ export default function DashboardPage() {
                 ₹{Number(healthData?.forecast_30d_spending || 0).toLocaleString("en-IN")}
               </div>
               <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
-                <span className="text-teal-400 font-medium">{transactions.length} Transactions</span>
+                <span className="text-teal-400 font-medium">{fmt(t.dashboard.transactionsCount, { count: transactions.length })}</span>
                 <Link href="/transactions" className="text-slate-400 hover:text-white flex items-center gap-0.5">
-                  <span>View</span>
+                  <span>{t.dashboard.view}</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -313,7 +313,7 @@ export default function DashboardPage() {
             {/* Target Budget Limit */}
             <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">Target Budget</span>
+                <span className="text-xs font-medium text-slate-400">{t.dashboard.targetBudget}</span>
                 <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
                   <PieChart className="w-3.5 h-3.5" />
                 </div>
@@ -322,9 +322,9 @@ export default function DashboardPage() {
                 ₹{Number(budgetData?.total_budget || 35000).toLocaleString("en-IN")}
               </div>
               <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
-                <span className="text-amber-400 font-medium">50/30/20 Framework</span>
+                <span className="text-amber-400 font-medium">{t.dashboard.framework503020}</span>
                 <Link href="/budget" className="text-slate-400 hover:text-white flex items-center gap-0.5">
-                  <span>Edit</span>
+                  <span>{t.common.edit}</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -333,7 +333,7 @@ export default function DashboardPage() {
             {/* Financial Health Score */}
             <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">Cash Flow Resilience</span>
+                <span className="text-xs font-medium text-slate-400">{t.dashboard.cashFlowResilience}</span>
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                   <Activity className="w-3.5 h-3.5" />
                 </div>
@@ -342,9 +342,9 @@ export default function DashboardPage() {
                 {healthData ? (healthData.data_sufficiency === "INSUFFICIENT_DATA" ? "—" : `${healthData.health_score}/100`) : "—"}
               </div>
               <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
-                <span className="text-emerald-400 font-medium">Resilience Index</span>
+                <span className="text-emerald-400 font-medium">{t.dashboard.resilienceIndex}</span>
                 <Link href="/financial-health" className="text-emerald-400 hover:text-emerald-300 flex items-center gap-0.5">
-                  <span>Breakdown</span>
+                  <span>{t.dashboard.breakdown}</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -356,7 +356,7 @@ export default function DashboardPage() {
             <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">
-                  {t.dashboard?.registeredCards || "Registered Cards"}
+                  {t.dashboard.registeredCards}
                 </span>
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                   <CreditCard className="w-3.5 h-3.5" />
@@ -367,10 +367,10 @@ export default function DashboardPage() {
               </div>
               <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
                 <span className="text-emerald-400 font-medium">
-                  {cards.filter((c) => c.is_active).length} {t.dashboard?.activeInWallet || "Active in Wallet"}
+                  {cards.filter((c) => c.is_active).length} {t.dashboard.activeInWallet}
                 </span>
                 <Link href="/cards" className="text-slate-400 hover:text-white flex items-center gap-0.5">
-                  <span>{t.dashboard?.viewFan || "Fan"}</span>
+                  <span>{t.dashboard.viewFan}</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -380,7 +380,7 @@ export default function DashboardPage() {
             <div data-spotlight className="card-interactive spot-light p-5 rounded-2xl bg-lime-400 text-[#12301A] relative overflow-hidden group">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-[#12301A]/70">
-                  {t.dashboard?.rewardsRealized || "Rewards Realized"}
+                  {t.dashboard.rewardsRealized}
                 </span>
                 <div className="w-7 h-7 rounded-full bg-[#12301A] text-lime-300 flex items-center justify-center">
                   <TrendingUp className="w-3.5 h-3.5" />
@@ -390,7 +390,7 @@ export default function DashboardPage() {
                 ₹{rewardStats ? Number(rewardStats.total_rewards_earned).toFixed(2) : "0.00"}
               </div>
               <div className="text-[11px] text-[#12301A]/70 font-medium mt-2">
-                {t.dashboard?.potentialReward || "Potential"}: ₹{rewardStats ? Number(rewardStats.total_optimal_possible).toFixed(2) : "0.00"}
+                {t.dashboard.potentialReward}: ₹{rewardStats ? Number(rewardStats.total_optimal_possible).toFixed(2) : "0.00"}
               </div>
             </div>
 
@@ -398,7 +398,7 @@ export default function DashboardPage() {
             <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">
-                  {t.dashboard?.rewardEfficiency || "Reward Efficiency"}
+                  {t.dashboard.rewardEfficiency}
                 </span>
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                   <Zap className="w-3.5 h-3.5" />
@@ -410,10 +410,10 @@ export default function DashboardPage() {
               <div className="text-[11px] mt-2">
                 {rewardStats && Number(rewardStats.reward_leakage_amount) > 0 ? (
                   <span className="text-amber-400 font-medium">
-                    ₹{Number(rewardStats.reward_leakage_amount).toFixed(2)} {t.dashboard?.leakage || "Leakage"}
+                    ₹{Number(rewardStats.reward_leakage_amount).toFixed(2)} {t.dashboard.leakage}
                   </span>
                 ) : (
-                  <span className="text-emerald-400 font-medium">{t.dashboard?.optimalSpendRate || "Optimal Spend Rate"}</span>
+                  <span className="text-emerald-400 font-medium">{t.dashboard.optimalSpendRate}</span>
                 )}
               </div>
             </div>
@@ -422,7 +422,7 @@ export default function DashboardPage() {
             <div data-spotlight className="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-400">
-                  {t.dashboard?.financialHealth || "Financial Health"}
+                  {t.dashboard.financialHealth}
                 </span>
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                   <Activity className="w-3.5 h-3.5" />
@@ -432,9 +432,9 @@ export default function DashboardPage() {
                 {healthData ? (healthData.data_sufficiency === "INSUFFICIENT_DATA" ? "—" : `${healthData.health_score}/100`) : "—"}
               </div>
               <div className="text-[11px] text-slate-400 mt-2 flex items-center justify-between">
-                <span>{healthData?.recurring_subscriptions?.length || 0} {t.dashboard?.subscriptions || "Subscriptions"}</span>
+                <span>{healthData?.recurring_subscriptions?.length || 0} {t.dashboard.subscriptions}</span>
                 <Link href="/financial-health" className="text-emerald-400 hover:text-emerald-300 flex items-center gap-0.5">
-                  <span>{t.dashboard?.viewDetails || "Details"}</span>
+                  <span>{t.dashboard.viewDetails}</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -454,25 +454,25 @@ export default function DashboardPage() {
                       <Receipt className="w-3.5 h-3.5" />
                     </div>
                     <h2 className="text-sm font-bold text-white tracking-wide">
-                      Quick Expense & UPI Tracker
+                      {t.dashboard.quickExpenseTitle}
                     </h2>
                   </div>
                   <span className="text-[10px] text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded-full font-medium">
-                    No-Card Cash Flow Mode
+                    {t.dashboard.noCardFlowMode}
                   </span>
                 </div>
 
                 {quickSuccess && (
                   <div className="mb-3 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4" />
-                    Expense recorded to cash flow and budget.
+                    {t.dashboard.expenseRecorded}
                   </div>
                 )}
 
                 <form onSubmit={handleQuickExpense} className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                   <div>
                     <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      Spend Amount (₹)
+                      {t.dashboard.amount}
                     </label>
                     <input
                       type="number"
@@ -486,12 +486,12 @@ export default function DashboardPage() {
 
                   <div>
                     <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      Merchant / Description
+                      {t.incomes.merchantDesc}
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Metro Card, Grocery"
+                      placeholder={t.dashboard.quickMerchantPlaceholder}
                       value={quickMerchant}
                       onChange={(e) => setQuickMerchant(e.target.value)}
                       className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
@@ -500,7 +500,7 @@ export default function DashboardPage() {
 
                   <div>
                     <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      Payment Method
+                      {t.dashboard.paymentMethod}
                     </label>
                     <select
                       value={quickMethod}
@@ -508,36 +508,36 @@ export default function DashboardPage() {
                       className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                     >
                       <option value="UPI">UPI</option>
-                      <option value="CASH">Cash</option>
-                      <option value="BANK_TRANSFER">Bank Transfer</option>
-                      <option value="DEBIT_CARD">Debit Card</option>
-                      <option value="OTHER">Other</option>
+                      <option value="CASH">{t.dashboard.methodCash}</option>
+                      <option value="BANK_TRANSFER">{t.dashboard.methodBankTransfer}</option>
+                      <option value="DEBIT_CARD">{t.dashboard.methodDebitCard}</option>
+                      <option value="OTHER">{t.dashboard.methodOther}</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      Category
+                      {t.dashboard.category}
                     </label>
                     <select
                       value={quickCategory}
                       onChange={(e) => setQuickCategory(e.target.value)}
                       className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                     >
-                      <option value="grocery">{t.categories?.grocery || "Groceries"}</option>
-                      <option value="dining">{t.categories?.dining || "Dining & Food"}</option>
-                      <option value="utility">{t.categories?.utility || "Utility & Bills"}</option>
-                      <option value="travel">{t.categories?.travel || "Travel & Transit"}</option>
-                      <option value="shopping">{t.categories?.shopping || "Shopping"}</option>
-                      <option value="other">{t.categories?.other || "General Spend"}</option>
+                      <option value="grocery">{t.categories.grocery}</option>
+                      <option value="dining">{t.categories.dining}</option>
+                      <option value="utility">{t.categories.utility}</option>
+                      <option value="travel">{t.categories.travel}</option>
+                      <option value="shopping">{t.categories.shopping}</option>
+                      <option value="other">{t.categories.other}</option>
                     </select>
                   </div>
 
                   <div className="sm:col-span-4 pt-2 flex items-center justify-between gap-3">
                     <span className="text-[11px] text-slate-400">
-                      Want card reward perks?{" "}
+                      {t.dashboard.wantRewardPerks}{" "}
                       <Link href="/cards/new" className="text-emerald-400 hover:underline">
-                        Add a credit card
+                        {t.dashboard.addCreditCardLink}
                       </Link>
                     </span>
                     <button
@@ -546,7 +546,7 @@ export default function DashboardPage() {
                       className="px-6 py-2 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime transition-all flex items-center gap-1.5"
                     >
                       {quickLogging ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
-                      <span>Log Expense</span>
+                      <span>{t.dashboard.logExpense}</span>
                     </button>
                   </div>
                 </form>
@@ -559,18 +559,18 @@ export default function DashboardPage() {
                       <Zap className="w-3.5 h-3.5" />
                     </div>
                     <h2 className="text-sm font-bold text-white tracking-wide">
-                      {t.dashboard?.quickOptimizer || "Purchase Optimizer"}
+                      {t.dashboard.quickOptimizer}
                     </h2>
                   </div>
                   <span className="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-mono font-medium">
-                    {t.dashboard?.decimalPrecision || "Decimal Precision"}
+                    {t.dashboard.decimalPrecision}
                   </span>
                 </div>
 
                 <form onSubmit={handleQuickOptimize} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      {t.dashboard?.amount || "Spend Amount (₹)"}
+                      {t.dashboard.amount}
                     </label>
                     <NumericInput
                       required
@@ -584,30 +584,30 @@ export default function DashboardPage() {
 
                   <div>
                     <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      {t.dashboard?.category || "Category"}
+                      {t.dashboard.category}
                     </label>
                     <select
                       value={optCategory}
                       onChange={(e) => setOptCategory(e.target.value)}
                       className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
                     >
-                      <option value="dining">{t.categories?.dining || "Dining & Delivery"}</option>
-                      <option value="shopping">{t.categories?.shopping || "Shopping"}</option>
-                      <option value="grocery">{t.categories?.grocery || "Groceries"}</option>
-                      <option value="utility">{t.categories?.utility || "Utility & Bills"}</option>
-                      <option value="travel">{t.categories?.travel || "Travel & Hotels"}</option>
-                      <option value="fuel">{t.categories?.fuel || "Fuel"}</option>
-                      <option value="other">{t.categories?.other || "General Spend"}</option>
+                      <option value="dining">{t.categories.dining}</option>
+                      <option value="shopping">{t.categories.shopping}</option>
+                      <option value="grocery">{t.categories.grocery}</option>
+                      <option value="utility">{t.categories.utility}</option>
+                      <option value="travel">{t.categories.travel}</option>
+                      <option value="fuel">{t.categories.fuel}</option>
+                      <option value="other">{t.categories.other}</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      {t.dashboard?.merchant || "Merchant"}
+                      {t.dashboard.merchant}
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Swiggy, Amazon"
+                      placeholder={t.dashboard.optimizerMerchantPlaceholder}
                       value={optMerchant}
                       onChange={(e) => setOptMerchant(e.target.value)}
                       className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
@@ -624,7 +624,7 @@ export default function DashboardPage() {
                         <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
                         <>
-                          <span>{t.dashboard?.recommendBestCard || "Recommend Best Card"}</span>
+                          <span>{t.dashboard.recommendBestCard}</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </>
                       )}
@@ -638,17 +638,17 @@ export default function DashboardPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
-                          {t.dashboard?.optimalRecommendation || "Optimal Recommendation"}
+                          {t.dashboard.optimalRecommendation}
                         </span>
                         <div className="text-base font-extrabold text-white flex items-center gap-2">
                           <span>{optResult.recommended_card.card_name}</span>
                           <span className="text-[10px] px-2 py-0.5 rounded-full bg-lime-400/20 text-lime-400 font-bold">
-                            {optResult.recommended_card.effective_rate_percentage}% {t.dashboard?.yield || "Yield"}
+                            {optResult.recommended_card.effective_rate_percentage}% {t.dashboard.yield}
                           </span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] text-slate-400">{t.dashboard?.expectedValue || "Expected Value"}</span>
+                        <span className="text-[10px] text-slate-400">{t.dashboard.expectedValue}</span>
                         <div className="text-xl font-extrabold text-lime-400">
                           ₹{Number(optResult.recommended_card.expected_reward_monetary).toFixed(2)}
                         </div>
@@ -659,7 +659,7 @@ export default function DashboardPage() {
                         href="/optimization"
                         className="text-xs text-lime-400 hover:text-lime-300 flex items-center gap-1 font-semibold"
                       >
-                        <span>{t.dashboard?.inspectAlternatives || "Inspect Alternatives"}</span>
+                        <span>{t.dashboard.inspectAlternatives}</span>
                         <ArrowRight className="w-3 h-3" />
                       </Link>
                     </div>
@@ -676,10 +676,10 @@ export default function DashboardPage() {
                 <div className="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
                   <Sparkles className="w-3.5 h-3.5" />
                 </div>
-                <h3 className="font-bold text-white text-sm">{t.dashboard?.financialIntelligenceTitle || "Financial Intelligence"}</h3>
+                <h3 className="font-bold text-white text-sm">{t.dashboard.financialIntelligenceTitle}</h3>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                {t.dashboard?.financialIntelligenceDesc || "Local-first assistant grounded in your verified card portfolio."}
+                {t.dashboard.financialIntelligenceDesc}
               </p>
 
               <div className="mt-4 space-y-2">
@@ -687,13 +687,13 @@ export default function DashboardPage() {
                   href="/assistant"
                   className="block p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-300 border border-white/[0.07] hover:border-emerald-500/30 transition-all"
                 >
-                  "{t.dashboard?.sampleSuggestion1 || "Which card gives the highest cashback on Swiggy?"}"
+                  "{t.dashboard.sampleSuggestion1}"
                 </Link>
                 <Link
                   href="/assistant"
                   className="block p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] text-xs text-slate-300 border border-white/[0.07] hover:border-emerald-500/30 transition-all"
                 >
-                  "{t.dashboard?.sampleSuggestion2 || "Show lounge access quotas across my cards"}"
+                  "{t.dashboard.sampleSuggestion2}"
                 </Link>
               </div>
             </div>
@@ -702,7 +702,7 @@ export default function DashboardPage() {
               href="/assistant"
               className="mt-5 w-full py-2.5 rounded-full bg-lime-400/10 hover:bg-lime-400/15 border border-lime-400/25 text-lime-400 font-semibold text-xs text-center block transition-all"
             >
-              {t.dashboard?.askAssistant || "Ask Assistant"}
+              {t.dashboard.askAssistant}
             </Link>
           </div>
         </div>
@@ -716,10 +716,10 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
                     <Wallet className="w-4 h-4 text-emerald-400" />
-                    <span>Active Income Streams</span>
+                    <span>{t.incomes.activeIncomeStreams}</span>
                   </h3>
                   <Link href="/budget" className="text-xs text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-0.5">
-                    <span>Manage Budget</span>
+                    <span>{t.dashboard.manageBudget}</span>
                     <ChevronRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -728,14 +728,14 @@ export default function DashboardPage() {
                   <div className="text-center py-8 space-y-3">
                     <Wallet className="w-8 h-8 text-slate-600 mx-auto" />
                     <p className="text-xs text-slate-400">
-                      No income streams recorded yet.
+                      {t.dashboard.noIncomeStreams}
                     </p>
                     <Link
                       href="/budget"
                       className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-teal-500 text-[#0E1013] font-bold text-xs"
                     >
                       <Plus className="w-3.5 h-3.5" />
-                      <span>Add First Income</span>
+                      <span>{t.incomes.addFirstIncome}</span>
                     </Link>
                   </div>
                 ) : (
@@ -749,11 +749,11 @@ export default function DashboardPage() {
                           <div className="text-xs font-bold text-white flex items-center gap-2">
                             <span>{inc.source_name}</span>
                             <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/[0.06] text-slate-300 font-mono">
-                              {inc.frequency}
+                              {frequencyLabel(t, inc.frequency)}
                             </span>
                           </div>
                           <div className="text-[11px] text-slate-400 mt-0.5">
-                            Monthly equiv: ₹{Number(inc.monthly_equivalent).toLocaleString("en-IN")}
+                            {fmt(t.dashboard.monthlyEquiv, { amount: `₹${Number(inc.monthly_equivalent).toLocaleString("en-IN")}` })}
                           </div>
                         </div>
 
@@ -771,10 +771,10 @@ export default function DashboardPage() {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-bold text-white tracking-wide">
-                    {t.dashboard?.portfolioShowcase || "Active Portfolio"}
+                    {t.dashboard.portfolioShowcase}
                   </h3>
                   <Link href="/cards" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-0.5">
-                    <span>{t.dashboard?.viewFan || "View Fan"}</span>
+                    <span>{t.dashboard.viewFan}</span>
                     <ChevronRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -783,14 +783,14 @@ export default function DashboardPage() {
                   <div className="text-center py-8 space-y-3">
                     <CreditCard className="w-8 h-8 text-slate-600 mx-auto" />
                     <p className="text-xs text-slate-400">
-                      {t.dashboard?.noCardsInPortfolio || "No cards registered yet."}
+                      {t.dashboard.noCardsInPortfolio}
                     </p>
                     <Link
                       href="/cards/new"
                       className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-lime-400 text-[#0E1013] font-bold text-xs shadow-neonLime"
                     >
                       <Plus className="w-3.5 h-3.5" />
-                      <span>{t.dashboard?.addYourFirstCard || "Add First Card"}</span>
+                      <span>{t.dashboard.addYourFirstCard}</span>
                     </Link>
                   </div>
                 ) : (
@@ -808,13 +808,13 @@ export default function DashboardPage() {
                             </span>
                           </div>
                           <div className="text-[11px] text-slate-400 mt-0.5">
-                            {c.bank_name} • {t.cards?.annualFee || "Fee"}: ₹{Number(c.annual_fee).toFixed(0)}
+                            {c.bank_name} • {t.cards.annualFee}: ₹{Number(c.annual_fee).toFixed(0)}
                           </div>
                         </div>
 
                         <div className="text-right">
                           <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-lime-400/10 text-lime-400 border border-lime-400/20 font-semibold">
-                            {c.reward_rules?.length || 1} {t.cards?.rules || "Multipliers"}
+                            {c.reward_rules?.length || 1} {t.cards.rules}
                           </span>
                         </div>
                       </div>
@@ -829,10 +829,10 @@ export default function DashboardPage() {
           <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)]">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-white tracking-wide">
-                {t.dashboard?.recentActivity || "Recent Transactions"}
+                {t.dashboard.recentActivity}
               </h3>
               <Link href="/transactions" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-0.5">
-                <span>{t.dashboard?.viewAllTransactions || "All History"}</span>
+                <span>{t.dashboard.viewAllTransactions}</span>
                 <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
@@ -841,14 +841,14 @@ export default function DashboardPage() {
               <div className="text-center py-8 space-y-3">
                 <Receipt className="w-8 h-8 text-slate-600 mx-auto" />
                 <p className="text-xs text-slate-400">
-                  {t.dashboard?.noRecentActivity || "No transaction records found."}
+                  {t.dashboard.noRecentActivity}
                 </p>
                 <Link
                   href="/transactions"
                   className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-slate-300 font-semibold text-xs"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>{t.dashboard?.recordFirstTransaction || "Log Purchase"}</span>
+                  <span>{t.dashboard.recordFirstTransaction}</span>
                 </Link>
               </div>
             ) : (
@@ -861,7 +861,7 @@ export default function DashboardPage() {
                     <div>
                       <div className="text-xs font-bold text-white">{tx.merchant_name}</div>
                       <div className="text-[11px] text-slate-400 mt-0.5">
-                        {tx.category_id} • {new Date(tx.transaction_date).toLocaleDateString()}
+                        {categoryLabel(t, tx.category_id)} • {new Date(tx.transaction_date).toLocaleDateString()}
                       </div>
                     </div>
 

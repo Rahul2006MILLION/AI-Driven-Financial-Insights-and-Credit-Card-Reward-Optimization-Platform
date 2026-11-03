@@ -55,7 +55,7 @@ export default function RegisterPage() {
         router.push("/login?registered=true");
       }
     } catch (err: any) {
-      setError(err.message || "Registration failed. Please try again.");
+      setError(err.message || t.auth.registrationFailed);
     } finally {
       setLoading(false);
     }
@@ -134,7 +134,7 @@ export default function RegisterPage() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Minimum 8 characters"
+                placeholder={t.auth.passwordMinPlaceholder}
                 className="w-full bg-white/[0.04] border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
@@ -149,9 +149,9 @@ export default function RegisterPage() {
               onChange={(e) => setLanguage(e.target.value as Language)}
               className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-emerald-500 transition-colors"
             >
-              <option value="en">English (Default)</option>
-              <option value="hi">हिन्दी (Hindi)</option>
-              <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              <option value="en">{t.auth.languageEnglishDefault}</option>
+              <option value="hi">{t.auth.languageHindiOption}</option>
+              <option value="kn">{t.auth.languageKannadaOption}</option>
             </select>
           </div>
 

@@ -158,6 +158,78 @@ export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded })
         }),
       });
 
+      // 4. Add SBI Cashback Card
+      await apiFetch("/cards", {
+        method: "POST",
+        body: JSON.stringify({
+          card_name: "SBI Cashback Card",
+          bank_name: "SBI Card",
+          network: "VISA",
+          card_type: "CASHBACK",
+          card_variant: "Signature",
+          last_four_digits: "4321",
+          annual_fee: 999.0,
+          renewal_waiver_spend: 200000.0,
+          billing_cycle_day: 10,
+          rules: [
+            {
+              category_id: "shopping",
+              merchant_pattern: "Online merchants",
+              reward_type: "CASHBACK",
+              reward_rate_percentage: 5.0,
+              point_monetary_value: 1.0,
+              monthly_cap_amount: 5000.0,
+            },
+            {
+              category_id: "all",
+              reward_type: "CASHBACK",
+              reward_rate_percentage: 1.0,
+              point_monetary_value: 1.0,
+            },
+          ],
+          benefits: [],
+        }),
+      });
+
+      // 5. Add Amex Platinum Travel
+      await apiFetch("/cards", {
+        method: "POST",
+        body: JSON.stringify({
+          card_name: "Amex Platinum Travel",
+          bank_name: "American Express",
+          network: "AMEX",
+          card_type: "PREMIUM",
+          card_variant: "Platinum",
+          last_four_digits: "1008",
+          annual_fee: 5000.0,
+          renewal_waiver_spend: 400000.0,
+          billing_cycle_day: 25,
+          rules: [
+            {
+              category_id: "travel",
+              merchant_pattern: "Airlines, MakeMyTrip",
+              reward_type: "REWARD_POINTS",
+              reward_rate_percentage: 4.0,
+              point_monetary_value: 0.5,
+            },
+            {
+              category_id: "all",
+              reward_type: "REWARD_POINTS",
+              reward_rate_percentage: 1.5,
+              point_monetary_value: 0.5,
+            },
+          ],
+          benefits: [
+            {
+              benefit_type: "LOUNGE_ACCESS",
+              title: "Complimentary Airport Lounge Access",
+              description: "8 complimentary domestic lounge visits per year (2 per quarter).",
+              annual_value_estimate: 6400.0,
+            },
+          ],
+        }),
+      });
+
       // 4. Add Initial Transactions
       const txns = [
         { merchant_name: "Swiggy", amount: 1450.0, category_id: "dining" },
@@ -188,7 +260,7 @@ export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded })
     return (
       <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-3.5 py-1.5 rounded-full">
         <CheckCircle2 className="w-3.5 h-3.5" />
-        <span>{t.common?.samplePortfolioInitialized || "Sample portfolio initialized"}</span>
+        <span>{t.common.samplePortfolioInitialized}</span>
       </div>
     );
   }
@@ -202,12 +274,12 @@ export const DemoBootstrap: React.FC<{ onSeeded?: () => void }> = ({ onSeeded })
       {loading ? (
         <>
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          <span>{t.common?.provisioningPortfolio || "Provisioning Portfolio..."}</span>
+          <span>{t.common.provisioningPortfolio}</span>
         </>
       ) : (
         <>
           <Sparkles className="w-3.5 h-3.5" />
-          <span>{t.common?.samplePortfolio || "Sample Portfolio"}</span>
+          <span>{t.common.samplePortfolio}</span>
         </>
       )}
     </button>

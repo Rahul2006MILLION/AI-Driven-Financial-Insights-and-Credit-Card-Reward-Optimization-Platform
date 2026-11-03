@@ -250,11 +250,11 @@ export default function AnalyticsPage() {
                   <div className="flex items-center gap-3 text-[10px]">
                     <span className="flex items-center gap-1">
                       <span className="w-2 h-2 rounded-sm bg-lime-400/80 inline-block" />
-                      <span className="text-slate-400">Spend</span>
+                      <span className="text-slate-400">{t.analytics.seriesSpend}</span>
                     </span>
                     <span className="flex items-center gap-1">
                       <span className="w-2 h-2 rounded-sm bg-emerald-500 inline-block" />
-                      <span className="text-slate-400">Rewards</span>
+                      <span className="text-slate-400">{t.analytics.seriesRewards}</span>
                     </span>
                   </div>
                 </div>
@@ -294,8 +294,8 @@ export default function AnalyticsPage() {
                           animationDuration={200}
                           animationEasing="ease-out"
                         />
-                        <Bar dataKey="total_amount" name="Spend" fill="url(#spendGrad)" radius={[5, 5, 0, 0]} maxBarSize={28} />
-                        <Bar dataKey="rewards_earned" name="Rewards" fill="url(#rewardGrad)" radius={[5, 5, 0, 0]} maxBarSize={28} />
+                        <Bar dataKey="total_amount" name={t.analytics.seriesSpend} fill="url(#spendGrad)" radius={[5, 5, 0, 0]} maxBarSize={28} />
+                        <Bar dataKey="rewards_earned" name={t.analytics.seriesRewards} fill="url(#rewardGrad)" radius={[5, 5, 0, 0]} maxBarSize={28} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>

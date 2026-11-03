@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useLanguage, frequencyLabel } from "@/lib/i18n";
+import { localizeHealthMessage } from "@/lib/healthMessages";
 import { Sidebar } from "@/components/Sidebar";
 import { apiFetch } from "@/lib/api";
 import {
@@ -8,15 +10,11 @@ import {
 } from "lucide-react";
 import NumericInput from "@/components/NumericInput";
 
-const FREQUENCY_LABELS: Record<string, string> = {
-  MONTHLY: "Monthly",
-  BI_WEEKLY: "Bi-Weekly",
-  WEEKLY: "Weekly",
-  IRREGULAR: "Irregular / Freelance",
-  ONE_TIME: "One-Time",
-};
+// Labels come from frequencyLabel() (t.incomes)
+const FREQUENCIES = ["MONTHLY", "BI_WEEKLY", "WEEKLY", "IRREGULAR", "ONE_TIME"];
 
 export default function IncomePage() {
+  const { t } = useLanguage();
   const [incomes, setIncomes] = useState<any[]>([]);
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -99,16 +97,16 @@ export default function IncomePage() {
           <div>
             <h1 className="text-2xl font-black text-white flex items-center gap-3">
               <Wallet className="w-6 h-6 text-emerald-400" />
-              My Income
+              {t.nav.myIncome}
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Track your salary, freelance, and other income streams.</p>
+            <p className="text-sm text-slate-400 mt-1">{t.incomes.pageSubtitle}</p>
           </div>
           <button
             onClick={() => setShowAdd((v) => !v)}
             className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all shadow-[0_0_20px_rgba(76,192,63,0.3)]"
           >
             <Plus className="w-4 h-4" />
-            Add Income
+            {t.incomes.addIncomeButton}
           </button>
         </div>
 
@@ -123,10 +121,10 @@ export default function IncomePage() {
         {summary && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { label: "Monthly Inflow",    value: fmt(summary.total_monthly_income), color: "text-emerald-400" },
-              { label: "Regular Income",    value: fmt(summary.regular_income),        color: "text-lime-400" },
-              { label: "Irregular Income",  value: fmt(summary.irregular_income),      color: "text-[#ADDC25]" },
-              { label: "Income Sources",    value: summary.income_sources_count,       color: "text-white" },
+              { label: t.cashDashboard.monthlyInflow,    value: fmt(summary.total_monthly_income), color: "text-emerald-400" },
+              { label: t.incomes.regularIncome,    value: fmt(summary.regular_income),        color: "text-lime-400" },
+              { label: t.incomes.irregularIncome,  value: fmt(summary.irregular_income),      color: "text-[#ADDC25]" },
+              { label: t.incomes.incomeSources,    value: summary.income_sources_count,       color: "text-white" },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl bg-white/[0.03] border border-white/[0.08] p-4">
                 <div className={`text-xl font-black ${s.color}`}>{s.value}</div>
@@ -139,21 +137,21 @@ export default function IncomePage() {
         {/* Add income form */}
         {showAdd && (
           <form onSubmit={handleAdd} className="rounded-2xl bg-white/[0.03] border border-emerald-500/25 p-6 space-y-4">
-            <h3 className="text-sm font-bold text-white">Add Income Stream</h3>
+            <h3 className="text-sm font-bold text-white">{t.incomes.addIncome}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Source Name</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.incomes.sourceName}</label>
                 <input
                   type="text"
                   required
                   value={sourceName}
                   onChange={(e) => setSourceName(e.target.value)}
-                  placeholder="e.g. Primary Salary"
+                  placeholder={t.incomes.sourcePlaceholder2}
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-emerald-500 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Amount (₹)</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.incomes.amount}</label>
                 <NumericInput
                   value={amount}
                   onChange={setAmount}
@@ -162,24 +160,24 @@ export default function IncomePage() {
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Frequency</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.incomes.frequency}</label>
                 <select
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value)}
                   className="w-full bg-[#17191E] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-emerald-500 focus:outline-none"
                 >
-                  {Object.entries(FREQUENCY_LABELS).map(([k, v]) => (
-                    <option key={k} value={k}>{v}</option>
+                  {FREQUENCIES.map((k) => (
+                    <option key={k} value={k}>{frequencyLabel(t, k)}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">Notes (optional)</label>
+                <label className="block text-xs text-slate-400 mb-1.5 font-semibold">{t.incomes.notesOptional}</label>
                 <input
                   type="text"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="e.g. Q1 bonus"
+                  placeholder={t.incomes.notesPlaceholder2}
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -191,14 +189,14 @@ export default function IncomePage() {
                 className="flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold disabled:opacity-50 transition-all"
               >
                 {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-                Save Income
+                {t.incomes.saveIncome}
               </button>
               <button
                 type="button"
                 onClick={() => setShowAdd(false)}
                 className="text-xs text-slate-400 hover:text-white transition-colors"
               >
-                Cancel
+                {t.cards.cancel}
               </button>
             </div>
           </form>
@@ -212,7 +210,7 @@ export default function IncomePage() {
         ) : incomes.length === 0 ? (
           <div className="text-center py-16 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
             <TrendingUp className="w-8 h-8 text-slate-600 mx-auto mb-3" />
-            <p className="text-sm text-slate-400">No income streams yet. Add your first one above.</p>
+            <p className="text-sm text-slate-400">{t.incomes.noStreamsYet}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -228,7 +226,7 @@ export default function IncomePage() {
                   <div>
                     <div className="text-sm font-semibold text-white">{inc.source_name}</div>
                     <div className="text-xs text-slate-500 mt-0.5">
-                      {FREQUENCY_LABELS[inc.frequency] || inc.frequency}
+                      {frequencyLabel(t, inc.frequency)}
                       {inc.notes && ` · ${inc.notes}`}
                     </div>
                   </div>
@@ -255,7 +253,7 @@ export default function IncomePage() {
 
         {summary?.data_sufficiency_explanation && (
           <p className="text-xs text-slate-500 leading-relaxed border-t border-white/[0.05] pt-4">
-            {summary.data_sufficiency_explanation}
+            {localizeHealthMessage(t, summary.data_sufficiency_explanation)}
           </p>
         )}
       </main>

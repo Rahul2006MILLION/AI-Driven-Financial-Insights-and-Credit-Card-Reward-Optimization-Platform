@@ -63,3 +63,25 @@ def test_financial_health_recurring_subscriptions_detection():
     assert len(report.annual_fee_audit) == 1
     assert report.annual_fee_audit[0]["annual_fee"] == 1000.0
     assert report.forecast_30d_spending > Decimal("0.00")
+
+
+def test_cibil_band_classification():
+    from app.api.v1.analytics import get_cibil_band
+    assert get_cibil_band(810) == "Excellent"
+    assert get_cibil_band(760) == "Excellent"
+    assert get_cibil_band(720) == "Good"
+    assert get_cibil_band(680) == "Fair"
+    assert get_cibil_band(580) == "Needs Attention"
+    assert get_cibil_band(300) == "Needs Attention"
+
+
+def test_credit_score_request_validation():
+    from app.schemas.analytics import CreditScoreCreateRequest, CreditScoreUpdateRequest
+    req = CreditScoreCreateRequest(score=750, notes="Verified score")
+    assert req.score == 750
+    assert req.notes == "Verified score"
+
+    update_req = CreditScoreUpdateRequest(score=800, notes="Updated via bank statement")
+    assert update_req.score == 800
+    assert update_req.notes == "Updated via bank statement"
+

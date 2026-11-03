@@ -405,7 +405,14 @@ html:is([lang="hi"], [lang="kn"]) :is(.tracking-wide, .tracking-wider, .tracking
   50%      { transform: translate3d(0, -12px, 0) rotate(6deg); }
 }
 .geo-drift { animation: geo-drift var(--dur, 22s) var(--delay, 0s) ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce) { .geo-drift { animation: none; } }
+@keyframes geo-spin { to { transform: rotate(360deg); } }
+.geo-spin { animation: geo-spin var(--dur, 90s) var(--delay, 0s) linear infinite; }
+@keyframes geo-breathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+.geo-breathe { animation: geo-breathe var(--dur, 10s) var(--delay, 0s) ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .geo-drift, .geo-spin, .geo-breathe { animation: none; } }
 
 /* ── Network pulse ────────────────────────────────────────────── */
 @keyframes net-pulse {

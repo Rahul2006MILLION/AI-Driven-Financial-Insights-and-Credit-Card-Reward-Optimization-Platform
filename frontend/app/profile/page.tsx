@@ -70,7 +70,7 @@ export default function ProfilePage() {
 
       setSavedSuccess(true);
     } catch (err: any) {
-      addToast("Failed to save profile: " + (err.message || err), "error");
+      addToast(t.profile.saveFailed + (err.message || err), "error");
     } finally {
       setSaving(false);
     }
@@ -112,7 +112,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">{fullName || "CLIQ User"}</h3>
+                  <h3 className="text-lg font-bold text-white">{fullName || t.nav.defaultUserName}</h3>
                   <div className="text-xs text-slate-400">{profile?.email}</div>
                   <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
                     {t.nav.proMember}
@@ -154,9 +154,9 @@ export default function ProfilePage() {
                     onChange={(e) => setCurrency(e.target.value)}
                     className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   >
-                    <option value="INR">INR (₹) - Indian Rupee</option>
-                    <option value="USD">USD ($) - US Dollar</option>
-                    <option value="EUR">EUR (€) - Euro</option>
+                    <option value="INR">{t.profile.currencyInr}</option>
+                    <option value="USD">{t.profile.currencyUsd}</option>
+                    <option value="EUR">{t.profile.currencyEur}</option>
                   </select>
                 </div>
 
@@ -170,14 +170,14 @@ export default function ProfilePage() {
                     className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-emerald-500 transition-colors"
                   >
                     <option value="en">English</option>
-                    <option value="hi">हिन्दी (Hindi)</option>
-                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                    <option value="hi">{t.auth.languageHindiOption}</option>
+                    <option value="kn">{t.auth.languageKannadaOption}</option>
                   </select>
                 </div>
 
                 <div className="sm:col-span-2">
                   <label className="block text-slate-400 font-medium mb-1.5">
-                    Financial Pathway Mode
+                    {t.profile.pathwayMode}
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
@@ -190,10 +190,10 @@ export default function ProfilePage() {
                       }`}
                     >
                       <p className={`font-bold text-xs ${financialPathway === "CREDIT_CARD" ? "text-emerald-400" : "text-white"}`}>
-                        Credit Card Optimization
+                        {t.profile.pathwayCardTitle}
                       </p>
                       <p className="text-[11px] text-slate-400 mt-1">
-                        Reward maximizer, card comparisons, merchant offer radar, and statement analytics.
+                        {t.profile.pathwayCardDesc}
                       </p>
                     </button>
 
@@ -207,10 +207,10 @@ export default function ProfilePage() {
                       }`}
                     >
                       <p className={`font-bold text-xs ${financialPathway === "NO_CREDIT_CARD" ? "text-emerald-400" : "text-white"}`}>
-                        Cash &amp; Savings Pathway
+                        {t.profile.pathwayCashTitle}
                       </p>
                       <p className="text-[11px] text-slate-400 mt-1">
-                        50/30/20 budget framework, emergency runway shield, UPI &amp; cash expense log, and savings goals.
+                        {t.profile.pathwayCashDesc}
                       </p>
                     </button>
                   </div>

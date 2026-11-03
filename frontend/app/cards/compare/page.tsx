@@ -55,7 +55,7 @@ export default function CompareCardsPage() {
       });
       setComparisonResult(res);
     } catch (err: any) {
-      addToast("Comparison failed: " + (err.message || err), "error");
+      addToast(t.compare.comparisonFailed + (err.message || err), "error");
     } finally {
       setComparing(false);
     }
@@ -74,10 +74,10 @@ export default function CompareCardsPage() {
       <main className="flex-1 p-5 sm:p-7 lg:p-9 max-w-7xl mx-auto w-full space-y-7">
         <div>
           <h1 className="text-3xl font-black tracking-tight text-white">
-            {t.compare?.title || "Card Comparison"}
+            {t.compare.title}
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            {t.compare?.subtitle || "Side-by-side multiplier matrix and annual fee breakeven analysis"}
+            {t.compare.subtitle}
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export default function CompareCardsPage() {
         <div className="p-5 sm:p-6 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-white uppercase tracking-wider">
-              {t.compare?.selectionPrompt || "Select 2 to 5 Cards"} ({selectedIds.length} {t.cards?.verifiedCountLabel ? "Selected" : "Selected"})
+              {t.compare.selectionPrompt} ({selectedIds.length} {t.cards?.verifiedCountLabel ? "Selected" : "Selected"})
             </span>
             <button
               onClick={handleRunComparison}
@@ -93,7 +93,7 @@ export default function CompareCardsPage() {
               className="px-4 py-1.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-[0_0_15px_rgba(76,192,63,0.35)] transition-all flex items-center gap-1.5 disabled:opacity-40"
             >
               {comparing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <GitCompare className="w-3.5 h-3.5" />}
-              <span>{comparing ? (t.compare?.comparing || "Comparing...") : (t.compare?.runComparison || "Compare")}</span>
+              <span>{comparing ? (t.compare.comparing) : (t.compare.runComparison)}</span>
             </button>
           </div>
 
@@ -147,15 +147,15 @@ export default function CompareCardsPage() {
 
                       <div className="mt-4 pt-3 border-t border-white/[0.06] space-y-2 text-xs">
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-500">Annual Fee:</span>
+                          <span className="text-slate-500">{t.compare.annualFeeLabel}</span>
                           <span className="font-bold text-white">
                             {Number(cardMeta?.annual_fee) === 0
-                              ? "Lifetime Free"
+                              ? t.compare.lifetimeFree
                               : `₹${Number(cardMeta?.annual_fee).toFixed(0)}`}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-500">Breakeven Spend:</span>
+                          <span className="text-slate-500">{t.compare.breakevenSpend}</span>
                           <span className="font-bold text-emerald-400">
                             ₹{Number(comparisonResult.annual_break_even_spends[card.card_id] || 0).toFixed(0)}/yr
                           </span>
@@ -171,10 +171,10 @@ export default function CompareCardsPage() {
             <div className="rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_16px_40px_0_rgba(0,0,0,0.6)] overflow-hidden">
               <div className="p-4 bg-white/[0.02] border-b border-white/[0.06] flex items-center justify-between">
                 <span className="text-xs font-bold text-white uppercase tracking-wider">
-                  Category Yield Matrix (%)
+                  {t.compare.yieldMatrix}
                 </span>
                 <span className="text-[11px] text-emerald-400 font-medium">
-                  Leading Yield Highlighted
+                  {t.compare.leadingYield}
                 </span>
               </div>
 
@@ -182,7 +182,7 @@ export default function CompareCardsPage() {
                 <table className="w-full text-xs text-left">
                   <thead className="bg-white/[0.01] text-slate-400 uppercase text-[10px] tracking-wider border-b border-white/[0.06]">
                     <tr>
-                      <th className="py-3.5 px-4 font-semibold">Category</th>
+                      <th className="py-3.5 px-4 font-semibold">{t.dashboard.category}</th>
                       {comparisonResult.cards.map((c: any) => (
                         <th key={c.card_id} className="py-3.5 px-4 font-semibold text-center">
                           {c.card_name}

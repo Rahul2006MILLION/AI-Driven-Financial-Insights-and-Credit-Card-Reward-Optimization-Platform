@@ -113,3 +113,34 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 };
 
 export const useLanguage = () => useContext(LanguageContext);
+
+/**
+ * Fill `{name}` placeholders in a translated template, e.g.
+ * fmt(t.cards.activeCount, { count: 3 }). Keeps word order in the dictionary,
+ * so Hindi/Kannada are never assembled from English fragments.
+ */
+export const fmt = (template: string, vars: Record<string, string | number>): string =>
+  template.replace(/\{(\w+)\}/g, (_, k: string) => (k in vars ? String(vars[k]) : `{${k}}`));
+
+/** Localized label for a category id (e.g. "dining"); unknown/custom ids are shown as-is. */
+export const categoryLabel = (t: Translations, id: string | null | undefined): string => {
+  if (!id) return "";
+  const labels = t.categories as unknown as Record<string, string>;
+  return labels[id.toLowerCase()] ?? id;
+};
+
+const FREQUENCY_KEYS: Record<string, keyof Translations["incomes"]> = {
+  MONTHLY: "monthly",
+  BI_WEEKLY: "biWeekly",
+  BIWEEKLY: "biWeekly",
+  WEEKLY: "weekly",
+  IRREGULAR: "irregular",
+  ONE_TIME: "oneTime",
+};
+
+/** Localized label for an income frequency code (MONTHLY, WEEKLY, …). */
+export const frequencyLabel = (t: Translations, code: string | null | undefined): string => {
+  if (!code) return "";
+  const key = FREQUENCY_KEYS[code.toUpperCase()];
+  return key ? (t.incomes[key] as string) : code;
+};

@@ -50,6 +50,8 @@ class CreditCard(Base):
     cardholder_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
     nickname: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
     last_four_digits: Mapped[Optional[str]] = mapped_column(String(4), nullable=True)
+    credit_limit: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 2), nullable=True)
+    current_balance: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 2), nullable=True)
     joining_fee: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
     annual_fee: Mapped[Decimal] = mapped_column(Numeric(10, 2), default=Decimal("0.00"), nullable=False)
     renewal_waiver_spend: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 2), nullable=True)
@@ -455,5 +457,20 @@ class UserLearningProgress(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     user: Mapped["Profile"] = relationship("Profile")
+
+
+class CreditScoreRecord(Base):
+    __tablename__ = "credit_score_records"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False, index=True)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    score_band: Mapped[str] = mapped_column(String(32), nullable=False)
+    source: Mapped[str] = mapped_column(String(64), default="User-Provided (Manual Entry)", nullable=False)
+    recorded_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    user: Mapped["Profile"] = relationship("Profile")
+
 
 

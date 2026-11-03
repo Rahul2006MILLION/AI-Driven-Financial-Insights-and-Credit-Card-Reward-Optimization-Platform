@@ -23,7 +23,7 @@ export default function LoginPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("registered") === "true") {
-        setSuccessMessage("Account created successfully! Please sign in with your credentials.");
+        setSuccessMessage(t.auth.registeredSuccessBanner);
       }
     }
   }, []);
@@ -53,7 +53,7 @@ export default function LoginPage() {
 
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err.message || "Failed to sign in. Please verify your credentials.");
+      setError(err.message || t.auth.signInFailed);
     } finally {
       setLoading(false);
     }

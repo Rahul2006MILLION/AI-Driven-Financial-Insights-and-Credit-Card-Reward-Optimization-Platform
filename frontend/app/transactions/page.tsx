@@ -85,7 +85,7 @@ export default function TransactionsPage() {
     e.preventDefault();
     const numAmount = typeof amount === "number" ? amount : parseFloat(amount);
     if (!amount || isNaN(numAmount) || numAmount <= 0) {
-      addToast("Please enter a valid transaction amount greater than 0.", "warning");
+      addToast(t.transactions.invalidAmount, "warning");
       return;
     }
 
@@ -106,7 +106,7 @@ export default function TransactionsPage() {
       setAmount("");
       await fetchData();
     } catch (err: any) {
-      addToast("Failed to create transaction: " + (err.message || err), "error");
+      addToast(t.transactions.createFailed + (err.message || err), "error");
     } finally {
       setSubmitting(false);
     }
@@ -140,7 +140,7 @@ export default function TransactionsPage() {
   const handlePreviewUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-      setImportError("Please select a CSV statement file first.");
+      setImportError(t.transactions.selectCsvFirst);
       return;
     }
 
@@ -163,7 +163,7 @@ export default function TransactionsPage() {
       setPreviewRows(res.rows || []);
       setImportStage("PREVIEW");
     } catch (err: any) {
-      setImportError(err.message || "Failed to analyze CSV statement.");
+      setImportError(err.message || t.transactions.analyzeFailed);
     } finally {
       setParsing(false);
     }
@@ -188,7 +188,7 @@ export default function TransactionsPage() {
   const handleCommitImport = async () => {
     const selectedRows = previewRows.filter((r) => r.selected_for_import && r.is_valid && r.duplicate_status !== "EXCLUDED");
     if (selectedRows.length === 0) {
-      addToast("No rows selected for import.", "warning");
+      addToast(t.transactions.noRowsSelected, "warning");
       return;
     }
 
@@ -220,7 +220,7 @@ export default function TransactionsPage() {
       setImportStage("SUMMARY");
       await fetchData();
     } catch (err: any) {
-      addToast("Failed to commit imported transactions: " + err.message, "error");
+      addToast(t.transactions.commitFailed + err.message, "error");
     } finally {
       setCommitting(false);
     }
@@ -326,20 +326,20 @@ export default function TransactionsPage() {
 
                     <div>
                       <label className="block text-slate-400 mb-1 font-medium">
-                        Statement Bank Format
+                        {t.transactions.bankFormat}
                       </label>
                       <select
                         value={bankFormat}
                         onChange={(e) => setBankFormat(e.target.value)}
                         className="w-full bg-[#17191E] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
                       >
-                        <option value="AUTO">Auto-Detect Statement Layout (Default)</option>
-                        <option value="HDFC">HDFC Bank Credit Card Statement</option>
-                        <option value="ICICI">ICICI Bank Credit Card Statement</option>
-                        <option value="SBI">SBI Card Statement</option>
-                        <option value="AXIS">Axis Bank Credit Card Statement</option>
-                        <option value="AMEX">American Express (Amex) Statement</option>
-                        <option value="GENERIC">Generic / CLIQ Standard CSV</option>
+                        <option value="AUTO">{t.transactions.autoDetect}</option>
+                        <option value="HDFC">{t.transactions.fmtHdfc}</option>
+                        <option value="ICICI">{t.transactions.fmtIcici}</option>
+                        <option value="SBI">{t.transactions.fmtSbi}</option>
+                        <option value="AXIS">{t.transactions.fmtAxis}</option>
+                        <option value="AMEX">{t.transactions.fmtAmex}</option>
+                        <option value="GENERIC">{t.transactions.fmtGeneric}</option>
                       </select>
                     </div>
                   </div>
@@ -364,7 +364,7 @@ export default function TransactionsPage() {
                         {selectedFile ? selectedFile.name : t.transactions.dropCsvPrompt}
                       </p>
                       <p className="text-[11px] text-slate-500 mt-1">
-                        Supported: CSV exports from HDFC, ICICI, SBI, Axis, Amex & custom CSV (Max 5MB)
+                        {t.transactions.supportedFormats}
                       </p>
                     </div>
                     {selectedFile && (
@@ -394,7 +394,7 @@ export default function TransactionsPage() {
                         </>
                       ) : (
                         <>
-                          <span>Parse & Preview Statement</span>
+                          <span>{t.transactions.parsePreview}</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </>
                       )}
@@ -425,7 +425,7 @@ export default function TransactionsPage() {
                       <span className="text-sm font-black text-slate-300">{previewData?.duplicate_rows_count || 0}</span>
                     </div>
                     <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                      <span className="text-[10px] text-slate-500 font-semibold block">Estimated Spend</span>
+                      <span className="text-[10px] text-slate-500 font-semibold block">{t.transactions.estimatedSpend}</span>
                       <span className="text-sm font-black text-emerald-400">₹{Number(previewData?.total_spend_amount || 0).toFixed(2)}</span>
                     </div>
                   </div>
@@ -435,13 +435,13 @@ export default function TransactionsPage() {
                     <table className="w-full text-xs text-left">
                       <thead className="bg-white/[0.03] text-slate-400 uppercase text-[10px] tracking-wider sticky top-0 backdrop-blur-md border-b border-white/[0.06] z-10">
                         <tr>
-                          <th className="py-2.5 px-3 text-center">Import</th>
-                          <th className="py-2.5 px-3">Date</th>
-                          <th className="py-2.5 px-3">Statement Line & Normalized</th>
-                          <th className="py-2.5 px-3">Category</th>
-                          <th className="py-2.5 px-3 text-right">Amount</th>
-                          <th className="py-2.5 px-3 text-right">Est. Reward</th>
-                          <th className="py-2.5 px-3 text-center">Reconciliation Status</th>
+                          <th className="py-2.5 px-3 text-center">{t.transactions.colImport}</th>
+                          <th className="py-2.5 px-3">{t.transactions.tableDate}</th>
+                          <th className="py-2.5 px-3">{t.transactions.colStatementLine}</th>
+                          <th className="py-2.5 px-3">{t.dashboard.category}</th>
+                          <th className="py-2.5 px-3 text-right">{t.transactions.tableAmount}</th>
+                          <th className="py-2.5 px-3 text-right">{t.transactions.colEstReward}</th>
+                          <th className="py-2.5 px-3 text-center">{t.transactions.colReconciliation}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/[0.06]">
@@ -602,7 +602,7 @@ export default function TransactionsPage() {
 
                   <div>
                     <h4 className="text-lg font-black text-white">
-                      Statement Successfully Imported
+                      {t.transactions.importSuccess}
                     </h4>
                     <p className="text-xs text-slate-400 mt-1 max-w-md">
                       {t.transactions.importSuccessMessage}
@@ -611,19 +611,19 @@ export default function TransactionsPage() {
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-lg text-xs py-2">
                     <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
-                      <span className="text-[10px] text-slate-500 font-medium block">Imported</span>
+                      <span className="text-[10px] text-slate-500 font-medium block">{t.transactions.imported}</span>
                       <span className="text-base font-black text-lime-400">{importSummary.imported_count}</span>
                     </div>
                     <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
-                      <span className="text-[10px] text-slate-500 font-medium block">Duplicates Skipped</span>
+                      <span className="text-[10px] text-slate-500 font-medium block">{t.transactions.duplicatesSkipped}</span>
                       <span className="text-base font-black text-slate-300">{importSummary.skipped_duplicates_count}</span>
                     </div>
                     <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
-                      <span className="text-[10px] text-slate-500 font-medium block">Total Spend</span>
+                      <span className="text-[10px] text-slate-500 font-medium block">{t.transactions.totalSpend}</span>
                       <span className="text-base font-black text-white">₹{Number(importSummary.total_spend_imported).toFixed(2)}</span>
                     </div>
                     <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
-                      <span className="text-[10px] text-slate-500 font-medium block">Rewards Yield</span>
+                      <span className="text-[10px] text-slate-500 font-medium block">{t.transactions.rewardsYield}</span>
                       <span className="text-base font-black text-lime-400">₹{Number(importSummary.total_rewards_predicted).toFixed(2)}</span>
                     </div>
                   </div>
@@ -634,7 +634,7 @@ export default function TransactionsPage() {
                       onClick={resetImportFlow}
                       className="px-6 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] text-xs font-bold shadow-neonLime transition-all"
                     >
-                      Done & View Transactions
+                      {t.transactions.doneView}
                     </button>
                   </div>
                 </div>
@@ -657,7 +657,7 @@ export default function TransactionsPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Swiggy, Amazon, HPCL"
+                    placeholder={t.transactions.merchantPlaceholder}
                     value={merchant}
                     onChange={(e) => setMerchant(e.target.value)}
                     className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
@@ -869,10 +869,10 @@ export default function TransactionsPage() {
 
       {deleteTargetId && (
         <ConfirmDialog
-          title={t.transactions.deletePrompt || "Delete Transaction"}
-          message="This transaction will be permanently removed. This action cannot be undone."
-          confirmLabel="Delete"
-          cancelLabel="Cancel"
+          title={t.transactions.deletePrompt || t.transactions.deleteTitle}
+          message={t.transactions.deleteMessage}
+          confirmLabel={t.common.delete}
+          cancelLabel={t.cards.cancel}
           variant="danger"
           onConfirm={confirmDelete}
           onCancel={() => setDeleteTargetId(null)}

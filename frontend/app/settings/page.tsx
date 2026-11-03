@@ -74,7 +74,7 @@ export default function SettingsPage() {
       });
       addToast(t.settings.preferencesSavedMsg, "success");
     } catch (err: any) {
-      addToast(err.message || "Failed to save preferences.", "error");
+      addToast(err.message || t.settings.savePrefsFailed, "error");
     } finally {
       setPrefsSaving(false);
     }
@@ -90,7 +90,7 @@ export default function SettingsPage() {
       const res = await fetch(`${API_BASE_URL}/auth/export`, {
         headers: stored?.accessToken ? { Authorization: `Bearer ${stored.accessToken}` } : {},
       });
-      if (!res.ok) throw new Error("Export failed");
+      if (!res.ok) throw new Error(t.settings.exportFailedShort);
 
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -103,9 +103,9 @@ export default function SettingsPage() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      addToast("Export downloaded successfully.", "success");
+      addToast(t.settings.exportDownloaded, "success");
     } catch (err: any) {
-      addToast(err.message || "Export failed.", "error");
+      addToast(err.message || t.settings.exportFailed, "error");
     } finally {
       setExporting(false);
     }
@@ -113,11 +113,11 @@ export default function SettingsPage() {
 
   const handleDeleteAccount = async () => {
     if (deleteConfirmText !== "DELETE MY ACCOUNT") {
-      addToast("Please type DELETE MY ACCOUNT exactly to confirm.", "warning");
+      addToast(t.settings.typeToConfirmToast, "warning");
       return;
     }
     if (!deletePassword) {
-      addToast("Please enter your password.", "warning");
+      addToast(t.settings.enterPassword, "warning");
       return;
     }
     setDeleting(true);
@@ -132,7 +132,7 @@ export default function SettingsPage() {
       clearSession();
       router.push("/register");
     } catch (err: any) {
-      addToast(err.message || "Account deletion failed.", "error");
+      addToast(err.message || t.settings.deleteFailed, "error");
       setDeleting(false);
       setShowDeleteDialog(false);
     }
@@ -167,28 +167,28 @@ export default function SettingsPage() {
                 <span className="font-semibold text-white block">{t.settings.rlsTitle}</span>
                 <span className="text-[10px] text-slate-500">{t.settings.rlsDesc}</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">ACTIVE</span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">{t.settings.statusActive}</span>
             </div>
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
                 <span className="font-semibold text-white block">{t.settings.tokenEncryptionTitle}</span>
                 <span className="text-[10px] text-slate-500">{t.settings.tokenEncryptionDesc}</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">COMPLIANT</span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">{t.settings.statusCompliant}</span>
             </div>
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-semibold text-white block">JWT Cryptographic Validation</span>
-                <span className="text-[10px] text-slate-500">Bearer Token Auth</span>
+                <span className="font-semibold text-white block">{t.settings.jwtTitle}</span>
+                <span className="text-[10px] text-slate-500">{t.settings.jwtDesc}</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">HS256 VERIFIED</span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">{t.settings.statusHs256}</span>
             </div>
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
               <div>
-                <span className="font-semibold text-white block">Rate Limiting & Headers</span>
-                <span className="text-[10px] text-slate-500">CSP, HSTS, 600 req/min</span>
+                <span className="font-semibold text-white block">{t.settings.rateLimitTitle}</span>
+                <span className="text-[10px] text-slate-500">{t.settings.rateLimitDesc}</span>
               </div>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">ENFORCED</span>
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">{t.settings.statusEnforced}</span>
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function SettingsPage() {
           {prefsLoading ? (
             <div className="flex items-center gap-2 text-xs text-slate-400">
               <Loader2 className="w-4 h-4 animate-spin" />
-              Loading preferences…
+              {t.settings.loadingPrefs}
             </div>
           ) : (
             <form onSubmit={handleSavePreferences} className="space-y-3.5 text-xs">
@@ -237,8 +237,8 @@ export default function SettingsPage() {
 
               <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
                 <div>
-                  <span className="font-semibold text-white block">Budget Alert Threshold</span>
-                  <span className="text-[10px] text-slate-500">Alert when spending reaches this % of budget</span>
+                  <span className="font-semibold text-white block">{t.settings.budgetAlertTitle}</span>
+                  <span className="text-[10px] text-slate-500">{t.settings.budgetAlertDesc}</span>
                 </div>
                 <input
                   type="number"
@@ -275,7 +275,7 @@ export default function SettingsPage() {
             <div>
               <span className="text-xs font-semibold text-white block">{t.settings.exportArchiveButton}</span>
               <span className="text-[10px] text-slate-400">
-                Download a JSON archive of all your profile, cards, transactions, income, and budget data.
+                {t.settings.exportDesc}
               </span>
             </div>
             <button
@@ -292,7 +292,7 @@ export default function SettingsPage() {
             <div>
               <span className="text-xs font-semibold text-rose-400 block">{t.settings.deleteAccountButton}</span>
               <span className="text-[10px] text-slate-400">
-                Permanently delete your account and all associated data. This action cannot be undone.
+                {t.settings.deleteDesc}
               </span>
             </div>
             <button
@@ -308,15 +308,15 @@ export default function SettingsPage() {
         {/* Password Reset Link */}
         <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-semibold text-white block">Change Password</span>
-            <span className="text-[10px] text-slate-500">Reset your password via email verification</span>
+            <span className="text-xs font-semibold text-white block">{t.settings.changePassword}</span>
+            <span className="text-[10px] text-slate-500">{t.settings.changePasswordDesc}</span>
           </div>
           <a
             href="/forgot-password"
             className="px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors"
           >
             <Lock className="w-3.5 h-3.5" />
-            <span>Reset Password</span>
+            <span>{t.auth.resetPassword}</span>
           </a>
         </div>
       </main>
@@ -324,29 +324,31 @@ export default function SettingsPage() {
       {/* Delete Account Dialog */}
       {showDeleteDialog && (
         <ConfirmDialog
-          title="Delete Account"
-          message="This will permanently delete your account, all cards, transactions, budgets, and income records. Audit logs are retained for compliance. This cannot be undone."
-          confirmLabel={deleting ? "Deleting…" : "Delete My Account"}
-          cancelLabel="Cancel"
+          title={t.settings.deleteAccount}
+          message={t.settings.deleteDialogMessage}
+          confirmLabel={deleting ? t.settings.deleting : t.settings.deleteMyAccount}
+          cancelLabel={t.cards.cancel}
           variant="danger"
           onConfirm={handleDeleteAccount}
           onCancel={() => { setShowDeleteDialog(false); setDeletePassword(""); setDeleteConfirmText(""); }}
         >
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Your password</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">{t.settings.yourPassword}</label>
               <input
                 type="password"
                 value={deletePassword}
                 onChange={(e) => setDeletePassword(e.target.value)}
-                placeholder="Enter your current password"
+                placeholder={t.settings.currentPasswordPlaceholder}
                 className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs focus:border-rose-500 focus:outline-none"
                 autoFocus
               />
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Type <span className="text-rose-400 font-mono">DELETE MY ACCOUNT</span> to confirm
+                {t.settings.typeToConfirm.split("{phrase}")[0]}
+                <span className="text-rose-400 font-mono">DELETE MY ACCOUNT</span>
+                {t.settings.typeToConfirm.split("{phrase}")[1]}
               </label>
               <input
                 type="text"

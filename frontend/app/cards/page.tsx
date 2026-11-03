@@ -116,7 +116,7 @@ export default function MyCreditCardsPage() {
       await api.deleteCard(deleteTargetId);
       await fetchCards();
     } catch (err: any) {
-      addToast("Failed to delete card: " + (err.message || err), "error");
+      addToast(t.cards.deleteFailed + (err.message || err), "error");
     } finally {
       setDeletingId(null);
     }
@@ -144,7 +144,7 @@ export default function MyCreditCardsPage() {
     if (!editingCard) return;
 
     if (editForm.last_four_digits && !/^[0-9]{4}$/.test(editForm.last_four_digits.trim())) {
-      addToast("Last 4 digits must contain exactly 4 numeric digits.", "warning");
+      addToast(t.cards.lastFourValidation, "warning");
       return;
     }
 
@@ -170,7 +170,7 @@ export default function MyCreditCardsPage() {
       setEditingCard(null);
       await fetchCards();
     } catch (err: any) {
-      addToast("Failed to update card: " + err.message, "error");
+      addToast(t.cards.updateFailed + err.message, "error");
     } finally {
       setSavingEdit(false);
     }
@@ -196,7 +196,7 @@ export default function MyCreditCardsPage() {
           <div className="flex flex-col items-center justify-center p-24 space-y-4">
             <Loader2 className="w-9 h-9 text-cliq-cyan animate-spin" />
             <p className="text-xs text-cliq-textSecondary tracking-wide">
-              Loading your credit card wallet...
+              {t.cards.loadingWallet}
             </p>
           </div>
         ) : cards.length === 0 ? (
@@ -220,10 +220,10 @@ export default function MyCreditCardsPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/[0.07] pb-5">
               <div>
                 <h1 className="text-3xl font-black tracking-tight text-white glow-emerald">
-                  {t.cards?.cardCollectionTitle || "Card Collection"}
+                  {t.cards.cardCollectionTitle}
                 </h1>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  {t.cards?.cardCollectionSubtitle || "Interactive multi-card portfolio & privileges"}
+                  {t.cards.cardCollectionSubtitle}
                 </p>
               </div>
 
@@ -232,13 +232,13 @@ export default function MyCreditCardsPage() {
                 {/* Metrics Badges */}
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs">
                   <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-slate-400">{t.cards?.cardsCountLabel || "Cards:"}</span>
+                  <span className="text-slate-400">{t.cards.cardsCountLabel}</span>
                   <strong className="text-white font-bold">{cards.length}</strong>
                 </div>
 
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-slate-400">{t.cards?.verifiedCountLabel || "Verified:"}</span>
+                  <span className="text-slate-400">{t.cards.verifiedCountLabel}</span>
                   <strong className="text-white font-bold">{verifiedCount}</strong>
                 </div>
 
@@ -254,7 +254,7 @@ export default function MyCreditCardsPage() {
                     }`}
                   >
                     <Layers className="w-3.5 h-3.5" />
-                    <span>{t.cards?.viewFan || "Fan"}</span>
+                    <span>{t.cards.viewFan}</span>
                   </button>
                   <button
                     type="button"
@@ -266,7 +266,7 @@ export default function MyCreditCardsPage() {
                     }`}
                   >
                     <LayoutGrid className="w-3.5 h-3.5" />
-                    <span>{t.cards?.viewGrid || "Grid"}</span>
+                    <span>{t.cards.viewGrid}</span>
                   </button>
                 </div>
 
@@ -277,7 +277,7 @@ export default function MyCreditCardsPage() {
                   className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-[#0E1013] font-semibold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
                 >
                   <PlusCircle className="w-3.5 h-3.5" />
-                  <span>{t.cards?.addNew || "Add Card"}</span>
+                  <span>{t.cards.addNew}</span>
                 </button>
               </div>
             </div>
@@ -288,7 +288,7 @@ export default function MyCreditCardsPage() {
                 <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder={t.cards?.searchPlaceholder || "Filter cards by name, bank, or nickname..."}
+                  placeholder={t.cards.searchPlaceholder}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
@@ -301,7 +301,7 @@ export default function MyCreditCardsPage() {
                   onChange={(e) => setSelectedBank(e.target.value)}
                   className="px-3 py-1.5 rounded-xl bg-[#17191E] border border-white/10 text-white text-xs focus:outline-none focus:border-emerald-500"
                 >
-                  <option value="ALL">{t.cards?.allBanks || "All Banks"} ({uniqueBanks.length})</option>
+                  <option value="ALL">{t.cards.allBanks} ({uniqueBanks.length})</option>
                   {uniqueBanks.map((b) => (
                     <option key={b} value={b}>
                       {b}
@@ -314,7 +314,7 @@ export default function MyCreditCardsPage() {
                   onChange={(e) => setSelectedNetwork(e.target.value)}
                   className="px-2.5 py-1.5 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                 >
-                  <option value="ALL">{t.cards?.allNetworks || "All Networks"}</option>
+                  <option value="ALL">{t.cards.allNetworks}</option>
                   <option value="VISA">VISA</option>
                   <option value="MASTERCARD">Mastercard</option>
                   <option value="AMEX">Amex</option>
@@ -343,14 +343,14 @@ export default function MyCreditCardsPage() {
                   {/* Summary metric callout */}
                   <div className="grid grid-cols-2 gap-3 text-xs">
                     <div className="p-3 rounded-2xl bg-cliq-surface/60 border border-cliq-border flex items-center justify-between">
-                      <span className="text-cliq-textSecondary">Total Annual Fees:</span>
+                      <span className="text-cliq-textSecondary">{t.cards.totalAnnualFees}</span>
                       <strong className="text-white font-bold">
                         {totalAnnualFee === 0 ? "FREE" : `₹${totalAnnualFee.toLocaleString("en-IN")}`}
                       </strong>
                     </div>
 
                     <div className="p-3 rounded-2xl bg-cliq-surface/60 border border-cliq-border flex items-center justify-between">
-                      <span className="text-cliq-textSecondary">Potential Waiver Targets:</span>
+                      <span className="text-cliq-textSecondary">{t.cards.potentialWaiverTargets}</span>
                       <strong className="text-emerald-400 font-bold">
                         {totalWaiverSpend > 0 ? `₹${totalWaiverSpend.toLocaleString("en-IN")}` : "N/A"}
                       </strong>
@@ -402,13 +402,13 @@ export default function MyCreditCardsPage() {
                       <div className="space-y-2 pt-1 text-xs">
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="text-[10px] text-cliq-textSecondary block">Annual Fee</span>
+                            <span className="text-[10px] text-cliq-textSecondary block">{t.cards.annualFee}</span>
                             <span className="font-bold text-white">
                               {annualFeeNum === 0 ? "FREE" : `₹${annualFeeNum.toLocaleString("en-IN")}`}
                             </span>
                           </div>
                           <div className="text-right">
-                            <span className="text-[10px] text-cliq-textSecondary block">Renewal Waiver</span>
+                            <span className="text-[10px] text-cliq-textSecondary block">{t.cards.renewalWaiver}</span>
                             <span className="font-bold text-emerald-400">
                               {waiverSpendNum > 0 ? `₹${waiverSpendNum.toLocaleString("en-IN")}` : "N/A"}
                             </span>
@@ -425,7 +425,7 @@ export default function MyCreditCardsPage() {
                             className="text-cliq-cyan hover:underline text-xs font-semibold flex items-center gap-1"
                           >
                             <Eye className="w-3.5 h-3.5" />
-                            <span>View in Fan</span>
+                            <span>{t.cards.viewInFan}</span>
                           </button>
 
                           <div className="flex items-center gap-1.5">
@@ -433,7 +433,7 @@ export default function MyCreditCardsPage() {
                               type="button"
                               onClick={() => openEditModal(card)}
                               className="p-1.5 rounded-lg bg-cliq-surfaceHover hover:bg-cliq-border text-cliq-textSecondary hover:text-white"
-                              title="Edit Card"
+                              title={t.cards.editCard}
                             >
                               <Edit2 className="w-3.5 h-3.5" />
                             </button>
@@ -441,7 +441,7 @@ export default function MyCreditCardsPage() {
                               type="button"
                               onClick={() => handleDeleteCard(card.id)}
                               className="p-1.5 rounded-lg bg-cliq-surfaceHover hover:bg-red-950/60 text-cliq-textSecondary hover:text-red-400"
-                              title="Deactivate Card"
+                              title={t.cards.deactivateCard}
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -486,13 +486,13 @@ export default function MyCreditCardsPage() {
 
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <Edit2 className="w-4 h-4 text-cliq-cyan" />
-                <span>Edit Card Specifications</span>
+                <span>{t.cards.editSpecsTitle}</span>
               </h3>
 
               <form onSubmit={handleSaveEdit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Card Name *</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.cardNameRequired}</label>
                     <input
                       type="text"
                       required
@@ -503,7 +503,7 @@ export default function MyCreditCardsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Bank Name *</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.bankNameRequired}</label>
                     <input
                       type="text"
                       required
@@ -514,7 +514,7 @@ export default function MyCreditCardsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Cardholder Name</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cardSelection.cardholderNameLabel}</label>
                     <input
                       type="text"
                       value={editForm.cardholder_name}
@@ -524,18 +524,18 @@ export default function MyCreditCardsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Nickname</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.nickname}</label>
                     <input
                       type="text"
                       value={editForm.nickname}
                       onChange={(e) => setEditForm({ ...editForm, nickname: e.target.value })}
-                      placeholder="e.g. Travel Card"
+                      placeholder={t.cards.nicknamePlaceholder}
                       className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Last 4 Digits</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.lastFourDigits}</label>
                     <input
                       type="text"
                       maxLength={4}
@@ -549,7 +549,7 @@ export default function MyCreditCardsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Network</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.network}</label>
                     <select
                       value={editForm.network}
                       onChange={(e) => setEditForm({ ...editForm, network: e.target.value })}
@@ -564,7 +564,7 @@ export default function MyCreditCardsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Annual Fee (₹)</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cardSelection.annualFeeLabel}</label>
                     <NumericInput
                       allowDecimal
                       value={editForm.annual_fee}
@@ -575,20 +575,20 @@ export default function MyCreditCardsPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-cliq-textSecondary font-semibold">Renewal Waiver Spend (₹)</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.renewalWaiverSpend}</label>
                     <NumericInput
                       allowDecimal
                       value={editForm.renewal_waiver_spend}
                       onChange={(val) =>
                         setEditForm({ ...editForm, renewal_waiver_spend: val })
                       }
-                      placeholder="Optional waiver spend"
+                      placeholder={t.cards.optionalWaiverSpend}
                       className="w-full px-3 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     />
                   </div>
 
                   <div className="space-y-1 sm:col-span-2">
-                    <label className="text-cliq-textSecondary font-semibold">Waiver Condition Details</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.waiverConditionDetails}</label>
                     <input
                       type="text"
                       value={editForm.fee_waiver_condition_details}
@@ -600,7 +600,7 @@ export default function MyCreditCardsPage() {
                   </div>
 
                   <div className="space-y-1 sm:col-span-2">
-                    <label className="text-cliq-textSecondary font-semibold">Terms URL</label>
+                    <label className="text-cliq-textSecondary font-semibold">{t.cards.termsUrl}</label>
                     <input
                       type="url"
                       value={editForm.terms_source_url}
@@ -617,7 +617,7 @@ export default function MyCreditCardsPage() {
                     onClick={() => setEditingCard(null)}
                     className="px-4 py-2 rounded-xl bg-cliq-surfaceHover text-white text-xs font-semibold hover:bg-cliq-border"
                   >
-                    Cancel
+                    {t.cards.cancel}
                   </button>
                   <button
                     type="submit"
@@ -625,7 +625,7 @@ export default function MyCreditCardsPage() {
                     className="px-5 py-2 rounded-xl bg-cliq-cyan text-cliq-navy text-xs font-extrabold hover:opacity-95 disabled:opacity-50 flex items-center gap-1.5"
                   >
                     {savingEdit && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                    <span>Save Changes</span>
+                    <span>{t.cards.saveChanges}</span>
                   </button>
                 </div>
               </form>
@@ -636,10 +636,10 @@ export default function MyCreditCardsPage() {
 
       {deleteTargetId && (
         <ConfirmDialog
-          title="Deactivate Card"
-          message="Are you sure you want to deactivate this credit card? Historical transaction links will be preserved."
-          confirmLabel="Deactivate"
-          cancelLabel="Cancel"
+          title={t.cards.deactivateCard}
+          message={t.cards.deleteCardConfirm}
+          confirmLabel={t.cards.deactivate}
+          cancelLabel={t.cards.cancel}
           variant="warning"
           onConfirm={confirmDeleteCard}
           onCancel={() => setDeleteTargetId(null)}

@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { useLanguage } from "@/lib/i18n";
+import { GeoBackdrop } from "./GeoBackdrop";
 import { motion, useInView } from "framer-motion";
 import {
   Zap, BarChart3, Activity, Wallet, FileText, GraduationCap, Shield,
@@ -94,6 +95,7 @@ export function FeaturesSection() {
   return (
     <section className="relative px-3 sm:px-4 py-4">
       <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#F4F6EE] overflow-hidden">
+        <GeoBackdrop variant="features" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
 
           {/* ── Header ───────────────────────────────────────────── */}

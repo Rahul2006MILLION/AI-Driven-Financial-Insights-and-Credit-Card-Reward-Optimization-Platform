@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, fmt, categoryLabel } from "@/lib/i18n";
 import { api, CardOffer } from "@/lib/api";
 import {
   Tag,
@@ -22,14 +22,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const CATEGORIES = [
-  { id: "all", label: "All Offers" },
-  { id: "food_delivery", label: "Dining & Delivery" },
-  { id: "shopping", label: "Shopping" },
-  { id: "travel", label: "Travel & Flights" },
-  { id: "grocery", label: "Grocery & Mart" },
-  { id: "entertainment", label: "Entertainment" },
-];
+// Labels come from t.offers.allOffers / t.categories via categoryLabel()
+const CATEGORIES = ["all", "food_delivery", "shopping", "travel", "grocery", "entertainment"].map((id) => ({ id }));
 
 export default function OffersDiscoveryPage() {
   const { t } = useLanguage();
@@ -77,10 +71,10 @@ export default function OffersDiscoveryPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-black tracking-tight text-white">
-              {t.offers?.title || "Offers & Promotions"}
+              {t.offers.title}
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">
-              {t.offers?.subtitle || "Verified merchant partnerships and credit card discounts"}
+              {t.offers.subtitle}
             </p>
           </div>
 
@@ -90,14 +84,14 @@ export default function OffersDiscoveryPage() {
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-semibold text-xs hover:bg-amber-500/20 transition-all"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>{t.offers?.reviewDeskCta || "Review Desk"}</span>
+              <span>{t.offers.reviewDeskCta}</span>
             </Link>
             <Link
               href="/optimization"
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-semibold text-xs shadow-[0_0_20px_rgba(76,192,63,0.35)] transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>{t.offers?.optimizeSpendCta || "Optimize Spend"}</span>
+              <span>{t.offers.optimizeSpendCta}</span>
             </Link>
           </div>
         </div>
@@ -110,7 +104,7 @@ export default function OffersDiscoveryPage() {
               <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder={t.offers?.searchPlaceholder || "Search merchant, coupon, or deal..."}
+                placeholder={t.offers.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white/[0.04] border border-white/10 rounded-full pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none transition-colors"
@@ -125,7 +119,7 @@ export default function OffersDiscoveryPage() {
                   onChange={(e) => setOnlyUserCards(e.target.checked)}
                   className="rounded border-white/20 bg-white/[0.05] text-emerald-500 focus:ring-0 h-4 w-4"
                 />
-                <span className="font-semibold text-emerald-400">{t.offers?.myCardsOnly || "My Cards Only"}</span>
+                <span className="font-semibold text-emerald-400">{t.offers.myCardsOnly}</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-300">
@@ -135,7 +129,7 @@ export default function OffersDiscoveryPage() {
                   onChange={(e) => setExpiringSoon(e.target.checked)}
                   className="rounded border-white/20 bg-white/[0.05] text-emerald-500 focus:ring-0 h-4 w-4"
                 />
-                <span>{t.offers?.expiringSoon || "Expiring Soon"}</span>
+                <span>{t.offers.expiringSoon}</span>
               </label>
             </div>
           </div>
@@ -154,7 +148,7 @@ export default function OffersDiscoveryPage() {
                       : "bg-white/[0.03] text-slate-400 hover:text-white border border-white/[0.06]"
                   }`}
                 >
-                  {cat.label}
+                  {cat.id === "all" ? t.offers.allOffers : categoryLabel(t, cat.id)}
                 </button>
               );
             })}
@@ -165,23 +159,23 @@ export default function OffersDiscoveryPage() {
         {loading ? (
           <div className="py-20 text-center">
             <Loader2 className="w-8 h-8 animate-spin text-emerald-400 mx-auto" />
-            <p className="text-xs text-slate-400 mt-2">Loading promotions...</p>
+            <p className="text-xs text-slate-400 mt-2">{t.offers.loadingPromotions}</p>
           </div>
         ) : offers.length === 0 ? (
           <div className="p-12 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl text-center space-y-4 max-w-lg mx-auto">
             <Tag className="w-10 h-10 text-slate-600 mx-auto" />
-            <h3 className="text-base font-bold text-white">No Offers Found</h3>
+            <h3 className="text-base font-bold text-white">{t.offers.noOffersTitle}</h3>
             <p className="text-xs text-slate-400">
               {onlyUserCards
-                ? "No active promotions currently match your portfolio cards."
-                : "No offers match the current filter criteria."}
+                ? t.offers.noOffersForCards
+                : t.offers.noOffersForFilter}
             </p>
             {onlyUserCards && (
               <button
                 onClick={() => setOnlyUserCards(false)}
                 className="px-4 py-2 rounded-full bg-emerald-500 text-[#0E1013] font-bold text-xs"
               >
-                Show All Offers
+                {t.offers.showAllOffers}
               </button>
             )}
           </div>
@@ -191,8 +185,8 @@ export default function OffersDiscoveryPage() {
               const isVerified = offer.verification_status === "VERIFIED";
               const isPercentage = offer.discount_type === "PERCENTAGE";
               const discountDisplay = isPercentage
-                ? `${Number(offer.discount_value)}% OFF`
-                : `₹${Number(offer.discount_value).toLocaleString("en-IN")} FLAT OFF`;
+                ? fmt(t.offers.percentOff, { value: Number(offer.discount_value) })
+                : fmt(t.offers.flatOff, { value: `₹${Number(offer.discount_value).toLocaleString("en-IN")}` });
 
               const validDateStr = new Date(offer.valid_to).toLocaleDateString("en-IN", {
                 month: "short",
@@ -231,16 +225,16 @@ export default function OffersDiscoveryPage() {
                         {offer.payment_channel === "OFFLINE" ? (
                           <span className="flex items-center gap-1 text-slate-300">
                             <Store className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>In-Store</span>
+                            <span>{t.optimizer.offlineChannel}</span>
                           </span>
                         ) : offer.payment_channel === "ONLINE" ? (
                           <span className="flex items-center gap-1 text-slate-300">
                             <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Online</span>
+                            <span>{t.optimizer.onlineChannel}</span>
                           </span>
                         ) : (
                           <span className="flex items-center gap-1 text-slate-300">
-                            <span>Omni</span>
+                            <span>{t.offers.omniChannel}</span>
                           </span>
                         )}
                       </div>
@@ -259,14 +253,14 @@ export default function OffersDiscoveryPage() {
                     {/* Offer Terms Snapshot */}
                     <div className="mt-4 pt-3 border-t border-white/[0.07] grid grid-cols-2 gap-2 text-xs">
                       <div>
-                        <span className="text-[10px] text-slate-500 block">Min Spend</span>
+                        <span className="text-[10px] text-slate-500 block">{t.offers.minSpend}</span>
                         <span className="font-bold text-white">
                           ₹{Number(offer.min_transaction_value).toLocaleString("en-IN")}
                         </span>
                       </div>
                       {offer.max_discount_amount && (
                         <div>
-                          <span className="text-[10px] text-slate-500 block">Max Savings</span>
+                          <span className="text-[10px] text-slate-500 block">{t.offers.maxSavings}</span>
                           <span className="font-bold text-emerald-400">
                             ₹{Number(offer.max_discount_amount).toLocaleString("en-IN")}
                           </span>
@@ -277,7 +271,7 @@ export default function OffersDiscoveryPage() {
                     {/* Eligible Issuer / Cards */}
                     <div className="mt-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs">
                       <span className="text-[10px] text-slate-500 block font-semibold mb-1">
-                        Eligible Cards:
+                        {t.offers.eligibleCards}
                       </span>
                       <div className="flex flex-wrap items-center gap-1.5">
                         {offer.eligible_bank && (
@@ -291,7 +285,7 @@ export default function OffersDiscoveryPage() {
                           </span>
                         )}
                         {!offer.eligible_bank && !offer.eligible_network && (
-                          <span className="text-[10px] text-slate-400">All major cards</span>
+                          <span className="text-[10px] text-slate-400">{t.offers.allMajorCards}</span>
                         )}
                       </div>
 
@@ -307,7 +301,7 @@ export default function OffersDiscoveryPage() {
                     {offer.promo_code && (
                       <div className="mt-3 flex items-center justify-between p-2.5 rounded-2xl bg-white/[0.03] border border-white/10">
                         <div>
-                          <span className="text-[9px] text-slate-500 uppercase font-bold block">Coupon</span>
+                          <span className="text-[9px] text-slate-500 uppercase font-bold block">{t.offers.coupon}</span>
                           <span className="font-mono text-xs font-bold text-emerald-400">
                             {offer.promo_code}
                           </span>
@@ -319,12 +313,12 @@ export default function OffersDiscoveryPage() {
                           {copiedCode === offer.promo_code ? (
                             <>
                               <Check className="w-3 h-3 text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
+                              <span className="text-emerald-400">{t.offers.copied}</span>
                             </>
                           ) : (
                             <>
                               <Copy className="w-3 h-3" />
-                              <span>Copy</span>
+                              <span>{t.offers.copy}</span>
                             </>
                           )}
                         </button>
@@ -336,7 +330,7 @@ export default function OffersDiscoveryPage() {
                   <div className="mt-5 pt-3 border-t border-white/[0.07] flex items-center justify-between text-[11px] text-slate-500">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      <span>Expires {validDateStr}</span>
+                      <span>{fmt(t.offers.expiresOn, { date: validDateStr })}</span>
                     </div>
 
                     {offer.source_url && (
@@ -346,7 +340,7 @@ export default function OffersDiscoveryPage() {
                         rel="noreferrer"
                         className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium"
                       >
-                        <span>Terms</span>
+                        <span>{t.offers.terms}</span>
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     )}

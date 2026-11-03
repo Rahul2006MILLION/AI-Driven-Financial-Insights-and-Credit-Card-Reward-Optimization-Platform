@@ -65,18 +65,18 @@ export const Sidebar: React.FC = () => {
 
   /* ── No-credit-card pathway nav ─────────────────────────── */
   const nccNavItems = [
-    { href: "/dashboard",        label: "Dashboard",                 icon: LayoutDashboard },
-    { href: "/income",           label: "My Income",                 icon: Wallet,        highlight: true },
-    { href: "/transactions",     label: "Expense Log",               icon: Receipt },
-    { href: "/budget",           label: "Budget Planner",            icon: PiggyBank,     highlight: true },
-    { href: "/savings-goals",    label: "Savings Goals",             icon: Target },
-    { href: "/emergency-fund",   label: "Emergency Fund",            icon: ShieldCheck },
-    { href: "/subscriptions",    label: "Subscriptions & Bills",     icon: Repeat },
-    { href: "/financial-health", label: "Financial Health",          icon: TrendingUp },
-    { href: "/assistant",        label: "AI Assistant",              icon: Bot,           highlight: true },
-    { href: "/learn",            label: "CLIQ Learn",                icon: GraduationCap, highlight: true },
-    { href: "/profile",          label: "User Profile",              icon: User },
-    { href: "/settings",         label: "Settings & Security",       icon: Settings },
+    { href: "/dashboard",        label: t.nav.dashboard,                 icon: LayoutDashboard },
+    { href: "/income",           label: t.nav.myIncome,                 icon: Wallet,        highlight: true },
+    { href: "/transactions",     label: t.nav.expenseLog,               icon: Receipt },
+    { href: "/budget",           label: t.nav.budgetPlanner,            icon: PiggyBank,     highlight: true },
+    { href: "/savings-goals",    label: t.nav.savingsGoals,             icon: Target },
+    { href: "/emergency-fund",   label: t.nav.emergencyFund,            icon: ShieldCheck },
+    { href: "/subscriptions",    label: t.nav.subscriptions,     icon: Repeat },
+    { href: "/financial-health", label: t.nav.financialHealth,          icon: TrendingUp },
+    { href: "/assistant",        label: t.nav.assistant,              icon: Bot,           highlight: true },
+    { href: "/learn",            label: t.nav.learn,                icon: GraduationCap, highlight: true },
+    { href: "/profile",          label: t.nav.profile,              icon: User },
+    { href: "/settings",         label: t.nav.settings,       icon: Settings },
   ];
 
   const navItems = isNoCard ? nccNavItems : ccNavItems;
@@ -103,10 +103,10 @@ export const Sidebar: React.FC = () => {
   return (
     <aside className="w-64 hidden lg:flex flex-col shrink-0 m-3 mr-0 rounded-[1.75rem] bg-[#17191E] border border-white/[0.05] self-start sticky top-[84px] max-h-[calc(100vh-96px)] overflow-y-auto p-3 space-y-0.5">
       <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-        <span>{t.sidebar?.workspace || "WORKSPACE"}</span>
+        <span>{t.sidebar.workspace}</span>
         {isNoCard && (
           <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-bold text-[9px] tracking-normal">
-            CASH & SAVINGS
+            {t.nav.cashSavingsBadge}
           </span>
         )}
       </div>
@@ -150,9 +150,9 @@ export const Sidebar: React.FC = () => {
       {session?.isAdmin && (
         <>
           <div className="pt-4 mt-3 border-t border-white/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-            <span>{t.sidebar?.administration || "Administration"}</span>
+            <span>{t.sidebar.administration}</span>
             <span className="px-1.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-[9px]">
-              {t.sidebar?.staffBadge || "STAFF"}
+              {t.sidebar.staffBadge}
             </span>
           </div>
           <Link
@@ -164,7 +164,7 @@ export const Sidebar: React.FC = () => {
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
-            <span>{t.sidebar?.offerReviewDesk || t.nav?.adminDesk || "Offer Review Desk"}</span>
+            <span>{t.sidebar?.offerReviewDesk || t.nav.adminDesk}</span>
           </Link>
         </>
       )}

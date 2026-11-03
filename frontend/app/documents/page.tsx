@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, fmt } from "@/lib/i18n";
 import { apiFetch } from "@/lib/api";
 import NumericInput from "@/components/NumericInput";
 import {
@@ -50,7 +50,7 @@ export default function DocumentProcessingPage() {
   const selectDocument = (doc: any) => {
     setSelectedDoc(doc);
     if (doc.extracted_data) {
-      setCardName(doc.extracted_data.extracted_card_name || "New Card");
+      setCardName(doc.extracted_data.extracted_card_name || t.documents.newCardDefault);
       setBankName(doc.extracted_data.extracted_bank_name || "Bank");
       setNetwork(doc.extracted_data.extracted_network || "VISA");
       setAnnualFee(
@@ -89,11 +89,11 @@ export default function DocumentProcessingPage() {
         body: formData,
       });
 
-      setSuccessMsg(`Document '${file.name}' processed successfully.`);
+      setSuccessMsg(fmt(t.documents.processedSuccess, { name: file.name }));
       await fetchDocuments();
       selectDocument(newDoc);
     } catch (err: any) {
-      setError(err.message || "Upload failed.");
+      setError(err.message || t.documents.uploadFailed);
     } finally {
       setUploading(false);
     }
@@ -118,10 +118,10 @@ export default function DocumentProcessingPage() {
         }),
       });
 
-      setSuccessMsg(`Card '${cardName}' verified and added to active portfolio.`);
+      setSuccessMsg(fmt(t.documents.cardVerified, { name: cardName }));
       await fetchDocuments();
     } catch (err: any) {
-      setError(err.message || "Verification failed.");
+      setError(err.message || t.documents.verifyFailed);
     } finally {
       setVerifying(false);
     }
@@ -159,7 +159,7 @@ export default function DocumentProcessingPage() {
           <FileUp className="w-8 h-8 text-emerald-400 mx-auto mb-2.5 animate-pulse" />
           <h3 className="text-sm font-bold text-white">{t.documents.dragDrop}</h3>
           <p className="text-xs text-slate-400 mt-1">
-            Max 10MB • Extracts reward tiers, caps, annual fees, and exclusions into staging
+            {t.documents.uploadHint}
           </p>
 
           <label className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-full btn-fx bg-lime-400 hover:bg-lime-300 text-[#0E1013] font-bold text-xs shadow-neonLime cursor-pointer transition-all">
@@ -191,7 +191,7 @@ export default function DocumentProcessingPage() {
             <div className="space-y-2">
               {documents.length === 0 ? (
                 <div className="text-xs text-slate-500 py-6 text-center">
-                  No documents in queue.
+                  {t.documents.noDocuments}
                 </div>
               ) : (
                 documents.map((doc) => (
@@ -310,7 +310,7 @@ export default function DocumentProcessingPage() {
                   <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                     {stagedRules.length === 0 ? (
                       <div className="text-xs text-slate-500 py-4 text-center">
-                        No rules extracted.
+                        {t.documents.noRules}
                       </div>
                     ) : (
                       stagedRules.map((r: any, idx: number) => (
@@ -347,7 +347,7 @@ export default function DocumentProcessingPage() {
                 {/* Human Verification Action Button */}
                 <div className="pt-4 border-t border-white/[0.07] flex items-center justify-between">
                   <span className="text-[11px] text-slate-400">
-                    Confidence:{" "}
+                    {t.documents.confidence}{" "}
                     <strong className="text-emerald-400">
                       {((selectedDoc.extracted_data?.confidence_score || 0.85) * 100).toFixed(0)}%
                     </strong>
@@ -374,7 +374,7 @@ export default function DocumentProcessingPage() {
               </div>
             ) : (
               <div className="text-center py-12 text-xs text-slate-500">
-                Select a document to inspect staged rules.
+                {t.documents.selectDocument}
               </div>
             )}
           </div>

@@ -75,6 +75,10 @@ async def init_db():
                     await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN nickname VARCHAR(128)"))
                 if "joining_fee" not in existing_cols:
                     await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN joining_fee NUMERIC(10, 2) DEFAULT 0.00"))
+                if "credit_limit" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN credit_limit NUMERIC(12, 2)"))
+                if "current_balance" not in existing_cols:
+                    await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN current_balance NUMERIC(12, 2)"))
                 if "renewal_date" not in existing_cols:
                     await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN renewal_date DATETIME"))
                 if "fee_waiver_condition_details" not in existing_cols:
@@ -172,6 +176,61 @@ async def init_db():
                     await conn.execute(text("ALTER TABLE transactions ADD COLUMN category_confidence NUMERIC(4, 2)"))
                 if "payment_method" not in txn_cols:
                     await conn.execute(text("ALTER TABLE transactions ADD COLUMN payment_method VARCHAR(32) DEFAULT 'CREDIT_CARD'"))
+            except Exception:
+                pass
+        elif conn.dialect.name == "postgresql":
+            try:
+                # PostgreSQL safe column migrations
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS card_variant VARCHAR(64)"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS cardholder_name VARCHAR(128)"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS nickname VARCHAR(128)"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS joining_fee NUMERIC(10, 2) DEFAULT 0.00"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS credit_limit NUMERIC(12, 2)"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS current_balance NUMERIC(12, 2)"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS renewal_date TIMESTAMP"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS fee_waiver_condition_details VARCHAR(255)"))
+                await conn.execute(text("ALTER TABLE credit_cards ADD COLUMN IF NOT EXISTS terms_source_url VARCHAR(512)"))
+
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS applicable_category VARCHAR(64) DEFAULT 'all'"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS reward_percentage_or_points NUMERIC(6, 2)"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS reward_basis VARCHAR(32) DEFAULT 'COMPLIMENTARY'"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS max_reward NUMERIC(10, 2)"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS min_transaction_amount NUMERIC(10, 2) DEFAULT 0.00"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS cap_amount NUMERIC(10, 2)"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS cap_period VARCHAR(32) DEFAULT 'NONE'"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS eligibility_restrictions VARCHAR(255)"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS valid_from TIMESTAMP"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS valid_to TIMESTAMP"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS terms_and_conditions TEXT"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS source_reference VARCHAR(512)"))
+                await conn.execute(text("ALTER TABLE card_benefits ADD COLUMN IF NOT EXISTS last_verified_date TIMESTAMP"))
+
+                await conn.execute(text("ALTER TABLE profiles ADD COLUMN IF NOT EXISTS role VARCHAR(32) DEFAULT 'USER'"))
+                await conn.execute(text("ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE"))
+                await conn.execute(text("ALTER TABLE profiles ADD COLUMN IF NOT EXISTS financial_pathway VARCHAR(32) DEFAULT 'CREDIT_CARD'"))
+
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS source_name VARCHAR(128)"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS source_evidence TEXT"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS extraction_confidence NUMERIC(4, 2) DEFAULT 0.85"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS content_hash VARCHAR(64)"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS version INTEGER DEFAULT 1"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS previous_version_json TEXT"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS rejection_reason VARCHAR(255)"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS reviewed_by_id VARCHAR(36)"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS reviewed_by_name VARCHAR(128)"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMP"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS change_history_json TEXT DEFAULT '[]'"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS source_id VARCHAR(36)"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS ingestion_channel VARCHAR(32) DEFAULT 'MANUAL_ENTRY'"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS source_document_id VARCHAR(36)"))
+                await conn.execute(text("ALTER TABLE card_offers ADD COLUMN IF NOT EXISTS freshness_state VARCHAR(32) DEFAULT 'FRESH'"))
+
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN IF NOT EXISTS raw_description VARCHAR(500)"))
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN IF NOT EXISTS reference_number VARCHAR(128)"))
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN IF NOT EXISTS deduplication_hash VARCHAR(64)"))
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN IF NOT EXISTS import_batch_id VARCHAR(36)"))
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN IF NOT EXISTS category_confidence NUMERIC(4, 2)"))
+                await conn.execute(text("ALTER TABLE transactions ADD COLUMN IF NOT EXISTS payment_method VARCHAR(32) DEFAULT 'CREDIT_CARD'"))
             except Exception:
                 pass
         elif conn.dialect.name == "postgresql":

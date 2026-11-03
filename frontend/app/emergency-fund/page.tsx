@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useLanguage, fmt as fill } from "@/lib/i18n";
 import { Sidebar } from "@/components/Sidebar";
 import { ShieldCheck, Info, AlertCircle, Loader2, TrendingUp, Plus, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -16,6 +17,7 @@ function classifyNeeds(cat: string) {
 }
 
 export default function EmergencyFundPage() {
+  const { t } = useLanguage();
   const [incomeSummary, setIncomeSummary] = useState<any>(null);
   const [budgetData,    setBudgetData]    = useState<any>(null);
   const [loading,       setLoading]       = useState(true);
@@ -67,9 +69,9 @@ export default function EmergencyFundPage() {
   const hasInsufficientData = monthlyInflow === 0 || monthlyExpenses === 0;
 
   const recommendations = [
-    { months: 3,  label: "Basic (3 months)", desc: "Covers a job gap or major unexpected expense" },
-    { months: 6,  label: "Standard (6 months)", desc: "Recommended for most salaried employees" },
-    { months: 12, label: "Conservative (12 months)", desc: "For freelancers, irregular income earners" },
+    { months: 3,  label: t.emergencyFund.tierBasic, desc: t.emergencyFund.tierBasicDesc },
+    { months: 6,  label: t.emergencyFund.tierStandard, desc: t.emergencyFund.tierStandardDesc },
+    { months: 12, label: t.emergencyFund.tierConservative, desc: t.emergencyFund.tierConservativeDesc },
   ];
 
   if (loading) {
@@ -89,10 +91,10 @@ export default function EmergencyFundPage() {
         <div>
           <h1 className="text-2xl font-black text-white flex items-center gap-3">
             <ShieldCheck className="w-6 h-6 text-emerald-400" />
-            Emergency Fund
+            {t.nav.emergencyFund}
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            A 3–6 month financial buffer for unexpected expenses — the cornerstone of financial security.
+            {t.emergencyFund.subtitle}
           </p>
         </div>
 
@@ -113,32 +115,32 @@ export default function EmergencyFundPage() {
                   <Info className="w-5 h-5 text-slate-400" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-white mb-1">Insufficient data to calculate target</h2>
+                  <h2 className="text-base font-bold text-white mb-1">{t.emergencyFund.insufficientData}</h2>
                   <p className="text-sm text-slate-400 leading-relaxed">
-                    Your emergency fund target is based on 3× your monthly essential expenses. To calculate this accurately, CLIQ needs real spending data.
+                    {t.emergencyFund.insufficientDesc}
                   </p>
                 </div>
               </div>
 
               <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 space-y-2">
-                <p className="text-xs font-semibold text-slate-300 mb-2">What&apos;s needed:</p>
+                <p className="text-xs font-semibold text-slate-300 mb-2">{t.emergencyFund.whatsNeeded}</p>
                 <div className="space-y-2">
                   {monthlyInflow === 0 && (
                     <div className="flex items-center gap-3">
                       <span className="w-5 h-5 rounded-full bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-400 text-[10px] font-bold shrink-0">1</span>
-                      <span className="text-xs text-slate-400">At least one income source — so we can understand your financial baseline</span>
+                      <span className="text-xs text-slate-400">{t.emergencyFund.needIncome}</span>
                     </div>
                   )}
                   {monthlyExpenses === 0 && (
                     <div className="flex items-center gap-3">
                       <span className="w-5 h-5 rounded-full bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-400 text-[10px] font-bold shrink-0">{monthlyInflow === 0 ? "2" : "1"}</span>
-                      <span className="text-xs text-slate-400">At least one logged expense — to calculate your monthly essential spending</span>
+                      <span className="text-xs text-slate-400">{t.emergencyFund.needExpense}</span>
                     </div>
                   )}
                   {budgetNotConfigured && (
                     <div className="flex items-center gap-3">
                       <span className="w-5 h-5 rounded-full bg-slate-500/15 border border-slate-500/25 flex items-center justify-center text-slate-400 text-[10px] font-bold shrink-0">+</span>
-                      <span className="text-xs text-slate-500">Configuring a budget improves category-level accuracy</span>
+                      <span className="text-xs text-slate-500">{t.emergencyFund.budgetImproves}</span>
                     </div>
                   )}
                 </div>
@@ -148,12 +150,12 @@ export default function EmergencyFundPage() {
                 <Link href="/income"
                   className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all"
                 >
-                  <Plus className="w-3.5 h-3.5" /> Add Income
+                  <Plus className="w-3.5 h-3.5" /> {t.emergencyFund.addIncome}
                 </Link>
                 <Link href="/transactions"
                   className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white text-xs font-semibold transition-all"
                 >
-                  Log Expenses <ArrowRight className="w-3.5 h-3.5" />
+                  {t.emergencyFund.logExpenses} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
@@ -165,11 +167,11 @@ export default function EmergencyFundPage() {
                   <ShieldCheck className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-white">3-Month Emergency Target</h2>
+                  <h2 className="text-base font-bold text-white">{t.emergencyFund.threeMonthTarget}</h2>
                   <div className="text-3xl font-black text-emerald-400 tabular-nums mt-1">{fmt(efTarget)}</div>
                   <p className="text-xs text-slate-500 mt-1">
-                    Based on {fmt(monthlyEssentials)}/month in essential expenses
-                    {needsSpend > 0 ? " (needs category spending)" : " (estimated at 50% of total expenses)"}
+                    {fill(t.emergencyFund.basedOnEssentials, { amount: fmt(monthlyEssentials) })}
+                    {needsSpend > 0 ? t.emergencyFund.needsBasis : t.emergencyFund.estimateBasis}
                   </p>
                 </div>
               </div>
@@ -177,7 +179,7 @@ export default function EmergencyFundPage() {
               {/* Progress */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">This month&apos;s savings contribution</span>
+                  <span className="text-slate-400">{t.emergencyFund.monthContribution}</span>
                   <span className="text-emerald-400 font-semibold">{fmt(savingsSpend)}</span>
                 </div>
                 <div className="h-3 bg-white/[0.04] rounded-full overflow-hidden">
@@ -187,16 +189,16 @@ export default function EmergencyFundPage() {
                   />
                 </div>
                 <p className="text-[10px] text-slate-600">
-                  Note: This reflects single-month savings data. Your actual cumulative savings balance may differ.
+                  {t.emergencyFund.singleMonthNote}
                 </p>
               </div>
 
               {/* Breakdown */}
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label: "Monthly essentials",  value: fmt(monthlyEssentials), color: "text-slate-200" },
-                  { label: "3-month target",       value: fmt(efTarget),          color: "text-emerald-400" },
-                  { label: "Current month savings", value: fmt(savingsSpend),    color: "text-lime-400" },
+                  { label: t.emergencyFund.monthlyEssentials,  value: fmt(monthlyEssentials), color: "text-slate-200" },
+                  { label: t.emergencyFund.threeMonthTargetShort,       value: fmt(efTarget),          color: "text-emerald-400" },
+                  { label: t.emergencyFund.currentMonthSavings, value: fmt(savingsSpend),    color: "text-lime-400" },
                 ].map((s) => (
                   <div key={s.label} className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-3 text-center">
                     <div className={`text-base font-black ${s.color}`}>{s.value}</div>
@@ -211,7 +213,7 @@ export default function EmergencyFundPage() {
         {/* ── Runway recommendations ───────────────────────────────── */}
         {!hasInsufficientData && (
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-white">How much should you save?</h2>
+            <h2 className="text-sm font-bold text-white">{t.emergencyFund.howMuch}</h2>
             {recommendations.map((rec) => (
               <div key={rec.months} className="flex items-start gap-4 rounded-xl bg-white/[0.02] border border-white/[0.06] p-4">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/8 border border-emerald-500/15 flex items-center justify-center shrink-0">
@@ -233,19 +235,19 @@ export default function EmergencyFundPage() {
         <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-5">
           <h2 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-lime-400" />
-            Building your emergency fund
+            {t.emergencyFund.buildingTitle}
           </h2>
           <ul className="space-y-2.5 text-xs text-slate-400 leading-relaxed">
-            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />Start with a micro-goal: save ₹5,000–₹10,000 first, then scale up.</li>
-            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />Keep your emergency fund in a liquid savings account — not investments.</li>
-            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />Automate a monthly transfer to a dedicated account on salary day.</li>
-            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />Only use it for true emergencies — job loss, medical crisis, urgent repairs.</li>
-            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />Rebuild immediately after any withdrawal.</li>
+            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />{t.emergencyFund.tip1}</li>
+            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />{t.emergencyFund.tip2}</li>
+            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />{t.emergencyFund.tip3}</li>
+            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />{t.emergencyFund.tip4}</li>
+            <li className="flex items-start gap-2"><span className="w-1 h-1 rounded-full bg-lime-500 mt-1.5 shrink-0" />{t.emergencyFund.tip5}</li>
           </ul>
         </div>
 
         <p className="text-[10px] text-slate-600 border-t border-white/[0.05] pt-4 leading-relaxed">
-          Targets are based on your actual spending data from the current month. For accurate calculations, log all essential expenses (rent, groceries, utilities, transport, medical) in the correct categories.
+          {t.emergencyFund.dataNote}
         </p>
       </main>
     </div>

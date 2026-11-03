@@ -156,8 +156,8 @@ export function CardSelectionFlow({
       ...benefits,
       {
         benefit_type: "LOUNGE_ACCESS",
-        title: "Airport Lounge Access",
-        description: "Complimentary airport lounge visits per calendar quarter.",
+        title: t.cardSelection.airportLounge,
+        description: t.cardSelection.airportLoungeDesc,
         applicable_category: "travel",
         reward_basis: "COMPLIMENTARY",
         annual_value_estimate: 3200,
@@ -177,13 +177,13 @@ export function CardSelectionFlow({
 
     // 1. Validate Cardholder Name
     if (!cardholderName.trim()) {
-      setError("Please enter the cardholder name as displayed on the physical or virtual card.");
+      setError(t.cardSelection.cardholderRequired);
       return;
     }
 
     // 2. Validate Last 4 Digits if provided
     if (lastFour && !/^[0-9]{4}$/.test(lastFour.trim())) {
-      setError("Last 4 digits must contain exactly 4 numeric digits (e.g. 8821).");
+      setError(t.cardSelection.lastFourInvalid);
       return;
     }
 
@@ -194,13 +194,13 @@ export function CardSelectionFlow({
     const parsedCycleDay = cycleDay === "" ? 15 : Number(cycleDay);
 
     if (parsedJoiningFee < 0 || parsedAnnualFee < 0 || parsedWaiverSpend < 0) {
-      setError("Fees and renewal waiver thresholds cannot be negative numbers.");
+      setError(t.cardSelection.feesNegative);
       return;
     }
 
     // 4. Validate terms URL
     if (termsUrl && !termsUrl.startsWith("https://") && !termsUrl.startsWith("http://")) {
-      setError("Official terms URL must begin with https:// or http://");
+      setError(t.cardSelection.termsUrlInvalid);
       return;
     }
 
@@ -241,12 +241,12 @@ export function CardSelectionFlow({
         })),
       });
 
-      setSuccessMessage("Card successfully added! Updating your digital collection...");
+      setSuccessMessage(t.cardSelection.addedUpdating);
       setTimeout(() => {
         onCardAdded();
       }, 700);
     } catch (err: any) {
-      setError(err.message || "Failed to add card. Please check your inputs.");
+      setError(err.message || t.cardSelection.addFailed);
     } finally {
       setLoading(false);
     }
@@ -262,17 +262,17 @@ export function CardSelectionFlow({
             <span>CLIQ PRO</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-            {t.cardSelection?.title || "Select & Customize Credit Card"}
+            {t.cardSelection.title}
           </h2>
           <p className="text-xs sm:text-sm text-cliq-textSecondary max-w-2xl">
-            {t.cardSelection?.subtitle || "Choose from 10 verified Indian credit card catalogues with real fee schedules and reward multipliers, or enter a custom card."}
+            {t.cardSelection.subtitle}
           </p>
         </div>
 
         <div className="shrink-0 flex items-center gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>{t.cardSelection?.zeroStorageBadge || "Zero PAN / CVV Storage"}</span>
+            <span>{t.cardSelection.zeroStorageBadge}</span>
           </div>
           {onCancel && (
             <button
@@ -291,9 +291,9 @@ export function CardSelectionFlow({
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
             <Building2 className="w-4 h-4" />
-            <span>{t.cardSelection?.step1Title || "1. Select Card Issuer"}</span>
+            <span>{t.cardSelection.step1Title}</span>
           </h3>
-          <span className="text-xs text-cliq-textSecondary">{t.cardSelection?.issuersCount || "10 Issuers Available"}</span>
+          <span className="text-xs text-cliq-textSecondary">{t.cardSelection.issuersCount}</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
@@ -312,16 +312,16 @@ export function CardSelectionFlow({
               >
                 <div className="flex items-center justify-between w-full">
                   <span className="font-extrabold text-xs tracking-wider text-white">
-                    {issuer.shortName}
+                    {issuer.id === "custom" ? t.cardSelection.customIssuerShort : issuer.shortName}
                   </span>
                   {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-cliq-cyan" />}
                 </div>
                 <div>
                   <div className="text-[11px] font-semibold text-cliq-textPrimary truncate">
-                    {issuer.name}
+                    {issuer.id === "custom" ? t.cardSelection.customIssuerName : issuer.name}
                   </div>
                   <div className="text-[9px] text-cliq-textSecondary">
-                    {issuer.cards.length} {t.cards?.cardsCountLabel || "cards"}
+                    {issuer.cards.length} {t.cards.cardsCountLabel}
                   </div>
                 </div>
               </button>
@@ -335,10 +335,10 @@ export function CardSelectionFlow({
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
             <Layers className="w-4 h-4" />
-            <span>{t.cardSelection?.step2Title || "2. Select Card Variant"}</span>
+            <span>{t.cardSelection.step2Title}</span>
           </h3>
           <span className="text-xs text-cliq-textSecondary">
-            {t.cardSelection?.verifiedCardsCount || "Verified Cards"}
+            {t.cardSelection.verifiedCardsCount}
           </span>
         </div>
 
@@ -364,10 +364,10 @@ export function CardSelectionFlow({
                     {card.badgeType === "VERIFIED_CATALOGUE" ? (
                       <span className="text-[10px] font-semibold text-emerald-400 flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" />
-                        <span>Verified</span>
+                        <span>{t.cardSelection.verified}</span>
                       </span>
                     ) : (
-                      <span className="text-[10px] font-semibold text-amber-400">Custom</span>
+                      <span className="text-[10px] font-semibold text-amber-400">{t.cardSelection.custom}</span>
                     )}
                   </div>
                   <h4 className="text-sm font-bold text-white tracking-tight">
@@ -380,9 +380,9 @@ export function CardSelectionFlow({
 
                 <div className="mt-2.5 pt-2 border-t border-cliq-border/60 flex items-center justify-between text-[11px] text-cliq-textSecondary">
                   <div>
-                    Fee:{" "}
+                    {t.cardSelection.feeLabel}{" "}
                     <span className="text-white font-semibold">
-                      {card.annualFee === 0 ? "FREE" : `₹${card.annualFee.toLocaleString("en-IN")}`}
+                      {card.annualFee === 0 ? t.cardSelection.free : `₹${card.annualFee.toLocaleString("en-IN")}`}
                     </span>
                   </div>
                   <div>
@@ -400,11 +400,11 @@ export function CardSelectionFlow({
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
             <Award className="w-4 h-4" />
-            <span>3. Review, Personalize & Save to Wallet</span>
+            <span>{t.cardSelection.step3Personalize}</span>
           </h3>
           <div className="flex items-center gap-1 text-xs text-cliq-textSecondary">
             <Info className="w-3.5 h-3.5 text-cliq-cyan" />
-            <span>Updates live in preview</span>
+            <span>{t.cardSelection.updatesLive}</span>
           </div>
         </div>
 
@@ -430,21 +430,21 @@ export function CardSelectionFlow({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1 sm:col-span-2">
                     <label className="text-xs font-semibold text-cliq-textSecondary flex items-center justify-between">
-                      <span>{t.cardSelection?.cardholderNameLabel || "Cardholder Name"} *</span>
-                      <span className="text-[10px] text-cliq-cyan">Appears on card</span>
+                      <span>{t.cardSelection.cardholderNameLabel} *</span>
+                      <span className="text-[10px] text-cliq-cyan">{t.cardSelection.appearsOnCard}</span>
                     </label>
                     <input
                       type="text"
                       required
                       value={cardholderName}
                       onChange={(e) => setCardholderName(e.target.value)}
-                      placeholder="e.g. RAHUL JAIN"
+                      placeholder={t.cardSelection.cardholderPlaceholderFlow}
                       className="w-full px-3.5 py-2.5 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-sm focus:outline-none focus:border-cliq-cyan uppercase font-medium"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cards?.title || "Card Name"} *</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cards?.title || t.cardSelection.cardName} *</label>
                     <input
                       type="text"
                       required
@@ -455,7 +455,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.step1Title || "Issuing Bank"} *</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.step1Title || t.cardSelection.issuingBank} *</label>
                     <input
                       type="text"
                       required
@@ -466,7 +466,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.networkLabel || "Payment Network"} *</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.networkLabel || t.cardSelection.paymentNetwork} *</label>
                     <select
                       value={network}
                       onChange={(e) => setNetwork(e.target.value as any)}
@@ -481,7 +481,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.step2Title || "Variant / Tier"}</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.step2Title || t.cardSelection.variantTier}</label>
                     <input
                       type="text"
                       value={cardVariant}
@@ -491,20 +491,20 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.nicknameLabel || "Nickname (Optional)"}</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.nicknameLabel || t.cardSelection.nicknameOptional}</label>
                     <input
                       type="text"
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
-                      placeholder="e.g. Primary Travel"
+                      placeholder={t.cardSelection.nicknamePlaceholderFlow}
                       className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                     />
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-xs font-semibold text-cliq-textSecondary flex items-center justify-between">
-                      <span>{t.cardSelection?.lastFourLabel || "Last 4 Digits (Optional)"}</span>
-                      <span className="text-[10px] text-emerald-400">Safe masked</span>
+                      <span>{t.cardSelection.lastFourLabel}</span>
+                      <span className="text-[10px] text-emerald-400">{t.cardSelection.safeMasked}</span>
                     </label>
                     <input
                       type="text"
@@ -522,7 +522,7 @@ export function CardSelectionFlow({
               <div className="p-5 rounded-2xl bg-cliq-surface border border-cliq-border space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.joiningFeeLabel || "Joining Fee (₹)"}</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection.joiningFeeLabel}</label>
                     <NumericInput
                       min={0}
                       allowDecimal
@@ -534,7 +534,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.annualFeeLabel || "Annual Fee (₹)"}</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection.annualFeeLabel}</label>
                     <NumericInput
                       min={0}
                       allowDecimal
@@ -546,7 +546,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.waiverSpendLabel || "Waiver Spend (₹)"}</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.waiverSpendLabel || t.cardSelection.waiverSpend}</label>
                     <NumericInput
                       min={0}
                       allowDecimal
@@ -558,7 +558,7 @@ export function CardSelectionFlow({
                   </div>
 
                   <div className="space-y-1 sm:col-span-3">
-                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.waiverDetailsLabel || "Waiver Condition"}</label>
+                    <label className="text-xs font-semibold text-cliq-textSecondary">{t.cardSelection?.waiverDetailsLabel || t.cardDetails.waiverCondition}</label>
                     <input
                       type="text"
                       value={waiverDetails}
@@ -579,12 +579,12 @@ export function CardSelectionFlow({
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>{t.cardSelection?.registering || "Adding to Wallet..."}</span>
+                      <span>{t.cardSelection?.registering || t.cardSelection.addingToWallet}</span>
                     </>
                   ) : (
                     <>
                       <CardIcon className="w-4 h-4" />
-                      <span>{t.cardSelection?.submitAddCard || "Add Card to My Collection"}</span>
+                      <span>{t.cardSelection?.submitAddCard || t.cardSelection.addToCollection}</span>
                     </>
                   )}
                 </button>
@@ -597,7 +597,7 @@ export function CardSelectionFlow({
             <div className="p-4 rounded-2xl bg-cliq-surface border border-cliq-border space-y-3">
               <span className="text-xs font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-cliq-turquoise" />
-                <span>Live Card Preview</span>
+                <span>{t.cardSelection.livePreview}</span>
               </span>
 
               <DigitalCreditCard
@@ -613,15 +613,15 @@ export function CardSelectionFlow({
 
               <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-cliq-border/60">
                 <div className="p-2.5 rounded-xl bg-cliq-surfaceHover/60 border border-cliq-border">
-                  <span className="text-[10px] text-cliq-textSecondary block">Annual Fee</span>
+                  <span className="text-[10px] text-cliq-textSecondary block">{t.cards.annualFee}</span>
                   <span className="font-bold text-white">
                     {annualFee === "" || Number(annualFee) === 0
-                      ? "FREE"
+                      ? t.cardSelection.free
                       : `₹${Number(annualFee).toLocaleString("en-IN")}`}
                   </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-cliq-surfaceHover/60 border border-cliq-border">
-                  <span className="text-[10px] text-cliq-textSecondary block">Waiver Spend</span>
+                  <span className="text-[10px] text-cliq-textSecondary block">{t.cardSelection.waiverSpendShort}</span>
                   <span className="font-bold text-emerald-400">
                     {waiverSpend !== "" && Number(waiverSpend) > 0
                       ? `₹${Number(waiverSpend).toLocaleString("en-IN")}`
@@ -635,10 +635,10 @@ export function CardSelectionFlow({
             <div className="p-4 rounded-2xl bg-gradient-to-br from-cliq-surface to-cliq-cyan/5 border border-cliq-cyan/20 space-y-2">
               <div className="flex items-center gap-2 text-cliq-cyan text-xs font-bold">
                 <Zap className="w-4 h-4 text-cliq-turquoise" />
-                <span>Want to test the Fan Collection immediately?</span>
+                <span>{t.cardSelection.testFanPrompt}</span>
               </div>
               <p className="text-[11px] text-cliq-textSecondary">
-                Instantly seed 3 sample cards (HDFC Millennia, SBI Cashback, Axis Ace) to test the interactive fan hand.
+                {t.cardSelection.testFanDesc}
               </p>
               <div className="pt-1">
                 <DemoBootstrap onSeeded={onCardAdded} />

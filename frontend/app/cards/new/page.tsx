@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Sidebar } from "@/components/Sidebar";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, fmt } from "@/lib/i18n";
 import { api } from "@/lib/api";
 import {
   BANK_ISSUERS,
@@ -148,8 +148,8 @@ export default function AddCreditCardPage() {
       ...benefits,
       {
         benefit_type: "LOUNGE_ACCESS",
-        title: "Airport Lounge Access",
-        description: "Complimentary airport lounge visits per calendar quarter.",
+        title: t.cardSelection.airportLounge,
+        description: t.cardSelection.airportLoungeDesc,
         applicable_category: "travel",
         reward_basis: "COMPLIMENTARY",
         annual_value_estimate: 3200,
@@ -175,13 +175,13 @@ export default function AddCreditCardPage() {
 
     // 1. Validate Cardholder Name
     if (!cardholderName.trim()) {
-      setError("Please enter the cardholder name as displayed on the physical or virtual card.");
+      setError(t.cardSelection.cardholderRequired);
       return;
     }
 
     // 2. Validate Last 4 Digits if provided
     if (lastFour && (!/^[0-9]{4}$/.test(lastFour.trim()))) {
-      setError("Last 4 digits must contain exactly 4 numeric digits (e.g. 8821).");
+      setError(t.cardSelection.lastFourInvalid);
       return;
     }
 
@@ -192,13 +192,13 @@ export default function AddCreditCardPage() {
     const parsedCycleDay = cycleDay === "" ? 15 : Number(cycleDay);
 
     if (parsedJoiningFee < 0 || parsedAnnualFee < 0 || parsedWaiverSpend < 0) {
-      setError("Fees and renewal waiver thresholds cannot be negative numbers.");
+      setError(t.cardSelection.feesNegative);
       return;
     }
 
     // 4. Validate terms URL
     if (termsUrl && !termsUrl.startsWith("https://") && !termsUrl.startsWith("http://")) {
-      setError("Official terms URL must begin with https:// or http://");
+      setError(t.cardSelection.termsUrlInvalid);
       return;
     }
 
@@ -240,12 +240,12 @@ export default function AddCreditCardPage() {
         })),
       });
 
-      setSuccessMessage("Credit card registered successfully! Redirecting to wallet...");
+      setSuccessMessage(t.cardSelection.registeredRedirecting);
       setTimeout(() => {
         router.push("/cards");
       }, 1000);
     } catch (err: any) {
-      setError(err.message || "Failed to add card. Please check your inputs.");
+      setError(err.message || t.cardSelection.addFailed);
     } finally {
       setLoading(false);
     }
@@ -264,20 +264,20 @@ export default function AddCreditCardPage() {
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors mb-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Wallet</span>
+              <span>{t.cardSelection.backToWallet}</span>
             </Link>
             <h1 className="text-3xl font-black text-white tracking-tight">
-              Add Credit Card
+              {t.nav.addCard}
             </h1>
             <p className="text-xs text-slate-400">
-              Select an issuer catalogue or customize your own card specifications
+              {t.cardSelection.pageSubtitle}
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-medium">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Zero PAN / CVV Storage</span>
+              <span>{t.cardSelection.zeroStorageBadge}</span>
             </div>
           </div>
         </div>
@@ -287,9 +287,9 @@ export default function AddCreditCardPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
               <Building2 className="w-3.5 h-3.5" />
-              <span>1. Select Card Issuer</span>
+              <span>{t.cardSelection.step1Title}</span>
             </h2>
-            <span className="text-xs text-slate-500">10 Issuers</span>
+            <span className="text-xs text-slate-500">{t.cardSelection.tenIssuers}</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
@@ -308,7 +308,7 @@ export default function AddCreditCardPage() {
                 >
                   <div className="flex items-center justify-between w-full">
                     <span className="font-extrabold text-xs tracking-wider text-white">
-                      {issuer.shortName}
+                      {issuer.id === "custom" ? t.cardSelection.customIssuerShort : issuer.shortName}
                     </span>
                     {isSelected && (
                       <CheckCircle2 className="w-4 h-4 text-cliq-cyan" />
@@ -316,7 +316,7 @@ export default function AddCreditCardPage() {
                   </div>
                   <div>
                     <div className="text-[11px] font-semibold text-cliq-textPrimary truncate">
-                      {issuer.name}
+                      {issuer.id === "custom" ? t.cardSelection.customIssuerName : issuer.name}
                     </div>
                     <div className="text-[9px] text-cliq-textSecondary mt-0.5">
                       {issuer.cards.length} {issuer.cards.length === 1 ? "card" : "cards"}
@@ -333,10 +333,10 @@ export default function AddCreditCardPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-2">
               <Layers className="w-4 h-4" />
-              <span>2. Select Card Variant</span>
+              <span>{t.cardSelection.step2Title}</span>
             </h2>
             <span className="text-xs text-cliq-textSecondary">
-              Pre-configured with official rewards & benefits
+              {t.cardSelection.preconfigured}
             </span>
           </div>
 
@@ -362,11 +362,11 @@ export default function AddCreditCardPage() {
                       {card.badgeType === "VERIFIED_CATALOGUE" ? (
                         <span className="text-[10px] font-semibold text-emerald-400 flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" />
-                          <span>Verified</span>
+                          <span>{t.cardSelection.verified}</span>
                         </span>
                       ) : (
                         <span className="text-[10px] font-semibold text-amber-400">
-                          Custom
+                          {t.cardSelection.custom}
                         </span>
                       )}
                     </div>
@@ -380,9 +380,9 @@ export default function AddCreditCardPage() {
 
                   <div className="mt-3 pt-2 border-t border-cliq-border/60 flex items-center justify-between text-[11px] text-cliq-textSecondary">
                     <div>
-                      Annual Fee:{" "}
+                      {t.compare.annualFeeLabel}{" "}
                       <span className="text-white font-semibold">
-                        {card.annualFee === 0 ? "FREE" : `₹${card.annualFee.toLocaleString("en-IN")}`}
+                        {card.annualFee === 0 ? t.cardSelection.free : `₹${card.annualFee.toLocaleString("en-IN")}`}
                       </span>
                     </div>
                     <div>
@@ -400,11 +400,11 @@ export default function AddCreditCardPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-2">
               <Award className="w-4 h-4" />
-              <span>3. Review, Customize & Save Card</span>
+              <span>{t.cardSelection.step3Customize}</span>
             </h2>
             <div className="flex items-center gap-1.5 text-xs text-cliq-textSecondary">
               <Info className="w-3.5 h-3.5 text-cliq-cyan" />
-              <span>Card preview updates in real time</span>
+              <span>{t.cardSelection.previewRealtime}</span>
             </div>
           </div>
 
@@ -430,7 +430,7 @@ export default function AddCreditCardPage() {
                 <div className="p-5 rounded-2xl bg-cliq-surface border border-cliq-border space-y-4">
                   <div className="flex items-center justify-between pb-3 border-b border-cliq-border/60">
                     <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                      <span>Card Identity & Specifications</span>
+                      <span>{t.cardSelection.identityTitle}</span>
                     </h3>
                     <span
                       className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
@@ -439,7 +439,7 @@ export default function AddCreditCardPage() {
                           : "bg-amber-500/10 text-amber-400 border-amber-500/30"
                       }`}
                     >
-                      {badgeType === "VERIFIED_CATALOGUE" ? "Verified Bank Data" : "Custom Manual"}
+                      {badgeType === "VERIFIED_CATALOGUE" ? t.cardDetails.verifiedBankData : t.cardSelection.customManual}
                     </span>
                   </div>
 
@@ -447,15 +447,15 @@ export default function AddCreditCardPage() {
                     {/* Cardholder Name */}
                     <div className="space-y-1 sm:col-span-2">
                       <label className="text-xs font-semibold text-cliq-textSecondary flex items-center justify-between">
-                        <span>Cardholder Name *</span>
-                        <span className="text-[10px] text-cliq-cyan">Appears on card face</span>
+                        <span>{t.cardSelection.cardholderNameRequired}</span>
+                        <span className="text-[10px] text-cliq-cyan">{t.cardSelection.appearsOnCardFace}</span>
                       </label>
                       <input
                         type="text"
                         required
                         value={cardholderName}
                         onChange={(e) => setCardholderName(e.target.value)}
-                        placeholder="e.g. PRIYA SHARMA"
+                        placeholder={t.cardSelection.cardholderPlaceholderNew}
                         className="w-full px-3.5 py-2.5 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-sm focus:outline-none focus:border-cliq-cyan font-medium uppercase"
                       />
                     </div>
@@ -463,7 +463,7 @@ export default function AddCreditCardPage() {
                     {/* Card Name */}
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Card Name *
+                        {t.cards.cardNameRequired}
                       </label>
                       <input
                         type="text"
@@ -477,7 +477,7 @@ export default function AddCreditCardPage() {
                     {/* Bank Name */}
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Issuing Bank *
+                        {t.cardSelection.issuingBankRequired}
                       </label>
                       <input
                         type="text"
@@ -491,7 +491,7 @@ export default function AddCreditCardPage() {
                     {/* Network Selector */}
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Payment Network *
+                        {t.cardSelection.paymentNetworkRequired}
                       </label>
                       <select
                         value={network}
@@ -509,13 +509,13 @@ export default function AddCreditCardPage() {
                     {/* Card Variant */}
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Variant / Tier
+                        {t.cardSelection.variantTier}
                       </label>
                       <input
                         type="text"
                         value={cardVariant}
                         onChange={(e) => setCardVariant(e.target.value)}
-                        placeholder="e.g. Signature, Metal, Infinite"
+                        placeholder={t.cardSelection.variantPlaceholder}
                         className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                       />
                     </div>
@@ -523,13 +523,13 @@ export default function AddCreditCardPage() {
                     {/* Optional Nickname */}
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Nickname (Optional)
+                        {t.cardSelection.nicknameOptional}
                       </label>
                       <input
                         type="text"
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
-                        placeholder="e.g. Primary Travel, Daily Groceries"
+                        placeholder={t.cardSelection.nicknamePlaceholderNew}
                         className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                       />
                     </div>
@@ -537,8 +537,8 @@ export default function AddCreditCardPage() {
                     {/* Last 4 Digits */}
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary flex items-center justify-between">
-                        <span>Last 4 Digits (Optional)</span>
-                        <span className="text-[10px] text-emerald-400">Safe: masked only</span>
+                        <span>{t.cardSelection.lastFourLabel}</span>
+                        <span className="text-[10px] text-emerald-400">{t.cardSelection.safeMaskedOnly}</span>
                       </label>
                       <input
                         type="text"
@@ -555,13 +555,13 @@ export default function AddCreditCardPage() {
                 {/* Financial Specifications & Fee Waivers */}
                 <div className="p-5 rounded-2xl bg-cliq-surface border border-cliq-border space-y-4">
                   <h3 className="text-sm font-bold text-white pb-3 border-b border-cliq-border/60">
-                    Annual Fees & Renewal Waiver Spend
+                    {t.cardSelection.feesTitle}
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Joining Fee (₹)
+                        {t.cardSelection.joiningFeeLabel}
                       </label>
                       <NumericInput
                         min={0}
@@ -575,7 +575,7 @@ export default function AddCreditCardPage() {
 
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Annual Fee (₹)
+                        {t.cardSelection.annualFeeLabel}
                       </label>
                       <NumericInput
                         min={0}
@@ -589,7 +589,7 @@ export default function AddCreditCardPage() {
 
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Renewal Waiver Spend (₹)
+                        {t.cards.renewalWaiverSpend}
                       </label>
                       <NumericInput
                         min={0}
@@ -603,20 +603,20 @@ export default function AddCreditCardPage() {
 
                     <div className="space-y-1 sm:col-span-2">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Waiver Condition Details
+                        {t.cards.waiverConditionDetails}
                       </label>
                       <input
                         type="text"
                         value={waiverDetails}
                         onChange={(e) => setWaiverDetails(e.target.value)}
-                        placeholder="e.g. Spend ₹4,00,000 in anniversary year to waive fee."
+                        placeholder={t.cardSelection.waiverPlaceholder}
                         className="w-full px-3.5 py-2 rounded-xl bg-cliq-surfaceHover border border-cliq-border text-white text-xs focus:outline-none focus:border-cliq-cyan"
                       />
                     </div>
 
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-cliq-textSecondary">
-                        Billing Cycle Day
+                        {t.cardSelection.billingDayLabel}
                       </label>
                       <NumericInput
                         min={1}
@@ -631,7 +631,7 @@ export default function AddCreditCardPage() {
 
                     <div className="space-y-1 sm:col-span-3">
                       <label className="text-xs font-semibold text-cliq-textSecondary flex items-center justify-between">
-                        <span>Official Terms & Schedule of Charges URL</span>
+                        <span>{t.cardSelection.termsUrlTitle}</span>
                         {termsUrl && termsUrl.startsWith("https://") && (
                           <a
                             href={termsUrl}
@@ -639,7 +639,7 @@ export default function AddCreditCardPage() {
                             rel="noopener noreferrer"
                             className="text-[10px] text-cliq-cyan hover:underline flex items-center gap-1"
                           >
-                            <span>Open URL</span>
+                            <span>{t.cardSelection.openUrl}</span>
                             <ExternalLink className="w-2.5 h-2.5" />
                           </a>
                         )}
@@ -665,7 +665,7 @@ export default function AddCreditCardPage() {
                     <div className="flex items-center gap-2">
                       <Zap className="w-4 h-4 text-cliq-cyan" />
                       <span className="text-sm font-bold text-white">
-                        Category Multipliers & Reward Rules ({rules.length})
+                        {fmt(t.cardSelection.rulesSection, { count: rules.length })}
                       </span>
                     </div>
                     {showRulesAccordion ? (
@@ -678,7 +678,7 @@ export default function AddCreditCardPage() {
                   {showRulesAccordion && (
                     <div className="p-5 pt-0 space-y-3 border-t border-cliq-border/60">
                       <p className="text-xs text-cliq-textSecondary">
-                        CLIQ's optimization engine uses these rules to evaluate real net cashback and points on every spend.
+                        {t.cardSelection.rulesHelp}
                       </p>
 
                       <div className="space-y-3">
@@ -697,49 +697,49 @@ export default function AddCreditCardPage() {
                                 className="text-red-400 hover:text-red-300 text-xs flex items-center gap-1"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
-                                <span>Remove</span>
+                                <span>{t.cardSelection.remove}</span>
                               </button>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                               <div className="space-y-1">
                                 <label className="text-[10px] text-cliq-textSecondary font-semibold">
-                                  Category
+                                  {t.dashboard.category}
                                 </label>
                                 <select
                                   value={rule.category_id}
                                   onChange={(e) => updateRuleField(idx, "category_id", e.target.value)}
                                   className="w-full px-2.5 py-1.5 rounded-lg bg-cliq-surface border border-cliq-border text-white text-xs"
                                 >
-                                  <option value="all">All Retail Spends</option>
-                                  <option value="shopping">Shopping / E-commerce</option>
-                                  <option value="dining">Dining & Food Delivery</option>
-                                  <option value="travel">Travel & Flights</option>
-                                  <option value="grocery">Grocery & Supermarket</option>
-                                  <option value="utility">Utility Bills</option>
-                                  <option value="fuel">Fuel</option>
-                                  <option value="entertainment">Entertainment & Movies</option>
+                                  <option value="all">{t.cardSelection.catAllRetail}</option>
+                                  <option value="shopping">{t.cardSelection.catShopping}</option>
+                                  <option value="dining">{t.cardSelection.catDining}</option>
+                                  <option value="travel">{t.cardSelection.catTravel}</option>
+                                  <option value="grocery">{t.cardSelection.catGrocery}</option>
+                                  <option value="utility">{t.cardSelection.catUtility}</option>
+                                  <option value="fuel">{t.cardSelection.catFuel}</option>
+                                  <option value="entertainment">{t.categories.entertainment}</option>
                                 </select>
                               </div>
 
                               <div className="space-y-1">
                                 <label className="text-[10px] text-cliq-textSecondary font-semibold">
-                                  Reward Type
+                                  {t.cardSelection.rewardType}
                                 </label>
                                 <select
                                   value={rule.reward_type}
                                   onChange={(e) => updateRuleField(idx, "reward_type", e.target.value as any)}
                                   className="w-full px-2.5 py-1.5 rounded-lg bg-cliq-surface border border-cliq-border text-white text-xs"
                                 >
-                                  <option value="CASHBACK">Direct Cashback (%)</option>
-                                  <option value="REWARD_POINTS">Reward Points</option>
-                                  <option value="MILES">Airlines Miles</option>
+                                  <option value="CASHBACK">{t.cardSelection.directCashback}</option>
+                                  <option value="REWARD_POINTS">{t.cards.rewardPoints}</option>
+                                  <option value="MILES">{t.cardSelection.airlineMiles}</option>
                                 </select>
                               </div>
 
                               <div className="space-y-1">
                                 <label className="text-[10px] text-cliq-textSecondary font-semibold">
-                                  Rate (% or Pts per 100)
+                                  {t.cardSelection.rateLabel}
                                 </label>
                                 <NumericInput
                                   allowDecimal
@@ -754,24 +754,24 @@ export default function AddCreditCardPage() {
 
                               <div className="space-y-1 sm:col-span-2">
                                 <label className="text-[10px] text-cliq-textSecondary font-semibold">
-                                  Merchant Pattern (Optional)
+                                  {t.cardSelection.merchantPatternOptional}
                                 </label>
                                 <input
                                   type="text"
                                   value={rule.merchant_pattern || ""}
                                   onChange={(e) => updateRuleField(idx, "merchant_pattern", e.target.value)}
-                                  placeholder="e.g. Amazon, Swiggy, Flipkart"
+                                  placeholder={t.cardSelection.merchantPatternPlaceholder}
                                   className="w-full px-2.5 py-1.5 rounded-lg bg-cliq-surface border border-cliq-border text-white text-xs"
                                 />
                               </div>
 
                               <div className="space-y-1">
                                 <label className="text-[10px] text-cliq-textSecondary font-semibold">
-                                  Monthly Cap (₹)
+                                  {t.cardSelection.monthlyCap}
                                 </label>
                                 <NumericInput
                                   allowDecimal
-                                  placeholder="No cap"
+                                  placeholder={t.cardSelection.noCap}
                                   value={rule.monthly_cap_amount ?? ""}
                                   onChange={(val) =>
                                     updateRuleField(
@@ -793,7 +793,7 @@ export default function AddCreditCardPage() {
                           className="w-full py-2.5 rounded-xl border border-dashed border-cliq-cyan/40 hover:border-cliq-cyan text-cliq-cyan hover:bg-cliq-cyan/5 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
                         >
                           <PlusCircle className="w-4 h-4" />
-                          <span>Add Reward Rule</span>
+                          <span>{t.cardSelection.addRewardRule}</span>
                         </button>
                       </div>
                     </div>
@@ -810,7 +810,7 @@ export default function AddCreditCardPage() {
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-cliq-turquoise" />
                       <span className="text-sm font-bold text-white">
-                        Lounge & Premium Benefits ({benefits.length})
+                        {fmt(t.cardSelection.benefitsSection, { count: benefits.length })}
                       </span>
                     </div>
                     {showBenefitsAccordion ? (
@@ -838,7 +838,7 @@ export default function AddCreditCardPage() {
                                 className="text-red-400 hover:text-red-300 text-xs flex items-center gap-1"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
-                                <span>Remove</span>
+                                <span>{t.cardSelection.remove}</span>
                               </button>
                             </div>
 
@@ -859,7 +859,7 @@ export default function AddCreditCardPage() {
                           className="w-full py-2.5 rounded-xl border border-dashed border-cliq-turquoise/40 hover:border-cliq-turquoise text-cliq-turquoise hover:bg-cliq-turquoise/5 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
                         >
                           <PlusCircle className="w-4 h-4" />
-                          <span>Add Lounge / Custom Perk</span>
+                          <span>{t.cardSelection.addPerk}</span>
                         </button>
                       </div>
                     </div>
@@ -870,9 +870,9 @@ export default function AddCreditCardPage() {
                 <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-700/60 text-xs text-slate-300 flex items-start gap-3">
                   <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
-                    <p className="font-semibold text-white">Privacy Safeguard & Data Minimization</p>
+                    <p className="font-semibold text-white">{t.cardSelection.privacyTitle}</p>
                     <p className="text-slate-400">
-                      CLIQ never solicits or stores primary account numbers (PAN), CVVs, expiration credentials, or net banking passwords. Only authorized reward rules and your reference alias are saved.
+                      {t.cardSelection.privacyBody}
                     </p>
                   </div>
                 </div>
@@ -887,12 +887,12 @@ export default function AddCreditCardPage() {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Registering Credit Card...</span>
+                        <span>{t.cardSelection.registeringCreditCard}</span>
                       </>
                     ) : (
                       <>
                         <CardIcon className="w-4 h-4" />
-                        <span>Save to Credit Card Wallet</span>
+                        <span>{t.cardSelection.saveToWallet}</span>
                       </>
                     )}
                   </button>
@@ -901,7 +901,7 @@ export default function AddCreditCardPage() {
                     href="/cards"
                     className="py-3.5 px-5 rounded-xl bg-cliq-surface border border-cliq-border hover:bg-cliq-surfaceHover text-white text-sm font-semibold transition-colors"
                   >
-                    Cancel
+                    {t.cards.cancel}
                   </Link>
                 </div>
               </form>
@@ -913,10 +913,10 @@ export default function AddCreditCardPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-cliq-cyan flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-cliq-turquoise" />
-                    <span>Live Interactive Card</span>
+                    <span>{t.cardSelection.liveInteractiveCard}</span>
                   </span>
                   <span className="text-[10px] text-cliq-textSecondary">
-                    Hover to tilt 3D sheen
+                    {t.cardSelection.hoverToTilt}
                   </span>
                 </div>
 
@@ -938,16 +938,16 @@ export default function AddCreditCardPage() {
                 <div className="space-y-3 pt-2 border-t border-cliq-border/60">
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="p-2.5 rounded-xl bg-cliq-surfaceHover/60 border border-cliq-border">
-                      <span className="text-[10px] text-cliq-textSecondary block">Annual Fee</span>
+                      <span className="text-[10px] text-cliq-textSecondary block">{t.cards.annualFee}</span>
                       <span className="font-bold text-white text-sm">
                         {annualFee === "" || Number(annualFee) === 0
-                          ? "FREE"
+                          ? t.cardSelection.free
                           : `₹${Number(annualFee).toLocaleString("en-IN")}`}
                       </span>
                     </div>
 
                     <div className="p-2.5 rounded-xl bg-cliq-surfaceHover/60 border border-cliq-border">
-                      <span className="text-[10px] text-cliq-textSecondary block">Renewal Waiver</span>
+                      <span className="text-[10px] text-cliq-textSecondary block">{t.cards.renewalWaiver}</span>
                       <span className="font-bold text-emerald-400 text-sm">
                         {waiverSpend !== "" && Number(waiverSpend) > 0
                           ? `₹${Number(waiverSpend).toLocaleString("en-IN")}`
@@ -959,7 +959,7 @@ export default function AddCreditCardPage() {
                   {/* Highlights Pill List */}
                   <div className="space-y-1.5">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-cliq-textSecondary">
-                      Reward Highlights
+                      {t.cardSelection.rewardHighlights}
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {rules.slice(0, 3).map((r, i) => (
@@ -978,7 +978,7 @@ export default function AddCreditCardPage() {
                     <div className="p-2.5 rounded-xl bg-cliq-cyan/5 border border-cliq-cyan/20 text-xs">
                       <div className="flex items-center gap-1.5 text-cliq-turquoise font-semibold text-[11px] mb-0.5">
                         <Sparkles className="w-3 h-3" />
-                        <span>Key Perk</span>
+                        <span>{t.cardSelection.keyPerk}</span>
                       </div>
                       <p className="text-white text-[11px] font-medium truncate">
                         {benefits[0].title}
